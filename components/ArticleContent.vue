@@ -12,22 +12,14 @@
       <div class="article-content-wrapper">
         <div ref="contentRef" class="content" v-html="renderedContent"></div>
         <div class="toc-container-wrapper">
-          <div
-            ref="tocContainerRef"
-            class="toc-container"
-            :class="{ 'toc-fixed': isTocFixed }"
-          >
+          <div ref="tocContainerRef" class="toc-container" :class="{ 'toc-fixed': isTocFixed }">
             <div class="toc-header">
               <h3>目录</h3>
             </div>
             <nav class="toc-nav">
               <ul>
                 <li v-for="heading in headings" :key="heading.id">
-                  <a
-                    :class="{ active: activeHeading == heading.id }"
-                    :href="'#' + heading.id"
-                    @click.prevent="scrollToHeading(heading.id)"
-                  >
+                  <a :class="{ active: activeHeading == heading.id }" :href="'#' + heading.id" @click.prevent="scrollToHeading(heading.id)">
                     {{ heading.text }}
                   </a>
                 </li>
@@ -118,7 +110,7 @@ const handleScroll = () => {
   const scrollPosition = window.scrollY;
 
   // 更新固定目录状态
-  isTocFixed.value = scrollPosition > 120;
+  isTocFixed.value = scrollPosition > 200;
 
   // 更新当前激活的标题
   for (let i = headingElements.length - 1; i >= 0; i--) {
@@ -201,7 +193,6 @@ onUnmounted(() => {
   flex-direction: column;
   @include themed() {
     background-color: themed("bg");
-    border: 1px solid themed("border");
   }
 
   &.toc-fixed {
@@ -214,7 +205,6 @@ onUnmounted(() => {
 }
 
 .toc-header {
-  margin-bottom: 1rem;
   border-bottom: 1px solid var(--border-color);
 
   h3 {
@@ -363,6 +353,10 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
+  .article-content-wrapper {
+    padding: 0;
+  }
+
   .article-container {
     padding: 1rem;
   }

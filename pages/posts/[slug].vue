@@ -1,32 +1,35 @@
 <template>
-  <div class="post-detail container">
+  <div class="post-detail container pt-16">
     <ArticleContent :article="article" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+definePageMeta({
+  layout: "article",
+});
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
-const route = useRoute()
-const slug = route.params.slug as string
+const route = useRoute();
+const slug = route.params.slug as string;
 
 const article = ref({
-  title: '',
-  date: '',
+  title: "",
+  date: "",
   readTime: 0,
-  content: ''
-})
+  content: "",
+});
 
 // Mock data - In a real app, this would come from an API or CMS
 const posts = [
   {
     id: 1,
-    title: 'Getting Started with Nuxt.js',
-    date: 'March 28, 2024',
+    title: "Getting Started with Nuxt.js",
+    date: "March 28, 2024",
     readTime: 5,
-    excerpt: 'Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.',
-    slug: 'getting-started-with-nuxtjs',
+    excerpt: "Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.",
+    slug: "getting-started-with-nuxtjs",
     content: `
       <p>Nuxt.js is a powerful framework built on top of Vue.js that makes it easy to create modern web applications. In this article, we'll explore the key features and benefits of using Nuxt.js for your next project.</p>
       
@@ -46,15 +49,15 @@ const posts = [
       
       <p>This will create a new Nuxt.js project with all the necessary dependencies and configuration files.</p>
     `,
-    tags: ['Nuxt.js', 'Vue.js', 'JavaScript', 'Web Development']
+    tags: ["Nuxt.js", "Vue.js", "JavaScript", "Web Development"],
   },
   {
     id: 2,
-    title: 'The Power of UnoCSS',
-    date: 'March 27, 2024',
+    title: "The Power of UnoCSS",
+    date: "March 27, 2024",
     readTime: 4,
-    excerpt: 'Discover how UnoCSS can help you create beautiful and responsive designs with minimal effort.',
-    slug: 'power-of-unocss',
+    excerpt: "Discover how UnoCSS can help you create beautiful and responsive designs with minimal effort.",
+    slug: "power-of-unocss",
     content: `
       <p>UnoCSS is a modern CSS framework that provides a powerful set of utility classes for building beautiful and responsive designs. In this article, we'll explore how to use UnoCSS effectively in your projects.</p>
       
@@ -71,25 +74,27 @@ const posts = [
       <p>To add UnoCSS to your project, first install the necessary dependencies:</p>
       <pre><code>npm install -D unocss @unocss/preset-uno</code></pre>
     `,
-    tags: ['CSS', 'UnoCSS', 'Frontend', 'Styling']
-  }
-]
+    tags: ["CSS", "UnoCSS", "Frontend", "Styling"],
+  },
+];
 
 const post = computed(() => {
-  return posts.find(p => p.slug === slug) || {
-    title: 'Article Not Found',
-    content: 'The article you are looking for does not exist.',
-    date: '',
-    readTime: 0,
-    excerpt: '',
-    tags: []
-  }
-})
+  return (
+    posts.find((p) => p.slug === slug) || {
+      title: "Article Not Found",
+      content: "The article you are looking for does not exist.",
+      date: "",
+      readTime: 0,
+      excerpt: "",
+      tags: [],
+    }
+  );
+});
 
 onMounted(async () => {
   // 这里应该替换为实际的 API 调用
   article.value = {
-    title: '示例文章标题',
+    title: "示例文章标题",
     date: new Date().toISOString(),
     readTime: 5,
     content: `
@@ -134,9 +139,9 @@ console.log(hello);
 
 ## 图片
 
-    `
-  }
-})
+    `,
+  };
+});
 </script>
 
 <style lang="scss" scoped>
@@ -144,7 +149,7 @@ console.log(hello);
 .post-detail {
   min-height: 100vh;
   @include themed() {
-    background-color: themed('bg');
+    background-color: themed("bg");
   }
 }
-</style> 
+</style>

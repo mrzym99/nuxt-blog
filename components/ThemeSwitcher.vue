@@ -1,16 +1,10 @@
 <template>
-  <div class="theme-switcher">
+  <div class="theme-switcher" v-click-outside="() => (isMenuOpen = false)">
     <button class="theme-button" @click="toggleMenu">
       <Icon :name="currentTheme === 'dark' ? 'ph:moon-bold' : 'ph:sun-bold'" size="1.5rem" />
     </button>
     <div class="theme-menu" :class="{ show: isMenuOpen }">
-      <div
-        v-for="theme in themes"
-        :key="theme.name"
-        class="theme-option"
-        :class="{ active: currentTheme === theme.name }"
-        @click="selectTheme(theme.name)"
-      >
+      <div v-for="theme in themes" :key="theme.name" class="theme-option" :class="{ active: currentTheme === theme.name }" @click="selectTheme(theme.name)">
         {{ theme.label }}
       </div>
     </div>
@@ -18,40 +12,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from "vue";
 
 const themes = [
-  { name: 'default', label: '默认主题' },
-  { name: 'dark', label: '暗色主题' },
-  { name: 'purple', label: '紫色主题' },
-  { name: 'green', label: '绿色主题' }
-]
+  { name: "default", label: "默认主题" },
+  { name: "dark", label: "暗色主题" },
+  { name: "purple", label: "紫色主题" },
+  { name: "green", label: "绿色主题" },
+];
 
-const isMenuOpen = ref(false)
-const currentTheme = ref('default')
+const isMenuOpen = ref(false);
+const currentTheme = ref("default");
 
 const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value
-}
+  isMenuOpen.value = !isMenuOpen.value;
+};
 
 const selectTheme = (themeName) => {
-  currentTheme.value = themeName
-  document.documentElement.setAttribute('data-theme', themeName)
-  localStorage.setItem('theme', themeName)
-  isMenuOpen.value = false
-}
+  currentTheme.value = themeName;
+  document.documentElement.setAttribute("data-theme", themeName);
+  localStorage.setItem("theme", themeName);
+  isMenuOpen.value = false;
+};
 
 // 监听主题变化，添加过渡效果
 watch(currentTheme, () => {
-  document.documentElement.style.transition = 'background-color 0.3s ease, color 0.3s ease'
-})
+  document.documentElement.style.transition = "background-color 0.3s ease, color 0.3s ease";
+});
 
 // 初始化主题
 onMounted(() => {
-  const savedTheme = localStorage.getItem('theme') || 'default'
-  currentTheme.value = savedTheme
-  document.documentElement.setAttribute('data-theme', savedTheme)
-})
+  const savedTheme = localStorage.getItem("theme") || "default";
+  currentTheme.value = savedTheme;
+  document.documentElement.setAttribute("data-theme", savedTheme);
+});
 </script>
 
 <style lang="scss" scoped>
@@ -64,7 +58,7 @@ onMounted(() => {
     height: 2rem;
     border-radius: 2rem;
     @include themed() {
-      background-color: themed('primary');
+      background-color: themed("primary");
       color: white;
     }
     display: flex;
@@ -89,8 +83,8 @@ onMounted(() => {
     padding: 0.5rem;
     z-index: 2001;
     @include themed() {
-      background-color: themed('bg');
-      border: 1px solid themed('border');
+      background-color: themed("bg");
+      border: 1px solid themed("border");
     }
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -106,10 +100,17 @@ onMounted(() => {
       border-radius: 0.25rem;
       text-align: center;
       @include themed() {
-        color: themed('text');
+        color: themed("text");
         &:hover {
-          background-color: themed('border');
+          background-color: themed("border");
         }
+      }
+    }
+
+    .active {
+      @include themed() {
+        color: white;
+        background-color: themed("primary");
       }
     }
   }

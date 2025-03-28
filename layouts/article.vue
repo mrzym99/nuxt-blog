@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <!-- Navigation -->
-    <nav class="nav" :class="{ 'nav-scrolled': isScrolled, 'nav-fixed': isFixed }">
+    <nav class="nav article-nav" :class="{ 'nav-scrolled': isScrolled, 'nav-fixed': isFixed }">
       <div class="nav-container">
         <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> My Blog </NuxtLink>
         <div class="nav-links">

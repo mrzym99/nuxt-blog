@@ -11,6 +11,9 @@ importers:
       '@nuxt/content':
         specifier: ^3.4.0
         version: 3.4.0(magicast@0.3.5)(typescript@5.8.2)
+      '@nuxt/schema':
+        specifier: ^3.16.1
+        version: 3.16.1
       '@nuxtjs/color-mode':
         specifier: ^3.5.2
         version: 3.5.2(magicast@0.3.5)
@@ -20,15 +23,30 @@ importers:
       '@unocss/reset':
         specifier: ^0.58.5
         version: 0.58.9
+      defu:
+        specifier: ^6.1.4
+        version: 6.1.4
       marked:
         specifier: ^15.0.7
         version: 15.0.7
       nuxt:
         specifier: ^3.10.1
         version: 3.16.1(@parcel/watcher@2.5.1)(@types/node@20.17.28)(better-sqlite3@11.9.1)(db0@0.3.1(better-sqlite3@11.9.1))(ioredis@5.6.0)(magicast@0.3.5)(rollup@4.37.0)(sass@1.86.0)(terser@5.39.0)(typescript@5.8.2)(vite@6.2.3(@types/node@20.17.28)(jiti@2.4.2)(sass@1.86.0)(terser@5.39.0)(yaml@2.7.0))(yaml@2.7.0)
+      ofetch:
+        specifier: ^1.4.1
+        version: 1.4.1
       sass:
         specifier: ^1.71.0
         version: 1.86.0
+      ufo:
+        specifier: ^1.5.4
+        version: 1.5.4
+      vue:
+        specifier: ^3.5.13
+        version: 3.5.13(typescript@5.8.2)
+      vue-router:
+        specifier: ^4.5.0
+        version: 4.5.0(vue@3.5.13(typescript@5.8.2))
       vue-scrollama:
         specifier: ^2.0.6
         version: 2.0.6
