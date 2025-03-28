@@ -1,0 +1,107 @@
+@use "sass:map";
+
+// Global variable declaration
+$theme-map: null !default;
+
+// Theme variables
+:root {
+  --primary-color: #00c6fb;
+  --secondary-color: #005bea;
+  --text-color: #333;
+  --text-light: #666;
+  --bg-color: #fff;
+  --border-color: #e5e7eb;
+  --hover-color: #00a8e6;
+}
+
+// Dark theme
+[data-theme='dark'] {
+  --primary-color: #60a5fa;
+  --secondary-color: #3b82f6;
+  --text-color: #e5e7eb;
+  --text-light: #9ca3af;
+  --bg-color: #1f2937;
+  --border-color: #374151;
+  --hover-color: #3b82f6;
+}
+
+// Purple theme
+[data-theme='purple'] {
+  --primary-color: #a78bfa;
+  --secondary-color: #7c3aed;
+  --text-color: #1f2937;
+  --text-light: #6b7280;
+  --bg-color: #fff;
+  --border-color: #e5e7eb;
+  --hover-color: #8b5cf6;
+}
+
+// Green theme
+[data-theme='green'] {
+  --primary-color: #34d399;
+  --secondary-color: #059669;
+  --text-color: #1f2937;
+  --text-light: #6b7280;
+  --bg-color: #fff;
+  --border-color: #e5e7eb;
+  --hover-color: #10b981;
+}
+
+// Theme configurations
+$themes: (
+  'default': (
+    'primary': #00c6fb,
+    'secondary': #005bea,
+    'text': #333,
+    'text-light': #666,
+    'bg': #fff,
+    'border': #e5e7eb,
+    'hover': #00a8e6
+  ),
+  'dark': (
+    'primary': #60a5fa,
+    'secondary': #3b82f6,
+    'text': #e5e7eb,
+    'text-light': #9ca3af,
+    'bg': #1f2937,
+    'border': #374151,
+    'hover': #3b82f6
+  ),
+  'purple': (
+    'primary': #a78bfa,
+    'secondary': #7c3aed,
+    'text': #1f2937,
+    'text-light': #6b7280,
+    'bg': #fff,
+    'border': #e5e7eb,
+    'hover': #8b5cf6
+  ),
+  'green': (
+    'primary': #34d399,
+    'secondary': #059669,
+    'text': #1f2937,
+    'text-light': #6b7280,
+    'bg': #fff,
+    'border': #e5e7eb,
+    'hover': #10b981
+  )
+);
+
+// Theme mixin
+@mixin themed() {
+  @each $theme, $map in $themes {
+    $theme-map: () !global;
+    @each $key, $value in $map {
+      $theme-map: map.merge($theme-map, ($key: $value)) !global;
+    }
+    [data-theme='#{$theme}'] & {
+      @content;
+    }
+  }
+  $theme-map: null !global;
+}
+
+// Theme function
+@function themed($key) {
+  @return map.get($theme-map, $key);
+} 
