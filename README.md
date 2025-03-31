@@ -35,3 +35,19 @@
 4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
 5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
 6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+
+## 代码提交规范
+
+<type>(<scope>): <subject>
+
+feat：新功能
+fix：修复 bug
+docs：文档变更
+style：代码格式（不影响代码运行的变动）
+refactor：重构
+perf：性能优化
+test：增加测试
+chore：构建过程或辅助工具的变动
+revert：回退
+build：打包
+ci：CI 相关变更
