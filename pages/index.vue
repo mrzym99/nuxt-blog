@@ -108,104 +108,104 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue';
-  import bg from '~/assets/images/bg.png';
-  // Mock data for blog posts
-  const posts = [
-    {
-      id: 1,
-      title: 'Getting Started with Nuxt.js',
-      date: 'March 28, 2024',
-      readTime: 5,
-      excerpt:
-        'Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.',
-      slug: '/posts/getting-started-with-nuxtjs',
-      tags: ['Nuxt.js', 'Vue.js', 'JavaScript'],
-    },
-    {
-      id: 2,
-      title: 'The Power of UnoCSS',
-      date: 'March 27, 2024',
-      readTime: 4,
-      excerpt:
-        'Discover how UnoCSS can help you create beautiful and responsive designs with minimal effort.',
-      slug: '/posts/power-of-unocss',
-      tags: ['CSS', 'UnoCSS', 'Frontend'],
-    },
-    {
-      id: 3,
-      title: 'Building a Personal Blog',
-      date: 'March 26, 2024',
-      readTime: 6,
-      excerpt:
-        'A step-by-step guide to creating your own personal blog using modern web technologies.',
-      slug: '/posts/building-personal-blog',
-      tags: ['Web Development', 'Tutorial'],
-    },
-    {
-      id: 4,
-      title: 'CSS Best Practices',
-      date: 'March 25, 2024',
-      readTime: 7,
-      excerpt: 'Essential tips and tricks for writing clean, maintainable, and efficient CSS code.',
-      slug: '/posts/css-best-practices',
-      tags: ['CSS', 'Frontend', 'Best Practices'],
-    },
-  ];
+import { computed } from 'vue';
+import bg from '~/assets/images/bg.png';
+// Mock data for blog posts
+const posts = [
+  {
+    id: 1,
+    title: 'Getting Started with Nuxt.js',
+    date: 'March 28, 2024',
+    readTime: 5,
+    excerpt:
+      'Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.',
+    slug: '/posts/getting-started-with-nuxtjs',
+    tags: ['Nuxt.js', 'Vue.js', 'JavaScript'],
+  },
+  {
+    id: 2,
+    title: 'The Power of UnoCSS',
+    date: 'March 27, 2024',
+    readTime: 4,
+    excerpt:
+      'Discover how UnoCSS can help you create beautiful and responsive designs with minimal effort.',
+    slug: '/posts/power-of-unocss',
+    tags: ['CSS', 'UnoCSS', 'Frontend'],
+  },
+  {
+    id: 3,
+    title: 'Building a Personal Blog',
+    date: 'March 26, 2024',
+    readTime: 6,
+    excerpt:
+      'A step-by-step guide to creating your own personal blog using modern web technologies.',
+    slug: '/posts/building-personal-blog',
+    tags: ['Web Development', 'Tutorial'],
+  },
+  {
+    id: 4,
+    title: 'CSS Best Practices',
+    date: 'March 25, 2024',
+    readTime: 7,
+    excerpt: 'Essential tips and tricks for writing clean, maintainable, and efficient CSS code.',
+    slug: '/posts/css-best-practices',
+    tags: ['CSS', 'Frontend', 'Best Practices'],
+  },
+];
 
-  const bgStyle = computed(() => {
-    return {
-      backgroundImage: `url(${bg})`,
-    };
-  });
+const bgStyle = computed(() => {
+  return {
+    backgroundImage: `url(${bg})`,
+  };
+});
 
-  // Compute all unique tags with their counts
-  const allTags = computed(() => {
-    const tagCounts: Record<string, number> = {};
-    posts.forEach(post => {
-      post.tags.forEach(tag => {
-        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-      });
+// Compute all unique tags with their counts
+const allTags = computed(() => {
+  const tagCounts: Record<string, number> = {};
+  posts.forEach(post => {
+    post.tags.forEach(tag => {
+      tagCounts[tag] = (tagCounts[tag] || 0) + 1;
     });
-    return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
   });
+  return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
+});
 
-  // Get recent posts for sidebar
-  const recentPosts = computed(() => {
-    return posts.slice(0, 5);
-  });
+// Get recent posts for sidebar
+const recentPosts = computed(() => {
+  return posts.slice(0, 5);
+});
 </script>
 
 <style scoped>
-  .blog-post {
-    @apply p-6 rounded-lg transition-colors;
-  }
+.blog-post {
+  @apply p-6 rounded-lg transition-colors;
+}
 
-  .post-title {
-    @apply text-2xl font-bold mb-2;
-  }
+.post-title {
+  @apply text-2xl font-bold mb-2;
+}
 
-  .post-meta {
-    @apply text-sm text-gray-600 mb-3;
-  }
+.post-meta {
+  @apply text-sm text-gray-600 mb-3;
+}
 
-  .post-excerpt {
-    @apply text-gray-600 mb-4;
-  }
+.post-excerpt {
+  @apply text-gray-600 mb-4;
+}
 
-  .tags {
-    @apply flex flex-wrap gap-2;
-  }
+.tags {
+  @apply flex flex-wrap gap-2;
+}
 
-  .tag {
-    @apply px-2 py-1 text-sm rounded-full;
-  }
+.tag {
+  @apply px-2 py-1 text-sm rounded-full;
+}
 
-  .read-more {
-    @apply text-sm;
-  }
+.read-more {
+  @apply text-sm;
+}
 
-  .blog-card {
-    @apply p-6 rounded-lg;
-  }
+.blog-card {
+  @apply p-6 rounded-lg;
+}
 </style>

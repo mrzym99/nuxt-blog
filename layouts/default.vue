@@ -64,24 +64,24 @@
 </template>
 
 <script setup lang="ts">
-  import Drawer from '~/components/Drawer.vue';
+import Drawer from '~/components/Drawer.vue';
 
-  const isScrolled = ref(false);
-  const isFixed = ref(false);
-  const lastScrollPosition = ref(0);
-  const showDrawer = ref(false);
+const isScrolled = ref(false);
+const isFixed = ref(false);
+const lastScrollPosition = ref(0);
+const showDrawer = ref(false);
 
-  onMounted(() => {
-    window.addEventListener('scroll', () => {
-      const isDown = lastScrollPosition.value < window.scrollY;
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      isScrolled.value = scrollTop > 100 && isDown;
-      isFixed.value = scrollTop > 100 && !isDown;
-      nextTick(() => {
-        lastScrollPosition.value = scrollTop;
-      });
+onMounted(() => {
+  window.addEventListener('scroll', () => {
+    const isDown = lastScrollPosition.value < window.scrollY;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    isScrolled.value = scrollTop > 100 && isDown;
+    isFixed.value = scrollTop > 100 && !isDown;
+    nextTick(() => {
+      lastScrollPosition.value = scrollTop;
     });
   });
+});
 </script>
 
 <style lang="scss" scoped></style>

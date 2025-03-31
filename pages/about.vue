@@ -42,30 +42,30 @@
 </template>
 
 <script setup lang="ts">
-  const skills = [
-    'Vue.js',
-    'Nuxt.js',
-    'TypeScript',
-    'UnoCSS',
-    'SCSS',
-    'Node.js',
-    'Git',
-    'Docker',
-    'AWS',
-  ];
+const skills = [
+  'Vue.js',
+  'Nuxt.js',
+  'TypeScript',
+  'UnoCSS',
+  'SCSS',
+  'Node.js',
+  'Git',
+  'Docker',
+  'AWS',
+];
 
-  const experience = [
-    {
-      title: 'Senior Frontend Developer',
-      company: 'Tech Company',
-      period: '2020 - Present',
-      description: 'Leading frontend development team and implementing modern web solutions.',
-    },
-    {
-      title: 'Full Stack Developer',
-      company: 'Startup',
-      period: '2018 - 2020',
-      description: 'Developed and maintained multiple web applications using Vue.js and Node.js.',
-    },
-  ];
+const experience = [
+  {
+    title: 'Senior Frontend Developer',
+    company: 'Tech Company',
+    period: '2020 - Present',
+    description: 'Leading frontend development team and implementing modern web solutions.',
+  },
+  {
+    title: 'Full Stack Developer',
+    company: 'Startup',
+    period: '2018 - 2020',
+    description: 'Developed and maintained multiple web applications using Vue.js and Node.js.',
+  },
+];
 </script>

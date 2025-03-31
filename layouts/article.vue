@@ -71,46 +71,46 @@
 </template>
 
 <script setup lang="ts">
-  import Drawer from '~/components/Drawer.vue';
-  import { useArticleStore } from '~/store';
+import Drawer from '~/components/Drawer.vue';
+import { useArticleStore } from '~/store';
 
-  const isScrolled = ref(false);
-  const isFixed = ref(false);
-  const lastScrollPosition = ref(0);
-  const showDrawer = ref(false);
+const isScrolled = ref(false);
+const isFixed = ref(false);
+const lastScrollPosition = ref(0);
+const showDrawer = ref(false);
 
-  const { getArticleHasCover } = toRefs(useArticleStore());
+const { getArticleHasCover } = toRefs(useArticleStore());
 
-  onMounted(() => {
-    window.addEventListener('scroll', () => {
-      const isDown = lastScrollPosition.value < window.screenY;
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      isScrolled.value = scrollTop > 100 && isDown;
-      isFixed.value = scrollTop > 100 && !isDown;
-      nextTick(() => {
-        lastScrollPosition.value = scrollTop;
-      });
+onMounted(() => {
+  window.addEventListener('scroll', () => {
+    const isDown = lastScrollPosition.value < window.screenY;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    isScrolled.value = scrollTop > 100 && isDown;
+    isFixed.value = scrollTop > 100 && !isDown;
+    nextTick(() => {
+      lastScrollPosition.value = scrollTop;
     });
   });
+});
 </script>
 
 <style lang="scss" scoped>
-  @use '~/assets/styles/themes.scss' as *;
-  @use '~/assets/styles/global.scss' as *;
+@use '~/assets/styles/themes.scss' as *;
+@use '~/assets/styles/global.scss' as *;
 
-  .article-layout {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+.article-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-  .article-content {
-    flex: 1;
-    padding-top: 4rem;
-    max-width: 800px;
-    margin: 0 auto;
-    width: 100%;
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
+.article-content {
+  flex: 1;
+  padding-top: 4rem;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 </style>

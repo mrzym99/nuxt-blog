@@ -34,49 +34,49 @@
 </template>
 
 <script setup lang="ts">
-  definePageMeta({
-    layout: 'article',
-  });
-  import docker from '~/assets/images/docker.png';
-  import { ref, onMounted } from 'vue';
-  import { useRoute } from 'vue-router';
-  import { useArticleStore } from '~/store';
+definePageMeta({
+  layout: 'article',
+});
+import docker from '~/assets/images/docker.png';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useArticleStore } from '~/store';
 
-  const { setCurrentArticle } = useArticleStore();
-  const route = useRoute();
-  const slug = route.params.slug as string;
+const { setCurrentArticle } = useArticleStore();
+const route = useRoute();
+const slug = route.params.slug as string;
 
-  const article = ref<IArticle>({
-    id: 0,
-    title: '',
-    date: '',
-    readTime: 0,
-    description: '',
-    slug: '',
-    createTime: 0,
-    content: '',
-    tags: [],
-    cover: '',
-  });
+const article = ref<IArticle>({
+  id: 0,
+  title: '',
+  date: '',
+  readTime: 0,
+  description: '',
+  slug: '',
+  createTime: 0,
+  content: '',
+  tags: [],
+  cover: '',
+});
 
-  // 格式化日期
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString();
-  };
+// 格式化日期
+const formatDate = (timestamp: number) => {
+  return new Date(timestamp).toLocaleDateString();
+};
 
-  // Mock data - In a real app, this would come from an API or CMS
-  const posts = [
-    {
-      id: 1,
-      title: 'Getting Started with Nuxt.js',
-      date: 'March 28, 2024',
-      readTime: 5,
-      createTime: 1717027200000,
-      description:
-        'Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.',
-      slug: 'getting-started-with-nuxtjs',
-      cover: docker,
-      content: `
+// Mock data - In a real app, this would come from an API or CMS
+const posts = [
+  {
+    id: 1,
+    title: 'Getting Started with Nuxt.js',
+    date: 'March 28, 2024',
+    readTime: 5,
+    createTime: 1717027200000,
+    description:
+      'Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.',
+    slug: 'getting-started-with-nuxtjs',
+    cover: docker,
+    content: `
 # 示例文章
 
 这是一篇示例文章，展示了 Markdown 的各种功能。
@@ -118,135 +118,135 @@ console.log(hello);
 
 
 ## 图片`,
-      tags: ['Nuxt.js', 'Vue.js', 'JavaScript', 'Web Development'],
-    },
-  ];
+    tags: ['Nuxt.js', 'Vue.js', 'JavaScript', 'Web Development'],
+  },
+];
 
-  onMounted(() => {
-    article.value = posts[0] as IArticle;
-    const num = Math.floor(Math.random() * 4);
-    posts[0].slug = slug;
-    if (num % 2 === 0) {
-      article.value.cover = docker;
-    } else {
-      article.value.cover = '';
-    }
-    setCurrentArticle(article.value);
-  });
+onMounted(() => {
+  article.value = posts[0] as IArticle;
+  const num = Math.floor(Math.random() * 4);
+  posts[0].slug = slug;
+  if (num % 2 === 0) {
+    article.value.cover = docker;
+  } else {
+    article.value.cover = '';
+  }
+  setCurrentArticle(article.value);
+});
 </script>
 
 <style lang="scss" scoped>
-  @use '~/assets/styles/themes.scss' as *;
-  @use '~/assets/styles/global.scss' as *;
-  .post-detail {
-    min-height: 100vh;
+@use '~/assets/styles/themes.scss' as *;
+@use '~/assets/styles/global.scss' as *;
+.post-detail {
+  min-height: 100vh;
+  @include themed() {
+    background-color: themed('bg');
+  }
+}
+
+.article-header {
+  h1 {
+    margin: 1rem 0;
+    line-height: 1.1;
+    font-size: 2.4rem;
+    font-weight: 700;
     @include themed() {
-      background-color: themed('bg');
+      color: themed('text');
     }
   }
 
-  .article-header {
+  h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+    line-height: $line-height-normal;
+    font-weight: 300;
+    @include themed() {
+      color: themed('text-light');
+    }
+  }
+
+  @include responsive(md) {
     h1 {
-      margin: 1rem 0;
-      line-height: 1.1;
-      font-size: 2.4rem;
-      font-weight: 700;
-      @include themed() {
-        color: themed('text');
-      }
+      font-size: 3rem;
+      margin: 1.4rem 0;
     }
 
     h3 {
-      margin: 0 0 1rem 0;
-      font-size: 1.2rem;
-      line-height: $line-height-normal;
-      font-weight: 300;
-      @include themed() {
-        color: themed('text-light');
-      }
+      font-size: 1.6rem;
+      margin: 0 0 3rem 0;
+    }
+  }
+
+  @include responsive(lg) {
+    h1 {
+      font-size: 4rem;
+      margin: 1.4rem 0;
     }
 
-    @include responsive(md) {
-      h1 {
-        font-size: 3rem;
-        margin: 1.4rem 0;
-      }
-
-      h3 {
-        font-size: 1.6rem;
-        margin: 0 0 3rem 0;
-      }
-    }
-
-    @include responsive(lg) {
-      h1 {
-        font-size: 4rem;
-        margin: 1.4rem 0;
-      }
-
-      h3 {
-        font-size: 1.6rem;
-        margin: 0 0 3rem 0;
-      }
-
-      .article-meta {
-        .date {
-          font-size: 1.2rem !important;
-        }
-      }
+    h3 {
+      font-size: 1.6rem;
+      margin: 0 0 3rem 0;
     }
 
     .article-meta {
-      @include themed() {
-        color: themed('text-light');
-      }
-
       .date {
-        font-size: 1rem;
-        font-weight: 100;
-        font-style: italic;
+        font-size: 1.2rem !important;
       }
     }
   }
 
-  .white-tags {
-    .tag {
-      background: transparent;
-      @include themed() {
-        color: themed('nav-text');
-        border: 1px solid rgba(themed('border'), 0.7);
-      }
+  .article-meta {
+    @include themed() {
+      color: themed('text-light');
+    }
 
-      @include hover-effect {
-        background-color: themed('primary');
-        color: white;
-      }
+    .date {
+      font-size: 1rem;
+      font-weight: 100;
+      font-style: italic;
+    }
+  }
+}
+
+.white-tags {
+  .tag {
+    background: transparent;
+    @include themed() {
+      color: themed('nav-text');
+      border: 1px solid rgba(themed('border'), 0.7);
+    }
+
+    @include hover-effect {
+      background-color: themed('primary');
+      color: white;
+    }
+  }
+}
+
+.cover {
+  h1 {
+    @include themed() {
+      color: themed('nav-text');
     }
   }
 
-  .cover {
-    h1 {
-      @include themed() {
-        color: themed('nav-text');
-      }
-    }
-
-    h3 {
-      @include themed() {
-        color: themed('nav-text');
-      }
-    }
-
-    .article-meta {
-      @include themed() {
-        color: themed('nav-text');
-      }
+  h3 {
+    @include themed() {
+      color: themed('nav-text');
     }
   }
 
-  .info-wrapper {
-    @include responsive(lg) {
-      padding-right: 260px;
+  .article-meta {
+    @include themed() {
+      color: themed('nav-text');
     }
   }
+}
+
+.info-wrapper {
+  @include responsive(lg) {
+    padding-right: 260px;
+  }
+}
 </style>
