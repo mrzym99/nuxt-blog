@@ -3,7 +3,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   devServer: {
-    port: 3333,
+    port: 3000,
   },
   devtools: { enabled: true },
 
@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
   plugins: ["~/plugins/index.ts"],
 
-  css: ["~/assets/styles/main.scss", "~/assets/styles/themes.scss", "~/assets/styles/home.scss", "~/assets/styles/global.scss"],
+  css: ["~/assets/styles/main.scss"],
 
   vite: {
     css: {

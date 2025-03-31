@@ -2,8 +2,11 @@
   <div
     :class="{
       'transition-all duration-300': article.cover,
-      'article-header cover blog-bg h-32rem flex lt-lg:h-26rem lt-md:h-24rem pt-6rem lt-lg:pt-4rem': article.cover,
+      'article-header cover blog-bg h-36rem flex lt-lg:h-28rem lt-md:h-24rem pt-6rem lt-lg:pt-4rem': article.cover,
       'article-header mb-2rem pt-20': !article.cover,
+    }"
+    :style="{
+      backgroundImage: article.cover ? `url(${article.cover})` : 'none',
     }"
   >
     <div class="container info-wrapper z-10">
@@ -28,7 +31,7 @@
 definePageMeta({
   layout: "article",
 });
-import bg from "~/assets/images/bg.jpg";
+import docker from "~/assets/images/docker.png";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useArticleStore } from "~/store";
@@ -65,7 +68,7 @@ const posts = [
     createTime: 1717027200000,
     description: "Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.",
     slug: "getting-started-with-nuxtjs",
-    cover: bg,
+    cover: docker,
     content: `
 # 示例文章
 
@@ -114,6 +117,12 @@ console.log(hello);
 
 onMounted(() => {
   article.value = posts[0] as IArticle;
+  const num = Math.floor(Math.random() * 4);
+  if (num % 2 === 0) {
+    article.value.cover = docker;
+  } else {
+    article.value.cover = "";
+  }
   setCurrentArticle(article.value);
 });
 </script>

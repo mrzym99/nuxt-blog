@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- Hero Section -->
-    <section class="h-32rem bg-gray-100 flex flex-col items-center justify-center blog-bg">
+    <section :style="bgStyle" class="h-28rem bg-gray-100 flex flex-col items-center justify-center blog-bg">
       <h1 class="text-6xl leading-tight font-bold mb-6">Zym'S Blog</h1>
-      <p class="text-xl text-gray-600 mx-auto">A place where I share my journey in technology and life.</p>
+      <p class="text-xl text-gray-600 mx-auto">「 A place where I share my journey in technology and life. 」</p>
     </section>
 
     <!-- Main Content with Sidebar -->
-    <div class="container mx-auto py-8 lt-sm:py-4">
+    <div class="container mx-auto lt-sm:py-4">
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Blog Posts -->
         <main class="flex-1">
@@ -88,6 +88,8 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+import bg from "~/assets/images/bg.png";
 // Mock data for blog posts
 const posts = [
   {
@@ -127,6 +129,12 @@ const posts = [
     tags: ["CSS", "Frontend", "Best Practices"],
   },
 ];
+
+const bgStyle = computed(() => {
+  return {
+    backgroundImage: `url(${bg})`,
+  };
+});
 
 // Compute all unique tags with their counts
 const allTags = computed(() => {
