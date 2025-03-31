@@ -2,8 +2,19 @@
 // Variables
 $font-family:
   -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
 $max-width: 1280px;
 $smaller-max-width: 880px;
+
+$duration: 300ms;
+
+$line-height-normal: 1.4;
+$line-height-large: 1.7;
+
+$z-index-header: 1000;
+$z-index-modal: 2010;
+$z-index-mask: 2000;
+$z-index-popover: 3000;
 
 // Breakpoints
 $breakpoint-sm: 640px;
@@ -33,7 +44,7 @@ $breakpoint-xl: 1280px;
 }
 
 @mixin hover-effect {
-  transition: all 0.2s ease;
+  transition: all $duration ease;
   &:hover {
     @content;
   }
@@ -59,7 +70,7 @@ h4,
 h5,
 h6 {
   margin: 2rem 0 1rem 0;
-  line-height: 1.4;
+  line-height: $line-height-normal;
 }
 
 h1 {

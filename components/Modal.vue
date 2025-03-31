@@ -95,7 +95,7 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: $z-index-mask;
   }
 
   .modal-wrapper {
@@ -107,7 +107,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1001;
+    z-index: $z-index-modal;
 
     &.is-mobile {
       align-items: flex-start;
@@ -152,7 +152,7 @@
         background: none;
         cursor: pointer;
         border-radius: 0.25rem;
-        transition: all 0.2s;
+        transition: all $duration;
         @include themed() {
           color: themed('text-light');
 

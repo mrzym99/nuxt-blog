@@ -70,6 +70,7 @@
 
 <style lang="scss" scoped>
   @use '~/assets/styles/themes.scss' as *;
+  @use '~/assets/styles/global.scss' as *;
 
   .drawer-mask {
     position: fixed;
@@ -78,14 +79,14 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
+    z-index: $z-index-mask;
   }
 
   .drawer {
     position: fixed;
     top: 0;
     bottom: 0;
-    z-index: 2001;
+    z-index: $z-index-modal;
     transition: transform 0.3s ease-in-out;
     @include themed() {
       background-color: themed('bg');
@@ -124,7 +125,7 @@
         background: none;
         cursor: pointer;
         border-radius: 0.25rem;
-        transition: all 0.2s;
+        transition: all $duration;
         @include themed() {
           color: themed('text-light');
 

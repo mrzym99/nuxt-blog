@@ -142,7 +142,7 @@
     width: 240px;
     padding: 1rem;
     border-radius: 0.5rem;
-    transition: all 0.3s ease;
+    transition: all $duration ease;
     display: flex;
     flex-direction: column;
     @include themed() {

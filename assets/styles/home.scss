@@ -69,7 +69,7 @@
   }
 
   .post-title {
-    transition: all 0.3s ease;
+    transition: all $duration ease;
     font-size: 1.5rem;
     margin-bottom: 0.5rem;
     @include themed() {
@@ -81,7 +81,7 @@
   }
 
   .post-meta {
-    transition: all 0.3s ease;
+    transition: all $duration ease;
     @include themed() {
       color: themed('text-light');
     }
@@ -90,7 +90,7 @@
   }
 
   .post-excerpt {
-    transition: all 0.3s ease;
+    transition: all $duration ease;
     @include themed() {
       color: themed('text-light');
     }
@@ -99,7 +99,7 @@
   }
 
   .read-more {
-    transition: all 0.3s ease;
+    transition: all $duration ease;
     @include themed() {
       color: themed('text-light');
     }

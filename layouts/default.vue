@@ -16,7 +16,7 @@
           <a href="/rss.xml" target="_blank" class="rss-link" title="RSS 订阅">
             <Icon name="ph:rss" size="1.5rem" />
           </a>
-          <ThemeSwitcher />
+          <ThemeSwitch />
         </div>
       </div>
     </nav>
@@ -34,7 +34,7 @@
           RSS
         </a>
         <div class="mobile-nav-item">
-          <ThemeSwitcher />
+          <ThemeSwitch />
         </div>
       </div>
     </Drawer>

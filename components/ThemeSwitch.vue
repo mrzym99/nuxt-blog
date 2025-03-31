@@ -1,8 +1,8 @@
 <template>
-  <Popover position="bottom" :offset="8" :width="240" :arrow="true">
+  <Popover ref="popoverRef" position="bottom-right" :width="200">
     <template #trigger>
-      <button class="theme-switch-btn">
-        <span class="theme-icon">🎨</span>
+      <button class="theme-button">
+        <Icon :name="currentTheme === 'dark' ? 'ph:moon-bold' : 'ph:sun-bold'" size="1.2rem" />
       </button>
     </template>
     <div class="theme-panel">
@@ -35,11 +35,13 @@
   ];
 
   const currentTheme = ref('default');
+  const popoverRef = ref<InstanceType<typeof Popover>>();
 
   const setTheme = (theme: string) => {
     currentTheme.value = theme;
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    popoverRef.value?.close();
   };
 
   onMounted(() => {
@@ -50,34 +52,35 @@
 
 <style lang="scss" scoped>
   @use '~/assets/styles/themes.scss' as *;
+  @use '~/assets/styles/global.scss' as *;
 
-  .theme-switch-btn {
-    padding: 0.5rem;
-    border: none;
-    background: none;
+  .theme-button {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 1.5rem;
+    @include themed() {
+      background-color: themed('primary');
+      color: white;
+    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
 
     &:hover {
-      @include themed() {
-        background-color: themed('border');
-      }
-    }
-
-    .theme-icon {
-      font-size: 1.2rem;
+      transform: scale(1.1);
     }
   }
 
   .theme-panel {
-    padding: 1rem;
-    min-width: 200px;
+    padding: 0.25rem;
 
     .theme-title {
       font-size: 0.875rem;
       font-weight: 500;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
       @include themed() {
         color: themed('text');
       }
@@ -98,7 +101,7 @@
       background: none;
       cursor: pointer;
       border-radius: 0.5rem;
-      transition: all 0.2s ease;
+      transition: all $duration ease;
       width: 100%;
       text-align: left;
 
@@ -119,7 +122,7 @@
         height: 1.25rem;
         border-radius: 50%;
         border: 2px solid transparent;
-        transition: all 0.2s ease;
+        transition: all $duration ease;
       }
 
       .theme-name {

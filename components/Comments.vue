@@ -69,13 +69,15 @@
                     </div>
                   </div>
                 </Popover>
-                <Popover position="bottom" :offset="8" :width="400" :arrow="true">
+                <Popover position="bottom-left" :offset="8">
                   <template #trigger>
-                    <button class="tool-btn">预览</button>
+                    <button class="preview-button">
+                      <Icon name="ph:eye" size="1.25rem" />
+                      预览
+                    </button>
                   </template>
                   <div class="preview-panel">
-                    <div class="preview-title">预览</div>
-                    <div class="preview-content markdown-body" v-html="renderedContent"></div>
+                    <div v-html="renderedContent"></div>
                   </div>
                 </Popover>
               </div>
@@ -462,7 +464,7 @@
     }
 
     .comment-text {
-      line-height: 1.7;
+      line-height: $line-height-large;
       @include themed() {
         color: themed('text');
       }
@@ -548,7 +550,7 @@
     }
 
     .reply-text {
-      line-height: 1.7;
+      line-height: $line-height-large;
       @include themed() {
         color: themed('text');
       }
@@ -685,7 +687,7 @@
           background: none;
           cursor: pointer;
           border-radius: 0.25rem;
-          transition: all 0.2s;
+          transition: all $duration;
 
           i {
             width: 1rem;

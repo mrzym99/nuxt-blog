@@ -3,7 +3,6 @@
 
 // Layout
 .container {
-  max-width: $max-width;
   margin: 0 auto;
   padding: 0 1rem;
 
@@ -12,21 +11,15 @@
   }
 }
 
-.smaller-container {
-  max-width: $smaller-max-width;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
 // Navigation
 .nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 2000;
+  z-index: $z-index-header;
   padding: 1rem 0;
-  transition: all 0.3s ease;
+  transition: all $duration ease;
   .nav-container {
     display: flex;
     justify-content: space-between;

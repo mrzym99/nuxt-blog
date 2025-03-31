@@ -4,7 +4,7 @@
       <h1 class="text-6xl leading-tight font-bold mb-6">About Me</h1>
     </section>
 
-    <div class="smaller-container pt-16 mx-auto prose prose-lg">
+    <div class="container pt-16 mx-auto prose prose-lg">
       <p class="mb-6 text-xl">
         Hello! I'm a passionate developer who loves creating beautiful and functional web
         applications. I believe in writing clean, maintainable code and sharing knowledge with the

@@ -3,7 +3,7 @@
     <section class="h-20rem bg-gray-100 flex flex-col items-center justify-center other-bg">
       <h1 class="text-6xl leading-tight font-bold mb-6">Archive</h1>
     </section>
-    <div class="smaller-container mx-auto pt-16">
+    <div class="container mx-auto pt-16">
       <div v-for="(yearPosts, year) in groupedPosts" :key="year" class="mb-12">
         <h2 class="text-2xl font-bold mb-6">{{ year }}</h2>
         <div class="space-y-6">

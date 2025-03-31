@@ -40,7 +40,6 @@
 
   .article-content {
     margin: 0 auto;
-    max-width: $breakpoint-lg;
 
     @include responsive(lg) {
       display: grid;

@@ -159,7 +159,7 @@ console.log(hello);
     h3 {
       margin: 0 0 1rem 0;
       font-size: 1.2rem;
-      line-height: 1.4;
+      line-height: $line-height-normal;
       font-weight: 300;
       @include themed() {
         color: themed('text-light');
