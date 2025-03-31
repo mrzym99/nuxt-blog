@@ -1,0 +1,47 @@
+# 构建输出目录
+dist
+.output
+.nuxt
+
+# 依赖目录
+node_modules
+
+# 日志文件
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 环境变量
+.env
+.env.*
+!.env.example
+
+# 编辑器和IDE文件
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 锁文件
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# 静态资源
+public
+static
+
+# 缓存文件
+.cache
+.temp
+
+# 其他文件
+.DS_Store
+.git
+LICENSE 

@@ -1,12 +1,12 @@
-@use "themes" as *;
-@use "global" as *;
-@use "home" as *;
-@use "layout" as *;
+@use 'themes' as *;
+@use 'global' as *;
+@use 'home' as *;
+@use 'layout' as *;
 
 body {
   font-family: $font-family;
   @include themed() {
-    color: themed("text");
-    background-color: themed("bg");
+    color: themed('text');
+    background-color: themed('bg');
   }
 }

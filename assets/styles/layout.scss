@@ -1,5 +1,5 @@
-@use "themes" as *;
-@use "global" as *;
+@use 'themes' as *;
+@use 'global' as *;
 
 // Layout
 .container {
@@ -37,7 +37,7 @@
 
   .nav-blog-title {
     @include themed() {
-      color: themed("nav-text");
+      color: themed('nav-text');
     }
   }
 
@@ -47,9 +47,9 @@
 
     a {
       @include themed() {
-        color: themed("nav-text");
+        color: themed('nav-text');
         @include hover-effect {
-          color: themed("primary");
+          color: themed('primary');
         }
       }
       text-decoration: none;
@@ -60,7 +60,7 @@
   .menu-toggle {
     .menu-toggle-icon {
       @include themed() {
-        color: themed("nav-text");
+        color: themed('nav-text');
       }
     }
   }
@@ -68,21 +68,21 @@
 
 .white-nav {
   @include themed() {
-    color: themed("text");
-    background-color: rgba(themed("bg"), 0.7);
+    color: themed('text');
+    background-color: rgba(themed('bg'), 0.7);
     backdrop-filter: blur(10px);
   }
 
   .nav-blog-title {
     @include themed() {
-      color: themed("text");
+      color: themed('text');
     }
   }
 
   .nav-links {
     a {
       @include themed() {
-        color: themed("text");
+        color: themed('text');
       }
     }
   }
@@ -90,7 +90,7 @@
   .menu-toggle {
     .menu-toggle-icon {
       @include themed() {
-        color: themed("text");
+        color: themed('text');
       }
     }
   }
@@ -107,11 +107,11 @@
     display: flex;
     align-items: center;
     @include themed() {
-      color: themed("text");
+      color: themed('text');
     }
 
     @include hover-effect {
-      background-color: themed("hover");
+      background-color: themed('hover');
     }
 
     a {
@@ -155,21 +155,21 @@
 .nav-fixed {
   .nav-blog-title {
     @include themed() {
-      color: themed("text");
+      color: themed('text');
     }
   }
 
   .nav-links {
     a {
       @include themed() {
-        color: themed("text");
+        color: themed('text');
       }
     }
   }
 
   @include themed() {
-    color: themed("text");
-    background-color: rgba(themed("bg"), 0.7);
+    color: themed('text');
+    background-color: rgba(themed('bg'), 0.7);
     backdrop-filter: blur(10px);
     animation: down 0.3s ease forwards;
   }
@@ -186,11 +186,11 @@
 
 .other-bg {
   @include themed() {
-    background-color: rgba(themed("primary"), 0.5);
+    background-color: rgba(themed('primary'), 0.5);
   }
   h1 {
     @include themed() {
-      color: themed("nav-text");
+      color: themed('nav-text');
     }
   }
 }
@@ -199,7 +199,7 @@
 .footer {
   padding: 2rem 0;
   @include themed() {
-    background-color: themed("border");
+    background-color: themed('border');
   }
   margin-top: 4rem;
 
@@ -224,9 +224,9 @@
 
     a {
       @include themed() {
-        color: themed("text-light");
+        color: themed('text-light');
         @include hover-effect {
-          color: themed("primary");
+          color: themed('primary');
         }
       }
     }

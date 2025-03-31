@@ -26,7 +26,9 @@
       <div class="mobile-nav">
         <NuxtLink to="/" class="mobile-nav-item" @click="showDrawer = false">Home</NuxtLink>
         <NuxtLink to="/about" class="mobile-nav-item" @click="showDrawer = false">About</NuxtLink>
-        <NuxtLink to="/archive" class="mobile-nav-item" @click="showDrawer = false">Archive</NuxtLink>
+        <NuxtLink to="/archive" class="mobile-nav-item" @click="showDrawer = false"
+          >Archive</NuxtLink
+        >
         <a href="/rss.xml" target="_blank" class="mobile-nav-item" @click="showDrawer = false">
           <Icon class="mr-2" name="ph:rss" size="1.5rem" />
           RSS
@@ -62,24 +64,24 @@
 </template>
 
 <script setup lang="ts">
-import Drawer from "~/components/Drawer.vue";
+  import Drawer from '~/components/Drawer.vue';
 
-const isScrolled = ref(false);
-const isFixed = ref(false);
-const lastScrollPosition = ref(0);
-const showDrawer = ref(false);
+  const isScrolled = ref(false);
+  const isFixed = ref(false);
+  const lastScrollPosition = ref(0);
+  const showDrawer = ref(false);
 
-onMounted(() => {
-  window.addEventListener("scroll", () => {
-    const isDown = lastScrollPosition.value < window.scrollY;
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    isScrolled.value = scrollTop > 100 && isDown;
-    isFixed.value = scrollTop > 100 && !isDown;
-    nextTick(() => {
-      lastScrollPosition.value = scrollTop;
+  onMounted(() => {
+    window.addEventListener('scroll', () => {
+      const isDown = lastScrollPosition.value < window.scrollY;
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      isScrolled.value = scrollTop > 100 && isDown;
+      isFixed.value = scrollTop > 100 && !isDown;
+      nextTick(() => {
+        lastScrollPosition.value = scrollTop;
+      });
     });
   });
-});
 </script>
 
 <style lang="scss" scoped></style>
