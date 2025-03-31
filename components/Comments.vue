@@ -1,0 +1,856 @@
+<template>
+  <div class="comments-section">
+    <h2 class="comments-title">评论</h2>
+
+    <!-- 评论列表 -->
+    <div class="comments-list">
+      <!-- 主评论输入框 -->
+      <div class="comment-form">
+        <div class="form-header">
+          <div class="avatar">
+            <img :src="avatar" alt="用户头像" />
+          </div>
+          <div class="form-content">
+            <div class="markdown-toolbar">
+              <button class="tool-btn" @click="insertText('**', '**')" title="加粗">
+                <Icon name="carbon:text-bold" />
+              </button>
+              <button class="tool-btn" @click="insertText('*', '*')" title="斜体">
+                <Icon name="carbon:text-italic" />
+              </button>
+              <button class="tool-btn" @click="insertText('__', '__')" title="下划线">
+                <Icon name="carbon:text-underline" />
+              </button>
+              <button class="tool-btn" @click="insertText('> ')" title="引用">
+                <Icon name="carbon:quote" />
+              </button>
+              <button class="tool-btn" @click="insertText('`', '`')" title="代码">
+                <Icon name="carbon:code" />
+              </button>
+              <button class="tool-btn" @click="insertText('```\n', '\n```')" title="代码块">
+                <Icon name="carbon:code-block" />
+              </button>
+              <button class="tool-btn" @click="insertText('@')" title="@用户">
+                <Icon name="carbon:user-avatar" />
+              </button>
+              <button class="tool-btn" @click="triggerImageUpload" title="插入图片">
+                <Icon name="carbon:image" />
+              </button>
+              <input type="file" ref="imageInput" accept="image/*" class="hidden" @change="handleImageUpload" />
+            </div>
+            <textarea v-model="commentContent" placeholder="写下你的评论..." rows="3" @keydown.enter.prevent="handleSubmit"></textarea>
+            <div class="form-footer">
+              <div class="form-tools">
+                <Popover position="bottom" :offset="8" :width="300">
+                  <template #trigger>
+                    <button class="tool-btn">😊</button>
+                  </template>
+                  <div class="emoji-picker">
+                    <div class="emoji-list">
+                      <span v-for="emoji in emojis" :key="emoji" class="emoji-item" @click="insertEmoji(emoji)">
+                        {{ emoji }}
+                      </span>
+                    </div>
+                  </div>
+                </Popover>
+                <Popover position="bottom" :offset="8" :width="400" :arrow="true">
+                  <template #trigger>
+                    <button class="tool-btn">预览</button>
+                  </template>
+                  <div class="preview-panel">
+                    <div class="preview-title">预览</div>
+                    <div class="preview-content markdown-body" v-html="renderedContent"></div>
+                  </div>
+                </Popover>
+              </div>
+              <div class="form-actions">
+                <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">发表评论</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="comments.length === 0" class="no-comments">暂无评论，快来抢沙发吧！</div>
+      <template v-else>
+        <div v-for="comment in comments" :key="comment.id" class="comment-item">
+          <div class="comment-avatar">
+            <img :src="comment.avatar" :alt="comment.username" />
+          </div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="username">{{ comment.username }}</span>
+              <span class="time">{{ formatTime(comment.createTime) }}</span>
+            </div>
+            <div class="comment-text" v-html="comment.content"></div>
+            <div class="comment-actions">
+              <button class="action-btn" @click="handleReply(comment)">回复</button>
+              <button class="action-btn" @click="handleLike(comment)">{{ comment.likes }} 赞</button>
+            </div>
+
+            <!-- 子评论列表 -->
+            <div v-if="comment.replies && comment.replies.length > 0" class="replies-list">
+              <div v-for="reply in comment.replies" :key="reply.id" class="reply-item">
+                <div class="reply-avatar">
+                  <img :src="reply.avatar" :alt="reply.username" />
+                </div>
+                <div class="reply-content">
+                  <div class="reply-header">
+                    <span class="username">{{ reply.username }}</span>
+                    <span v-if="reply.replyTo" class="reply-to">
+                      回复 <span class="reply-to-user">@{{ reply.replyTo }}</span>
+                    </span>
+                    <span class="time">{{ formatTime(reply.createTime) }}</span>
+                  </div>
+                  <div class="reply-text" v-html="reply.content"></div>
+                  <div class="reply-actions">
+                    <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
+                    <button class="action-btn" @click="handleLike(reply)">{{ reply.likes }} 赞</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 回复框 -->
+            <div v-if="replyTo && replyTo.parentId === comment.id" class="reply-form">
+              <div class="form-header">
+                <div class="avatar">
+                  <img :src="avatar" alt="用户头像" />
+                </div>
+                <div class="form-content">
+                  <textarea v-model="commentContent" :placeholder="`回复 @${replyTo.username}`" rows="3" @keydown.enter.prevent="handleSubmit"></textarea>
+                  <div class="form-footer">
+                    <div class="form-actions">
+                      <button class="cancel-btn" @click="cancelReply">取消回复</button>
+                      <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">回复</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, nextTick } from "vue";
+import avatar from "@/assets/images/avatar.png";
+import Popover from "./Popover.vue";
+import { marked } from "marked";
+
+const props = defineProps<{
+  identifier: string;
+}>();
+
+// 评论内容
+const commentContent = ref("");
+const showPreview = ref(false);
+const replyTo = ref<any>(null);
+const imageInput = ref<HTMLInputElement | null>(null);
+
+// 表情列表
+const emojis = ["😊", "😂", "🤔", "👍", "❤️", "🎉", "✨", "🌟", "💡", "📝"];
+
+// 类型定义
+interface Comment {
+  id: number;
+  username: string;
+  avatar: string;
+  content: string;
+  createTime: number;
+  likes: number;
+  replies: Reply[];
+}
+
+interface Reply {
+  id: number;
+  username: string;
+  avatar: string;
+  content: string;
+  createTime: number;
+  likes: number;
+  replyTo: string;
+}
+
+// 模拟评论数据
+const comments = ref([
+  {
+    id: 1,
+    username: "张三",
+    avatar: avatar,
+    content: "这是一条示例评论，支持 Markdown 格式。",
+    createTime: new Date().getTime() - 3600000,
+    likes: 5,
+    replies: [
+      {
+        id: 11,
+        username: "李四",
+        avatar: avatar,
+        content: "这是一条回复评论。",
+        createTime: new Date().getTime() - 3500000,
+        likes: 2,
+        replyTo: "张三",
+      },
+    ],
+  },
+  {
+    id: 2,
+    username: "李四",
+    avatar: avatar,
+    content: "评论内容可以包含 **加粗** 和 *斜体* 等格式。",
+    createTime: new Date().getTime() - 7200000,
+    likes: 3,
+    replies: [],
+  },
+]);
+
+// 渲染 Markdown 内容
+const renderedContent = computed(() => {
+  if (!commentContent.value) return "";
+  return marked(commentContent.value);
+});
+
+// 处理评论提交
+const handleSubmit = () => {
+  if (!commentContent.value.trim()) return;
+
+  const newComment: Comment | Reply = replyTo.value
+    ? {
+        id: Date.now(),
+        username: "当前用户",
+        avatar: avatar,
+        content: commentContent.value,
+        createTime: new Date().getTime(),
+        likes: 0,
+        replyTo: replyTo.value.username,
+      }
+    : {
+        id: Date.now(),
+        username: "当前用户",
+        avatar: avatar,
+        content: commentContent.value,
+        createTime: new Date().getTime(),
+        likes: 0,
+        replies: [],
+      };
+
+  if (replyTo.value) {
+    // 如果是回复评论
+    const parentComment = comments.value.find((c) => c.id === replyTo.value.parentId);
+    if (parentComment) {
+      if (!parentComment.replies) {
+        parentComment.replies = [];
+      }
+      parentComment.replies.push(newComment as Reply);
+    }
+  } else {
+    // 如果是新评论
+    comments.value.push(newComment as Comment);
+  }
+
+  // 清空输入框和回复状态
+  commentContent.value = "";
+  replyTo.value = null;
+};
+
+// 处理回复
+const handleReply = (comment: any, reply?: any) => {
+  replyTo.value = {
+    parentId: comment.id,
+    username: reply ? reply.username : comment.username,
+  };
+};
+
+// 取消回复
+const cancelReply = () => {
+  replyTo.value = null;
+  commentContent.value = "";
+};
+
+// 处理点赞
+const handleLike = (comment: any) => {
+  comment.likes++;
+  // TODO: 调用后端 API 更新点赞数
+};
+
+// 插入表情
+const insertEmoji = (emoji: string) => {
+  commentContent.value += emoji;
+};
+
+// 切换预览
+const togglePreview = () => {
+  showPreview.value = !showPreview.value;
+};
+
+// 格式化时间
+const formatTime = (timestamp: number) => {
+  const now = new Date().getTime();
+  const diff = now - timestamp;
+
+  if (diff < 60000) return "刚刚";
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
+  if (diff < 2592000000) return `${Math.floor(diff / 86400000)}天前`;
+  return new Date(timestamp).toLocaleDateString();
+};
+
+// 插入文本
+const insertText = (before: string, after: string = "") => {
+  const textarea = document.querySelector("textarea") as HTMLTextAreaElement;
+  if (!textarea) return;
+
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const text = textarea.value;
+  const selectedText = text.substring(start, end);
+
+  const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
+  commentContent.value = newText;
+
+  // 恢复光标位置
+  nextTick(() => {
+    textarea.focus();
+    textarea.setSelectionRange(start + before.length, end + before.length);
+  });
+};
+
+// 触发图片上传
+const triggerImageUpload = () => {
+  imageInput.value?.click();
+};
+
+// 处理图片上传
+const handleImageUpload = async (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) return;
+
+  try {
+    // TODO: 实现图片上传到服务器的逻辑
+    // const formData = new FormData();
+    // formData.append('image', file);
+    // const response = await fetch('/api/upload', { method: 'POST', body: formData });
+    // const { url } = await response.json();
+
+    // 模拟上传成功
+    const url = URL.createObjectURL(file);
+    insertText(`![图片](${url})`);
+  } catch (error) {
+    console.error("图片上传失败:", error);
+  } finally {
+    input.value = "";
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+@use "~/assets/styles/themes.scss" as *;
+
+.comments-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid;
+  @include themed() {
+    border-color: themed("border");
+  }
+}
+
+.comments-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  @include themed() {
+    color: themed("primary");
+  }
+}
+
+.comments-list {
+  .no-comments {
+    text-align: center;
+    padding: 2rem;
+    @include themed() {
+      color: themed("text-light");
+    }
+  }
+}
+
+.comment-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid;
+  @include themed() {
+    border-color: themed("border");
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.comment-content {
+  flex: 1;
+
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .username {
+    font-weight: 500;
+    @include themed() {
+      color: themed("text");
+    }
+  }
+
+  .time {
+    font-size: 0.875rem;
+    @include themed() {
+      color: themed("text-light");
+    }
+  }
+
+  .comment-text {
+    line-height: 1.7;
+    @include themed() {
+      color: themed("text");
+    }
+  }
+
+  .comment-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .action-btn {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    @include themed() {
+      color: themed("text-light");
+
+      &:hover {
+        color: themed("primary");
+      }
+    }
+  }
+}
+
+.replies-list {
+  margin-top: 1rem;
+  padding-left: 1rem;
+  border-left: 2px solid;
+  @include themed() {
+    border-color: themed("border");
+  }
+}
+
+.reply-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid;
+  @include themed() {
+    border-color: themed("border");
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.reply-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.reply-content {
+  flex: 1;
+
+  .reply-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .reply-to {
+    font-size: 0.875rem;
+    @include themed() {
+      color: themed("text-light");
+    }
+
+    .reply-to-user {
+      color: themed("primary");
+    }
+  }
+
+  .reply-text {
+    line-height: 1.7;
+    @include themed() {
+      color: themed("text");
+    }
+  }
+
+  .reply-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cancel-btn {
+  padding: 0.3rem 0.5;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  @include themed() {
+    background-color: themed("border");
+    color: themed("text");
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+.reply-form {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  @include themed() {
+    background-color: themed("bg");
+    border: 1px solid themed("border");
+  }
+
+  .form-header {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .form-content {
+    flex: 1;
+
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid;
+      resize: vertical;
+      @include themed() {
+        background-color: themed("bg");
+        border-color: themed("border");
+        color: themed("text");
+
+        &:focus {
+          outline: none;
+          border-color: themed("primary");
+        }
+      }
+    }
+  }
+
+  .form-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+.comment-form {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  @include themed() {
+    background-color: themed("bg");
+    border: 1px solid themed("border");
+  }
+
+  .form-header {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .form-content {
+    flex: 1;
+
+    .markdown-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      @include themed() {
+        background-color: themed("bg");
+        border: 1px solid themed("border");
+      }
+
+      .tool-btn {
+        padding: 0.25rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-radius: 0.25rem;
+        transition: all 0.2s;
+
+        i {
+          width: 1rem;
+          height: 1rem;
+          @include themed() {
+            color: themed("text");
+
+            &:hover {
+              color: themed("primary");
+            }
+          }
+        }
+
+        i {
+          font-size: 1.25rem;
+        }
+      }
+    }
+
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid;
+      resize: vertical;
+      @include themed() {
+        background-color: themed("bg");
+        border-color: themed("border");
+        color: themed("text");
+
+        &:focus {
+          outline: none;
+          border-color: themed("primary");
+        }
+      }
+    }
+  }
+
+  .form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  .form-tools {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .tool-btn {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    @include themed() {
+      color: themed("text-light");
+
+      &:hover {
+        color: themed("primary");
+      }
+    }
+  }
+
+  .submit-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    border: none;
+    cursor: pointer;
+    @include themed() {
+      background-color: themed("primary");
+      color: white;
+
+      &:disabled {
+        background-color: themed("border");
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        opacity: 0.9;
+      }
+    }
+  }
+}
+
+.emoji-picker {
+  .emoji-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .emoji-item {
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 1.2rem;
+
+    &:hover {
+      @include themed() {
+        color: themed("primary");
+      }
+    }
+  }
+}
+
+.preview-panel {
+  padding: 1rem;
+
+  .preview-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+    @include themed() {
+      color: themed("text");
+    }
+  }
+
+  .preview-content {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    @include themed() {
+      background-color: themed("bg");
+      border: 1px solid themed("border");
+    }
+
+    :deep(p) {
+      margin: 0.5em 0;
+    }
+
+    :deep(code) {
+      background-color: var(--border-color);
+      padding: 0.2em 0.4em;
+      border-radius: 0.25rem;
+      font-family: monospace;
+    }
+
+    :deep(pre) {
+      background-color: var(--border-color);
+      padding: 1em;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin: 1em 0;
+
+      code {
+        background-color: transparent;
+        padding: 0;
+      }
+    }
+
+    :deep(blockquote) {
+      margin: 1em 0;
+      padding-left: 1em;
+      border-left: 3px solid var(--primary-color);
+      @include themed() {
+        color: themed("text-light");
+      }
+    }
+
+    :deep(ul),
+    :deep(ol) {
+      padding-left: 1.5em;
+      margin: 0.5em 0;
+    }
+
+    :deep(a) {
+      color: var(--primary-color);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    :deep(img) {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      margin: 0.5em 0;
+    }
+
+    :deep(table) {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 0.5em 0;
+
+      th,
+      td {
+        border: 1px solid var(--border-color);
+        padding: 0.5em;
+        text-align: left;
+      }
+
+      th {
+        background-color: var(--border-color);
+      }
+    }
+  }
+}
+</style>

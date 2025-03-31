@@ -7,7 +7,7 @@ $theme-map: null !default;
 :root {
   --primary-color: #00c6fb;
   --secondary-color: #005bea;
-  --text-color: #333;
+  --text-color: #404040;
   --text-light: #666;
   --bg-color: #fff;
   --border-color: #e5e7eb;
@@ -56,7 +56,7 @@ $themes: (
   "default": (
     "primary": #00c6fb,
     "secondary": #005bea,
-    "text": #333,
+    "text": #404040,
     "text-light": #666,
     "bg": #fff,
     "border": #e5e7eb,
@@ -116,5 +116,8 @@ $themes: (
 
 // Theme function
 @function themed($key) {
+  @if $theme-map == null {
+    @return var(--#{$key}-color);
+  }
   @return map.get($theme-map, $key);
 }

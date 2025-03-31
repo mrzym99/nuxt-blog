@@ -1,5 +1,5 @@
 @use "themes" as *;
-@use "main" as *;
+@use "global" as *;
 
 .blog-bg {
   @include themed() {
@@ -18,7 +18,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.4);
     z-index: 1;
   }
 
@@ -45,24 +45,26 @@
     background-color: themed("bg");
   }
 
-  @include hover-effect {
-    @include themed() {
-      background-color: rgba(themed("primary"), 0.01);
+  .blog-info {
+    @include hover-effect {
+      @include themed() {
+        background-color: rgba(themed("primary"), 0.01);
 
-      .post-title {
-        color: themed("primary");
-      }
+        .post-title {
+          color: themed("primary");
+        }
 
-      .post-meta {
-        color: themed("primary");
-      }
+        .post-meta {
+          color: themed("primary");
+        }
 
-      .post-excerpt {
-        color: themed("primary");
-      }
+        .post-excerpt {
+          color: themed("primary");
+        }
 
-      .read-more {
-        color: themed("primary");
+        .read-more {
+          color: themed("primary");
+        }
       }
     }
   }
@@ -103,21 +105,27 @@
       color: themed("text-light");
     }
   }
+}
 
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1rem;
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 
-    .tag {
-      padding: 0.25rem 0.75rem;
-      @include themed() {
-        background-color: themed("border");
-        color: themed("text");
-      }
-      border-radius: 9999px;
-      font-size: 0.875rem;
+  .tag {
+    cursor: pointer;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    @include themed() {
+      background-color: themed("border");
+      color: themed("text");
+    }
+    border-radius: 9999px;
+    font-size: 0.875rem;
+
+    @include hover-effect {
+      background-color: themed("primary");
+      color: white;
     }
   }
 }
@@ -218,5 +226,11 @@
         }
       }
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .blog-post {
+    padding: 1rem !important;
   }
 }

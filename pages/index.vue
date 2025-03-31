@@ -7,31 +7,33 @@
     </section>
 
     <!-- Main Content with Sidebar -->
-    <div class="container mx-auto py-8">
+    <div class="container mx-auto py-8 lt-sm:py-4">
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Blog Posts -->
         <main class="flex-1">
           <div class="space-y-8">
-            <article v-for="post in posts" :key="post.id" class="blog-post group cursor-pointer" @click="navigateTo(post.slug)">
-              <div class="flex flex-col md:flex-row md:items-center gap-4">
-                <div class="flex-1">
-                  <h3 class="post-title">
-                    {{ post.title }}
-                  </h3>
-                  <div class="post-meta">
-                    <span>{{ post.date }}</span>
-                    <span class="mx-2">·</span>
-                    <span>{{ post.readTime }} min read</span>
+            <article v-for="post in posts" :key="post.id" class="blog-post group cursor-pointer">
+              <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between blog-info" @click="navigateTo(post.slug)">
+                  <div class="flex-1">
+                    <h3 class="post-title">
+                      {{ post.title }}
+                    </h3>
+                    <div class="post-meta">
+                      <span>{{ post.date }}</span>
+                      <span class="mx-2">·</span>
+                      <span>{{ post.readTime }} min read</span>
+                    </div>
+                    <p class="post-excerpt">{{ post.excerpt }}</p>
                   </div>
-                  <p class="post-excerpt">{{ post.excerpt }}</p>
-                  <div class="tags">
-                    <span v-for="tag in post.tags" :key="tag" class="tag">
-                      {{ tag }}
-                    </span>
+                  <div class="flex items-center">
+                    <span class="read-more"> Read More → </span>
                   </div>
                 </div>
-                <div class="flex items-center">
-                  <span class="read-more"> Read More → </span>
+                <div class="tags">
+                  <span v-for="tag in post.tags" :key="tag" class="tag" @click="navigateTo('/tags/' + tag)">
+                    {{ tag }}
+                  </span>
                 </div>
               </div>
             </article>
@@ -145,7 +147,7 @@ const recentPosts = computed(() => {
 
 <style scoped>
 .blog-post {
-  @apply p-6 rounded-lg  transition-colors;
+  @apply p-6 rounded-lg transition-colors;
 }
 
 .post-title {
@@ -160,7 +162,19 @@ const recentPosts = computed(() => {
   @apply text-gray-600 mb-4;
 }
 
-.blog-blog-card {
+.tags {
+  @apply flex flex-wrap gap-2;
+}
+
+.tag {
+  @apply px-2 py-1 text-sm rounded-full;
+}
+
+.read-more {
+  @apply text-sm;
+}
+
+.blog-card {
   @apply p-6 rounded-lg;
 }
 </style>

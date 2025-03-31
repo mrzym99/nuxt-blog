@@ -54,9 +54,9 @@ onMounted(() => {
 .theme-switcher {
   position: relative;
   .theme-button {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 2rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 1.8rem;
     @include themed() {
       background-color: themed("primary");
       color: white;
