@@ -3,16 +3,19 @@
     <!-- Navigation -->
     <nav class="nav" :class="{ 'nav-scrolled': isScrolled, 'nav-fixed': isFixed }">
       <div class="nav-container">
-        <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> My Blog </NuxtLink>
+        <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> Zym'S Blog </NuxtLink>
         <!-- 移动端菜单按钮 -->
-        <button class="menu-toggle" @click="showDrawer = true">
-          <Icon class="menu-toggle-icon" name="ph:list" size="1.5rem" />
-        </button>
+        <div class="flex items-center md:hidden">
+          <ThemeSwitch class="mr-3" />
+          <button class="menu-toggle" @click="showDrawer = true">
+            <Icon class="menu-toggle-icon" name="ph:list" size="1.5rem" />
+          </button>
+        </div>
         <!-- PC端导航链接 -->
         <div class="nav-links">
           <NuxtLink to="/">Home</NuxtLink>
           <NuxtLink to="/about">About</NuxtLink>
-          <NuxtLink to="/archive">Archive</NuxtLink>
+          <NuxtLink to="/archives/all">Archive</NuxtLink>
           <a href="/rss.xml" target="_blank" class="rss-link" title="RSS 订阅">
             <Icon name="ph:rss" size="1.5rem" />
           </a>
@@ -26,16 +29,13 @@
       <div class="mobile-nav">
         <NuxtLink to="/" class="mobile-nav-item" @click="showDrawer = false">Home</NuxtLink>
         <NuxtLink to="/about" class="mobile-nav-item" @click="showDrawer = false">About</NuxtLink>
-        <NuxtLink to="/archive" class="mobile-nav-item" @click="showDrawer = false"
+        <NuxtLink to="/archives/all" class="mobile-nav-item" @click="showDrawer = false"
           >Archive</NuxtLink
         >
         <a href="/rss.xml" target="_blank" class="mobile-nav-item" @click="showDrawer = false">
           <Icon class="mr-2" name="ph:rss" size="1.5rem" />
           RSS
         </a>
-        <div class="mobile-nav-item">
-          <ThemeSwitch />
-        </div>
       </div>
     </Drawer>
 
@@ -48,7 +48,7 @@
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
-          <p>© {{ new Date().getFullYear() }} My Blog. All rights reserved.</p>
+          <p>© {{ new Date().getFullYear() }} Zym'S Blog. All rights reserved.</p>
           <div class="social-links">
             <a href="https://github.com" target="_blank" rel="noopener noreferrer">
               <Icon name="ph:github-logo-light" size="1.5rem" />

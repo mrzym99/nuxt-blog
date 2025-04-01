@@ -6,15 +6,36 @@
 </template>
 
 <script setup lang="ts">
+import 'highlight.js/styles/atom-one-dark.css';
+
 import { computed } from 'vue';
 import { marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
 import Catalog from './Catalog.vue';
+import hljs from 'highlight.js';
 
 type ArticleProps = {
   article: IArticle;
 };
 
 const props = defineProps<ArticleProps>();
+
+// 配置marked-highlight
+marked.use(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code: string, lang: string) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(code, { language: lang }).value;
+        } catch (error) {
+          console.error('代码高亮错误:', error);
+        }
+      }
+      return code;
+    },
+  })
+);
 
 // 渲染 Markdown 内容
 const renderedContent = computed(() => {
@@ -45,13 +66,36 @@ const renderedContent = computed(() => {
   grid-template-columns: 1fr 240px;
   gap: 2rem;
 
-  @include responsive(lg) {
+  @include responsive(md) {
     display: block;
   }
 
   .article-body {
     @include themed() {
       color: themed('text');
+    }
+
+    :deep(pre) {
+      @apply rounded-md p-4 my-4 overflow-x-auto;
+      @include themed() {
+        background-color: var(--code-bg-color);
+      }
+    }
+
+    :deep(code) {
+      @apply font-mono text-sm;
+    }
+
+    :deep(p) {
+      @apply my-4 leading-relaxed;
+    }
+
+    :deep(blockquote) {
+      @apply pl-4 border-l-4 my-4 italic;
+      @include themed() {
+        border-color: themed('primary');
+        color: var(--text-secondary-color);
+      }
     }
   }
 }

@@ -13,6 +13,9 @@ $theme-map: null !default;
   --border-color: #e5e7eb;
   --hover-color: #00a8e6;
   --nav-text-color: #fff;
+  --code-bg-color: #f6f8fa;
+  --code-text-color: #24292e;
+  --text-secondary-color: #6a737d;
 }
 
 // Dark theme
@@ -25,6 +28,8 @@ $theme-map: null !default;
   --border-color: #374151;
   --hover-color: #3b82f6;
   --nav-text-color: #fff;
+  --code-bg-color: #1e1e1e;
+  --text-secondary-color: #a0a0a0;
 }
 
 // Purple theme
@@ -37,6 +42,9 @@ $theme-map: null !default;
   --border-color: #e5e7eb;
   --hover-color: #8b5cf6;
   --nav-text-color: #fff;
+  --code-bg-color: #f6f8fa;
+  --code-text-color: #24292e;
+  --text-secondary-color: #6a737d;
 }
 
 // Green theme
@@ -49,6 +57,9 @@ $theme-map: null !default;
   --border-color: #e5e7eb;
   --hover-color: #10b981;
   --nav-text-color: #fff;
+  --code-bg-color: #f6f8fa;
+  --code-text-color: #24292e;
+  --text-secondary-color: #6a737d;
 }
 
 // Theme configurations

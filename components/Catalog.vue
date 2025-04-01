@@ -139,6 +139,7 @@ onUnmounted(() => {
 @use '~/assets/styles/themes.scss' as *;
 @use '~/assets/styles/global.scss' as *;
 .catalog-pc {
+  display: block;
   width: 240px;
   padding: 1rem;
   border-radius: 0.5rem;
@@ -155,6 +156,10 @@ onUnmounted(() => {
     max-height: calc(100vh - 8rem);
     overflow-y: auto;
     z-index: 10;
+  }
+
+  @include responsive(md) {
+    display: none;
   }
 }
 
@@ -211,6 +216,10 @@ onUnmounted(() => {
   right: 3px;
   z-index: 100;
 
+  @include responsive(md) {
+    display: block;
+  }
+
   .catalog-toggle {
     display: flex;
     align-items: center;
@@ -258,16 +267,6 @@ onUnmounted(() => {
     i {
       font-size: 1.25rem;
     }
-  }
-}
-
-@media (max-width: $breakpoint-lg) {
-  .catalog-pc {
-    display: none;
-  }
-
-  .catalog-mobile {
-    display: block;
   }
 }
 </style>

@@ -7,6 +7,7 @@ $max-width: 1280px;
 $smaller-max-width: 880px;
 
 $duration: 300ms;
+$duration-slow: 500ms;
 
 $line-height-normal: 1.4;
 $line-height-large: 1.7;
@@ -60,6 +61,25 @@ $breakpoint-xl: 1280px;
 
 .text-gradient {
   @include text-gradient;
+}
+
+@mixin bg {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all $duration-slow ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1;
+  }
 }
 
 // Typography

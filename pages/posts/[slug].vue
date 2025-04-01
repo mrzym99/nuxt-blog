@@ -2,9 +2,8 @@
   <div
     :class="{
       'transition-all duration-300': article.cover,
-      'article-header cover blog-bg h-36rem flex lt-lg:h-28rem lt-md:h-24rem pt-6rem lt-lg:pt-4rem':
-        article.cover,
-      'article-header mb-2rem pt-20': !article.cover,
+      'article-header cover article-bg': article.cover,
+      'article-header': !article.cover,
     }"
     :style="{
       backgroundImage: article.cover ? `url(${article.cover})` : 'none',
@@ -16,7 +15,7 @@
           class="tag"
           v-for="tag in article.tags"
           :key="tag"
-          @click="navigateTo(`/tags/${tag}`)"
+          @click="navigateTo(`/archives/${tag}`)"
         >
           {{ tag }}
         </span>
@@ -45,6 +44,7 @@ import { useArticleStore } from '~/store';
 const { setCurrentArticle } = useArticleStore();
 const route = useRoute();
 const slug = route.params.slug as string;
+console.log(slug);
 
 const article = ref<IArticle>({
   id: 0,
@@ -138,6 +138,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use '~/assets/styles/themes.scss' as *;
 @use '~/assets/styles/global.scss' as *;
+
 .post-detail {
   min-height: 100vh;
   @include themed() {
@@ -145,28 +146,44 @@ onMounted(() => {
   }
 }
 
+.article-bg {
+  min-height: 32rem;
+  display: flex;
+  align-items: center;
+
+  @include bg;
+
+  @include responsive(lg) {
+    min-height: 28rem;
+  }
+
+  @include responsive(md) {
+    min-height: 24rem;
+  }
+}
+
 .article-header {
   h1 {
-    margin: 1rem 0;
-    line-height: 1.1;
-    font-size: 2.4rem;
-    font-weight: 700;
+    font-size: 4rem;
+    margin: 1.4rem 0;
+    font-weight: 600;
+
     @include themed() {
       color: themed('text');
     }
   }
 
   h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.2rem;
-    line-height: $line-height-normal;
+    font-size: 1.6rem;
+    margin: 0 0 3rem 0;
     font-weight: 300;
+
     @include themed() {
       color: themed('text-light');
     }
   }
 
-  @include responsive(md) {
+  @include responsive(lg) {
     h1 {
       font-size: 3rem;
       margin: 1.4rem 0;
@@ -178,21 +195,15 @@ onMounted(() => {
     }
   }
 
-  @include responsive(lg) {
+  @include responsive(md) {
     h1 {
-      font-size: 4rem;
-      margin: 1.4rem 0;
+      font-size: 2rem;
+      margin: 1rem 0;
     }
 
     h3 {
-      font-size: 1.6rem;
-      margin: 0 0 3rem 0;
-    }
-
-    .article-meta {
-      .date {
-        font-size: 1.2rem !important;
-      }
+      margin: 0 0 1rem 0;
+      font-size: 1.2rem;
     }
   }
 
@@ -202,9 +213,15 @@ onMounted(() => {
     }
 
     .date {
-      font-size: 1rem;
+      font-size: 1.2rem;
       font-weight: 100;
       font-style: italic;
+    }
+
+    @include responsive(md) {
+      .date {
+        font-size: 1rem;
+      }
     }
   }
 }
@@ -245,8 +262,12 @@ onMounted(() => {
 }
 
 .info-wrapper {
-  @include responsive(lg) {
-    padding-right: 260px;
+  padding-top: 6rem;
+  padding-bottom: 3rem;
+  padding-right: 260px;
+  @include responsive(md) {
+    padding-top: 4rem;
+    padding-right: 2rem;
   }
 }
 </style>

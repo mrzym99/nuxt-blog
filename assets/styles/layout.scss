@@ -5,8 +5,13 @@
 .container {
   margin: 0 auto;
   padding: 0 5rem 0 10rem;
-  @include responsive(lg) {
+
+  @include responsive(md) {
     padding: 0 1rem;
+  }
+
+  @include responsive(lg) {
+    padding: 0 2rem;
   }
 }
 
@@ -116,17 +121,14 @@
 
 .nav {
   .menu-toggle {
-    display: none;
-
-    @include responsive(lg) {
-      display: block;
-    }
+    display: flex;
+    align-items: center;
   }
 
   .nav-links {
     display: flex;
 
-    @include responsive(lg) {
+    @include responsive(md) {
       display: none;
     }
   }
@@ -223,20 +225,5 @@
         }
       }
     }
-  }
-}
-
-// Responsive design
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2rem;
-  }
-
-  .nav-links {
-    gap: 1rem;
-  }
-
-  .container {
-    padding: 0 1rem;
   }
 }
