@@ -70,13 +70,13 @@
 
   .post-title {
     transition: all $duration ease;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     margin-bottom: 0.5rem;
     @include themed() {
       color: themed('text');
     }
     @include responsive(md) {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
     }
   }
 

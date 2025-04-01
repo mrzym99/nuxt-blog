@@ -41,10 +41,12 @@ const renderedContent = computed(() => {
 .article-content {
   margin: 0 auto;
 
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 2rem;
+
   @include responsive(lg) {
-    display: grid;
-    grid-template-columns: 1fr 240px;
-    gap: 2rem;
+    display: block;
   }
 
   .article-body {

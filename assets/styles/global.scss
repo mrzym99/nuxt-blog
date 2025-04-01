@@ -25,19 +25,19 @@ $breakpoint-xl: 1280px;
 // Mixins
 @mixin responsive($breakpoint) {
   @if $breakpoint == sm {
-    @media (min-width: $breakpoint-sm) {
+    @media (max-width: $breakpoint-sm) {
       @content;
     }
   } @else if $breakpoint == md {
-    @media (min-width: $breakpoint-md) {
+    @media (max-width: $breakpoint-md) {
       @content;
     }
   } @else if $breakpoint == lg {
-    @media (min-width: $breakpoint-lg) {
+    @media (max-width: $breakpoint-lg) {
       @content;
     }
   } @else if $breakpoint == xl {
-    @media (min-width: $breakpoint-xl) {
+    @media (max-width: $breakpoint-xl) {
       @content;
     }
   }

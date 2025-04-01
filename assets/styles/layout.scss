@@ -4,10 +4,9 @@
 // Layout
 .container {
   margin: 0 auto;
-  padding: 0 1rem;
-
+  padding: 0 5rem 0 10rem;
   @include responsive(lg) {
-    padding: 0 5rem 0 10rem;
+    padding: 0 1rem;
   }
 }
 
@@ -117,17 +116,18 @@
 
 .nav {
   .menu-toggle {
-    display: block;
+    display: none;
+
     @include responsive(lg) {
-      display: none;
+      display: block;
     }
   }
 
   .nav-links {
-    display: none;
+    display: flex;
 
     @include responsive(lg) {
-      display: flex;
+      display: none;
     }
   }
 }
@@ -198,7 +198,7 @@
 
   .footer-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     justify-content: space-between;
     align-items: center;
@@ -207,7 +207,7 @@
     padding: 0 1rem;
 
     @include responsive(md) {
-      flex-direction: row;
+      flex-direction: column;
     }
   }
 
