@@ -12,9 +12,13 @@
       <div class="nav-container">
         <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> Zym'S Blog </NuxtLink>
         <!-- 移动端菜单按钮 -->
-        <button class="menu-toggle" @click="showDrawer = true">
-          <Icon class="menu-toggle-icon" name="ph:list" size="1.5rem" />
-        </button>
+        <!-- 移动端菜单按钮 -->
+        <div class="flex items-center md:hidden">
+          <ThemeSwitch class="mr-3" />
+          <button class="menu-toggle" @click="showDrawer = true">
+            <Icon class="menu-toggle-icon" name="ph:list" size="1.5rem" />
+          </button>
+        </div>
         <!-- PC端导航链接 -->
         <div class="nav-links">
           <NuxtLink to="/">Home</NuxtLink>
