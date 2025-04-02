@@ -153,7 +153,7 @@ onUnmounted(() => {
   &.catalog-fixed {
     position: fixed;
     top: 4rem;
-    max-height: calc(100vh - 8rem);
+    max-height: calc(100vh - 10rem);
     overflow-y: auto;
     z-index: 10;
   }

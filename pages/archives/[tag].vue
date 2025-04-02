@@ -37,7 +37,7 @@
                         {{ post.title }}
                       </NuxtLink>
                     </h3>
-                    <p class="text-gray-600">{{ post.excerpt }}</p>
+                    <p class="text-gray-600">{{ post.description }}</p>
                   </div>
                   <time class="text-sm text-gray-500">{{ post.date }}</time>
                 </div>

@@ -5,10 +5,10 @@ declare interface IArticle {
   date?: string;
   readTime?: number;
   description?: string;
+  description?: string;
   slug: string;
   createTime: number;
-  content: string;
+  content?: string;
   tags: string[];
-  category?: string;
   cover?: string;
 }

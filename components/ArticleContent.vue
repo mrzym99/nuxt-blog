@@ -1,7 +1,7 @@
 <template>
   <div class="article-content">
     <div class="article-body markdown-body" v-html="renderedContent"></div>
-    <Catalog :identifier="article.title" :cover="article.cover" />
+    <Catalog v-if="renderedContent" :identifier="article.title" :cover="article.cover" />
   </div>
 </template>
 
@@ -51,7 +51,7 @@ const renderedContent = computed(() => {
     gfm: true,
   });
 
-  return marked(props.article.content);
+  return marked(props.article.content || '');
 });
 </script>
 
@@ -61,6 +61,7 @@ const renderedContent = computed(() => {
 
 .article-content {
   margin: 0 auto;
+  width: 100%;
 
   display: grid;
   grid-template-columns: 1fr 240px;
@@ -71,6 +72,8 @@ const renderedContent = computed(() => {
   }
 
   .article-body {
+    width: 100%;
+    overflow: hidden;
     @include themed() {
       color: themed('text');
     }

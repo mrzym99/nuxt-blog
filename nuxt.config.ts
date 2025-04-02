@@ -17,6 +17,15 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {},
     },
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://mrzym.top:8888',
+          changeOrigin: true,
+          rewrite: (path: string) => path.replace(/^\/api/, ''),
+        },
+      },
+    },
   },
 
   unocss: {

@@ -1,50 +1,52 @@
 <template>
-  <div
-    :class="{
-      'transition-all duration-300': article.cover,
-      'article-header cover article-bg': article.cover,
-      'article-header': !article.cover,
-    }"
-    :style="{
-      backgroundImage: article.cover ? `url(${article.cover})` : 'none',
-    }"
-  >
-    <div class="container info-wrapper z-10">
-      <div :class="['tags', article.cover ? 'white-tags' : '']">
-        <span
-          class="tag"
-          v-for="tag in article.tags"
-          :key="tag"
-          @click="navigateTo(`/archives/${tag}`)"
-        >
-          {{ tag }}
-        </span>
-      </div>
-      <h1>{{ article.title }}</h1>
-      <h3>{{ article.description }}</h3>
-      <div class="article-meta">
-        <span class="date">Posted By XiaoZhang on {{ formatDate(article.createTime) }}</span>
+  <Loading :loading="loading">
+    <div
+      :class="{
+        'transition-all duration-300': article.cover,
+        'article-header cover article-bg': article.cover,
+        'article-header': !article.cover,
+      }"
+      :style="{
+        backgroundImage: article.cover ? `url(${article.cover})` : 'none',
+      }"
+    >
+      <div class="container info-wrapper z-10">
+        <div :class="['tags', article.cover ? 'white-tags' : '']">
+          <span
+            class="tag"
+            v-for="tag in article.tags"
+            :key="tag"
+            @click="navigateTo(`/archives/${tag}`)"
+          >
+            {{ tag }}
+          </span>
+        </div>
+        <h1>{{ article.title }}</h1>
+        <h3>{{ article.description }}</h3>
+        <div class="article-meta">
+          <span class="date">Posted By XiaoZhang on {{ formatDate(article.createTime) }}</span>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="post-detail container">
-    <ArticleContent :article="article" />
-  </div>
+    <div class="post-detail container">
+      <ArticleContent :article="article" />
+    </div>
+  </Loading>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
   layout: 'article',
 });
-import docker from '~/assets/images/docker.png';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useArticleStore } from '~/store';
+import { getArticleDetail } from '~/api';
 
+const loading = ref(false);
 const { setCurrentArticle } = useArticleStore();
 const route = useRoute();
 const slug = route.params.slug as string;
-console.log(slug);
 
 const article = ref<IArticle>({
   id: 0,
@@ -64,74 +66,27 @@ const formatDate = (timestamp: number) => {
   return new Date(timestamp).toLocaleDateString();
 };
 
-// Mock data - In a real app, this would come from an API or CMS
-const posts = [
-  {
-    id: 1,
-    title: 'Getting Started with Nuxt.js',
-    date: 'March 28, 2024',
-    readTime: 5,
-    createTime: 1717027200000,
-    description:
-      'Learn how to build modern web applications with Nuxt.js, a powerful Vue.js framework.',
-    slug: 'getting-started-with-nuxtjs',
-    cover: docker,
-    content: `
-# 示例文章
-
-这是一篇示例文章，展示了 Markdown 的各种功能。
-
-## 标题示例
-
-### 三级标题
-#### 四级标题
-
-## 文本格式
-
-- **粗体文本**
-- *斜体文本*
-- ~~删除线文本~~
-
-## 列表
-
-1. 第一项
-2. 第二项
-3. 第三项
-
-## 代码块
-
-\`\`\`javascript
-const hello = 'world';
-console.log(hello);
-\`\`\`
-
-## 引用
-
-> 这是一段引用文本。
-
-## 表格
-
-| 表头1 | 表头2 |
-|-------|-------|
-| 内容1 | 内容2 |
-| 内容3 | 内容4 |
-
-
-## 图片`,
-    tags: ['Nuxt.js', 'Vue.js', 'JavaScript', 'Web Development'],
-  },
-];
+const getArticleInfo = async () => {
+  loading.value = true;
+  const res = await getArticleDetail(slug);
+  loading.value = false;
+  article.value = {
+    id: res.result.id,
+    title: res.result.article_title,
+    date: res.result.updatedAt,
+    readTime: res.result.reading_duration / 1000,
+    description: res.result.article_description,
+    slug: 'posts/' + res.result.id,
+    createTime: res.result.createdAt,
+    content: res.result.article_content,
+    tags: res.result.tagNameList,
+    cover: res.result.article_cover,
+  };
+  setCurrentArticle(article.value);
+};
 
 onMounted(() => {
-  article.value = posts[0] as IArticle;
-  const num = Math.floor(Math.random() * 4);
-  posts[0].slug = slug;
-  if (num % 2 === 0) {
-    article.value.cover = docker;
-  } else {
-    article.value.cover = '';
-  }
-  setCurrentArticle(article.value);
+  getArticleInfo();
 });
 </script>
 
