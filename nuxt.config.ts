@@ -17,15 +17,6 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {},
     },
-    server: {
-      proxy: {
-        '/api': {
-          target: 'http://mrzym.top:8888',
-          changeOrigin: true,
-          rewrite: (path: string) => path.replace(/^\/api/, ''),
-        },
-      },
-    },
   },
 
   unocss: {
@@ -56,7 +47,19 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-28',
 
   nitro: {
+    devProxy: {
+      '/api': {
+        target: 'http://mrzym.top:8888',
+        changeOrigin: true,
+        prependPath: true,
+      },
+    },
     routeRules: {
+      '/': { prerender: true },
+      '/posts/**': { isr: true },
+      '/api/v1/**': {
+        proxy: 'http://mrzym.top:8888/**',
+      },
       '/rss.xml': {
         headers: {
           'Content-Type': 'application/xml',
