@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="loading" class="loading-container">
+    <div v-if="loading" class="loading-container min-h-20rem">
       <div class="loading-spinner">
         <div class="spinner"></div>
         <p class="loading-text">加载中...</p>
@@ -22,10 +22,7 @@ defineProps<{
 @use '~/assets/styles/themes.scss' as *;
 
 .loading-container {
-  @apply fixed inset-0 z-10 flex items-center justify-center;
-  @include themed() {
-    background-color: rgba(themed('bg'), 0.5);
-  }
+  @apply w-full h-full flex items-center justify-center;
 }
 
 .loading-spinner {

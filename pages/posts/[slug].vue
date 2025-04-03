@@ -1,5 +1,5 @@
 <template>
-  <Loading :loading="loading">
+  <div>
     <div
       :class="{
         'transition-all duration-300': article.cover,
@@ -28,10 +28,12 @@
         </div>
       </div>
     </div>
-    <div class="post-detail container">
-      <ArticleContent :article="article" />
-    </div>
-  </Loading>
+    <Loading :loading="loading">
+      <div class="post-detail container">
+        <ArticleContent :article="article" />
+      </div>
+    </Loading>
+  </div>
 </template>
 
 <script setup lang="ts">
