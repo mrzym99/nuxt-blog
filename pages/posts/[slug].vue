@@ -221,6 +221,7 @@ onMounted(() => {
 }
 
 .info-wrapper {
+  width: 100%;
   padding-top: 6rem;
   padding-bottom: 3rem;
   padding-right: 260px;

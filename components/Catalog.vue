@@ -165,7 +165,6 @@ onUnmounted(() => {
 
 .catalog-header {
   border-bottom: 1px solid var(--border-color);
-  margin-bottom: 1rem;
 
   h3 {
     font-size: 1.25rem;
