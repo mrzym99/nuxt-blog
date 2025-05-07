@@ -53,9 +53,10 @@
 
   .post-title {
     transition: all $duration ease;
-    font-size: 1.75rem;
-    line-height: $line-height-large;
+    font-size: 1.5rem;
+    line-height: $line-height-normal;
     margin-bottom: 0.8rem;
+    letter-spacing: normal;
     @include themed() {
       color: themed('text');
     }
@@ -64,21 +65,23 @@
     }
   }
 
-  .post-meta {
-    @include themed() {
-      color: themed('text-light');
-    }
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
-  }
-
   .post-description {
     transition: all $duration ease;
     @include themed() {
       color: themed('text-light');
     }
+    font-style: italic;
     margin-bottom: 1rem;
     overflow-wrap: break-word;
+  }
+
+  .post-meta {
+    @include themed() {
+      color: themed('text-light');
+    }
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-style: italic;
   }
 }
 
@@ -89,7 +92,7 @@
 
   .tag {
     cursor: pointer;
-    padding: 0.3rem 0.6rem;
+    padding: 0.3rem 0.8rem;
     font-size: 0.8rem;
     @include themed() {
       border: 1px solid themed('text');

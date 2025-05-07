@@ -1,7 +1,7 @@
 <template>
   <div class="article-content">
     <div class="article-body markdown-body" v-html="renderedContent"></div>
-    <Catalog v-if="renderedContent" :identifier="article.title" :cover="article.cover" />
+    <Catalog v-if="isMd && renderedContent" :identifier="article.title" :cover="article.cover" />
   </div>
 </template>
 
@@ -19,6 +19,10 @@ type ArticleProps = {
 };
 
 const props = defineProps<ArticleProps>();
+
+const isMd = computed(() => {
+  return props.article.contentType === 0;
+});
 
 // 配置marked-highlight
 marked.use(
@@ -39,6 +43,7 @@ marked.use(
 
 // 渲染 Markdown 内容
 const renderedContent = computed(() => {
+  if (!isMd.value) return props.article.content;
   const renderer = new marked.Renderer();
   (renderer.heading as any) = (text: any) => {
     const { depth, text: textContent } = text;
@@ -72,7 +77,6 @@ const renderedContent = computed(() => {
   }
 
   .article-body {
-    border-top: 1px solid var(--border-color);
     width: 100%;
     overflow: hidden;
     @include themed() {

@@ -87,8 +87,9 @@ const { getArticleHasCover } = toRefs(useArticleStore());
 
 onMounted(() => {
   window.addEventListener('scroll', () => {
-    const isDown = lastScrollPosition.value < window.screenY;
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const isDown = lastScrollPosition.value < scrollTop;
+
     isScrolled.value = scrollTop > 100 && isDown;
     isFixed.value = scrollTop > 100 && !isDown;
     nextTick(() => {

@@ -22,9 +22,12 @@
                   </h3>
                   <p class="post-description">{{ post.description }}</p>
                   <div class="post-meta">
-                    <span>{{ post.date }}</span>
-                    <span class="mx-2">·</span>
-                    <span>{{ post.readTime }} min read</span>
+                    <span
+                      >Posted by {{ post.author?.profile.nickName }} on
+                      {{ post.createdAt && formatDate(post.createdAt) }}</span
+                    >
+                    <!-- <span class="mx-2">·</span>
+                    <span>1000 min read</span> -->
                   </div>
                 </div>
               </div>
@@ -43,6 +46,11 @@ import { computed } from 'vue';
 import bg from '~/assets/images/bg.jpg';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
+import { formatDate } from '~/utils/tool';
+
+definePageMeta({
+  keepalive: true,
+});
 
 const posts = ref<IArticle[]>([]);
 const loading = ref(true);
@@ -60,17 +68,10 @@ onMounted(async () => {
     pageSize: 10,
   });
   loading.value = false;
-  posts.value = res.data.list.map((v: any) => {
+  posts.value = res.data.list.map((item: IArticle) => {
     return {
-      id: v.id,
-      title: v.title,
-      date: v.updatedAt,
-      readTime: 1000,
-      description: v.description,
-      slug: 'posts/' + v.id,
-      createTime: v.createdAt,
-      tags: v.tags,
-      cover: v.cover,
+      ...item,
+      slug: '/posts/' + item.id,
     };
   });
 });

@@ -140,7 +140,7 @@ onUnmounted(() => {
 @use '~/assets/styles/global.scss' as *;
 .catalog-pc {
   display: block;
-  width: 240px;
+  width: 200px;
   padding: 1rem;
   border-radius: 0.5rem;
   transition: all $duration ease;

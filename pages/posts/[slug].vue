@@ -15,7 +15,7 @@
           <span
             class="tag"
             v-for="tag in article.tags"
-            :key="tag"
+            :key="tag.id"
             @click="navigateTo(`/archives/${tag.name}`)"
           >
             {{ tag.name }}
@@ -24,7 +24,10 @@
         <h1>{{ article.title }}</h1>
         <h3>{{ article.description }}</h3>
         <div class="article-meta">
-          <span class="date">Posted By XiaoZhang on {{ formatDate(article.createTime) }}</span>
+          <span class="date"
+            >Posted By {{ article.author?.profile.nickName }} on
+            {{ article.createdAt && formatDate(article.createdAt) }}</span
+          >
         </div>
       </div>
     </div>
@@ -44,6 +47,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useArticleStore } from '~/store';
 import { getArticleDetail } from '~/api';
+import { formatDate } from '~/utils/tool';
 
 const loading = ref(false);
 const { setCurrentArticle } = useArticleStore();
@@ -53,20 +57,20 @@ const slug = route.params.slug as string;
 const article = ref<IArticle>({
   id: 0,
   title: '',
-  date: '',
-  readTime: 0,
   description: '',
-  slug: '',
-  createTime: 0,
-  content: '',
-  tags: [],
   cover: '',
+  tags: [],
+  slug: '',
+  createdAt: null,
+  updatedAt: null,
+  content: '',
+  contentType: 0,
+  order: null,
+  top: null,
+  type: 0,
+  originalUrl: '',
+  author: null,
 });
-
-// 格式化日期
-const formatDate = (timestamp: number) => {
-  return new Date(timestamp).toLocaleDateString();
-};
 
 const getArticleInfo = async () => {
   loading.value = true;
@@ -74,18 +78,7 @@ const getArticleInfo = async () => {
   loading.value = false;
   const result = res.data;
 
-  article.value = {
-    id: result.id,
-    title: result.title,
-    date: result.updatedAt,
-    readTime: 1000,
-    description: result.description,
-    slug: 'posts/' + result.id,
-    createTime: result.createdAt,
-    content: result.content,
-    tags: result.tags,
-    cover: result.cover,
-  };
+  Object.assign(article.value, result);
   setCurrentArticle(article.value);
 };
 
@@ -106,18 +99,18 @@ onMounted(() => {
 }
 
 .article-bg {
-  min-height: 32rem;
+  min-height: 28rem;
   display: flex;
   align-items: center;
 
   @include bg;
 
   @include responsive(lg) {
-    min-height: 28rem;
+    min-height: 24rem;
   }
 
   @include responsive(md) {
-    min-height: 24rem;
+    min-height: 20rem;
   }
 }
 
@@ -172,7 +165,7 @@ onMounted(() => {
     }
 
     .date {
-      font-size: 1.2rem;
+      font-size: 1rem;
       font-weight: 100;
       font-style: italic;
     }

@@ -3,7 +3,7 @@ import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
   devServer: {
-    port: 8080,
+    port: 8081,
   },
   devtools: { enabled: true },
 

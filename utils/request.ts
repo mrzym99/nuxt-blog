@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
 export interface ApiResponse<T> {
-  result: any;
+  data: any;
   code: number;
   message?: string;
 }
