@@ -20,22 +20,12 @@
                   <h3 class="post-title">
                     {{ post.title }}
                   </h3>
+                  <p class="post-description">{{ post.description }}</p>
                   <div class="post-meta">
                     <span>{{ post.date }}</span>
                     <span class="mx-2">·</span>
                     <span>{{ post.readTime }} min read</span>
                   </div>
-                  <p class="post-description">{{ post.description }}</p>
-                </div>
-                <div class="tags">
-                  <span
-                    v-for="tag in post.tags"
-                    :key="tag"
-                    class="tag"
-                    @click="navigateTo('/archives/' + tag)"
-                  >
-                    {{ tag }}
-                  </span>
                 </div>
               </div>
             </article>
@@ -50,7 +40,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import bg from '~/assets/images/bg.png';
+import bg from '~/assets/images/bg.jpg';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 
@@ -65,19 +55,22 @@ const bgStyle = computed(() => {
 
 onMounted(async () => {
   loading.value = true;
-  const res = await getArticleList({});
+  const res = await getArticleList({
+    current: 1,
+    pageSize: 10,
+  });
   loading.value = false;
-  posts.value = res.result.list.map((v: any) => {
+  posts.value = res.data.list.map((v: any) => {
     return {
       id: v.id,
-      title: v.article_title,
+      title: v.title,
       date: v.updatedAt,
-      readTime: v.reading_duration / 1000,
-      description: v.article_description,
+      readTime: 1000,
+      description: v.description,
       slug: 'posts/' + v.id,
       createTime: v.createdAt,
-      tags: v.tagNameList,
-      cover: v.article_cover,
+      tags: v.tags,
+      cover: v.cover,
     };
   });
 });

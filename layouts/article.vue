@@ -10,7 +10,7 @@
       }"
     >
       <div class="nav-container">
-        <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> Zym'S Blog </NuxtLink>
+        <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> Blog </NuxtLink>
         <!-- 移动端菜单按钮 -->
         <!-- 移动端菜单按钮 -->
         <div class="flex items-center md:hidden">

@@ -10,15 +10,15 @@
         backgroundImage: article.cover ? `url(${article.cover})` : 'none',
       }"
     >
-      <div class="container info-wrapper z-10">
+      <div class="article-container info-wrapper z-10">
         <div :class="['tags', article.cover ? 'white-tags' : '']">
           <span
             class="tag"
             v-for="tag in article.tags"
             :key="tag"
-            @click="navigateTo(`/archives/${tag}`)"
+            @click="navigateTo(`/archives/${tag.name}`)"
           >
-            {{ tag }}
+            {{ tag.name }}
           </span>
         </div>
         <h1>{{ article.title }}</h1>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <Loading :loading="loading">
-      <div class="post-detail container">
+      <div class="post-detail article-container">
         <ArticleContent :article="article" />
       </div>
     </Loading>
@@ -72,17 +72,19 @@ const getArticleInfo = async () => {
   loading.value = true;
   const res = await getArticleDetail(slug);
   loading.value = false;
+  const result = res.data;
+
   article.value = {
-    id: res.result.id,
-    title: res.result.article_title,
-    date: res.result.updatedAt,
-    readTime: res.result.reading_duration / 1000,
-    description: res.result.article_description,
-    slug: 'posts/' + res.result.id,
-    createTime: res.result.createdAt,
-    content: res.result.article_content,
-    tags: res.result.tagNameList,
-    cover: res.result.article_cover,
+    id: result.id,
+    title: result.title,
+    date: result.updatedAt,
+    readTime: 1000,
+    description: result.description,
+    slug: 'posts/' + result.id,
+    createTime: result.createdAt,
+    content: result.content,
+    tags: result.tags,
+    cover: result.cover,
   };
   setCurrentArticle(article.value);
 };

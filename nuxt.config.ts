@@ -3,7 +3,7 @@ import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
   devServer: {
-    port: 3000,
+    port: 8080,
   },
   devtools: { enabled: true },
 
@@ -49,7 +49,12 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/api': {
-        target: 'http://mrzym.top:8888',
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        prependPath: true,
+      },
+      '/upload': {
+        target: 'http://localhost:3000/upload',
         changeOrigin: true,
         prependPath: true,
       },
@@ -58,7 +63,7 @@ export default defineNuxtConfig({
       '/': { prerender: true },
       '/posts/**': { isr: true },
       '/api/v1/**': {
-        proxy: 'http://mrzym.top:8888/**',
+        proxy: 'http://localhost:3000/**',
       },
       '/rss.xml': {
         headers: {

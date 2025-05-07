@@ -4,7 +4,23 @@
 // Layout
 .container {
   margin: 0 auto;
-  padding: 0 5rem 0 10rem;
+  padding: 0 2rem;
+  max-width: 1080px !important;
+
+  @include responsive(md) {
+    padding: 0 1rem;
+  }
+
+  @include responsive(lg) {
+    padding: 0 2rem;
+  }
+}
+
+.article-container {
+  margin: 0 auto;
+  padding: 0 2rem;
+  max-width: 1080px;
+  padding-left: 200px;
 
   @include responsive(md) {
     padding: 0 1rem;
@@ -49,8 +65,11 @@
           color: themed('primary');
         }
       }
+      text-transform: uppercase;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-size: 0.8rem;
     }
   }
 

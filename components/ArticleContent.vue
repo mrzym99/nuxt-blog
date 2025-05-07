@@ -64,7 +64,7 @@ const renderedContent = computed(() => {
   width: 100%;
 
   display: grid;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: 1fr 200px;
   gap: 2rem;
 
   @include responsive(md) {
@@ -72,6 +72,7 @@ const renderedContent = computed(() => {
   }
 
   .article-body {
+    border-top: 1px solid var(--border-color);
     width: 100%;
     overflow: hidden;
     @include themed() {
