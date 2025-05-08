@@ -64,6 +64,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { getAllTags } from '~/api';
+import type { IArticle } from '~/types/index';
 defineOptions({
   name: 'Archives',
 });

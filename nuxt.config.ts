@@ -20,6 +20,10 @@ export default defineNuxtConfig({
     },
   },
 
+  icon: {
+    localApiEndpoint: '/nuxt-icon',
+  },
+
   unocss: {
     // presets
     uno: true, // enabled `@unocss/preset-uno`
@@ -48,9 +52,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-28',
 
   nitro: {
-    prerender: {
-      routes: ['/404'],
-    },
     devProxy: {
       '/api': {
         target: 'http://localhost:3000',

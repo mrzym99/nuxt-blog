@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import type { IArticle, IUser } from '~/types/index';
 
 export const useArticleStore = defineStore('blogArticle', {
   state: () => ({
@@ -13,8 +14,18 @@ export const useArticleStore = defineStore('blogArticle', {
       this.currentArticle = article;
     },
   },
-  hydrate(state, initialState) {
-    // Manually hydrate with safe objects
-    state.currentArticle = initialState?.currentArticle ?? null;
+});
+
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    user: null as IUser | null,
+  }),
+  getters: {
+    getUser: state => state.user,
+  },
+  actions: {
+    setUser(user: IUser) {
+      this.user = user;
+    },
   },
 });

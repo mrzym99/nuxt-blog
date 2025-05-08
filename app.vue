@@ -1,15 +1,14 @@
 <template>
   <div>
-    <KeepAlive :include="['Home']">
-      <NuxtLayout>
-        <NuxtPage :keepalive />
-      </NuxtLayout>
-    </KeepAlive>
+    <NuxtLayout>
+      <NuxtPage />
+      <!-- <NuxtPage :keepalive /> -->
+    </NuxtLayout>
   </div>
 </template>
 
 <script lang="ts" setup>
 const keepalive = {
-  include: ['Home', 'Archives'],
+  // include: ['Home', 'Archives'],
 };
 </script>

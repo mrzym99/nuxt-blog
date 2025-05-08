@@ -46,6 +46,7 @@
 
 <script setup lang="ts">
 import { getAllTags } from '~/api';
+import type { IArticle } from '~/types/index';
 
 type Tag = {
   id: number;

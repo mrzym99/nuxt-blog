@@ -43,6 +43,7 @@ import { useRoute } from 'vue-router';
 import { useArticleStore } from '~/store';
 import { getArticleDetail } from '~/api';
 import { formatDate } from '~/utils/tool';
+import type { IArticle } from '~/types/index';
 
 const loading = ref(false);
 const { setCurrentArticle } = useArticleStore();
@@ -115,6 +116,7 @@ onMounted(() => {
     font-size: 4rem;
     margin: 1.4rem 0;
     font-weight: 600;
+    letter-spacing: 3px;
 
     @include themed() {
       color: themed('text');
@@ -125,6 +127,8 @@ onMounted(() => {
     font-size: 1.6rem;
     margin: 0 0 3rem 0;
     font-weight: 300;
+    letter-spacing: 1px;
+    font-style: italic;
 
     @include themed() {
       color: themed('text-light');
@@ -156,21 +160,10 @@ onMounted(() => {
   }
 
   .article-meta {
-    @include themed() {
-      color: themed('text-light');
-    }
-
-    .date {
-      font-size: 1rem;
-      font-weight: 100;
-      font-style: italic;
-    }
-
-    @include responsive(md) {
-      .date {
-        font-size: 1rem;
-      }
-    }
+    font-family: Lora, 'Times New Roman', serif;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-style: italic;
   }
 }
 

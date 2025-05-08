@@ -9,7 +9,7 @@
         'white-nav': isPost && !getArticleHasCover,
       }"
     >
-      <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> Zym'S Blog </NuxtLink>
+      <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> M </NuxtLink>
       <div class="nav-container">
         ,
         <!-- 移动端菜单按钮 -->

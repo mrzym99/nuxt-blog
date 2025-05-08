@@ -1,5 +1,4 @@
-// 全局声明IArticle接口
-declare interface IArticle {
+export interface IArticle {
   id: number;
   title: string;
   description?: string;
@@ -14,10 +13,10 @@ declare interface IArticle {
   top?: number | null;
   type: ArticleType;
   originalUrl?: string;
-  author: User | null;
+  author: IUser | null;
 }
 
-declare interface User {
+export interface IUser {
   id: number;
   username: string;
   profile: {
@@ -34,20 +33,25 @@ declare interface User {
   };
 }
 
-declare interface ITag {
+export interface ITag {
   id: number;
   name: string;
   count: number;
   articles: IArticle[];
 }
 
-enum ArticleType {
+export enum LikeType {
+  ARTICLE = 0,
+  COMMENT = 1,
+}
+
+export enum ArticleType {
   ORIGINAL = 0, // 原创
   TRANSPORT = 1, // 转载
   TRANSLATE = 2, // 翻译
 }
 
-enum ContentType {
+export enum ContentType {
   MD = 0, // markdown
   RICHTEXT = 1, // rich text
 }
