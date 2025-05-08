@@ -93,13 +93,12 @@
   .tag {
     cursor: pointer;
     padding: 0.3rem 0.8rem;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     @include themed() {
       border: 1px solid themed('text');
       color: themed('text');
     }
     border-radius: 9999px;
-    font-size: 0.875rem;
 
     @include hover-effect {
       border-color: transparent;

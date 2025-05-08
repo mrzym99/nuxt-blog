@@ -36,10 +36,14 @@
             </article>
             <div class="py-4 flex justify-between items-center">
               <div>
-                <NuxtLink v-if="showPrev" :to="`/?current=${prev}`"> prevs </NuxtLink>
+                <NuxtLink class="pagination" v-if="showPrev" :to="`?current=${prev}`">
+                  prev
+                </NuxtLink>
               </div>
               <div>
-                <NuxtLink v-if="showNext" :to="`/?current=${next}`"> next </NuxtLink>
+                <NuxtLink class="pagination" v-if="showNext" :to="`?current=${next}`">
+                  next
+                </NuxtLink>
               </div>
             </div>
           </main>
@@ -76,9 +80,11 @@ const bgStyle = computed(() => {
 async function getArticle() {
   loading.value = true;
   const current = Number(route.query.current) || 1;
+  console.log(current);
+
   const res = await getArticleList({
-    currentPage: current,
-    pageSize: PAGE_SIZE,
+    currentPage: 1,
+    pageSize: 10,
   });
   loading.value = false;
   total.value = res.data.total;
@@ -145,5 +151,25 @@ watch(
 
 .blog-card {
   @apply p-6 rounded-lg;
+}
+
+.pagination {
+  display: inline-block;
+  cursor: pointer;
+  font-size: 1.6rem;
+  padding: 0.3rem 2rem;
+  border-radius: 3px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  @include themed() {
+    color: themed('border');
+    border: 1px solid themed('border');
+  }
+
+  @include hover-effect {
+    color: themed('nav-text') !important;
+    border-color: transparent;
+    background-color: themed('primary');
+  }
 }
 </style>
