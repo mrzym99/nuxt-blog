@@ -19,7 +19,7 @@
 .article-container {
   margin: 0 auto;
   padding: 0 2rem;
-  max-width: 1080px;
+  max-width: 1200px;
   padding-left: 200px;
 
   @include responsive(md) {
@@ -38,14 +38,14 @@
   left: 0;
   right: 0;
   z-index: $z-index-header;
-  padding: 1rem 0;
+  padding: 1rem;
   transition: all $duration ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   .nav-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin: 0 auto;
-    padding: 0 1rem;
   }
 
   .nav-blog-title {

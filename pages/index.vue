@@ -34,6 +34,14 @@
                 </div>
               </div>
             </article>
+            <div class="py-4 flex justify-between items-center">
+              <div>
+                <NuxtLink v-if="showPrev" :to="`/?current=${prev}`"> prevs </NuxtLink>
+              </div>
+              <div>
+                <NuxtLink v-if="showNext" :to="`/?current=${next}`"> next </NuxtLink>
+              </div>
+            </div>
           </main>
           <!-- Sidebar -->
           <SideBar />
@@ -44,14 +52,20 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({
+  name: 'Home',
+});
 import { computed } from 'vue';
 import bg from '~/assets/images/bg.jpg';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate } from '~/utils/tool';
 
+const route = useRoute();
 const posts = ref<IArticle[]>([]);
 const loading = ref(true);
+const total = ref(0);
+const PAGE_SIZE = 10;
 
 const bgStyle = computed(() => {
   return {
@@ -59,23 +73,56 @@ const bgStyle = computed(() => {
   };
 });
 
-onMounted(async () => {
+async function getArticle() {
   loading.value = true;
+  const current = Number(route.query.current) || 1;
   const res = await getArticleList({
-    current: 1,
-    pageSize: 10,
+    currentPage: current,
+    pageSize: PAGE_SIZE,
   });
   loading.value = false;
+  total.value = res.data.total;
   posts.value = res.data.list.map((item: IArticle) => {
     return {
       ...item,
       slug: '/posts/' + item.id,
     };
   });
+}
+
+const showPrev = computed(() => {
+  return route.query.current && Number(route.query.current) > 1;
 });
+
+const showNext = computed(() => {
+  return route.query.current
+    ? Number(route.query.current) * PAGE_SIZE < total.value
+    : total.value > PAGE_SIZE;
+});
+
+const prev = computed(() => {
+  return route.query.current ? Number(route.query.current) - 1 : 1;
+});
+
+const next = computed(() => {
+  return route.query.current ? Number(route.query.current) + 1 : 2;
+});
+
+watch(
+  () => route.query.current,
+  async () => {
+    getArticle();
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '~/assets/styles/themes.scss' as *;
+@use '~/assets/styles/global.scss' as *;
+
 .blog-post {
   @apply transition-colors;
 }

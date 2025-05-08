@@ -9,8 +9,10 @@
         <h3 class="text-xl font-bold mb-2">Your Name</h3>
         <p class="text-gray-600 mb-4">Frontend Developer & Tech Enthusiast</p>
         <div class="social-links">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer"> GitHub </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"> Twitter </a>
+          <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer"> Gitee </a>
         </div>
       </div>
     </div>

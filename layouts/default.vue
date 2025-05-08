@@ -1,9 +1,17 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <!-- Navigation -->
-    <nav class="nav" :class="{ 'nav-scrolled': isScrolled, 'nav-fixed': isFixed }">
+    <nav
+      class="nav"
+      :class="{
+        'nav-scrolled': isScrolled,
+        'nav-fixed': isFixed,
+        'white-nav': isPost && !getArticleHasCover,
+      }"
+    >
+      <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> Zym'S Blog </NuxtLink>
       <div class="nav-container">
-        <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> Zym'S Blog </NuxtLink>
+        ,
         <!-- 移动端菜单按钮 -->
         <div class="flex items-center md:hidden">
           <ThemeSwitch class="mr-3" />
@@ -36,11 +44,14 @@
           <Icon class="mr-2" name="ph:rss" size="1.5rem" />
           RSS
         </a>
+        <div class="mobile-nav-item">
+          <ThemeSwitch />
+        </div>
       </div>
     </Drawer>
 
     <!-- Main Content -->
-    <main class="flex-grow">
+    <main class="flex-grow min-h-100vh">
       <slot />
     </main>
 
@@ -65,11 +76,18 @@
 
 <script setup lang="ts">
 import Drawer from '~/components/Drawer.vue';
+import { useArticleStore } from '~/store';
+const { getArticleHasCover } = toRefs(useArticleStore());
 
 const isScrolled = ref(false);
 const isFixed = ref(false);
 const lastScrollPosition = ref(0);
 const showDrawer = ref(false);
+const route = useRoute();
+
+const isPost = computed(() => {
+  return route.path.startsWith('/posts');
+});
 
 onMounted(() => {
   window.addEventListener('scroll', () => {

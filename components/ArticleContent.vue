@@ -70,7 +70,7 @@ const renderedContent = computed(() => {
 
   display: grid;
   grid-template-columns: 1fr 200px;
-  gap: 2rem;
+  gap: 1rem;
 
   @include responsive(md) {
     display: block;

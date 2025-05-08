@@ -38,9 +38,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'article',
-});
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useArticleStore } from '~/store';

@@ -2,7 +2,7 @@
   <Popover ref="popoverRef" position="bottom-right" :width="200">
     <template #trigger>
       <button class="theme-button">
-        <Icon :name="currentTheme === 'dark' ? 'ph:moon-bold' : 'ph:sun-bold'" size="1.2rem" />
+        <Icon name="ph:google-photos-logo-light" size="1.2rem" />
       </button>
     </template>
     <div class="theme-panel">

@@ -8,37 +8,8 @@
       <div class="flex flex-col md:flex-row gap-8">
         <main class="flex-1 p-1.5rem">
           <p class="mb-6 text-xl">
-            Hello! I'm a passionate developer who loves creating beautiful and functional web
-            applications. I believe in writing clean, maintainable code and sharing knowledge with
-            the community.
+            <span v-html="renderedContent"></span>
           </p>
-
-          <h2 class="text-2xl font-bold mt-8 mb-4">Skills</h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-            <div v-for="skill in skills" :key="skill" class="blog-card">
-              {{ skill }}
-            </div>
-          </div>
-
-          <h2 class="text-2xl font-bold mt-8 mb-4">Experience</h2>
-          <div class="space-y-6">
-            <div v-for="exp in experience" :key="exp.title" class="blog-card">
-              <h3 class="text-xl font-semibold">{{ exp.title }}</h3>
-              <p class="text-gray-600">{{ exp.company }} · {{ exp.period }}</p>
-              <p class="mt-2">{{ exp.description }}</p>
-            </div>
-          </div>
-
-          <h2 class="text-2xl font-bold mt-8 mb-4">Connect</h2>
-          <div class="flex gap-4">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn">
-              GitHub
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="btn">
-              Twitter
-            </a>
-            <a href="mailto:your.email@example.com" class="btn"> Email </a>
-          </div>
         </main>
         <SideBar />
       </div>
@@ -48,31 +19,53 @@
 
 <script setup lang="ts">
 import SideBar from '~/components/SideBar.vue';
+import 'highlight.js/styles/github.css';
 
-const skills = [
-  'Vue.js',
-  'Nuxt.js',
-  'TypeScript',
-  'UnoCSS',
-  'SCSS',
-  'Node.js',
-  'Git',
-  'Docker',
-  'AWS',
-];
+import { computed } from 'vue';
+import { marked } from 'marked';
+import { markedHighlight } from 'marked-highlight';
+import hljs from 'highlight.js';
 
-const experience = [
-  {
-    title: 'Senior Frontend Developer',
-    company: 'Tech Company',
-    period: '2020 - Present',
-    description: 'Leading frontend development team and implementing modern web solutions.',
-  },
-  {
-    title: 'Full Stack Developer',
-    company: 'Startup',
-    period: '2018 - 2020',
-    description: 'Developed and maintained multiple web applications using Vue.js and Node.js.',
-  },
-];
+const readme = ref<string>('');
+
+async function readMeMd() {
+  try {
+    const res = await fetch('/about.md');
+    readme.value = await res.text();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// 配置marked-highlight
+marked.use(
+  markedHighlight({
+    langPrefix: 'hljs language-',
+    highlight(code: string, lang: string) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(code, { language: lang }).value;
+        } catch (error) {
+          console.error('代码高亮错误:', error);
+        }
+      }
+      return code;
+    },
+  })
+);
+
+// 渲染 Markdown 内容
+const renderedContent = computed(() => {
+  const renderer = new marked.Renderer();
+  marked.setOptions({
+    renderer,
+    gfm: true,
+  });
+
+  return marked(readme.value || '');
+});
+
+onMounted(() => {
+  readMeMd();
+});
 </script>

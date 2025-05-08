@@ -195,6 +195,16 @@
   }
 }
 
+.archives {
+  .blog-card {
+    padding: 0 1rem 1.5rem 1rem;
+    @include themed() {
+      border-bottom: 1px solid themed('border');
+      background-color: themed('bg');
+    }
+  }
+}
+
 .tags-cloud {
   .tag {
     cursor: pointer;
