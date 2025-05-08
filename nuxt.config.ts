@@ -2,6 +2,7 @@
 import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
+  ssr: true,
   devServer: {
     port: 8081,
   },
@@ -47,6 +48,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-03-28',
 
   nitro: {
+    prerender: {
+      routes: ['/404'],
+    },
     devProxy: {
       '/api': {
         target: 'http://localhost:3000',

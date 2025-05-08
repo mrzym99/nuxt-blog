@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="loading" class="loading-container min-h-20rem">
+    <div v-if="loading" class="loading-container min-h-50rem">
       <div class="loading-spinner">
         <div class="spinner"></div>
         <p class="loading-text">加载中...</p>
@@ -23,13 +23,14 @@ defineProps<{
 
 .loading-container {
   @apply w-full h-full flex items-center justify-center;
+
+  @include themed() {
+    color: themed('text-light');
+  }
 }
 
 .loading-spinner {
   @apply flex flex-col items-center;
-  @include themed() {
-    color: themed('text');
-  }
 }
 
 .spinner {
@@ -45,6 +46,7 @@ defineProps<{
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

@@ -26,16 +26,16 @@
       </div>
     </div>
 
-    <!-- Recent Posts -->
+    <!-- Friends -->
     <div class="blog-card">
-      <h3>Recent Posts</h3>
+      <h3>Friends</h3>
       <div class="recent-posts">
         <ul>
-          <li v-for="post in recentPosts" :key="post.id">
+          <!-- <li v-for="post in recentPosts" :key="post.id">
             <NuxtLink :to="post.slug">
               {{ post.title }}
             </NuxtLink>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -43,22 +43,28 @@
 </template>
 
 <script setup lang="ts">
-import { posts as postsData } from '~/api';
+import { getAllTags } from '~/api';
 
-const posts = ref(postsData);
-// Compute all unique tags with their counts
-const allTags = computed(() => {
-  const tagCounts: Record<string, number> = {};
-  posts.value.forEach(post => {
-    post.tags.forEach((tag: string) => {
-      tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-    });
+type Tag = {
+  id: number;
+  name: string;
+  count: number;
+  articles: IArticle[];
+};
+
+const allTags = ref<Tag[]>([]);
+
+async function getTags() {
+  const res = await getAllTags();
+  allTags.value = res.data.map((tag: Tag) => {
+    return {
+      ...tag,
+      count: tag.articles.length,
+    };
   });
-  return Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
-});
+}
 
-// Get recent posts for sidebar
-const recentPosts = computed(() => {
-  return posts.value.slice(0, 5);
+onMounted(() => {
+  getTags();
 });
 </script>

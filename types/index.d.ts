@@ -4,7 +4,7 @@ declare interface IArticle {
   title: string;
   description?: string;
   cover?: string;
-  tags: Tag[];
+  tags: ITag[];
   slug: string;
   createdAt: Date | null;
   updatedAt: Date | null;
@@ -34,6 +34,13 @@ declare interface User {
   };
 }
 
+declare interface ITag {
+  id: number;
+  name: string;
+  count: number;
+  articles: IArticle[];
+}
+
 enum ArticleType {
   ORIGINAL = 0, // 原创
   TRANSPORT = 1, // 转载
@@ -43,9 +50,4 @@ enum ArticleType {
 enum ContentType {
   MD = 0, // markdown
   RICHTEXT = 1, // rich text
-}
-
-declare interface Tag {
-  id: number;
-  name: string;
 }

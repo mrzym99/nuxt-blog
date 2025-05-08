@@ -201,9 +201,10 @@
     display: inline-block;
     padding: 0.25rem 0.75rem;
     @include themed() {
-      background-color: themed('border');
-      color: themed('text');
+      border: 1px solid themed('text-light');
+      color: themed('text-light');
       @include hover-effect {
+        border-color: transparent;
         background-color: themed('primary');
         color: white;
       }

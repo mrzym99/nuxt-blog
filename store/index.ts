@@ -13,4 +13,8 @@ export const useArticleStore = defineStore('blogArticle', {
       this.currentArticle = article;
     },
   },
+  hydrate(state, initialState) {
+    // Manually hydrate with safe objects
+    state.currentArticle = initialState?.currentArticle ?? null;
+  },
 });

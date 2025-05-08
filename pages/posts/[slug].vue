@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <Loading :loading="loading">
     <div
       :class="{
         'transition-all duration-300': article.cover,
@@ -31,12 +31,10 @@
         </div>
       </div>
     </div>
-    <Loading :loading="loading">
-      <div class="post-detail article-container">
-        <ArticleContent :article="article" />
-      </div>
-    </Loading>
-  </div>
+    <div class="post-detail article-container">
+      <ArticleContent :article="article" />
+    </div>
+  </Loading>
 </template>
 
 <script setup lang="ts">
@@ -93,6 +91,7 @@ onMounted(() => {
 
 .post-detail {
   min-height: 100vh;
+
   @include themed() {
     background-color: themed('bg');
   }
@@ -181,6 +180,7 @@ onMounted(() => {
 .white-tags {
   .tag {
     background: transparent;
+
     @include themed() {
       color: themed('nav-text');
       border: 1px solid rgba(themed('border'), 0.7);
@@ -218,6 +218,7 @@ onMounted(() => {
   padding-top: 6rem;
   padding-bottom: 3rem;
   padding-right: 260px;
+
   @include responsive(md) {
     padding-top: 4rem;
     padding-right: 2rem;

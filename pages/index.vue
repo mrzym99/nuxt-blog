@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <!-- Hero Section -->
-    <section :style="bgStyle" class="bg-gray-100 flex flex-col items-center justify-center blog-bg">
-      <h1 class="text-6xl text-center leading-tight font-bold mb-6 lt-md:text-5xl">Zym'S Blog</h1>
-      <p class="text-2xl lt-md:text-xl text-center mx-auto px-4">
-        「 A place where I share my journey in technology and life. 」
-      </p>
-    </section>
-
-    <!-- Main Content with Sidebar -->
-    <div class="container mx-auto lt-sm:py-8">
-      <Loading :loading="loading">
+  <Loading :loading="loading">
+    <div>
+      <!-- Hero Section -->
+      <section
+        :style="bgStyle"
+        class="bg-gray-100 flex flex-col items-center justify-center blog-bg"
+      >
+        <h1 class="text-6xl text-center leading-tight font-bold mb-6 lt-md:text-5xl">Zym'S Blog</h1>
+        <p class="text-2xl lt-md:text-xl text-center mx-auto px-4">
+          「 A place where I share my journey in technology and life. 」
+        </p>
+      </section>
+      <!-- Main Content with Sidebar -->
+      <div class="container mx-auto lt-sm:py-8">
         <div class="flex flex-col md:flex-row gap-8">
           <!-- Blog Posts -->
           <main class="flex-1">
@@ -36,9 +38,9 @@
           <!-- Sidebar -->
           <SideBar />
         </div>
-      </Loading>
+      </div>
     </div>
-  </div>
+  </Loading>
 </template>
 
 <script setup lang="ts">
@@ -47,10 +49,6 @@ import bg from '~/assets/images/bg.jpg';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate } from '~/utils/tool';
-
-definePageMeta({
-  keepalive: true,
-});
 
 const posts = ref<IArticle[]>([]);
 const loading = ref(true);

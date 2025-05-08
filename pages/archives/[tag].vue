@@ -8,23 +8,23 @@
         <!-- Blog Posts -->
         <main class="flex-1 p-1.5rem">
           <div class="tags-cloud">
-            <div
+            <NuxtLink
               class="tag"
               :class="{ active: route.params.tag === 'all' }"
-              @click="handleTagClick('all')"
+              to="/archives/all"
             >
-              All ({{ posts.length }})
-            </div>
-            <div
+              All ({{ allPosts.length }})
+            </NuxtLink>
+            <NuxtLink
+              :to="`/archives/${tag.name}`"
               v-for="tag in allTags"
               :key="tag.name"
               class="tag"
               :class="{ active: route.params.tag === tag.name }"
-              @click="handleTagClick(tag.name)"
             >
               {{ tag.name }}
               <span class="ml-1 text-xs">({{ tag.count }})</span>
-            </div>
+            </NuxtLink>
           </div>
           <div v-for="(yearPosts, year) in filteredPosts" :key="year" class="mb-12">
             <h2 class="text-2xl font-bold mb-6">{{ year }}</h2>
@@ -53,60 +53,73 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import { posts as postsData } from '~/api';
+import { getAllTags } from '~/api';
+definePageMeta({
+  keepalive: true,
+});
+
+type Tag = {
+  id: number;
+  name: string;
+  count: number;
+  articles: IArticle[];
+};
 
 const route = useRoute();
-const router = useRouter();
-const posts = ref(postsData);
+const allTags = ref<Tag[]>([]);
+const allPosts = ref<IArticle[]>([]);
 
 // 根据标签筛选文章
 const filteredPosts = computed(() => {
-  const tag = route.params.tag as string;
-  if (!tag) return groupedPosts.value;
-  if (tag === 'all') return groupedPosts.value;
-
-  const filtered: Record<string, any> = {};
-  Object.entries(groupedPosts.value).forEach(([year, yearPosts]) => {
-    const filteredPosts = yearPosts.filter((post: any) => post.tags.includes(tag));
-    if (filteredPosts.length > 0) {
-      filtered[year] = filteredPosts;
-    }
-  });
-  return filtered;
+  const tagName = route.params.tag as string;
+  if (!tagName) return groupedPosts.value;
+  if (tagName === 'all') return groupedPosts.value;
+  const articles = allTags.value.find(tag => tag.name === tagName)?.articles || [];
+  return articleToGrops(articles);
 });
 
 // Group posts by year
 const groupedPosts = computed(() => {
+  return articleToGrops(allPosts.value);
+});
+
+function articleToGrops(articles: IArticle[]) {
   const groups: Record<string, any> = {};
-  posts.value.forEach(post => {
-    const year = new Date(post.date).getFullYear().toString();
-    if (!groups[year]) {
-      groups[year] = [];
+  articles.forEach(article => {
+    const year = article.createdAt && new Date(article.createdAt).getFullYear().toString();
+    if (year) {
+      if (!groups[year]) {
+        groups[year] = [];
+      }
+      groups[year].push(article);
     }
-    groups[year].push(post);
   });
   return groups;
-});
+}
 
-const allTags = computed(() => {
-  const tagCounts: Record<string, number> = {};
-  posts.value.forEach(post => {
-    post.tags.forEach((tag: string) => {
-      tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+async function getTags() {
+  const res = await getAllTags();
+  allTags.value = res.data.map((tag: Tag) => {
+    return {
+      ...tag,
+      count: tag.articles.length,
+    };
+  });
+
+  allPosts.value = [];
+  allTags.value.forEach(tag => {
+    tag.articles.forEach(article => {
+      if (!allPosts.value.find(item => item.id === article.id)) {
+        article.slug = '/posts/' + article.id;
+        allPosts.value.push(article);
+      }
     });
   });
-  const list = Object.entries(tagCounts).map(([name, count]) => ({ name, count }));
-  return list.sort((a, b) => b.count - a.count);
-});
+}
 
-// 处理标签点击
-const handleTagClick = (tag: string) => {
-  if (tag === 'all') {
-    router.push('/archives/all');
-  } else {
-    router.push(`/archives/${tag}`);
-  }
-};
+onMounted(() => {
+  getTags();
+});
 
 // 监听路由变化
 watch(
@@ -127,6 +140,7 @@ watch(
 
   .tag {
     @apply px-3 py-1 rounded-full text-sm cursor-pointer transition-colors duration-200;
+
     @include themed() {
       background-color: themed('bg');
       color: themed('text');
