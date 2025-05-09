@@ -1,6 +1,6 @@
 <template>
-  <div class="popover-container" ref="containerRef">
-    <div class="popover-trigger" @click="togglePopover">
+  <div class="popover-container">
+    <div ref="triggerRef" class="popover-trigger" @click="togglePopover">
       <slot name="trigger"></slot>
     </div>
     <div
@@ -12,7 +12,7 @@
           'is-visible': isVisible,
         },
       ]"
-      :style="contentStyle"
+      :style="newPosition"
       ref="contentRef"
     >
       <slot></slot>
@@ -56,10 +56,12 @@ const emit = defineEmits<{
   (e: 'update:visible', value: boolean): void;
 }>();
 
-const containerRef = ref<HTMLElement | null>(null);
 const contentRef = ref<HTMLElement | null>(null);
+const triggerRef = ref<HTMLElement | null>(null);
 const isVisible = ref(false);
 const actualPosition = ref(props.position);
+
+const newPosition = ref(null);
 
 // 获取主位置（用于CSS类）
 const positionClass = computed(() => {
@@ -68,10 +70,10 @@ const positionClass = computed(() => {
 });
 
 // 计算 Popover 内容的位置并检查边界
-const contentStyle = computed(() => {
-  if (!containerRef.value) return {};
+const calcContentStyle = () => {
+  if (!triggerRef.value) return {};
 
-  const containerRect = containerRef.value.getBoundingClientRect();
+  const containerRect = triggerRef.value.getBoundingClientRect();
   const offset = props.offset;
 
   let top = 0;
@@ -143,13 +145,13 @@ const contentStyle = computed(() => {
     transform = 'translateY(-100%)';
   }
 
-  return {
+  newPosition.value = {
     top: `${Math.round(top)}px`,
     left: `${Math.round(left)}px`,
     transform: transform,
     width: typeof props.width === 'number' ? `${props.width}px` : props.width,
   };
-});
+};
 
 // 重新计算位置，确保在视口内
 const updatePositionInViewport = () => {
@@ -219,6 +221,7 @@ const togglePopover = () => {
   emit('update:visible', isVisible.value);
 
   if (isVisible.value) {
+    calcContentStyle();
     // 在下一个渲染周期确保popover在视口内
     window.setTimeout(() => {
       updatePositionInViewport();
@@ -228,7 +231,7 @@ const togglePopover = () => {
 
 // 点击外部关闭 Popover
 const handleClickOutside = (event: MouseEvent) => {
-  if (containerRef.value && !containerRef.value.contains(event.target as Node) && isVisible.value) {
+  if (triggerRef.value && !triggerRef.value.contains(event.target as Node) && isVisible.value) {
     close();
   }
 };

@@ -14,6 +14,9 @@ export interface IArticle {
   type: ArticleType;
   originalUrl?: string;
   author: IUser | null;
+  viewCount?: number;
+  likeCount?: number;
+  viewDuration?: number;
 }
 
 export interface IUser {
@@ -41,17 +44,17 @@ export interface ITag {
 }
 
 export enum LikeType {
-  ARTICLE = 0,
-  COMMENT = 1,
+  ARTICLE = 'article',
+  COMMENT = 'comment',
 }
 
 export enum ArticleType {
-  ORIGINAL = 0, // 原创
-  TRANSPORT = 1, // 转载
-  TRANSLATE = 2, // 翻译
+  ORIGINAL = 'original', // 原创
+  TRANSPORT = 'transport', // 转载
+  TRANSLATE = 'translate', // 翻译
 }
 
 export enum ContentType {
-  MD = 0, // markdown
-  RICHTEXT = 1, // rich text
+  MD = 'md', // markdown
+  RICHTEXT = 'richtext', // rich text
 }

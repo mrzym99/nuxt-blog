@@ -59,15 +59,19 @@
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
-          <p>© {{ new Date().getFullYear() }} Zym'S Blog. All rights reserved.</p>
           <div class="social-links">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-              <Icon name="ph:github-logo-light" size="1.5rem" />
+            <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
+              <Icon name="simple-icons:github" size="3rem" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <Icon name="ph:twitter-logo-light" size="1.5rem" />
+            <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer">
+              <Icon name="simple-icons:gitee" size="3rem" />
             </a>
           </div>
+          <p class="text-xl">Copyright © Zy 2025</p>
+          <p class="text-xl">
+            Powered by
+            <a class="text-gradient" href="https://nuxt.com/" target="_blank">Nuxt</a>
+          </p>
         </div>
       </div>
     </footer>

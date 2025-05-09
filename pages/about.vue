@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
-    <section class="blog-bg flex flex-col items-center justify-center">
-      <h1 class="text-6xl leading-tight font-bold mb-6">About Me</h1>
+    <section class="blog-bg flex flex-col items-center justify-center h-6rem">
+      <h1 class="leading-tight font-bold mb-6">About Me</h1>
     </section>
 
     <div class="container mx-auto lt-sm:py-8">

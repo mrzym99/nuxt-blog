@@ -1,10 +1,11 @@
 <template>
   <div class="mx-auto">
-    <section class="h-20rem flex flex-col items-center justify-center blog-bg">
-      <h1 class="text-6xl leading-tight font-bold mb-6">Archive</h1>
+    <section class="h-6rem flex flex-col items-center justify-center blog-bg">
+      <h1 class="leading-tight font-bold mb-6">Archive</h1>
     </section>
     <div class="article-container mx-auto lt-sm:py-8">
       <div class="archive">
+        <div></div>
         <!-- Blog Posts -->
         <main class="flex-1 p-1.5rem">
           <div class="tags-cloud">
@@ -152,7 +153,7 @@ onMounted(() => {
 
 .archive {
   display: grid;
-  grid-template-columns: 1fr 200px;
+  grid-template-columns: 200px 1fr 200px;
   gap: 1rem;
 }
 

@@ -6,26 +6,37 @@
         <div class="avatar">
           <img src="../assets/images/avatar.png" alt="Profile" />
         </div>
-        <h3 class="text-xl font-bold mb-2">Your Name</h3>
-        <p class="text-gray-600 mb-4">Frontend Developer & Tech Enthusiast</p>
+        <p class="text-xl font-bold mb-2">M</p>
+        <p class="mb-4">Frontend Developer</p>
+        <p class="mb-4">
+          It's interesting that I spent a lot of time writing blog websites instead of creating
+          content
+        </p>
         <div class="social-links">
           <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
-            GitHub
+            <Icon name="simple-icons:github" size="1.5rem" />
           </a>
-          <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer"> Gitee </a>
+          <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer">
+            <Icon name="simple-icons:gitee" size="1.5rem" />
+          </a>
+        </div>
+        <div class="social-links">
+          <a
+            alt="博客技术交流群"
+            title="博客技术交流群"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI"
+          >
+            <img border="0" src="//pub.idqqimg.com/wpa/images/group.png" />
+          </a>
         </div>
       </div>
     </div>
 
     <!-- Tags Cloud -->
     <div class="blog-card">
-      <h3>Tags</h3>
-      <div class="tags-cloud">
-        <NuxtLink v-for="tag in allTags" :key="tag.name" :to="`/archives/${tag.name}`" class="tag">
-          {{ tag.name }}
-          <span class="ml-1 text-xs">({{ tag.count }})</span>
-        </NuxtLink>
-      </div>
+      <TagCloud />
     </div>
 
     <!-- Friends -->
@@ -33,11 +44,11 @@
       <h3>Friends</h3>
       <div class="recent-posts">
         <ul>
-          <!-- <li v-for="post in recentPosts" :key="post.id">
-            <NuxtLink :to="post.slug">
-              {{ post.title }}
+          <li v-for="post in 1" :key="post">
+            <NuxtLink to="http://mrzym.top/" target="_blank" rel="noopener noreferrer">
+              小张
             </NuxtLink>
-          </li> -->
+          </li>
         </ul>
       </div>
     </div>
@@ -45,29 +56,5 @@
 </template>
 
 <script setup lang="ts">
-import { getAllTags } from '~/api';
-import type { IArticle } from '~/types/index';
-
-type Tag = {
-  id: number;
-  name: string;
-  count: number;
-  articles: IArticle[];
-};
-
-const allTags = ref<Tag[]>([]);
-
-async function getTags() {
-  const res = await getAllTags();
-  allTags.value = res.data.map((tag: Tag) => {
-    return {
-      ...tag,
-      count: tag.articles.length,
-    };
-  });
-}
-
-onMounted(() => {
-  getTags();
-});
+import TagCloud from '~/components/TagCloud.vue';
 </script>

@@ -1,8 +1,14 @@
 import axios from 'axios';
 import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 
-export interface ApiResponse<T> {
-  data: any;
+let $toast: any;
+
+export function initToast(toast: any) {
+  $toast = toast;
+}
+
+export interface ApiResponse<T extends any> {
+  data: T;
   code: number;
   message?: string;
 }
@@ -47,6 +53,7 @@ service.interceptors.response.use(
     }
     // 处理其他状态码
     console.error('响应错误:', res.message);
+    $toast.error(res.message || '请求失败');
     return Promise.reject(new Error(res.message || '请求失败'));
   },
   (error: Error) => {

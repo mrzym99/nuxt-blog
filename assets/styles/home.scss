@@ -76,6 +76,8 @@
   }
 
   .post-meta {
+    display: flex;
+    align-items: center;
     font-family: Lora, 'Times New Roman', serif;
     color: var(--text-grey);
     font-size: 1rem;

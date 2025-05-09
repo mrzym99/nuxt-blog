@@ -1,7 +1,5 @@
 <template>
   <div class="comments-section">
-    <h2 class="comments-title">评论</h2>
-
     <!-- 评论列表 -->
     <div class="comments-list">
       <!-- 主评论输入框 -->
@@ -71,13 +69,12 @@
                 </Popover>
                 <Popover position="bottom-left" :offset="8">
                   <template #trigger>
-                    <button class="preview-button">
+                    <button class="preview-button flex items-center">
                       <Icon name="ph:eye" size="1.25rem" />
-                      预览
                     </button>
                   </template>
                   <div class="preview-panel">
-                    <div v-html="renderedContent"></div>
+                    <div class="w-300px min-h-10rem" v-html="renderedContent"></div>
                   </div>
                 </Popover>
               </div>
@@ -102,11 +99,11 @@
               <span class="username">{{ comment.username }}</span>
               <span class="time">{{ formatTime(comment.createTime) }}</span>
             </div>
-            <div class="comment-text" v-html="comment.content"></div>
+            <div class="comment-text" v-html="renderComment(comment.content)"></div>
             <div class="comment-actions">
               <button class="action-btn" @click="handleReply(comment)">回复</button>
               <button class="action-btn" @click="handleLike(comment)">
-                {{ comment.likes }} 赞
+                <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" /> {{ comment.likes }}
               </button>
             </div>
 
@@ -125,11 +122,11 @@
                     </span>
                     <span class="time">{{ formatTime(reply.createTime) }}</span>
                   </div>
-                  <div class="reply-text" v-html="reply.content"></div>
+                  <div class="reply-text" v-html="renderComment(reply.content)"></div>
                   <div class="reply-actions">
                     <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
                     <button class="action-btn" @click="handleLike(reply)">
-                      {{ reply.likes }} 赞
+                      <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" /> {{ reply.likes }}
                     </button>
                   </div>
                 </div>
@@ -248,6 +245,10 @@ const renderedContent = computed(() => {
   if (!commentContent.value) return '';
   return marked(commentContent.value);
 });
+
+const renderComment = (comment: string) => {
+  return marked(comment);
+};
 
 // 处理评论提交
 const handleSubmit = () => {
@@ -387,17 +388,11 @@ const handleImageUpload = async (event: Event) => {
 @use '~/assets/styles/themes.scss' as *;
 
 .comments-section {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid;
-  @include themed() {
-    border-color: themed('border');
-  }
 }
 
 .comments-title {
   font-size: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   @include themed() {
     color: themed('primary');
   }
@@ -406,7 +401,7 @@ const handleImageUpload = async (event: Event) => {
 .comments-list {
   .no-comments {
     text-align: center;
-    padding: 2rem;
+    padding: 1rem;
     @include themed() {
       color: themed('text-light');
     }
@@ -415,7 +410,7 @@ const handleImageUpload = async (event: Event) => {
 
 .comment-item {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   padding: 1rem 0;
   border-bottom: 1px solid;
   @include themed() {
@@ -464,7 +459,6 @@ const handleImageUpload = async (event: Event) => {
   }
 
   .comment-text {
-    line-height: $line-height-large;
     @include themed() {
       color: themed('text');
     }
@@ -472,11 +466,13 @@ const handleImageUpload = async (event: Event) => {
 
   .comment-actions {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-top: 0.5rem;
   }
 
   .action-btn {
+    display: flex;
+    align-items: center;
     padding: 0.25rem 0.5rem;
     border: none;
     background: none;
@@ -503,7 +499,7 @@ const handleImageUpload = async (event: Event) => {
 
 .reply-item {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid;
   @include themed() {
@@ -550,7 +546,6 @@ const handleImageUpload = async (event: Event) => {
   }
 
   .reply-text {
-    line-height: $line-height-large;
     @include themed() {
       color: themed('text');
     }
@@ -558,7 +553,7 @@ const handleImageUpload = async (event: Event) => {
 
   .reply-actions {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-top: 0.5rem;
   }
 }
@@ -594,7 +589,7 @@ const handleImageUpload = async (event: Event) => {
 
   .form-header {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .avatar {
@@ -640,8 +635,8 @@ const handleImageUpload = async (event: Event) => {
 }
 
 .comment-form {
-  margin-bottom: 2rem;
-  padding: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
   border-radius: 0.5rem;
   @include themed() {
     background-color: themed('bg');
@@ -650,7 +645,7 @@ const handleImageUpload = async (event: Event) => {
 
   .form-header {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 
   .avatar {
@@ -687,7 +682,7 @@ const handleImageUpload = async (event: Event) => {
         background: none;
         cursor: pointer;
         border-radius: 0.25rem;
-        transition: all $duration;
+        transition: all 0.3s;
 
         i {
           width: 1rem;
@@ -735,6 +730,7 @@ const handleImageUpload = async (event: Event) => {
 
   .form-tools {
     display: flex;
+    align-items: center;
     gap: 0.5rem;
   }
 
@@ -821,14 +817,12 @@ const handleImageUpload = async (event: Event) => {
     }
 
     :deep(code) {
-      background-color: var(--border-color);
       padding: 0.2em 0.4em;
       border-radius: 0.25rem;
       font-family: monospace;
     }
 
     :deep(pre) {
-      background-color: var(--border-color);
       padding: 1em;
       border-radius: 0.5rem;
       overflow-x: auto;
@@ -843,7 +837,6 @@ const handleImageUpload = async (event: Event) => {
     :deep(blockquote) {
       margin: 1em 0;
       padding-left: 1em;
-      border-left: 3px solid var(--primary-color);
       @include themed() {
         color: themed('text-light');
       }

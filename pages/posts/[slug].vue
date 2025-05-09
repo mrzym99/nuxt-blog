@@ -10,25 +10,29 @@
         backgroundImage: article.cover ? `url(${article.cover})` : 'none',
       }"
     >
-      <div class="article-container info-wrapper z-10">
-        <div :class="['tags', article.cover ? 'white-tags' : '']">
-          <span
-            class="tag"
-            v-for="tag in article.tags"
-            :key="tag.id"
-            @click="navigateTo(`/archives/${tag.name}`)"
-          >
-            {{ tag.name }}
-          </span>
+      <div class="article-container header-content z-10">
+        <div></div>
+        <div class="info-wrapper">
+          <div :class="['tags', article.cover ? 'white-tags' : '']">
+            <span
+              class="tag"
+              v-for="tag in article.tags"
+              :key="tag.id"
+              @click="navigateTo(`/archives/${tag.name}`)"
+            >
+              {{ tag.name }}
+            </span>
+          </div>
+          <h1>{{ article.title }}</h1>
+          <h3>{{ article.description }}</h3>
+          <div class="article-meta">
+            <span class="date"
+              >Posted By {{ article.author?.profile.nickName }} on
+              {{ article.createdAt && formatDate(article.createdAt) }}</span
+            >
+          </div>
         </div>
-        <h1>{{ article.title }}</h1>
-        <h3>{{ article.description }}</h3>
-        <div class="article-meta">
-          <span class="date"
-            >Posted By {{ article.author?.profile.nickName }} on
-            {{ article.createdAt && formatDate(article.createdAt) }}</span
-          >
-        </div>
+        <div></div>
       </div>
     </div>
     <div class="post-detail article-container">
@@ -45,7 +49,7 @@ import { getArticleDetail } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 
-const loading = ref(false);
+const loading = ref(true);
 const { setCurrentArticle } = useArticleStore();
 const route = useRoute();
 const slug = route.params.slug as string;
@@ -69,7 +73,6 @@ const article = ref<IArticle>({
 });
 
 const getArticleInfo = async () => {
-  loading.value = true;
   const res = await getArticleDetail(slug);
   loading.value = false;
   const result = res.data;
@@ -203,15 +206,24 @@ onMounted(() => {
   }
 }
 
+.header-content {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  gap: 1rem;
+
+  @include responsive(md) {
+    display: block;
+  }
+}
+
 .info-wrapper {
   width: 100%;
   padding-top: 6rem;
   padding-bottom: 3rem;
-  padding-right: 260px;
 
   @include responsive(md) {
     padding-top: 4rem;
-    padding-right: 2rem;
   }
 }
 </style>

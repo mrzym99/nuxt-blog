@@ -6,9 +6,9 @@
         :style="bgStyle"
         class="bg-gray-100 flex flex-col items-center justify-center blog-bg"
       >
-        <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">Zym Blog</h1>
+        <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">zy</h1>
         <p class="text-2xl lt-md:text-xl tracking-[1px] text-center mx-auto px-4">
-          「 A place where I share my journey in technology and life. 」
+          「 真理往往简单明了 」
         </p>
       </section>
       <!-- Main Content with Sidebar -->
@@ -28,8 +28,12 @@
                       >Posted by {{ post.author?.profile.nickName }} on
                       {{ post.createdAt && formatDate(post.createdAt) }}</span
                     >
-                    <!-- <span class="mx-2">·</span>
-                    <span>1000 min read</span> -->
+                    <span class="mx-2">·</span>
+                    <Icon name="ph:thumbs-up-duotone" class="mr-1" />
+                    {{ formatNumber(post.likeCount) }}
+                    <span class="mx-2">·</span>
+                    <Icon name="ph:eye" class="mr-1" />
+                    {{ formatNumber(post.viewCount) }}
                   </div>
                 </div>
               </div>
@@ -65,6 +69,7 @@ import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
+import { formatNumber } from '~/utils/tool';
 
 const route = useRoute();
 const posts = ref<IArticle[]>([]);
@@ -79,7 +84,6 @@ const bgStyle = computed(() => {
 });
 
 async function getArticle() {
-  loading.value = true;
   const current = Number(route.query.current) || 1;
 
   const res = await getArticleList({

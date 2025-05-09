@@ -20,7 +20,6 @@
   margin: 0 auto;
   padding: 0 2rem;
   max-width: 1200px;
-  padding-left: 200px;
 
   @include responsive(md) {
     padding: 0 1rem;
@@ -219,13 +218,12 @@
 
   .footer-content {
     display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
     align-items: center;
     max-width: $max-width;
-    margin: 0 auto;
-    padding: 0 1rem;
+    padding: 1rem 0 3rem 0;
 
     @include responsive(md) {
       flex-direction: column;
