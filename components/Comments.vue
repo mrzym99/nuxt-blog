@@ -20,7 +20,7 @@
                 <Icon name="carbon:text-underline" />
               </button>
               <button class="tool-btn" @click="insertText('> ')" title="引用">
-                <Icon name="carbon:quote" />
+                <Icon name="carbon:quotes" />
               </button>
               <button class="tool-btn" @click="insertText('`', '`')" title="代码">
                 <Icon name="carbon:code" />
@@ -92,18 +92,21 @@
       <template v-else>
         <div v-for="comment in comments" :key="comment.id" class="comment-item">
           <div class="comment-avatar">
-            <img :src="comment.avatar" :alt="comment.username" />
+            <img
+              :src="comment.commenter?.profile.avatar"
+              :alt="comment.commenter?.profile.nickName"
+            />
           </div>
           <div class="comment-content">
             <div class="comment-header">
-              <span class="username">{{ comment.username }}</span>
-              <span class="time">{{ formatTime(comment.createTime) }}</span>
+              <span class="username">{{ comment.commenter?.profile.nickName }}</span>
+              <span class="time">{{ formatTime(comment?.createdAt) }}</span>
             </div>
             <div class="comment-text" v-html="renderComment(comment.content)"></div>
             <div class="comment-actions">
               <button class="action-btn" @click="handleReply(comment)">回复</button>
               <button class="action-btn" @click="handleLike(comment)">
-                <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" /> {{ comment.likes }}
+                <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" /> {{ comment.likeCount }}
               </button>
             </div>
 
@@ -111,30 +114,37 @@
             <div v-if="comment.replies && comment.replies.length > 0" class="replies-list">
               <div v-for="reply in comment.replies" :key="reply.id" class="reply-item">
                 <div class="reply-avatar">
-                  <img :src="reply.avatar" :alt="reply.username" />
+                  <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
                 </div>
                 <div class="reply-content">
                   <div class="reply-header">
-                    <span class="username">{{ reply.username }}</span>
+                    <span class="username">{{ reply.reply.profile.nickName }}</span>
                     <span v-if="reply.replyTo" class="reply-to">
                       回复
-                      <span class="reply-to-user">@{{ reply.replyTo }}</span>
+                      <span class="reply-to-user">@{{ reply.replyTo.profile.nickName }}</span>
                     </span>
-                    <span class="time">{{ formatTime(reply.createTime) }}</span>
+                    <span class="time">{{ formatTime(reply?.createdAt) }}</span>
                   </div>
                   <div class="reply-text" v-html="renderComment(reply.content)"></div>
                   <div class="reply-actions">
                     <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
                     <button class="action-btn" @click="handleLike(reply)">
-                      <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" /> {{ reply.likes }}
+                      <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
+                      {{ reply.likeCount }}
                     </button>
                   </div>
                 </div>
               </div>
+              <div
+                v-if="comment.replies.length < (comment.replyCount || 0)"
+                @click="loadMoreReplies(comment)"
+              >
+                loadMore
+              </div>
             </div>
 
             <!-- 回复框 -->
-            <div v-if="replyTo && replyTo.parentId === comment.id" class="reply-form">
+            <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
               <div class="form-header">
                 <div class="avatar">
                   <img :src="avatar" alt="用户头像" />
@@ -142,7 +152,7 @@
                 <div class="form-content">
                   <textarea
                     v-model="commentContent"
-                    :placeholder="`回复 @${replyTo.username}`"
+                    :placeholder="`回复 @${replyTo.user.profile.nickName}`"
                     rows="3"
                     @keydown.enter.prevent="handleSubmit"
                   ></textarea>
@@ -163,6 +173,7 @@
             </div>
           </div>
         </div>
+        <div v-if="comments.length < commentTotal" @click="loadMoreComments">loadMore</div>
       </template>
     </div>
   </div>
@@ -173,72 +184,51 @@ import { ref, computed, nextTick } from 'vue';
 import avatar from '@/assets/images/avatar.png';
 import Popover from './Popover.vue';
 import { marked } from 'marked';
+import {
+  type IComment,
+  type IReply,
+  CommentType,
+  type IUser,
+  type CreateReply,
+  type CreateComment,
+  type Comment,
+} from '@/types/index';
+import { useUserStore } from '~/store';
+import {
+  getReplyList,
+  postDeleteComment,
+  postDeleteReply,
+  getParentComments,
+  postComment,
+  postReply,
+} from '~/api/comment';
 
-defineProps<{
-  identifier: string;
+const props = defineProps<{
+  type: CommentType;
+  targetId: number;
 }>();
 
+type ReplyTo = {
+  parent: Comment;
+  user: IUser;
+};
+
+const userStore = useUserStore();
 // 评论内容
 const commentContent = ref('');
 // const showPreview = ref(false);
-const replyTo = ref<any>(null);
+const replyTo = ref<ReplyTo | null>(null);
 const imageInput = ref<HTMLInputElement | null>(null);
+
+const currentPage = ref(1);
+const commentTotal = ref(0);
+const PAGE_SIZE = 5;
 
 // 表情列表
 const emojis = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '✨', '🌟', '💡', '📝'];
 
-// 类型定义
-interface Comment {
-  id: number;
-  username: string;
-  avatar: string;
-  content: string;
-  createTime: number;
-  likes: number;
-  replies: Reply[];
-}
-
-interface Reply {
-  id: number;
-  username: string;
-  avatar: string;
-  content: string;
-  createTime: number;
-  likes: number;
-  replyTo: string;
-}
-
 // 模拟评论数据
-const comments = ref([
-  {
-    id: 1,
-    username: '张三',
-    avatar: avatar,
-    content: '这是一条示例评论，支持 Markdown 格式。',
-    createTime: new Date().getTime() - 3600000,
-    likes: 5,
-    replies: [
-      {
-        id: 11,
-        username: '李四',
-        avatar: avatar,
-        content: '这是一条回复评论。',
-        createTime: new Date().getTime() - 3500000,
-        likes: 2,
-        replyTo: '张三',
-      },
-    ],
-  },
-  {
-    id: 2,
-    username: '李四',
-    avatar: avatar,
-    content: '评论内容可以包含 **加粗** 和 *斜体* 等格式。',
-    createTime: new Date().getTime() - 7200000,
-    likes: 3,
-    replies: [],
-  },
-]);
+const comments = ref<Array<Comment>>([]);
 
 // 渲染 Markdown 内容
 const renderedContent = computed(() => {
@@ -253,51 +243,46 @@ const renderComment = (comment: string) => {
 // 处理评论提交
 const handleSubmit = () => {
   if (!commentContent.value.trim()) return;
-
-  const newComment: Comment | Reply = replyTo.value
-    ? {
-        id: Date.now(),
-        username: '当前用户',
-        avatar: avatar,
-        content: commentContent.value,
-        createTime: new Date().getTime(),
-        likes: 0,
-        replyTo: replyTo.value.username,
-      }
-    : {
-        id: Date.now(),
-        username: '当前用户',
-        avatar: avatar,
-        content: commentContent.value,
-        createTime: new Date().getTime(),
-        likes: 0,
-        replies: [],
-      };
-
   if (replyTo.value) {
-    // 如果是回复评论
-    const parentComment = comments.value.find(c => c.id === replyTo.value.parentId);
-    if (parentComment) {
-      if (!parentComment.replies) {
-        parentComment.replies = [];
+    const newReply: CreateReply = {
+      parentId: replyTo.value.parent.id,
+      content: commentContent.value,
+      replyId: userStore.user?.id,
+      replyToId: replyTo.value.user.id,
+    };
+    postReply(newReply).then(res => {
+      if (res.code === 200) {
+        getReplies(replyTo.value!.parent);
+        // 清空输入框和回复状态
+        commentContent.value = '';
+        replyTo.value = null;
       }
-      parentComment.replies.push(newComment as Reply);
-    }
+    });
   } else {
-    // 如果是新评论
-    comments.value.push(newComment as Comment);
-  }
+    const newComment: CreateComment = {
+      type: props.type,
+      targetId: props.targetId,
+      content: commentContent.value,
+      commenterId: userStore.user?.id,
+    };
 
-  // 清空输入框和回复状态
-  commentContent.value = '';
-  replyTo.value = null;
+    postComment(newComment).then(res => {
+      if (res.code === 200) {
+        currentPage.value = 1;
+        getCommentList();
+        // 清空输入框和回复状态
+        commentContent.value = '';
+        replyTo.value = null;
+      }
+    });
+  }
 };
 
 // 处理回复
-const handleReply = (comment: any, reply?: any) => {
+const handleReply = (comment: Comment, reply?: IReply) => {
   replyTo.value = {
-    parentId: comment.id,
-    username: reply ? reply.username : comment.username,
+    parent: comment,
+    user: reply ? reply.reply! : comment.commenter!,
   };
 };
 
@@ -309,7 +294,7 @@ const cancelReply = () => {
 
 // 处理点赞
 const handleLike = (comment: any) => {
-  comment.likes++;
+  comment.likeCount++;
   // TODO: 调用后端 API 更新点赞数
 };
 
@@ -318,21 +303,17 @@ const insertEmoji = (emoji: string) => {
   commentContent.value += emoji;
 };
 
-// 切换预览
-// const togglePreview = () => {
-//   showPreview.value = !showPreview.value;
-// };
-
 // 格式化时间
-const formatTime = (timestamp: number) => {
+const formatTime = (date?: Date | null | undefined) => {
+  if (!date) return null;
   const now = new Date().getTime();
-  const diff = now - timestamp;
+  const diff = now - new Date(date!).getTime();
 
   if (diff < 60000) return '刚刚';
   if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
   if (diff < 2592000000) return `${Math.floor(diff / 86400000)}天前`;
-  return new Date(timestamp).toLocaleDateString();
+  return date!.toLocaleDateString();
 };
 
 // 插入文本
@@ -382,6 +363,52 @@ const handleImageUpload = async (event: Event) => {
     input.value = '';
   }
 };
+
+function loadMoreComments() {
+  currentPage.value += 1;
+  getCommentList();
+}
+
+async function loadMoreReplies(parent: Comment) {
+  const len = parent.replies ? parent.replies.length : 0;
+  const currentPage = len / 10 + 1;
+  const res = await getReplyList({
+    targetId: parent.id,
+    currentPage,
+    pageSize: 10,
+  });
+
+  const replies = res.data as IReply[];
+  parent.replies = parent.replies ? parent.replies.concat(replies) : replies;
+}
+
+async function getReplies(parent: Comment) {
+  const currentPage = 1;
+  const res = await getReplyList({
+    targetId: parent.id,
+    currentPage,
+    pageSize: 10,
+  });
+
+  const replies = res.data as IReply[];
+  parent.replies = replies;
+}
+
+async function getCommentList() {
+  const res = await getParentComments({
+    page: currentPage.value,
+    pageSize: PAGE_SIZE,
+    targetId: props.targetId,
+    type: CommentType.ARTICLE,
+  });
+  const { list, total } = res.data as { list: Comment[]; total: number };
+  comments.value = list;
+  commentTotal.value = total - 0;
+}
+
+onMounted(() => {
+  getCommentList();
+});
 </script>
 
 <style lang="scss" scoped>

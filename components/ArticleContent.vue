@@ -66,7 +66,7 @@
         </div>
         <div class="w-fuu">
           <h3>Comments</h3>
-          <Comments />
+          <Comments :type="CommentType.ARTICLE" :target-id="article.id" />
         </div>
       </div>
       <div>
@@ -89,7 +89,7 @@ import { markedHighlight } from 'marked-highlight';
 import Catalog from './Catalog.vue';
 import hljs from 'highlight.js';
 import { formatDate, formatDuration } from '~/utils/tool';
-import { LikeType, type IArticle } from '~/types/index';
+import { CommentType, LikeType, type IArticle } from '~/types/index';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
 import { postViewDuration } from '~/api/view';
 import { useUserStore } from '~/store';
@@ -113,7 +113,7 @@ const userStore = useUserStore();
 const props = defineProps<ArticleProps>();
 
 const isLike = ref(false);
-const likeCount = ref(0);
+const likeCount = ref<number>(0);
 const currentViewDuration = ref(0);
 const recommends = ref<IArticle[]>([]);
 
@@ -214,7 +214,7 @@ async function handleGetLikeCount() {
     targetId: props.article.id,
     type: LikeType.ARTICLE,
   });
-  likeCount.value = res.data;
+  likeCount.value = res.data as number;
 }
 
 async function handleAddViewDuration(duration: number) {
@@ -228,7 +228,7 @@ async function handleAddViewDuration(duration: number) {
 
 async function handleGetRecommends() {
   const res = await getRecommendArticle(props.article.id);
-  recommends.value = res.data;
+  recommends.value = res.data as IArticle[];
 }
 
 onMounted(() => {

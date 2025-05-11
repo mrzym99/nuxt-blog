@@ -1,12 +1,14 @@
-export interface IArticle {
+type baseModel = {
   id: number;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+};
+export interface IArticle extends baseModel {
   title: string;
   description?: string;
   cover?: string;
   tags: ITag[];
   slug: string;
-  createdAt: Date | null;
-  updatedAt: Date | null;
   content?: string;
   contentType: ContentType;
   order?: number | null;
@@ -19,9 +21,9 @@ export interface IArticle {
   viewDuration?: number;
 }
 
-export interface IUser {
-  id: number;
+export interface IUser extends baseModel {
   username: string;
+  status?: number;
   profile: {
     id: number;
     avatar: string;
@@ -36,8 +38,7 @@ export interface IUser {
   };
 }
 
-export interface ITag {
-  id: number;
+export interface ITag extends baseModel {
   name: string;
   count: number;
   articles: IArticle[];
@@ -46,6 +47,12 @@ export interface ITag {
 export enum LikeType {
   ARTICLE = 'article',
   COMMENT = 'comment',
+  REPLY = 'reply',
+}
+
+export enum CommentType {
+  ARTICLE = 'article',
+  ALBUM = 'album',
 }
 
 export enum ArticleType {
@@ -58,3 +65,51 @@ export enum ContentType {
   MD = 'md', // markdown
   RICHTEXT = 'richtext', // rich text
 }
+
+export type CreateComment = {
+  type: CommentType;
+  targetId: Number;
+  content: string;
+  commenterId?: number; // 评论人
+};
+
+export type CreateReply = {
+  parentId: number;
+  content: string;
+  replyId?: number; // 回复人id
+  replyToId?: number; // 被回复人 id
+};
+
+// 类型定义
+export interface IComment extends baseModel {
+  type: CommentType;
+  targetId: Number;
+  content: string;
+  likeCount: number;
+  commenter: IUser;
+  replies: IReply[];
+}
+
+export interface IReply extends baseModel {
+  parentId: number;
+  content: string;
+  likeCount: number;
+  reply: IUser;
+  replyTo: IUser;
+}
+
+export type Comment = {
+  id: number;
+  type?: CommentType;
+  targetId?: Number;
+  content: string;
+  parentId?: number;
+  reply?: IUser;
+  replyTo?: IUser;
+  likeCount: number;
+  commenter?: IUser;
+  replyCount?: number;
+  replies?: IReply[];
+  createdAt?: Date;
+  updatedAt?: Date;
+};
