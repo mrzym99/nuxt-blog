@@ -1,6 +1,7 @@
 <template>
   <div class="login" :style="{ backgroundImage: `url(${bgUrl})` }">
     <div class="login-container p-2rem">
+      <h1 class="login-title">{{ titleMap[type] }}</h1>
       <component :is="componentId" />
       <div class="link-container">
         <NuxtLink class="login-link" to="/login/code-login">邮箱登录</NuxtLink>
@@ -25,24 +26,34 @@ import PwdLogin from './modules/pwd-login.vue';
 import Register from './modules/register.vue';
 import bg from '~/assets/images/bg.jpg';
 import { getToken } from '~/utils/auth';
+import CodeLogin from './modules/code-login.vue';
+import GithubLogin from './modules/github-login.vue';
 
 const route = useRoute();
 const router = useRouter();
 
 type loginType = 'pwd-login' | 'code-login' | 'github-login' | 'register';
 
-const type = route.params.type as loginType;
-
 const loginMap: Record<loginType, Component> = {
   'pwd-login': PwdLogin,
-  'code-login': PwdLogin,
-  'github-login': PwdLogin,
+  'code-login': CodeLogin,
+  'github-login': GithubLogin,
   register: Register,
 };
+
+const titleMap: Record<loginType, string> = {
+  'pwd-login': '登录',
+  'code-login': '验证码登录',
+  'github-login': 'GitHub登录',
+  register: '注册',
+};
+
 const bgUrl = ref<string>(bg);
 
+const type = computed(() => route.params.type as loginType);
+
 const componentId = computed(() => {
-  return loginMap[type];
+  return loginMap[type.value];
 });
 
 async function getBg() {
@@ -90,15 +101,22 @@ onMounted(() => {
 .login-container {
   z-index: 2;
   width: 100%;
-  max-width: 400px;
+  max-width: 460px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 12px;
+  max-height: 90vh;
+  overflow: auto;
   @include themed() {
     background: themed('bg');
+  }
+
+  .login-title {
+    width: 100%;
+    margin: 0 0 10px 0 !important;
   }
 }
 

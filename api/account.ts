@@ -8,6 +8,19 @@ export type PwdLogin = {
   captchaId: string;
 };
 
+export type CodeLogin = {
+  email: string;
+  code: string;
+};
+
+export type Register = {
+  email: string;
+  code: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+};
+
 // 账户密码登录
 export const postLogin = (data?: PwdLogin) => post<token>('/auth/login', data);
 
@@ -21,10 +34,10 @@ export const getCaptcha = () => get<Captcha>('/auth/captcha/img');
 export const getEmailCaptcha = (email: string) => post<Captcha>('/auth/email/send', { email });
 
 // 验证码登录
-export const postCodeLogin = (data?: any) => post<token>('/auth/codeLogin', data);
+export const postCodeLogin = (data?: CodeLogin) => post<token>('/auth/codeLogin', data);
 
 // 用户注册
-export const postRegister = (data?: any) => post('/auth/register', data);
+export const postRegister = (data?: Register) => post('/auth/register', data);
 
 // 刷新 token
 export const postRefreshToken = (data?: any) => post<token>('/auth/refreshToken', data);

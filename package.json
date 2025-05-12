@@ -22,6 +22,7 @@
     "@vee-validate/i18n": "^4.15.0",
     "@vee-validate/nuxt": "^4.15.0",
     "@vee-validate/rules": "^4.15.0",
+    "@vueuse/core": "^13.1.0",
     "axios": "^1.8.4",
     "defu": "^6.1.4",
     "feed": "^4.2.2",

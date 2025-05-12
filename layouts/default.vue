@@ -16,15 +16,23 @@
           <NuxtLink to="/">Home</NuxtLink>
           <NuxtLink to="/about">About</NuxtLink>
           <NuxtLink to="/archives/all">Archive</NuxtLink>
+          <ThemeSwitch />
+          <NuxtLink
+            v-if="!user"
+            class="login-icon"
+            to="/login/pwd-login"
+            @click="showDrawer = false"
+            >登录</NuxtLink
+          >
+          <User v-else />
+
           <a href="/rss.xml" target="_blank" class="rss-link" title="RSS 订阅">
             <Icon name="ph:rss" size="1.5rem" />
           </a>
-          <ThemeSwitch />
-          <User />
         </div>
         <!-- 移动端菜单按钮 -->
-        <div class="flex items-center md:hidden">
-          <ThemeSwitch class="mr-3" />
+        <div class="flex items-center lg:hidden">
+          <User class="mr-3" />
           <button class="menu-toggle" @click="showDrawer = true">
             <Icon class="menu-toggle-icon" name="ph:list" size="1.5rem" />
           </button>
@@ -35,6 +43,14 @@
     <!-- 移动端抽屉菜单 -->
     <Drawer v-model="showDrawer" position="right" width="60%" title="菜单">
       <div class="mobile-nav">
+        <div v-if="user" class="pl-3">
+          <NuxtLink to="/user/profile" @click="showDrawer = false">
+            <img
+              class="size-3rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
+              :src="user?.avatar"
+              :alt="user?.nickName"
+          /></NuxtLink>
+        </div>
         <NuxtLink to="/" class="mobile-nav-item" @click="showDrawer = false">Home</NuxtLink>
         <NuxtLink to="/about" class="mobile-nav-item" @click="showDrawer = false">About</NuxtLink>
         <NuxtLink to="/archives/all" class="mobile-nav-item" @click="showDrawer = false"
@@ -44,8 +60,16 @@
           <Icon class="mr-2" name="ph:rss" size="1.5rem" />
           RSS
         </a>
-        <div class="mobile-nav-item">
+        <div class="mobile-bottom-nav">
           <ThemeSwitch />
+          <NuxtLink
+            v-if="!user"
+            class="login-icon"
+            to="/login/pwd-login"
+            @click="showDrawer = false"
+            >登录</NuxtLink
+          >
+          <div v-else class="login-icon" @click="logout">退出</div>
         </div>
       </div>
     </Drawer>
@@ -80,14 +104,16 @@
 
 <script setup lang="ts">
 import Drawer from '~/components/Drawer.vue';
-import { useArticleStore } from '~/store';
-const { getArticleHasCover } = toRefs(useArticleStore());
+import { useArticleStore, useUserStore } from '~/store';
+import { storeToRefs } from 'pinia';
 
 const isScrolled = ref(false);
 const isFixed = ref(false);
 const lastScrollPosition = ref(0);
 const showDrawer = ref(false);
 const route = useRoute();
+const { getArticleHasCover } = storeToRefs(useArticleStore());
+const { user } = storeToRefs(useUserStore());
 
 const isPost = computed(() => {
   return route.path.startsWith('/posts');
@@ -96,6 +122,11 @@ const isPost = computed(() => {
 const isLogin = computed(() => {
   return route.path.startsWith('/login');
 });
+
+const logout = () => {
+  useUserStore().logout();
+  showDrawer.value = false;
+};
 
 onMounted(() => {
   window.addEventListener('scroll', () => {

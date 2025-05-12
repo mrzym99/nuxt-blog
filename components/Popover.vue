@@ -61,7 +61,7 @@ const triggerRef = ref<HTMLElement | null>(null);
 const isVisible = ref(false);
 const actualPosition = ref(props.position);
 
-const newPosition = ref(null);
+const newPosition = ref<any>(null);
 
 // 获取主位置（用于CSS类）
 const positionClass = computed(() => {

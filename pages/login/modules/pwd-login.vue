@@ -1,7 +1,6 @@
 <template>
   <div class="login-form">
     <VeeForm @submit="handleLogin">
-      <h1>登录</h1>
       <div class="form-group mb-2">
         <label class="mb-1" for="username">用户名</label>
         <VeeField
@@ -9,7 +8,7 @@
           name="username"
           type="email"
           placeholder="请输入用户名"
-          rules="username"
+          rules="required|username"
         />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="username" key="username" />
@@ -22,7 +21,7 @@
           name="password"
           type="password"
           placeholder="请输入密码"
-          rules="password"
+          rules="required|password"
         />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="password" />
@@ -38,10 +37,12 @@ import { ref } from 'vue';
 import type { PwdLogin } from '~/api';
 import { useUserStore } from '~/store';
 import Button from '~/components/Button.vue';
+import { useNuxtApp } from '#app';
 
 const userStore = useUserStore();
 const router = useRouter();
 const loading = ref(false);
+const { $toast } = useNuxtApp();
 
 const loginForm = ref<PwdLogin>({
   username: 'admin',
@@ -57,6 +58,7 @@ const handleLogin = () => {
     .then(() => {
       loading.value = false;
       router.back();
+      $toast.success('登录成功');
     })
     .catch(() => {
       loading.value = false;

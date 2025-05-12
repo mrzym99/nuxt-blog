@@ -1,7 +1,14 @@
 import { defineStore } from 'pinia';
-import { getUserInfo, postLogin, type PwdLogin } from '~/api';
+import {
+  getLogout,
+  getUserInfo,
+  postCodeLogin,
+  postLogin,
+  type CodeLogin,
+  type PwdLogin,
+} from '~/api';
 import type { IArticle, UserDetail } from '~/types/index';
-import { setToken } from '~/utils/auth';
+import { setToken, removeToken } from '~/utils/auth';
 
 export const useArticleStore = defineStore('blogArticle', {
   state: () => ({
@@ -31,6 +38,9 @@ export const useUserStore = defineStore('user', {
         this.user = res.data;
       });
     },
+    removeUser() {
+      this.user = null;
+    },
     async pwdLogin(dto: PwdLogin) {
       return new Promise((resolve, reject) => {
         postLogin(dto)
@@ -38,15 +48,33 @@ export const useUserStore = defineStore('user', {
             const { access_token } = res.data;
             setToken(access_token);
             this.setUser();
+            resolve(res);
           })
           .catch(err => {
             reject(err);
           });
       });
     },
-    codeLogin() {},
+    codeLogin(dto: CodeLogin) {
+      return new Promise((resolve, reject) => {
+        postCodeLogin(dto)
+          .then(res => {
+            const { access_token } = res.data;
+            setToken(access_token);
+            this.setUser();
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
     thirdLogin() {},
-
-    logout() {},
+    logout() {
+      getLogout().then(() => {
+        removeToken();
+        this.removeUser();
+      });
+    },
   },
 });

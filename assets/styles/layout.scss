@@ -37,11 +37,16 @@
   left: 0;
   right: 0;
   z-index: $z-index-header;
-  padding: 1rem;
+  padding: 1rem 2rem;
   transition: all $duration ease;
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @include responsive(lg) {
+    padding: 1rem;
+  }
+
   .nav-container {
     display: flex;
     align-items: center;
@@ -56,6 +61,7 @@
   .nav-links {
     display: flex;
     gap: 2rem;
+    align-items: center;
 
     a {
       @include themed() {
@@ -112,9 +118,13 @@
 }
 
 .mobile-nav {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  height: 100%;
+  overflow: auto;
+  padding-bottom: 60px;
 
   .mobile-nav-item {
     padding: 0.75rem 1rem;
@@ -135,6 +145,27 @@
       gap: 0.5rem;
     }
   }
+
+  .mobile-bottom-nav {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include themed() {
+      color: themed('text');
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
 }
 
 .nav {
@@ -146,9 +177,15 @@
   .nav-links {
     display: flex;
 
-    @include responsive(md) {
+    @include responsive(lg) {
       display: none;
     }
+  }
+
+  .rss-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -194,6 +231,26 @@
   }
   to {
     transform: translateY(0);
+  }
+}
+
+.login-icon {
+  cursor: pointer;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 4rem;
+  height: 1.5rem;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  @include themed() {
+    color: themed('nav-text') !important;
+    background-color: themed('primary');
+  }
+  &:hover {
+    @include themed() {
+      background-color: themed('secondary');
+    }
   }
 }
 

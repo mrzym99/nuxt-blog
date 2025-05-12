@@ -3,7 +3,7 @@
     <div class="article-content">
       <div></div>
       <div>
-        <div class="py-3 px-2 bg-gray-100 rounded-md mb-4">
+        <div class="article-info p-1rem rounded-md my-4">
           <p class="my-2 flex item-center justify-between w-full">
             <span>
               <span class="mr-2">文章类型: </span
@@ -264,6 +264,13 @@ onBeforeUnmount(() => {
   }
 }
 
+.article-info {
+  border: 1px solid;
+  @include themed() {
+    border-color: themed('border');
+  }
+}
+
 .article-content {
   margin: 0 auto;
   width: 100%;
@@ -304,8 +311,6 @@ onBeforeUnmount(() => {
     margin: 1rem 0 3rem 0;
     @include themed() {
       color: themed('text');
-      border-top: 1px solid themed('border');
-      border-bottom: 1px solid themed('border');
     }
 
     :deep(pre) {

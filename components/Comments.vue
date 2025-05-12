@@ -6,7 +6,8 @@
       <div class="comment-form">
         <div class="form-header">
           <div class="avatar">
-            <img :src="user?.avatar" alt="用户头像" />
+            <img v-if="user" :src="user?.avatar" :alt="user?.nickName" />
+            <NuxtLink class="login-icon" to="/login/pwd-login">登录</NuxtLink>
           </div>
           <div class="form-content">
             <div class="markdown-toolbar">
@@ -164,7 +165,7 @@
               <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
                 <div class="form-header">
                   <div class="avatar">
-                    <img :src="user?.avatar" alt="用户头像" />
+                    <img :src="user?.avatar" :alt="user?.nickName" />
                   </div>
                   <div class="form-content">
                     <textarea
@@ -216,6 +217,7 @@ import {
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import { getReplyList, getParentComments, postComment, postReply } from '~/api/comment';
+import { useNuxtApp } from '#app';
 
 const props = defineProps<{
   type: CommentType;
@@ -228,6 +230,7 @@ type ReplyTo = {
 };
 
 const { user } = storeToRefs(useUserStore());
+const { $toast } = useNuxtApp();
 // 评论内容
 const commentContent = ref('');
 // const showPreview = ref(false);
@@ -260,6 +263,10 @@ const renderComment = (comment: string) => {
 // 处理评论提交
 const handleSubmit = () => {
   if (!commentContent.value.trim()) return;
+  if (!user.value) {
+    $toast.warning('请先登录');
+    return;
+  }
   if (replyTo.value) {
     const newReply: CreateReply = {
       parentId: replyTo.value.parent.id,

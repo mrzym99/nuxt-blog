@@ -1,5 +1,5 @@
 <template>
-  <Popover ref="popoverRef" position="bottom-right" :width="200">
+  <Popover v-if="user" ref="popoverRef" position="bottom-right" :width="200">
     <template #trigger>
       <img
         class="size-1.5rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
@@ -42,14 +42,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use '~/assets/styles/themes.scss' as *;
 @use '~/assets/styles/global.scss' as *;
-
-.user-avatar {
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-}
 
 .user-panel {
   padding: 0.25rem;

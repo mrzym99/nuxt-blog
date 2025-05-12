@@ -22,7 +22,7 @@ function initVeeValidate() {
     generateMessage: localize({ zhCn }),
   });
 
-  setLocale('zh_TW');
+  setLocale('zhCn');
 }
 
 export default defineNuxtPlugin(({ vueApp }) => {
