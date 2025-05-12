@@ -1,7 +1,9 @@
+import type { Comment, IPagination, IReply } from '~/types';
 import { get, post } from '~/utils/request';
 
 // 获取父评论列表 以及其子评论
-export const getParentComments = (params?: any) => get('/blog/comment/list', params);
+export const getParentComments = (params?: any) =>
+  get<IPagination<Comment>>('/blog/comment/list', params);
 
 // 创建评论
 export const postComment = (data?: any) => post('/blog/comment/create', data);
@@ -10,7 +12,8 @@ export const postComment = (data?: any) => post('/blog/comment/create', data);
 export const postReply = (data?: any) => post('/blog/comment/reply', data);
 
 // 获取回复列表
-export const getReplyList = (params?: any) => get('/blog/comment/reply/list', params);
+export const getReplyList = (params?: any) =>
+  get<IPagination<IReply>>('/blog/comment/reply/list', params);
 
 // 撤回评论
 export const postDeleteComment = (data?: any) => post('/blog/comment/deleteComment', data);

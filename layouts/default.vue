@@ -11,14 +11,6 @@
     >
       <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> M </NuxtLink>
       <div class="nav-container">
-        ,
-        <!-- 移动端菜单按钮 -->
-        <div class="flex items-center md:hidden">
-          <ThemeSwitch class="mr-3" />
-          <button class="menu-toggle" @click="showDrawer = true">
-            <Icon class="menu-toggle-icon" name="ph:list" size="1.5rem" />
-          </button>
-        </div>
         <!-- PC端导航链接 -->
         <div class="nav-links">
           <NuxtLink to="/">Home</NuxtLink>
@@ -28,6 +20,14 @@
             <Icon name="ph:rss" size="1.5rem" />
           </a>
           <ThemeSwitch />
+          <User />
+        </div>
+        <!-- 移动端菜单按钮 -->
+        <div class="flex items-center md:hidden">
+          <ThemeSwitch class="mr-3" />
+          <button class="menu-toggle" @click="showDrawer = true">
+            <Icon class="menu-toggle-icon" name="ph:list" size="1.5rem" />
+          </button>
         </div>
       </div>
     </nav>
@@ -56,7 +56,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer v-if="!isLogin" class="footer">
       <div class="container">
         <div class="footer-content">
           <div class="social-links">
@@ -91,6 +91,10 @@ const route = useRoute();
 
 const isPost = computed(() => {
   return route.path.startsWith('/posts');
+});
+
+const isLogin = computed(() => {
+  return route.path.startsWith('/login');
 });
 
 onMounted(() => {

@@ -127,3 +127,19 @@ h6 {
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+.error-message {
+  color: var(--error-color);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

@@ -3,7 +3,8 @@ export const formatDate = (time?: Date | null) => {
   return time && new Date(time).toLocaleDateString();
 };
 
-export const formatNumber = (count: number) => {
+export const formatNumber = (count?: number) => {
+  if (!count) return null;
   if (count >= 10000) {
     return `${(count / 10000).toFixed(1)}w+`;
   } else if (count >= 1000) {

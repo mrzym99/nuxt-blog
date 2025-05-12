@@ -64,10 +64,10 @@ const article = ref<IArticle>({
   createdAt: null,
   updatedAt: null,
   content: '',
-  contentType: 0,
+  contentType: 'md',
   order: null,
   top: null,
-  type: 0,
+  type: 'original',
   originalUrl: '',
   author: null,
 });
@@ -212,7 +212,7 @@ onMounted(() => {
   grid-template-columns: 200px 1fr 200px;
   gap: 1rem;
 
-  @include responsive(md) {
+  @include responsive(lg) {
     display: block;
   }
 }

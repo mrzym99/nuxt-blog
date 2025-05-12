@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
-import type { IArticle, IUser } from '~/types/index';
+import { getUserInfo, postLogin, type PwdLogin } from '~/api';
+import type { IArticle, UserDetail } from '~/types/index';
+import { setToken } from '~/utils/auth';
 
 export const useArticleStore = defineStore('blogArticle', {
   state: () => ({
@@ -18,14 +20,33 @@ export const useArticleStore = defineStore('blogArticle', {
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: null as IUser | null,
+    user: null as UserDetail | null,
   }),
   getters: {
     getUser: state => state.user,
   },
   actions: {
-    setUser(user: IUser) {
-      this.user = user;
+    setUser() {
+      getUserInfo().then(res => {
+        this.user = res.data;
+      });
     },
+    async pwdLogin(dto: PwdLogin) {
+      return new Promise((resolve, reject) => {
+        postLogin(dto)
+          .then(res => {
+            const { access_token } = res.data;
+            setToken(access_token);
+            this.setUser();
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
+    codeLogin() {},
+    thirdLogin() {},
+
+    logout() {},
   },
 });

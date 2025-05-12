@@ -8,7 +8,23 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
 
-  modules: ['@nuxtjs/tailwindcss', '@unocss/nuxt', '@nuxt/icon', '@pinia/nuxt'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@unocss/nuxt',
+    '@nuxt/icon',
+    '@pinia/nuxt',
+    '@vee-validate/nuxt',
+  ],
+
+  veeValidate: {
+    autoImports: true,
+    componentNames: {
+      Form: 'VeeForm',
+      Field: 'VeeField',
+      FieldArray: 'VeeFieldArray',
+      ErrorMessage: 'VeeErrorMessage',
+    },
+  },
 
   plugins: ['~/plugins/index.ts'],
 

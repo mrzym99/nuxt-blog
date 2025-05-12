@@ -1,0 +1,49 @@
+@use 'themes' as *;
+@use 'global' as *;
+
+.form-group {
+  min-height: 90px;
+}
+
+label {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+  @include themed() {
+    background-color: themed('bg');
+  }
+}
+
+input:focus {
+  outline: none;
+  @include themed() {
+    border-color: themed('primary');
+  }
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  @include themed() {
+    color: themed('nav-text');
+    background-color: themed('primary');
+  }
+}
+
+button:hover {
+  @include themed() {
+    background-color: themed('secondary');
+  }
+}

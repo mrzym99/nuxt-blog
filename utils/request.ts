@@ -1,16 +1,12 @@
 import axios from 'axios';
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import type { IApiResponse } from '~/types';
+import { getToken } from '~/utils/auth';
 
 let $toast: any;
 
 export function initToast(toast: any) {
   $toast = toast;
-}
-
-export interface ApiResponse<T extends any> {
-  data: T;
-  code: number;
-  message?: string;
 }
 
 // 创建axios实例
@@ -27,7 +23,7 @@ service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     // 在请求发送之前做一些处理，例如添加token
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
+      const token = getToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -56,30 +52,31 @@ service.interceptors.response.use(
     $toast.error(res.message || '请求失败');
     return Promise.reject(new Error(res.message || '请求失败'));
   },
-  (error: Error) => {
+  (error: AxiosError) => {
     // 处理响应错误
     console.error('响应错误:', error);
+    $toast.error((error.response?.data as any).message || '请求失败');
     return Promise.reject(error);
   }
 );
 
 // 封装GET请求
-export function get<T>(url: string, params?: any): Promise<ApiResponse<T>> {
+export function get<T>(url: string, params?: any): Promise<IApiResponse<T>> {
   return service.get(url, { params });
 }
 
 // 封装POST请求
-export function post<T>(url: string, data?: any): Promise<ApiResponse<T>> {
+export function post<T>(url: string, data?: any): Promise<IApiResponse<T>> {
   return service.post(url, data);
 }
 
 // 封装PUT请求
-export function put<T>(url: string, data?: any): Promise<ApiResponse<T>> {
+export function put<T>(url: string, data?: any): Promise<IApiResponse<T>> {
   return service.put(url, data);
 }
 
 // 封装DELETE请求
-export function del<T>(url: string): Promise<ApiResponse<T>> {
+export function del<T>(url: string): Promise<IApiResponse<T>> {
   return service.delete(url);
 }
 

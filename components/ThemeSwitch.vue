@@ -58,6 +58,7 @@ onMounted(() => {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 1.5rem;
+  padding: 0 !important;
   @include themed() {
     background-color: themed('primary');
     color: white;

@@ -3,6 +3,7 @@ type baseModel = {
   createdAt?: Date | null;
   updatedAt?: Date | null;
 };
+
 export interface IArticle extends baseModel {
   title: string;
   description?: string;
@@ -38,11 +39,33 @@ export interface IUser extends baseModel {
   };
 }
 
+export type UserDetail = {
+  id: number;
+  nickName?: string;
+  gender?: number;
+  phone?: string;
+  email?: string;
+  avatar?: string;
+  signature?: string;
+  address?: string;
+  birthDate?: Date;
+  introduction?: string;
+};
+
+export type Captcha = {
+  id: string;
+  img: string;
+};
+
 export interface ITag extends baseModel {
   name: string;
   count: number;
   articles: IArticle[];
 }
+
+export type token = {
+  access_token: string;
+};
 
 export enum LikeType {
   ARTICLE = 'article',
@@ -55,13 +78,17 @@ export enum CommentType {
   ALBUM = 'album',
 }
 
-export enum ArticleType {
+export type ArticleType = 'original' | 'transport' | 'translate';
+
+export enum ArticleEnum {
   ORIGINAL = 'original', // 原创
   TRANSPORT = 'transport', // 转载
   TRANSLATE = 'translate', // 翻译
 }
 
-export enum ContentType {
+export type ContentType = 'md' | 'richtext';
+
+export enum ContentEnum {
   MD = 'md', // markdown
   RICHTEXT = 'richtext', // rich text
 }
@@ -109,7 +136,22 @@ export type Comment = {
   likeCount: number;
   commenter?: IUser;
   replyCount?: number;
-  replies?: IReply[];
+  replies: IReply[];
   createdAt?: Date;
   updatedAt?: Date;
+  fold: boolean;
+  loading: boolean;
 };
+
+export interface IApiResponse<T extends any> {
+  data: T;
+  code: number;
+  message?: string;
+}
+
+export interface IPagination<T extends any> {
+  currentPage: number;
+  pageSize: number;
+  total: number;
+  list: Array<T>;
+}

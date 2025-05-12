@@ -164,7 +164,7 @@ const postedDays = computed(() => {
 });
 
 const postUrl = computed(() => {
-  return `${window.location}/posts/${props.article.id}`;
+  return window.location;
 });
 
 async function handleLike() {
@@ -272,7 +272,7 @@ onBeforeUnmount(() => {
   grid-template-columns: 200px 1fr 200px;
   gap: 1rem;
 
-  @include responsive(md) {
+  @include responsive(lg) {
     display: block;
   }
 

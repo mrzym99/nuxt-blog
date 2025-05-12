@@ -3,3 +3,4 @@ export * from './tag';
 export * from './view';
 export * from './like';
 export * from './comment';
+export * from './account';

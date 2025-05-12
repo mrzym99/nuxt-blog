@@ -215,7 +215,7 @@ onUnmounted(() => {
   right: 3px;
   z-index: 100;
 
-  @include responsive(md) {
+  @include responsive(lg) {
     display: block;
   }
 

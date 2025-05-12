@@ -1,12 +1,12 @@
 <template>
-  <div class="comments-section">
+  <div ref="commentRef" class="comments-section">
     <!-- 评论列表 -->
     <div class="comments-list">
       <!-- 主评论输入框 -->
       <div class="comment-form">
         <div class="form-header">
           <div class="avatar">
-            <img :src="avatar" alt="用户头像" />
+            <img :src="user?.avatar" alt="用户头像" />
           </div>
           <div class="form-content">
             <div class="markdown-toolbar">
@@ -90,90 +90,112 @@
 
       <div v-if="comments.length === 0" class="no-comments">暂无评论，快来抢沙发吧！</div>
       <template v-else>
-        <div v-for="comment in comments" :key="comment.id" class="comment-item">
-          <div class="comment-avatar">
-            <img
-              :src="comment.commenter?.profile.avatar"
-              :alt="comment.commenter?.profile.nickName"
-            />
-          </div>
-          <div class="comment-content">
-            <div class="comment-header">
-              <span class="username">{{ comment.commenter?.profile.nickName }}</span>
-              <span class="time">{{ formatTime(comment?.createdAt) }}</span>
+        <TransitionGroup name="fade">
+          <div v-for="comment in comments" :key="comment.id" class="comment-item">
+            <div class="comment-avatar">
+              <img
+                :src="comment.commenter?.profile.avatar"
+                :alt="comment.commenter?.profile.nickName"
+              />
             </div>
-            <div class="comment-text" v-html="renderComment(comment.content)"></div>
-            <div class="comment-actions">
-              <button class="action-btn" @click="handleReply(comment)">回复</button>
-              <button class="action-btn" @click="handleLike(comment)">
-                <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" /> {{ comment.likeCount }}
-              </button>
-            </div>
-
-            <!-- 子评论列表 -->
-            <div v-if="comment.replies && comment.replies.length > 0" class="replies-list">
-              <div v-for="reply in comment.replies" :key="reply.id" class="reply-item">
-                <div class="reply-avatar">
-                  <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
-                </div>
-                <div class="reply-content">
-                  <div class="reply-header">
-                    <span class="username">{{ reply.reply.profile.nickName }}</span>
-                    <span v-if="reply.replyTo" class="reply-to">
-                      回复
-                      <span class="reply-to-user">@{{ reply.replyTo.profile.nickName }}</span>
-                    </span>
-                    <span class="time">{{ formatTime(reply?.createdAt) }}</span>
-                  </div>
-                  <div class="reply-text" v-html="renderComment(reply.content)"></div>
-                  <div class="reply-actions">
-                    <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
-                    <button class="action-btn" @click="handleLike(reply)">
-                      <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
-                      {{ reply.likeCount }}
-                    </button>
-                  </div>
-                </div>
+            <div class="comment-content">
+              <div class="comment-header">
+                <span class="username">{{ comment.commenter?.profile.nickName }}</span>
+                <span class="time">{{ formatTime(comment?.createdAt) }}</span>
               </div>
-              <div
-                v-if="comment.replies.length < (comment.replyCount || 0)"
-                @click="loadMoreReplies(comment)"
-              >
-                loadMore
+              <div class="comment-text" v-html="renderComment(comment.content)"></div>
+              <div class="comment-actions">
+                <button class="action-btn" @click="handleReply(comment)">回复</button>
+                <button class="action-btn" @click="handleLike(comment)">
+                  <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
+                  {{ comment.likeCount }}
+                </button>
               </div>
-            </div>
 
-            <!-- 回复框 -->
-            <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
-              <div class="form-header">
-                <div class="avatar">
-                  <img :src="avatar" alt="用户头像" />
-                </div>
-                <div class="form-content">
-                  <textarea
-                    v-model="commentContent"
-                    :placeholder="`回复 @${replyTo.user.profile.nickName}`"
-                    rows="3"
-                    @keydown.enter.prevent="handleSubmit"
-                  ></textarea>
-                  <div class="form-footer">
-                    <div class="form-actions">
-                      <button class="cancel-btn" @click="cancelReply">取消回复</button>
-                      <button
-                        class="submit-btn"
-                        :disabled="!commentContent.trim()"
-                        @click="handleSubmit"
-                      >
+              <!-- 子评论列表 -->
+              <div v-if="comment.replyCount" class="replies-list">
+                <div
+                  v-for="reply in returnReplies(comment.replies, comment.fold)"
+                  :key="reply.id"
+                  class="reply-item"
+                >
+                  <div class="reply-avatar">
+                    <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
+                  </div>
+                  <div class="reply-content">
+                    <div class="reply-header">
+                      <span class="username">{{ reply.reply.profile.nickName }}</span>
+                      <span v-if="reply.replyTo" class="reply-to">
                         回复
+                        <span class="reply-to-user">@{{ reply.replyTo.profile.nickName }}</span>
+                      </span>
+                      <span class="time">{{ formatTime(reply?.createdAt) }}</span>
+                    </div>
+                    <div class="reply-text" v-html="renderComment(reply.content)"></div>
+                    <div class="reply-actions">
+                      <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
+                      <button class="action-btn" @click="handleLike(reply)">
+                        <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
+                        {{ reply.likeCount }}
                       </button>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="more"
+                  v-if="comment.replies.length < (comment.replyCount || 0)"
+                  @click="loadMoreReplies(comment)"
+                >
+                  <Icon
+                    v-if="comment.loading"
+                    name="svg-spinners:90-ring-with-bg"
+                    size="1.5rem"
+                  ></Icon>
+                  <span v-else>加载更多 </span>
+                </div>
+              </div>
+              <div class="fold-box" v-if="comment.replyCount">
+                <span class="fold" @click="comment.fold = !comment.fold">
+                  {{ comment.fold ? '展开' : '收起' }}</span
+                >
+              </div>
+
+              <!-- 回复框 -->
+              <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
+                <div class="form-header">
+                  <div class="avatar">
+                    <img :src="user?.avatar" alt="用户头像" />
+                  </div>
+                  <div class="form-content">
+                    <textarea
+                      v-model="commentContent"
+                      :placeholder="`回复 @${replyTo.user.profile.nickName}`"
+                      rows="3"
+                      @keydown.enter.prevent="handleSubmit"
+                    ></textarea>
+                    <div class="form-footer">
+                      <div class="form-actions">
+                        <button class="cancel-btn" @click="cancelReply">取消回复</button>
+                        <button
+                          class="submit-btn"
+                          :disabled="!commentContent.trim()"
+                          @click="handleSubmit"
+                        >
+                          回复
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </TransitionGroup>
+
+        <div class="more" v-if="comments.length < commentTotal" @click="loadMoreComments">
+          <Icon v-if="commentLoading" name="svg-spinners:90-ring-with-bg" size="1.5rem"></Icon>
+          <span v-else>加载更多 </span>
         </div>
-        <div v-if="comments.length < commentTotal" @click="loadMoreComments">loadMore</div>
       </template>
     </div>
   </div>
@@ -181,11 +203,9 @@
 
 <script setup lang="ts">
 import { ref, computed, nextTick } from 'vue';
-import avatar from '@/assets/images/avatar.png';
 import Popover from './Popover.vue';
 import { marked } from 'marked';
 import {
-  type IComment,
   type IReply,
   CommentType,
   type IUser,
@@ -194,14 +214,8 @@ import {
   type Comment,
 } from '@/types/index';
 import { useUserStore } from '~/store';
-import {
-  getReplyList,
-  postDeleteComment,
-  postDeleteReply,
-  getParentComments,
-  postComment,
-  postReply,
-} from '~/api/comment';
+import { storeToRefs } from 'pinia';
+import { getReplyList, getParentComments, postComment, postReply } from '~/api/comment';
 
 const props = defineProps<{
   type: CommentType;
@@ -213,16 +227,19 @@ type ReplyTo = {
   user: IUser;
 };
 
-const userStore = useUserStore();
+const { user } = storeToRefs(useUserStore());
 // 评论内容
 const commentContent = ref('');
 // const showPreview = ref(false);
 const replyTo = ref<ReplyTo | null>(null);
 const imageInput = ref<HTMLInputElement | null>(null);
+const commentRef = ref<HTMLElement | null>(null);
+let observer: any = null;
 
 const currentPage = ref(1);
 const commentTotal = ref(0);
 const PAGE_SIZE = 5;
+const commentLoading = ref(false);
 
 // 表情列表
 const emojis = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '✨', '🌟', '💡', '📝'];
@@ -247,7 +264,7 @@ const handleSubmit = () => {
     const newReply: CreateReply = {
       parentId: replyTo.value.parent.id,
       content: commentContent.value,
-      replyId: userStore.user?.id,
+      replyId: user.value?.id,
       replyToId: replyTo.value.user.id,
     };
     postReply(newReply).then(res => {
@@ -263,7 +280,7 @@ const handleSubmit = () => {
       type: props.type,
       targetId: props.targetId,
       content: commentContent.value,
-      commenterId: userStore.user?.id,
+      commenterId: user.value?.id,
     };
 
     postComment(newComment).then(res => {
@@ -371,51 +388,83 @@ function loadMoreComments() {
 
 async function loadMoreReplies(parent: Comment) {
   const len = parent.replies ? parent.replies.length : 0;
-  const currentPage = len / 10 + 1;
+  const currentPage = Math.floor(len / PAGE_SIZE) + 1;
+  parent.loading = true;
   const res = await getReplyList({
-    targetId: parent.id,
+    parentId: parent.id,
     currentPage,
-    pageSize: 10,
+    pageSize: PAGE_SIZE,
   });
 
-  const replies = res.data as IReply[];
+  const replies = res.data.list;
+  parent.fold = false;
+  parent.loading = false;
   parent.replies = parent.replies ? parent.replies.concat(replies) : replies;
+}
+
+function returnReplies(replies: IReply[], fold: boolean): IReply[] {
+  return fold ? replies.slice(0, 2) : replies;
 }
 
 async function getReplies(parent: Comment) {
   const currentPage = 1;
   const res = await getReplyList({
-    targetId: parent.id,
+    parentId: parent.id,
     currentPage,
-    pageSize: 10,
+    pageSize: PAGE_SIZE,
   });
 
-  const replies = res.data as IReply[];
+  const replies = res.data.list;
   parent.replies = replies;
 }
 
 async function getCommentList() {
+  commentLoading.value = true;
   const res = await getParentComments({
-    page: currentPage.value,
+    currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
     targetId: props.targetId,
     type: CommentType.ARTICLE,
   });
-  const { list, total } = res.data as { list: Comment[]; total: number };
-  comments.value = list;
+  const { list, total } = res.data;
+  const listWidthFold = list.map(v => {
+    return {
+      ...v,
+      loading: false,
+      fold: true,
+    };
+  });
+  comments.value = currentPage.value === 1 ? listWidthFold : comments.value.concat(listWidthFold);
   commentTotal.value = total - 0;
+  commentLoading.value = false;
 }
 
 onMounted(() => {
-  getCommentList();
+  if (window.IntersectionObserver) {
+    observer = new window.IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            getCommentList();
+            observer.unobserve(entry.target);
+            observer.disconnect();
+            observer = null;
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '200px 0px',
+        threshold: 0.1,
+      }
+    );
+    observer.observe(commentRef.value);
+  }
 });
 </script>
 
 <style lang="scss" scoped>
 @use '~/assets/styles/themes.scss' as *;
-
-.comments-section {
-}
 
 .comments-title {
   font-size: 1.5rem;
@@ -438,7 +487,7 @@ onMounted(() => {
 .comment-item {
   display: flex;
   gap: 0.5rem;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   border-bottom: 1px solid;
   @include themed() {
     border-color: themed('border');
@@ -446,6 +495,22 @@ onMounted(() => {
 
   &:last-child {
     border-bottom: none;
+  }
+
+  .fold {
+    cursor: pointer;
+    transition: color 0.3s ease;
+    font-size: 14px;
+    margin-left: 0.25rem;
+    @include themed() {
+      color: themed('primary');
+    }
+
+    &:hover {
+      @include themed() {
+        color: themed('secondary');
+      }
+    }
   }
 }
 
@@ -906,6 +971,24 @@ onMounted(() => {
       th {
         background-color: var(--border-color);
       }
+    }
+  }
+}
+
+.more {
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin: 1em 0;
+  font-size: 16px;
+  height: 20px;
+  @include themed() {
+    color: themed('primary');
+  }
+
+  &:hover {
+    @include themed() {
+      color: themed('secondary');
     }
   }
 }
