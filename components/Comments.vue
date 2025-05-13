@@ -91,6 +91,20 @@
 
       <div v-if="comments.length === 0" class="no-comments">暂无评论，快来抢沙发吧！</div>
       <template v-else>
+        <div class="tab">
+          <span
+            @click="toggleTab(CommentOrder.LATEST)"
+            class="tab-item"
+            :class="{ active: commentOrder === CommentOrder.LATEST }"
+            >最新</span
+          >
+          <span
+            @click="toggleTab(CommentOrder.HOT)"
+            class="tab-item"
+            :class="{ active: commentOrder === CommentOrder.HOT }"
+            >最热</span
+          >
+        </div>
         <TransitionGroup name="fade">
           <div v-for="comment in comments" :key="comment.id" class="comment-item">
             <div class="comment-avatar">
@@ -107,9 +121,22 @@
               <div class="comment-text" v-html="renderComment(comment.content)"></div>
               <div class="comment-actions">
                 <button class="action-btn" @click="handleReply(comment)">回复</button>
-                <button class="action-btn" @click="handleLike(comment)">
+                <button
+                  v-if="user?.id === comment.commenter?.id"
+                  class="cancel-btn"
+                  @click="handleRevokeComment(comment)"
+                >
+                  撤回
+                </button>
+                <button
+                  :class="{
+                    like: comment.isLike,
+                  }"
+                  class="action-btn"
+                  @click="handleLikeComment(comment)"
+                >
                   <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
-                  {{ comment.likeCount }}
+                  {{ comment.likeCount ? comment.likeCount : 0 }}
                 </button>
               </div>
 
@@ -135,9 +162,23 @@
                     <div class="reply-text" v-html="renderComment(reply.content)"></div>
                     <div class="reply-actions">
                       <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
-                      <button class="action-btn" @click="handleLike(reply)">
+
+                      <button
+                        v-if="user?.id === reply.reply?.id"
+                        class="cancel-btn"
+                        @click="handleRevokeReply(comment, reply)"
+                      >
+                        撤回
+                      </button>
+                      <button
+                        :class="{
+                          like: reply.isLike,
+                        }"
+                        class="action-btn"
+                        @click="handleLikeReply(reply)"
+                      >
                         <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
-                        {{ reply.likeCount }}
+                        {{ reply.likeCount ? reply.likeCount : '' }}
                       </button>
                     </div>
                   </div>
@@ -155,7 +196,7 @@
                   <span v-else>加载更多 </span>
                 </div>
               </div>
-              <div class="fold-box" v-if="comment.replyCount">
+              <div class="fold-box" v-if="comment.replyCount && comment.replyCount > 2">
                 <span class="fold" @click="comment.fold = !comment.fold">
                   {{ comment.fold ? '展开' : '收起' }}</span
                 >
@@ -176,9 +217,9 @@
                     ></textarea>
                     <div class="form-footer">
                       <div class="form-actions">
-                        <button class="cancel-btn" @click="cancelReply">取消回复</button>
+                        <button class="cancel-btn" @click="cancelReply">取消</button>
                         <button
-                          class="submit-btn"
+                          class="reply-btn"
                           :disabled="!commentContent.trim()"
                           @click="handleSubmit"
                         >
@@ -213,11 +254,22 @@ import {
   type CreateReply,
   type CreateComment,
   type Comment,
+  LikeType,
+  CommentOrder,
 } from '@/types/index';
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
-import { getReplyList, getParentComments, postComment, postReply } from '~/api/comment';
+import {
+  getReplyList,
+  getParentComments,
+  postComment,
+  postReply,
+  postDeleteComment,
+  postDeleteReply,
+} from '~/api/comment';
 import { useNuxtApp } from '#app';
+import { postCancelLike, postLike, uploadImg } from '~/api';
+import FormData from 'form-data';
 
 const props = defineProps<{
   type: CommentType;
@@ -233,7 +285,6 @@ const { user } = storeToRefs(useUserStore());
 const { $toast } = useNuxtApp();
 // 评论内容
 const commentContent = ref('');
-// const showPreview = ref(false);
 const replyTo = ref<ReplyTo | null>(null);
 const imageInput = ref<HTMLInputElement | null>(null);
 const commentRef = ref<HTMLElement | null>(null);
@@ -243,6 +294,7 @@ const currentPage = ref(1);
 const commentTotal = ref(0);
 const PAGE_SIZE = 5;
 const commentLoading = ref(false);
+const commentOrder = ref(CommentOrder.LATEST);
 
 // 表情列表
 const emojis = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '✨', '🌟', '💡', '📝'];
@@ -250,14 +302,20 @@ const emojis = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '✨', '🌟',
 // 模拟评论数据
 const comments = ref<Array<Comment>>([]);
 
+const renderer = new marked.Renderer();
+
+renderer.image = ({ href, title, text }) => {
+  return `<img src="${href}" alt="${text}" title="${title}" style="max-height: 20rem;object-fit: cover;" />`;
+};
+
 // 渲染 Markdown 内容
 const renderedContent = computed(() => {
   if (!commentContent.value) return '';
-  return marked(commentContent.value);
+  return marked.parse(commentContent.value, { renderer });
 });
 
 const renderComment = (comment: string) => {
-  return marked(comment);
+  return marked.parse(comment, { renderer });
 };
 
 // 处理评论提交
@@ -316,10 +374,64 @@ const cancelReply = () => {
   commentContent.value = '';
 };
 
+const handleRevokeComment = (comment: Comment) => {
+  postDeleteComment(comment.id).then(() => {
+    comments.value = comments.value.filter(item => item.id !== comment.id);
+    $toast.success('撤回成功');
+  });
+};
+
+const handleRevokeReply = (parent: Comment, reply: IReply) => {
+  postDeleteReply(reply.id).then(() => {
+    getReplies(parent);
+    $toast.success('撤回成功');
+  });
+};
+
 // 处理点赞
-const handleLike = (comment: any) => {
-  comment.likeCount++;
-  // TODO: 调用后端 API 更新点赞数
+const handleLikeComment = (comment: Comment) => {
+  if (comment.isLike) {
+    postCancelLike({
+      userId: user?.value?.id,
+      targetId: comment.id,
+      type: LikeType.COMMENT,
+    }).then(() => {
+      comment.likeCount--;
+      comment.isLike = false;
+    });
+  } else {
+    postLike({
+      userId: user?.value?.id,
+      targetId: comment.id,
+      type: LikeType.COMMENT,
+    }).then(() => {
+      comment.likeCount++;
+      comment.isLike = true;
+    });
+  }
+};
+
+// 处理点赞
+const handleLikeReply = (comment: IReply) => {
+  if (comment.isLike) {
+    postCancelLike({
+      userId: user?.value?.id,
+      targetId: comment.id,
+      type: LikeType.REPLY,
+    }).then(() => {
+      comment.likeCount--;
+      comment.isLike = false;
+    });
+  } else {
+    postLike({
+      userId: user?.value?.id,
+      targetId: comment.id,
+      type: LikeType.REPLY,
+    }).then(() => {
+      comment.likeCount++;
+      comment.isLike = true;
+    });
+  }
 };
 
 // 插入表情
@@ -372,15 +484,10 @@ const handleImageUpload = async (event: Event) => {
   if (!file) return;
 
   try {
-    // TODO: 实现图片上传到服务器的逻辑
-    // const formData = new FormData();
-    // formData.append('image', file);
-    // const response = await fetch('/api/upload', { method: 'POST', body: formData });
-    // const { url } = await response.json();
-
-    // 模拟上传成功
-    const url = URL.createObjectURL(file);
-    insertText(`![图片](${url})`);
+    const formData = new FormData();
+    formData.append('image', file);
+    const res = await uploadImg(formData);
+    insertText(`![${file.name}](${res.data})`);
   } catch (error) {
     console.error('图片上传失败:', error);
   } finally {
@@ -422,8 +529,16 @@ async function getReplies(parent: Comment) {
   });
 
   const replies = res.data.list;
+  parent.fold = false;
+  parent.replyCount = res.data.total;
   parent.replies = replies;
 }
+
+const toggleTab = (tab: CommentOrder) => {
+  commentOrder.value = tab;
+  currentPage.value = 1;
+  getCommentList();
+};
 
 async function getCommentList() {
   commentLoading.value = true;
@@ -432,6 +547,7 @@ async function getCommentList() {
     pageSize: PAGE_SIZE,
     targetId: props.targetId,
     type: CommentType.ARTICLE,
+    commentOrder: commentOrder.value,
   });
   const { list, total } = res.data;
   const listWidthFold = list.map(v => {
@@ -516,6 +632,34 @@ onMounted(() => {
     &:hover {
       @include themed() {
         color: themed('secondary');
+      }
+    }
+  }
+}
+
+.tab {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  @include themed() {
+    border-bottom: 1px solid themed('border');
+  }
+
+  .active {
+    @include themed() {
+      color: themed('primary') !important;
+    }
+  }
+
+  .tab-item {
+    border: none;
+    background: none;
+    cursor: pointer;
+    @include themed() {
+      color: themed('text-light');
+
+      &:hover {
+        color: themed('primary');
       }
     }
   }
@@ -663,16 +807,29 @@ onMounted(() => {
 }
 
 .cancel-btn {
-  padding: 0.3rem 0.5;
-  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
   border: none;
+  background: none;
   cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--error-color);
+}
+
+.reply-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 0.875rem;
   @include themed() {
-    background-color: themed('border');
-    color: themed('text');
+    color: themed('text-light');
 
     &:hover {
-      opacity: 0.9;
+      color: themed('primary');
     }
   }
 }
@@ -781,7 +938,7 @@ onMounted(() => {
         background: none;
         cursor: pointer;
         border-radius: 0.25rem;
-        transition: all 0.3s;
+        transition: all 0.3s ease;
 
         i {
           width: 1rem;

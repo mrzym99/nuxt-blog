@@ -114,8 +114,12 @@ const handleLogin = () => {
   postRegister(loginForm.value)
     .then(() => {
       loading.value = false;
-      router.push({ path: '/login/pwd-login' });
-      $toast.success('注册成功，快去登录吧');
+      $toast.success('注册成功，快去登录吧', {
+        autoClose: 500,
+        onClose: () => {
+          router.push({ path: '/login/pwd-login' });
+        },
+      });
     })
     .catch(() => {
       loading.value = false;

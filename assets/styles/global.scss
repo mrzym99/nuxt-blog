@@ -143,3 +143,20 @@ h6 {
 .fade-leave-to {
   opacity: 0;
 }
+
+.like {
+  animation: like 0.2s ease-in-out forwards;
+}
+
+@keyframes like {
+  0% {
+    transform: scale(0.9);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    color: var(--primary-color);
+    transform: scale(1);
+  }
+}

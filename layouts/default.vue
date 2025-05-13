@@ -18,14 +18,16 @@
           <NuxtLink to="/about">About</NuxtLink>
           <NuxtLink to="/archives/all">Archive</NuxtLink>
           <ThemeSwitch />
-          <NuxtLink
-            v-if="!user"
-            class="login-icon"
-            to="/login/pwd-login"
-            @click="showDrawer = false"
-            >登录</NuxtLink
-          >
-          <User v-else />
+          <ClientOnly>
+            <NuxtLink
+              v-if="!user"
+              class="login-icon"
+              to="/login/pwd-login"
+              @click="showDrawer = false"
+              >登录</NuxtLink
+            >
+            <User v-else />
+          </ClientOnly>
 
           <a href="/rss.xml" target="_blank" class="rss-link" title="RSS 订阅">
             <Icon name="ph:rss" size="1.5rem" />

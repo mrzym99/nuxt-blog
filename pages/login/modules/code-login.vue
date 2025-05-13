@@ -63,15 +63,15 @@ const { count, start, isCounting } = useCountDown(60);
 const sendCode = async () => {
   sendCodeLoading.value = true;
   start();
-  // getEmailCaptcha(loginForm.value.email)
-  //   .then(() => {
-  //     sendCodeLoading.value = false;
-  //     start();
-  //     $toast.success('发送成功，请注意查收邮件');
-  //   })
-  //   .catch(() => {
-  //     sendCodeLoading.value = false;
-  //   });
+  getEmailCaptcha(loginForm.value.email)
+    .then(() => {
+      sendCodeLoading.value = false;
+      start();
+      $toast.success('发送成功，请注意查收邮件');
+    })
+    .catch(() => {
+      sendCodeLoading.value = false;
+    });
 };
 
 const handleLogin = () => {
@@ -80,8 +80,12 @@ const handleLogin = () => {
     .codeLogin(loginForm.value)
     .then(() => {
       loading.value = false;
-      router.back();
-      $toast.success('登录成功');
+      $toast.success('登录成功', {
+        autoClose: 500,
+        onClose() {
+          router.push('/');
+        },
+      });
     })
     .catch(() => {
       loading.value = false;

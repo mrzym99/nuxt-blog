@@ -1,5 +1,11 @@
 import axios from 'axios';
-import type { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import type {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+  AxiosRequestConfig,
+} from 'axios';
 import type { IApiResponse } from '~/types';
 import { getToken, handleRefreshToken } from '~/utils/auth';
 import { useUserStore } from '~/store';
@@ -93,23 +99,35 @@ service.interceptors.response.use(
 );
 
 // 封装GET请求
-export function get<T>(url: string, params?: any): Promise<IApiResponse<T>> {
-  return service.get(url, { params });
+export function get<T>(
+  url: string,
+  params?: any,
+  config?: AxiosRequestConfig
+): Promise<IApiResponse<T>> {
+  return service.get(url, { params, ...config });
 }
 
 // 封装POST请求
-export function post<T>(url: string, data?: any): Promise<IApiResponse<T>> {
-  return service.post(url, data);
+export function post<T>(
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig
+): Promise<IApiResponse<T>> {
+  return service.post(url, data, config);
 }
 
 // 封装PUT请求
-export function put<T>(url: string, data?: any): Promise<IApiResponse<T>> {
-  return service.put(url, data);
+export function put<T>(
+  url: string,
+  data?: any,
+  config?: AxiosRequestConfig
+): Promise<IApiResponse<T>> {
+  return service.put(url, data, config);
 }
 
 // 封装DELETE请求
-export function del<T>(url: string): Promise<IApiResponse<T>> {
-  return service.delete(url);
+export function del<T>(url: string, config?: AxiosRequestConfig): Promise<IApiResponse<T>> {
+  return service.delete(url, config);
 }
 
 // 导出axios实例

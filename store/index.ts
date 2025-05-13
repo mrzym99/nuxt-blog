@@ -4,8 +4,10 @@ import {
   getUserInfo,
   postCodeLogin,
   postLogin,
+  postThirdLogin,
   type CodeLogin,
   type PwdLogin,
+  type ThirdRegister,
 } from '~/api';
 import type { IArticle, UserDetail } from '~/types/index';
 import { setToken, removeToken } from '~/utils/auth';
@@ -69,10 +71,25 @@ export const useUserStore = defineStore('user', {
           });
       });
     },
-    thirdLogin() {},
+    thirdLogin(dto: ThirdRegister) {
+      return new Promise((resolve, reject) => {
+        postThirdLogin(dto)
+          .then(res => {
+            const { access_token } = res.data;
+            setToken(access_token);
+            this.setUser();
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    },
     logout() {
-      removeToken();
-      this.removeUser();
+      getLogout().then(() => {
+        removeToken();
+        this.removeUser();
+      });
     },
   },
 });

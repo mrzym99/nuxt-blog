@@ -1,21 +1,18 @@
 <template>
-  <Loading :loading="loading">
-    <div>
-      <!-- Hero Section -->
-      <section
-        :style="bgStyle"
-        class="bg-gray-100 flex flex-col items-center justify-center blog-bg"
-      >
-        <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">zy</h1>
-        <p class="text-2xl lt-md:text-xl tracking-[1px] text-center mx-auto px-4">
-          「 真理往往简单明了 」
-        </p>
-      </section>
-      <!-- Main Content with Sidebar -->
-      <div class="container mx-auto lt-sm:py-8">
-        <div class="flex flex-col md:flex-row gap-8">
-          <!-- Blog Posts -->
-          <main class="flex-1">
+  <div>
+    <!-- Hero Section -->
+    <section :style="bgStyle" class="bg-gray-100 flex flex-col items-center justify-center blog-bg">
+      <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">zy</h1>
+      <p class="text-2xl lt-md:text-xl tracking-[1px] text-center mx-auto px-4">
+        「 真理往往简单明了 」
+      </p>
+    </section>
+    <!-- Main Content with Sidebar -->
+    <div class="container mx-auto lt-sm:py-8">
+      <div class="flex flex-col md:flex-row gap-8">
+        <!-- Blog Posts -->
+        <main class="flex-1">
+          <Loading :loading="loading">
             <article v-for="post in posts" :key="post.id" class="blog-post cursor-pointer">
               <div class="flex flex-col gap-4">
                 <div class="flex-1 blog-info" @click="navigateTo(post.slug)">
@@ -28,11 +25,11 @@
                       >Posted by {{ post.author?.profile.nickName }} on
                       {{ post.createdAt && formatDate(post.createdAt) }}</span
                     >
-                    <span class="mx-2">·</span>
-                    <Icon name="ph:thumbs-up-duotone" class="mr-1" />
+                    <span v-if="post.likeCount" class="mx-2">·</span>
+                    <Icon v-if="post.likeCount" name="ph:thumbs-up-duotone" class="mr-1" />
                     {{ formatNumber(post.likeCount) }}
-                    <span class="mx-2">·</span>
-                    <Icon name="ph:eye" class="mr-1" />
+                    <span v-if="post.viewCount" class="mx-2">·</span>
+                    <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
                     {{ formatNumber(post.viewCount) }}
                   </div>
                 </div>
@@ -50,13 +47,13 @@
                 </NuxtLink>
               </div>
             </div>
-          </main>
-          <!-- Sidebar -->
-          <SideBar />
-        </div>
+          </Loading>
+        </main>
+        <!-- Sidebar -->
+        <SideBar />
       </div>
     </div>
-  </Loading>
+  </div>
 </template>
 
 <script setup lang="ts">

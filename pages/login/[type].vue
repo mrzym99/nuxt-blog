@@ -10,18 +10,20 @@
           <component :is="componentId" />
         </Transition>
         <div class="link-container" v-if="type === 'pwd-login'">
-          <NuxtLink class="login-link" to="/login/code-login">验证码登录</NuxtLink>
-          <NuxtLink class="login-link" to="/login/github-login">GitHub 登录</NuxtLink>
+          <NuxtLink class="login-link" to="/login/code-login">验证码</NuxtLink>
+          <NuxtLink class="login-link" @click="thirdLogin('github')">GitHub</NuxtLink>
         </div>
         <div class="register-link">
-          <div></div>
-          <div v-if="type === 'register'">
-            已有账号？
-            <NuxtLink class="text-gradient underline" to="/login/pwd-login"> 去登录 </NuxtLink>
-          </div>
-          <div v-else>
-            没有账号？
-            <NuxtLink class="text-gradient underline" to="/login/register"> 去注册 </NuxtLink>
+          <span class="text-gradient underline cursor-pointer" @click="back"> Back </span>
+          <div v-if="['pwd-login', 'register'].includes(type)">
+            <div v-if="type === 'register'">
+              已有账号？
+              <NuxtLink class="text-gradient underline" to="/login/pwd-login"> 去登录 </NuxtLink>
+            </div>
+            <div v-else>
+              没有账号？
+              <NuxtLink class="text-gradient underline" to="/login/register"> 去注册 </NuxtLink>
+            </div>
           </div>
         </div>
       </div>
@@ -30,14 +32,14 @@
 </template>
 
 <script setup lang="ts">
-import { type Component } from 'vue';
+import { type Component, onBeforeMount } from 'vue';
 import PwdLogin from './modules/pwd-login.vue';
 import Register from './modules/register.vue';
-import bg from '~/assets/images/bg.jpg';
 import loginBg from '~/assets/images/login-bg.jpeg';
 import { getToken } from '~/utils/auth';
 import CodeLogin from './modules/code-login.vue';
 import GithubLogin from './modules/github-login.vue';
+import { getThirdLoginUrl } from '~/api';
 
 const route = useRoute();
 const router = useRouter();
@@ -58,25 +60,22 @@ const titleMap: Record<loginType, string> = {
   register: '注册',
 };
 
-const bgUrl = ref<string>(bg);
-
 const type = computed(() => route.params.type as loginType);
 
 const componentId = computed(() => {
   return loginMap[type.value];
 });
 
-async function getBg() {
-  // const res = await fetch('https://picsum.photos/800/600');
-  // if (res.url) {
-  //   console.log(res);
-  //   bgUrl.value = res.url;
-  // }
-}
+const thirdLogin = async (type: string) => {
+  const res = await getThirdLoginUrl(type);
+  if (window) window.location.href = res.data;
+};
 
-getBg();
+const back = () => {
+  router.back();
+};
 
-onMounted(() => {
+onBeforeMount(() => {
   if (getToken()) {
     router.push('/');
   }

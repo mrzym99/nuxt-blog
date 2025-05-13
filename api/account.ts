@@ -1,4 +1,4 @@
-import type { Captcha, token, UserDetail } from '~/types';
+import type { Captcha, thirdToken, token, UserDetail } from '~/types';
 import { get, post } from '~/utils/request';
 
 export type PwdLogin = {
@@ -19,6 +19,20 @@ export type Register = {
   username: string;
   password: string;
   confirmPassword: string;
+};
+
+export type ThirdRegister = {
+  type: string;
+  token_type: string;
+  access_token: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+  from: string;
+  uniqueId: string;
+  avatar: string;
+  address: string;
+  nickName: string;
 };
 
 // 账户密码登录
@@ -46,10 +60,15 @@ export const postRefreshToken = (data?: any) => post<token>('/auth/refreshToken'
 export const getLogout = () => get('auth/account/logout', {});
 
 // 三方登录 获取跳转的 url
-export const getThirdLogin = (type?: any) => post<token>('/auth/thirdLogin/' + type, {});
+export const getThirdLoginUrl = (type?: any) => get<string>('/auth/third-login/url/' + type, {});
 
 // 三方登录 根据 code 返回 token_type 和 token
-export const getThirdTypeAntTOken = (params: any) => post<token>('/auth/thirdLogin/', params);
+export const getThirdTypeAntToken = (params: any) =>
+  get<thirdToken>('/auth/third-login/getTypeAndToken', params);
+
+// 判断用户是否已经注册
+export const getIsRegister = (params: any) => get('/auth/third-login/checkRegister', params);
 
 // 三方登录
-export const postThirdLogin = (data?: any) => post<token>('/auth/thirdLogin/login', data);
+export const postThirdLogin = (data?: ThirdRegister) =>
+  post<token>('/auth/third-login/login', data);

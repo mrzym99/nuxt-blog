@@ -4,14 +4,13 @@
     <div class="blog-card">
       <div class="profile">
         <div class="avatar">
-          <img src="../assets/images/avatar.png" alt="Profile" />
+          <img :src="bloggerInfo?.profile.avatar || avatar" alt="Profile" />
         </div>
-        <p class="text-xl font-bold mb-2">M</p>
-        <p class="mb-4">Frontend Developer</p>
+        <p class="text-xl font-bold mb-2">{{ bloggerInfo?.profile.nickName }}</p>
         <p class="mb-4">
-          It's interesting that I spent a lot of time writing blog websites instead of creating
-          content
+          {{ bloggerInfo?.profile.introduction }}
         </p>
+        <p class="mb-4">{{ bloggerInfo?.profile.signature }}</p>
         <div class="social-links">
           <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
             <Icon name="simple-icons:github" size="1.5rem" />
@@ -57,4 +56,22 @@
 
 <script setup lang="ts">
 import TagCloud from '~/components/TagCloud.vue';
+import { getBloggerInfo, getParameter } from '~/api';
+import type { IUser } from '~/types';
+import avatar from '~/assets/images/avatar.png';
+
+const bloggerInfo = ref<IUser | null>(null);
+
+function initBlogInfo() {
+  getParameter('blogger').then(res => {
+    const username = res.data;
+    getBloggerInfo(username).then(res => {
+      bloggerInfo.value = res.data;
+    });
+  });
+}
+
+onMounted(() => {
+  initBlogInfo();
+});
 </script>

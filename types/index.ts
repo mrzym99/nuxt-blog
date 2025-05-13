@@ -67,6 +67,11 @@ export type token = {
   access_token: string;
 };
 
+export type thirdToken = {
+  token_type: string;
+  access_token: string;
+};
+
 export enum LikeType {
   ARTICLE = 'article',
   COMMENT = 'comment',
@@ -76,6 +81,11 @@ export enum LikeType {
 export enum CommentType {
   ARTICLE = 'article',
   ALBUM = 'album',
+}
+
+export enum CommentOrder {
+  HOT = 'hot',
+  LATEST = 'latest',
 }
 
 export type ArticleType = 'original' | 'transport' | 'translate';
@@ -115,6 +125,7 @@ export interface IComment extends baseModel {
   likeCount: number;
   commenter: IUser;
   replies: IReply[];
+  isLike: boolean;
 }
 
 export interface IReply extends baseModel {
@@ -123,6 +134,7 @@ export interface IReply extends baseModel {
   likeCount: number;
   reply: IUser;
   replyTo: IUser;
+  isLike: boolean;
 }
 
 export type Comment = {
@@ -134,6 +146,7 @@ export type Comment = {
   reply?: IUser;
   replyTo?: IUser;
   likeCount: number;
+  isLike?: boolean;
   commenter?: IUser;
   replyCount?: number;
   replies: IReply[];

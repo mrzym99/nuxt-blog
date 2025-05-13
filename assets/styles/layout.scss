@@ -239,9 +239,9 @@
   display: flex !important;
   justify-content: center;
   align-items: center;
-  width: 4rem;
+  width: 3rem;
   height: 1.5rem;
-  border-radius: 5px;
+  border-radius: 0.75rem;
   transition: all 0.3s ease;
   @include themed() {
     color: themed('nav-text') !important;

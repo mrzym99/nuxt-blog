@@ -247,23 +247,6 @@ onBeforeUnmount(() => {
 @use '~/assets/styles/themes.scss' as *;
 @use '~/assets/styles/global.scss' as *;
 
-.like {
-  animation: like 0.2s ease-in-out forwards;
-}
-
-@keyframes like {
-  0% {
-    transform: scale(0.9);
-  }
-  70% {
-    transform: scale(1.1);
-  }
-  100% {
-    color: var(--primary-color);
-    transform: scale(1);
-  }
-}
-
 .article-info {
   border: 1px solid;
   @include themed() {

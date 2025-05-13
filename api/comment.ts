@@ -1,5 +1,5 @@
 import type { Comment, IPagination, IReply } from '~/types';
-import { get, post } from '~/utils/request';
+import { get, post, del } from '~/utils/request';
 
 // 获取父评论列表 以及其子评论
 export const getParentComments = (params?: any) =>
@@ -16,7 +16,7 @@ export const getReplyList = (params?: any) =>
   get<IPagination<IReply>>('/blog/comment/reply/list', params);
 
 // 撤回评论
-export const postDeleteComment = (data?: any) => post('/blog/comment/deleteComment', data);
+export const postDeleteComment = (id?: number) => del('/blog/comment/deleteComment/' + id, {});
 
 // 撤回回复
-export const postDeleteReply = (data?: any) => post('/blog/comment/deleteReply', data);
+export const postDeleteReply = (id?: number) => del('/blog/comment/deleteReply/' + id, {});
