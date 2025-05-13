@@ -2,6 +2,7 @@
   <div class="min-h-screen flex flex-col">
     <!-- Navigation -->
     <nav
+      v-if="!isLogin"
       class="nav"
       :class="{
         'nav-scrolled': isScrolled,
@@ -41,7 +42,7 @@
     </nav>
 
     <!-- 移动端抽屉菜单 -->
-    <Drawer v-model="showDrawer" position="right" width="60%" title="菜单">
+    <Drawer v-if="!isLogin" v-model="showDrawer" position="right" width="60%" title="菜单">
       <div class="mobile-nav">
         <div v-if="user" class="pl-3">
           <NuxtLink to="/user/profile" @click="showDrawer = false">

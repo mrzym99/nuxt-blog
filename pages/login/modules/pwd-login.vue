@@ -2,29 +2,27 @@
   <div class="login-form">
     <VeeForm @submit="handleLogin">
       <div class="form-group mb-2">
-        <label class="mb-1" for="username">用户名</label>
         <VeeField
           v-model="loginForm.username"
-          name="username"
+          name="用户名"
           type="email"
           placeholder="请输入用户名"
           rules="required|username"
         />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="username" key="username" />
+          <VeeErrorMessage class="error-message" name="用户名" key="username" />
         </Transition>
       </div>
-      <div class="form-group mb-5">
-        <label class="mb-1" for="password">密码</label>
+      <div class="form-group mb-2">
         <VeeField
           v-model="loginForm.password"
-          name="password"
+          name="密码"
           type="password"
           placeholder="请输入密码"
           rules="required|password"
         />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="password" />
+          <VeeErrorMessage class="error-message" name="密码" key="password" />
         </Transition>
       </div>
       <Button :loading="loading" type="submit"> 登录 </Button>
@@ -53,16 +51,16 @@ const loginForm = ref<PwdLogin>({
 
 const handleLogin = () => {
   loading.value = true;
-  userStore
-    .pwdLogin(loginForm.value)
-    .then(() => {
-      loading.value = false;
-      router.back();
-      $toast.success('登录成功');
-    })
-    .catch(() => {
-      loading.value = false;
-    });
+  // userStore
+  //   .pwdLogin(loginForm.value)
+  //   .then(() => {
+  //     loading.value = false;
+  //     router.back();
+  //     $toast.success('登录成功');
+  //   })
+  //   .catch(() => {
+  //     loading.value = false;
+  //   });
 };
 </script>
 

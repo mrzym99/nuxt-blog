@@ -1,3 +1,5 @@
+import { postRefreshToken } from '~/api';
+
 const appName = import.meta.env.VITE_APP_NAME;
 export function setToken(token: string) {
   localStorage.setItem(`${appName}-token`, token);
@@ -11,14 +13,16 @@ export function removeToken() {
   return localStorage.removeItem(`${appName}-token`);
 }
 
-export function setRefreshToken(token: string) {
-  localStorage.setItem(`${appName}-refreshToken`, token);
-}
+export async function handleRefreshToken() {
+  const token = getToken();
+  if (!token) return false;
+  const res = await postRefreshToken({
+    accessToken: token!,
+  });
+  if (res.data.access_token) {
+    setToken(res.data.access_token);
+    return true;
+  }
 
-export function getRefreshToken() {
-  return localStorage.getItem(`${appName}-refreshToken`);
-}
-
-export function removeRefreshToken() {
-  return localStorage.removeItem(`${appName}-refreshToken`);
+  return false;
 }

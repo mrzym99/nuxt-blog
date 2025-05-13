@@ -71,10 +71,8 @@ export const useUserStore = defineStore('user', {
     },
     thirdLogin() {},
     logout() {
-      getLogout().then(() => {
-        removeToken();
-        this.removeUser();
-      });
+      removeToken();
+      this.removeUser();
     },
   },
 });

@@ -2,42 +2,39 @@
   <div class="register-form">
     <VeeForm @submit="handleLogin">
       <div class="form-group mb-2">
-        <label class="mb-1" for="email">邮箱</label>
         <VeeField
           v-model="loginForm.email"
-          name="email"
+          name="邮箱"
           type="email"
           placeholder="请输入邮箱"
           rules="required|email"
         />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="email" key="email" />
+          <VeeErrorMessage class="error-message" name="邮箱" key="email" />
         </Transition>
       </div>
       <div class="form-group mb-2">
-        <label class="mb-1" for="code">验证码</label>
         <div class="flex items-center">
           <VeeField
-            class="!w-75%"
+            class="!w-75% code-input"
             v-model="loginForm.code"
-            name="code"
+            name="验证码"
             placeholder="请输入验证码"
             rules="required|code"
           />
           <Button
-            class="flex-1"
+            class="flex-1 code-button"
             :loading="sendCodeLoading"
             :disabled="isCounting"
             @click="sendCode"
-            >{{ isCounting ? `${count}s后重发` : '发送' }}</Button
+            >{{ isCounting ? `${count}s` : '发送' }}</Button
           >
         </div>
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="code" />
+          <VeeErrorMessage class="error-message" name="验证码" key="code" />
         </Transition>
       </div>
       <div class="form-group mb-2">
-        <label class="mb-1" for="username">用户名</label>
         <VeeField
           v-model="loginForm.username"
           name="username"
@@ -49,27 +46,25 @@
         </Transition>
       </div>
       <div class="form-group mb-2">
-        <label class="mb-1" for="password">密码</label>
         <VeeField
           v-model="loginForm.password"
-          name="password"
+          name="密码"
           placeholder="请输入密码"
           rules="required|password"
         />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="password" />
+          <VeeErrorMessage class="error-message" name="密码" key="password" />
         </Transition>
       </div>
-      <div class="form-group mb-5">
-        <label class="mb-1" for="confirmPassword">确认密码</label>
+      <div class="form-group mb-2">
         <VeeField
           v-model="loginForm.confirmPassword"
-          name="confirmPassword"
+          name="确认密码"
           placeholder="请输入密码"
           rules="required|confirmPassword:@password"
         />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="confirmPassword" />
+          <VeeErrorMessage class="error-message" name="确认密码" key="confirmPassword" />
         </Transition>
       </div>
       <Button :loading="loading" type="submit"> 登录 </Button>

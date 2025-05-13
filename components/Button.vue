@@ -1,9 +1,7 @@
 <template>
   <button type="submit" :disabled="loading || disabled">
-    <span v-if="loading"><Icon name="svg-spinners:90-ring-with-bg" size="1.5rem"></Icon></span>
-    <span v-else>
-      <slot></slot>
-    </span>
+    <slot></slot>
+    <Icon class="ml-2" v-if="loading" name="svg-spinners:90-ring-with-bg" size="1.2rem"></Icon>
   </button>
 </template>
 
@@ -18,17 +16,17 @@ defineProps<{
 @use '~/assets/styles/themes.scss' as *;
 
 button {
-  // min-height: 50px;
-  padding: 6px 5px;
+  min-height: 46px;
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: themed('primary');
-  color: white;
+  color: themed('nav-text');
 
   &:disabled {
     cursor: not-allowed;
-    background: #ccc !important;
+    background: #c2c2c2 !important;
   }
 
   &:hover:not(:disabled) {

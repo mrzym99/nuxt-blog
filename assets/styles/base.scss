@@ -14,7 +14,8 @@ label {
 
 input {
   width: 100%;
-  padding: 5px;
+  padding: 10px;
+  min-height: 46px;
   border: 1px solid #ccc;
   border-radius: 4px;
   transition: border-color 0.3s;
@@ -46,4 +47,14 @@ button:hover {
   @include themed() {
     background-color: themed('secondary');
   }
+}
+
+.code-input {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.code-button {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
