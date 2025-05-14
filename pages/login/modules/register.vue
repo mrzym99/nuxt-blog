@@ -110,12 +110,13 @@ const sendCode = async () => {
 };
 
 const handleLogin = () => {
+  if (loading.value) return;
   loading.value = true;
   postRegister(loginForm.value)
     .then(() => {
       loading.value = false;
       $toast.success('注册成功，快去登录吧', {
-        autoClose: 500,
+        autoClose: 300,
         onClose: () => {
           router.push({ path: '/login/pwd-login' });
         },

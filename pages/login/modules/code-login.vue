@@ -75,13 +75,14 @@ const sendCode = async () => {
 };
 
 const handleLogin = () => {
+  if (loading.value) return;
   loading.value = true;
   userStore
     .codeLogin(loginForm.value)
     .then(() => {
       loading.value = false;
       $toast.success('登录成功', {
-        autoClose: 500,
+        autoClose: 300,
         onClose() {
           router.push('/');
         },

@@ -39,7 +39,8 @@
       <Button :loading="loading" type="submit"> 注册 </Button>
     </VeeForm>
     <div v-else class="flex items-center justify-center p-4 min-h-[200px]">
-      <Icon name="svg-spinners:90-ring-with-bg" size="4rem"></Icon>
+      登录中 请稍候...
+      <Icon name="svg-spinners:90-ring-with-bg" size="2rem" class="ml-2"></Icon>
     </div>
   </div>
 </template>
@@ -108,7 +109,7 @@ function thirdLogin() {
     })
     .catch(() => {
       $toast.error('登录授权失效，请重新登录', {
-        autoClose: 500,
+        autoClose: 300,
         onClose() {
           router.back();
         },
@@ -117,13 +118,14 @@ function thirdLogin() {
 }
 
 const handleLogin = () => {
+  if (loading.value) return;
   loading.value = true;
   useUserStore()
     .thirdLogin(loginForm.value)
     .then(() => {
       loading.value = false;
       $toast.success('登录成功', {
-        autoClose: 500,
+        autoClose: 300,
         onClose() {
           router.push('/');
         },

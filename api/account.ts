@@ -60,15 +60,16 @@ export const postRefreshToken = (data?: any) => post<token>('/auth/refreshToken'
 export const getLogout = () => get('auth/account/logout', {});
 
 // 三方登录 获取跳转的 url
-export const getThirdLoginUrl = (type?: any) => get<string>('/auth/third-login/url/' + type, {});
+export const getThirdLoginUrl = (type?: any) =>
+  get<string>('/auth/blog/third-login/url/' + type, {});
 
 // 三方登录 根据 code 返回 token_type 和 token
 export const getThirdTypeAntToken = (params: any) =>
-  get<thirdToken>('/auth/third-login/getTypeAndToken', params);
+  get<thirdToken>('/auth/blog/third-login/getTypeAndToken', params);
 
 // 判断用户是否已经注册
-export const getIsRegister = (params: any) => get('/auth/third-login/checkRegister', params);
+export const getIsRegister = (params: any) => get('/auth/blog/third-login/checkRegister', params);
 
 // 三方登录
 export const postThirdLogin = (data?: ThirdRegister) =>
-  post<token>('/auth/third-login/login', data);
+  post<token>('/auth/blog/third-login/login', data);

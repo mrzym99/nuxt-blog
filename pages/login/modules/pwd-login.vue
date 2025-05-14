@@ -52,13 +52,14 @@ const loginForm = ref<PwdLogin>({
 });
 
 const handleLogin = () => {
+  if (loading.value) return;
   loading.value = true;
   userStore
     .pwdLogin(loginForm.value)
     .then(() => {
       loading.value = false;
       $toast.success('登录成功', {
-        autoClose: 500,
+        autoClose: 300,
         onClose() {
           router.back();
         },

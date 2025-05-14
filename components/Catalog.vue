@@ -158,7 +158,7 @@ onUnmounted(() => {
     z-index: 10;
   }
 
-  @include responsive(md) {
+  @include responsive(lg) {
     display: none;
   }
 }

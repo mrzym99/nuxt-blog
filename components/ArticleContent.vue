@@ -114,6 +114,7 @@ const props = defineProps<ArticleProps>();
 
 const isLike = ref(false);
 const likeCount = ref<number>(0);
+const startViewTimestamp = ref(0);
 const currentViewDuration = ref(0);
 const recommends = ref<IArticle[]>([]);
 
@@ -231,15 +232,35 @@ async function handleGetRecommends() {
   recommends.value = res.data as IArticle[];
 }
 
+function visibleChange() {
+  if (document.visibilityState === 'visible') {
+    startViewTimestamp.value = Date.now();
+  } else {
+    currentViewDuration.value += Date.now() - startViewTimestamp.value;
+  }
+}
+
+function initViewDuration() {
+  startViewTimestamp.value = Date.now();
+  if (document) {
+    document.addEventListener('visibilitychange', visibleChange);
+  }
+}
+
 onMounted(() => {
-  currentViewDuration.value = new Date().getTime();
   checkIsLike();
   handleGetLikeCount();
   handleGetRecommends();
+  initViewDuration();
 });
 
 onBeforeUnmount(() => {
-  handleAddViewDuration(new Date().getTime() - currentViewDuration.value);
+  // 计算总的阅读时长
+  console.log(currentViewDuration.value);
+  console.log(Date.now() - startViewTimestamp.value);
+
+  handleAddViewDuration(currentViewDuration.value + Date.now() - startViewTimestamp.value);
+  document.removeEventListener('visibilitychange', visibleChange);
 });
 </script>
 
