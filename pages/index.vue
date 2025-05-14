@@ -9,10 +9,10 @@
     </section>
     <!-- Main Content with Sidebar -->
     <div class="container mx-auto lt-sm:py-8">
-      <div class="flex flex-col md:flex-row gap-8">
-        <!-- Blog Posts -->
-        <main class="flex-1">
-          <Loading :loading="loading">
+      <Loading :loading="loading">
+        <div class="flex flex-col md:flex-row gap-8">
+          <!-- Blog Posts -->
+          <main class="flex-1">
             <article v-for="post in posts" :key="post.id" class="blog-post cursor-pointer">
               <div class="flex flex-col gap-4">
                 <div class="flex-1 blog-info" @click="navigateTo(post.slug)">
@@ -47,11 +47,11 @@
                 </NuxtLink>
               </div>
             </div>
-          </Loading>
-        </main>
-        <!-- Sidebar -->
-        <SideBar />
-      </div>
+          </main>
+          <!-- Sidebar -->
+          <SideBar />
+        </div>
+      </Loading>
     </div>
   </div>
 </template>

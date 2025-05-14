@@ -7,7 +7,7 @@
         <div class="form-header">
           <div class="avatar">
             <img v-if="user" :src="user?.avatar" :alt="user?.nickName" />
-            <NuxtLink class="login-icon" to="/login/pwd-login">登录</NuxtLink>
+            <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
           </div>
           <div class="form-content">
             <div class="markdown-toolbar">
@@ -914,6 +914,26 @@ onMounted(() => {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+  }
+
+  .to-login {
+    cursor: pointer;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    transition: all 0.3s ease;
+    @include themed() {
+      color: themed('nav-text') !important;
+      background-color: themed('primary');
+    }
+    &:hover {
+      @include themed() {
+        background-color: themed('secondary');
+      }
     }
   }
 
