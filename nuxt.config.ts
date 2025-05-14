@@ -65,7 +65,7 @@ export default defineNuxtConfig({
     },
   },
 
-  compatibilityDate: '2025-03-28',
+  compatibilityDate: '2025-05-14',
 
   nitro: {
     devProxy: {
@@ -83,9 +83,6 @@ export default defineNuxtConfig({
     routeRules: {
       '/': { prerender: true },
       '/posts/**': { isr: true },
-      '/api/v1/**': {
-        proxy: 'http://localhost:3000/**',
-      },
       '/rss.xml': {
         headers: {
           'Content-Type': 'application/xml',
