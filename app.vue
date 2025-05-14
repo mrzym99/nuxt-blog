@@ -2,13 +2,13 @@
   <div>
     <NuxtLayout>
       <NuxtPage />
-      <!-- <NuxtPage :keepalive /> -->
+      <NuxtPage :keepalive />
     </NuxtLayout>
   </div>
 </template>
 
 <script lang="ts" setup>
 const keepalive = {
-  // include: ['Home', 'Archives'],
+  include: ['Home', 'Archives'],
 };
 </script>
