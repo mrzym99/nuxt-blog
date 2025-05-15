@@ -7,7 +7,7 @@
       <div class="archive">
         <div></div>
         <!-- Blog Posts -->
-        <main class="flex-1 p-1.5rem">
+        <main class="flex-1">
           <div class="tags-cloud">
             <NuxtLink
               class="tag tag-all"
@@ -155,6 +155,10 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 200px 1fr 200px;
   gap: 1rem;
+
+  @include responsive(lg) {
+    display: block;
+  }
 }
 
 .title {

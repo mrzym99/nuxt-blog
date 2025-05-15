@@ -281,10 +281,6 @@
     align-items: center;
     max-width: $max-width;
     padding: 1rem 0 3rem 0;
-
-    @include responsive(md) {
-      flex-direction: column;
-    }
   }
 
   .social-links {
