@@ -4,7 +4,7 @@
       <div></div>
       <div>
         <div class="article-info p-1rem rounded-md my-4">
-          <p class="my-2 flex item-center justify-between w-full">
+          <p class="my-2 flex item-center justify-between flex-wrap w-full">
             <span>
               <span class="mr-2">文章类型: </span
               ><span class="type">{{ typeEnum[article.type] }}</span></span
@@ -17,7 +17,9 @@
           <p class="mb-2">
             <span class="mr-2">文章地址:</span>
             <ClientOnly>
-              <span class="underline" href="#">{{ postUrl }}</span>
+              <span v-copy="postUrl" class="underline cursor-pointer text-gradient" href="#">{{
+                postUrl
+              }}</span>
             </ClientOnly>
           </p>
           <p class="mb-2" v-if="postedDays">
@@ -43,7 +45,7 @@
             size="1.8rem"
           />
           <span
-            v-if="isLike"
+            v-if="likeCount"
             :class="{
               like: isLike,
             }"
@@ -256,9 +258,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   // 计算总的阅读时长
-  console.log(currentViewDuration.value);
-  console.log(Date.now() - startViewTimestamp.value);
-
   handleAddViewDuration(currentViewDuration.value + Date.now() - startViewTimestamp.value);
   document.removeEventListener('visibilitychange', visibleChange);
 });

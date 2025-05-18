@@ -18,15 +18,15 @@
 
 .article-container {
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 1rem 2rem;
   max-width: 1200px;
 
   @include responsive(md) {
-    padding: 0 1rem;
+    padding: 1rem;
   }
 
   @include responsive(lg) {
-    padding: 0 2rem;
+    padding: 1rem 2rem;
   }
 }
 

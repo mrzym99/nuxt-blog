@@ -19,7 +19,8 @@ export async function handleRefreshToken() {
   const res = await postRefreshToken({
     accessToken: token!,
   });
-  if (res.data.access_token) {
+
+  if (res.data && res.data.access_token) {
     setToken(res.data.access_token);
     return true;
   }

@@ -45,8 +45,8 @@ const loading = ref(false);
 const { $toast } = useNuxtApp();
 
 const loginForm = ref<PwdLogin>({
-  username: 'admin',
-  password: '123456',
+  username: '',
+  password: '',
   code: '',
   captchaId: '',
 });
@@ -59,7 +59,7 @@ const handleLogin = () => {
     .then(() => {
       loading.value = false;
       $toast.success('登录成功', {
-        autoClose: 300,
+        autoClose: 200,
         onClose() {
           router.back();
         },

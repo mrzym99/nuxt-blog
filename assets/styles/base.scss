@@ -58,3 +58,31 @@ button:hover {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
 }
+
+.tab {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  @include themed() {
+    border-bottom: 1px solid themed('border');
+  }
+
+  .active {
+    @include themed() {
+      color: themed('primary') !important;
+    }
+  }
+
+  .tab-item {
+    border: none;
+    background: none;
+    cursor: pointer;
+    @include themed() {
+      color: themed('text-light');
+
+      &:hover {
+        color: themed('primary');
+      }
+    }
+  }
+}

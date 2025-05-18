@@ -91,5 +91,9 @@ export const useUserStore = defineStore('user', {
         this.removeUser();
       });
     },
+    resetStore() {
+      removeToken();
+      this.removeUser();
+    },
   },
 });

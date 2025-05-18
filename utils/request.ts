@@ -7,7 +7,7 @@ import type {
   AxiosRequestConfig,
 } from 'axios';
 import type { IApiResponse } from '~/types';
-import { getToken, handleRefreshToken } from '~/utils/auth';
+import { getToken, handleRefreshToken, removeToken } from '~/utils/auth';
 import { useUserStore } from '~/store';
 
 let $toast: any;
@@ -68,6 +68,10 @@ service.interceptors.response.use(
         const authorization = getAuthorization();
         Object.assign(response.config.headers, { Authorization: authorization });
         return service.request(response.config) as Promise<AxiosResponse>;
+      } else {
+        removeToken();
+        useUserStore().removeUser();
+        $toast.error('登录状态已过期，请重新登录');
       }
     } else if (logoutCodes.includes(code)) {
       useUserStore().logout();
@@ -86,7 +90,7 @@ service.interceptors.response.use(
     const status = error.status;
     switch (status) {
       case 401:
-        useUserStore().logout();
+        useUserStore().resetStore();
         break;
       default:
         // 处理其他错误

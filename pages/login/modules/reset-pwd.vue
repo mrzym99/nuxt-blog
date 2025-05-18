@@ -1,16 +1,16 @@
 <template>
-  <div class="register-form">
-    <VeeForm @submit="handleLogin">
+  <div class="login-form">
+    <VeeForm @submit="handleReset">
       <div class="form-group mb-2">
         <VeeField
           v-model="loginForm.email"
-          name="邮箱"
+          name="email"
           type="email"
           placeholder="请输入QQ邮箱"
           rules="required|email"
         />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="邮箱" key="email" />
+          <VeeErrorMessage class="error-message" name="email" key="email" />
         </Transition>
       </div>
       <div class="form-group mb-2">
@@ -18,7 +18,7 @@
           <VeeField
             class="!w-75% code-input"
             v-model="loginForm.code"
-            name="验证码"
+            name="code"
             placeholder="请输入验证码"
             rules="required|code"
           />
@@ -31,18 +31,7 @@
           >
         </div>
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="验证码" key="code" />
-        </Transition>
-      </div>
-      <div class="form-group mb-2">
-        <VeeField
-          v-model="loginForm.username"
-          name="用户名"
-          placeholder="请输入自定义的用户名"
-          rules="username"
-        />
-        <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="用户名" key="username" />
+          <VeeErrorMessage class="error-message" name="code" />
         </Transition>
       </div>
       <div class="form-group mb-2">
@@ -67,14 +56,14 @@
           <VeeErrorMessage class="error-message" name="确认密码" key="confirmPassword" />
         </Transition>
       </div>
-      <Button :loading="loading" type="submit"> 登录 </Button>
+      <Button :loading="loading" type="submit"> 确认 </Button>
     </VeeForm>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { getEmailCaptcha, postRegister, type Register } from '~/api';
+import { getEmailCaptcha, putResetPassword, type ResetPwd } from '~/api';
 import Button from '~/components/Button.vue';
 import useCountDown from '~/hooks/use-count-down';
 import { useNuxtApp } from '#app';
@@ -84,10 +73,9 @@ const router = useRouter();
 const loading = ref(false);
 const sendCodeLoading = ref(false);
 
-const loginForm = ref<Register>({
+const loginForm = ref<ResetPwd>({
   email: '',
   code: '',
-  username: '',
   password: '',
   confirmPassword: '',
 });
@@ -95,30 +83,28 @@ const loginForm = ref<Register>({
 const { count, start, isCounting } = useCountDown(60);
 
 const sendCode = async () => {
-  if (!loginForm.value.email) {
-    return $toast.warning('请输入QQ邮箱');
-  }
   sendCodeLoading.value = true;
+  start();
   getEmailCaptcha(loginForm.value.email)
     .then(() => {
       sendCodeLoading.value = false;
       start();
+      $toast.success('发送成功，请注意查收邮件');
     })
     .catch(() => {
       sendCodeLoading.value = false;
     });
 };
 
-const handleLogin = () => {
+const handleReset = () => {
   if (loading.value) return;
   loading.value = true;
-  postRegister(loginForm.value)
+  putResetPassword(loginForm.value)
     .then(() => {
-      loading.value = false;
-      $toast.success('注册成功，快去登录吧', {
+      $toast.success('重置成功', {
         autoClose: 200,
-        onClose: () => {
-          router.push({ path: '/login/pwd-login' });
+        onClose() {
+          router.push('/login/pwd-login');
         },
       });
     })
@@ -133,7 +119,7 @@ const handleLogin = () => {
 @use '~/assets/styles/global.scss' as *;
 @use '~/assets/styles/base.scss' as *;
 
-.register-form {
+.login-form {
   width: 100%;
   margin-bottom: 20px;
 }

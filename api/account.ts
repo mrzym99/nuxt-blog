@@ -1,5 +1,5 @@
 import type { Captcha, thirdToken, token, UserDetail } from '~/types';
-import { get, post } from '~/utils/request';
+import { get, post, put } from '~/utils/request';
 
 export type PwdLogin = {
   username: string;
@@ -35,6 +35,19 @@ export type ThirdRegister = {
   nickName: string;
 };
 
+export type ResetPwd = {
+  email: string;
+  code: string;
+  password: string;
+  confirmPassword: string;
+};
+
+export type UserResetPwd = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};
+
 // 账户密码登录
 export const postLogin = (data?: PwdLogin) => post<token>('/auth/login', data);
 
@@ -49,6 +62,13 @@ export const getEmailCaptcha = (email: string) => post<Captcha>('/auth/email/sen
 
 // 验证码登录
 export const postCodeLogin = (data?: CodeLogin) => post<token>('/auth/codeLogin', data);
+
+// 用户重置密码
+export const putUserResetPassword = (data?: UserResetPwd) => put('/auth/account/password', data);
+
+// 验证码重置密码
+export const putResetPassword = (data?: ResetPwd) =>
+  put('/auth/account/updatePasswordByCode', data);
 
 // 用户注册
 export const postRegister = (data?: Register) => post('/auth/register', data);

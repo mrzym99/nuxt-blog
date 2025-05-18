@@ -109,7 +109,7 @@ function thirdLogin() {
     })
     .catch(() => {
       $toast.error('登录授权失效，请重新登录', {
-        autoClose: 300,
+        autoClose: 200,
         onClose() {
           router.back();
         },
@@ -125,7 +125,7 @@ const handleLogin = () => {
     .then(() => {
       loading.value = false;
       $toast.success('登录成功', {
-        autoClose: 300,
+        autoClose: 200,
         onClose() {
           router.push('/');
         },

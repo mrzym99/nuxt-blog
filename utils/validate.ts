@@ -34,6 +34,30 @@ const defineCustomeRules = () => {
 
     return true;
   });
+
+  defineRule('newPassword', (value: string, [target]: [string]) => {
+    if (value && value === target) {
+      return '新密码不能和旧密码一样';
+    }
+
+    if (!REG_PWD.test(value)) {
+      return '密码格式不正确，6-18位字符，包含字母、数字、特殊字符';
+    }
+
+    return true;
+  });
+
+  defineRule('userConfirmPassword', (value: string, [target]: [string]) => {
+    if (value && value !== target) {
+      return '新密码和确认密码不一致';
+    }
+
+    if (!REG_PWD.test(value)) {
+      return '密码格式不正确，6-18位字符，包含字母、数字、特殊字符';
+    }
+
+    return true;
+  });
 };
 
 export default defineCustomeRules;

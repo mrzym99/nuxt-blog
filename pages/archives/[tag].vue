@@ -7,7 +7,7 @@
       <div class="archive">
         <div></div>
         <!-- Blog Posts -->
-        <main class="flex-1 pt-1rem">
+        <main class="flex-1">
           <div class="tags-cloud">
             <NuxtLink
               class="tag tag-all"

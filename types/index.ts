@@ -31,7 +31,7 @@ export interface IUser extends baseModel {
     address?: string;
     email: string;
     phone?: string;
-    birthDate?: string;
+    birthDate?: Date;
     introduction?: string;
     nickName: string;
     signature?: string;

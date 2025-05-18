@@ -10,7 +10,7 @@
     <div class="user-panel">
       <div class="user-list">
         <button class="user-item">
-          <NuxtLink class="user-name">user center</NuxtLink>
+          <NuxtLink class="user-name" :to="`/user-center/${user.id}`">user center</NuxtLink>
         </button>
         <button class="user-item" @click="logout">
           <span class="user-name">logout</span>

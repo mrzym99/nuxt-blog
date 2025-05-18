@@ -6,7 +6,7 @@
           v-model="loginForm.email"
           name="email"
           type="email"
-          placeholder="请输入邮箱"
+          placeholder="请输入QQ邮箱"
           rules="required|email"
         />
         <Transition name="fade">
@@ -82,7 +82,7 @@ const handleLogin = () => {
     .then(() => {
       loading.value = false;
       $toast.success('登录成功', {
-        autoClose: 300,
+        autoClose: 200,
         onClose() {
           router.push('/');
         },

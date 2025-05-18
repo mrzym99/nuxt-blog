@@ -5,7 +5,10 @@
         <img :src="loginBg" alt="" />
       </div>
       <div class="login-container w-full p-2rem">
-        <h1 class="login-title">{{ titleMap[type] }}</h1>
+        <div class="w-full flex justify-between">
+          <h1 class="login-title">{{ titleMap[type] }}</h1>
+          <Icon class="back" name="ph:arrow-u-up-left-light" @click="back"></Icon>
+        </div>
         <Transition name="fade">
           <component :is="componentId" />
         </Transition>
@@ -14,8 +17,11 @@
           <NuxtLink class="login-link" @click="thirdLogin('github')">GitHub</NuxtLink>
         </div>
         <div class="register-link">
-          <span class="text-gradient underline cursor-pointer" @click="back"> Back </span>
-          <div v-if="['pwd-login', 'register'].includes(type)">
+          <div
+            class="flex justify-between items-center"
+            v-if="['pwd-login', 'register'].includes(type)"
+          >
+            <NuxtLink class="text-gradient underline" to="/login/reset-pwd"> 忘记密码？ </NuxtLink>
             <div v-if="type === 'register'">
               已有账号？
               <NuxtLink class="text-gradient underline" to="/login/pwd-login"> 去登录 </NuxtLink>
@@ -40,17 +46,19 @@ import { getToken } from '~/utils/auth';
 import CodeLogin from './modules/code-login.vue';
 import GithubLogin from './modules/github-login.vue';
 import { getThirdLoginUrl } from '~/api';
+import ResetPwd from './modules/reset-pwd.vue';
 
 const route = useRoute();
 const router = useRouter();
 
-type loginType = 'pwd-login' | 'code-login' | 'github-login' | 'register';
+type loginType = 'pwd-login' | 'code-login' | 'github-login' | 'register' | 'reset-pwd';
 
 const loginMap: Record<loginType, Component> = {
   'pwd-login': PwdLogin,
   'code-login': CodeLogin,
   'github-login': GithubLogin,
   register: Register,
+  'reset-pwd': ResetPwd,
 };
 
 const titleMap: Record<loginType, string> = {
@@ -58,6 +66,7 @@ const titleMap: Record<loginType, string> = {
   'code-login': '验证码登录',
   'github-login': 'GitHub登录',
   register: '注册',
+  'reset-pwd': '重置密码',
 };
 
 const type = computed(() => route.params.type as loginType);
@@ -156,6 +165,15 @@ onBeforeMount(() => {
   }
 }
 
+.back {
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  @include hover-effect {
+    color: themed('primary');
+  }
+}
+
 .link-container {
   display: flex;
   justify-content: center;
@@ -184,8 +202,5 @@ onBeforeMount(() => {
 
 .register-link {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 </style>
