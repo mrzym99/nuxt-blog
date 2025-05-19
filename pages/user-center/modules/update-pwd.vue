@@ -1,5 +1,5 @@
 <template>
-  <div class="login-form">
+  <div class="login-form max-w-320px">
     <VeeForm @submit="handleReset">
       <div class="form-group mb-2">
         <Password

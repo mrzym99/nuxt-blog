@@ -106,7 +106,14 @@
           >
         </div>
         <TransitionGroup name="fade">
-          <div v-for="comment in comments" :key="comment.id" class="comment-item">
+          <div
+            v-for="comment in comments"
+            :key="comment.id"
+            class="comment-item"
+            :class="{
+              'focus-comment': hasScrollToView && routerCommentId && comment.id === routerCommentId,
+            }"
+          >
             <div class="comment-avatar">
               <img
                 :src="comment.commenter?.profile.avatar"
@@ -146,6 +153,9 @@
                   v-for="reply in returnReplies(comment.replies, comment.fold)"
                   :key="reply.id"
                   class="reply-item"
+                  :class="{
+                    'focus-comment': hasScrollToView && routerReplyId && reply.id === routerReplyId,
+                  }"
                 >
                   <div class="reply-avatar">
                     <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
@@ -283,12 +293,15 @@ type ReplyTo = {
 
 const { user } = storeToRefs(useUserStore());
 const { $toast } = useNuxtApp();
+const route = useRoute();
+
 // 评论内容
 const commentContent = ref('');
 const replyTo = ref<ReplyTo | null>(null);
 const imageInput = ref<HTMLInputElement | null>(null);
 const commentRef = ref<HTMLElement | null>(null);
 let observer: any = null;
+const hasScrollToView = ref(false);
 
 const currentPage = ref(1);
 const commentTotal = ref(0);
@@ -562,6 +575,15 @@ async function getCommentList() {
   commentLoading.value = false;
 }
 
+// 判断是否带 replyId commentId
+const routerReplyId = computed(() => {
+  return Number(route.query.replyId) || null;
+});
+
+const routerCommentId = computed(() => {
+  return Number(route.query.commentId) || null;
+});
+
 onMounted(() => {
   if (window.IntersectionObserver) {
     observer = new window.IntersectionObserver(
@@ -572,6 +594,10 @@ onMounted(() => {
             observer.unobserve(entry.target);
             observer.disconnect();
             observer = null;
+            window &&
+              window.setTimeout(() => {
+                hasScrollToView.value = true;
+              }, 500);
           }
         });
       },
@@ -582,6 +608,15 @@ onMounted(() => {
       }
     );
     observer.observe(commentRef.value);
+  }
+
+  if (window) {
+    if (routerReplyId.value || routerCommentId.value) {
+      commentRef.value?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
   }
 });
 </script>
@@ -632,34 +667,6 @@ onMounted(() => {
     &:hover {
       @include themed() {
         color: themed('secondary');
-      }
-    }
-  }
-}
-
-.tab {
-  display: flex;
-  gap: 1rem;
-  padding: 0.5rem;
-  @include themed() {
-    border-bottom: 1px solid themed('border');
-  }
-
-  .active {
-    @include themed() {
-      color: themed('primary') !important;
-    }
-  }
-
-  .tab-item {
-    border: none;
-    background: none;
-    cursor: pointer;
-    @include themed() {
-      color: themed('text-light');
-
-      &:hover {
-        color: themed('primary');
       }
     }
   }
@@ -1173,6 +1180,20 @@ onMounted(() => {
     @include themed() {
       color: themed('secondary');
     }
+  }
+}
+
+.focus-comment {
+  outline: 2px solid transparent;
+  background: transparent;
+  animation: outline ease-in-out 1.2s;
+}
+
+@keyframes outline {
+  100% {
+    border-radius: 3px;
+    outline-color: var(--primary-color);
+    background: rgba(255, 0, 0, 0.1);
   }
 }
 </style>

@@ -1,4 +1,4 @@
-import type { Captcha, thirdToken, token, UserDetail } from '~/types';
+import type { Captcha, Profile, thirdToken, token, UserDetail } from '~/types';
 import { get, post, put } from '~/utils/request';
 
 export type PwdLogin = {
@@ -65,6 +65,9 @@ export const postCodeLogin = (data?: CodeLogin) => post<token>('/auth/codeLogin'
 
 // 用户重置密码
 export const putUserResetPassword = (data?: UserResetPwd) => put('/auth/account/password', data);
+
+// 修改个人信息
+export const putUpdateProfile = (data?: Profile) => put('/auth/account/profile', data);
 
 // 验证码重置密码
 export const putResetPassword = (data?: ResetPwd) =>

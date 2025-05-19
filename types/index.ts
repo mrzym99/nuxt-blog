@@ -25,19 +25,21 @@ export interface IArticle extends baseModel {
 export interface IUser extends baseModel {
   username: string;
   status?: number;
-  profile: {
-    id: number;
-    avatar: string;
-    address?: string;
-    email: string;
-    phone?: string;
-    birthDate?: Date;
-    introduction?: string;
-    nickName: string;
-    signature?: string;
-    gender: number;
-  };
+  profile: Profile;
 }
+
+export type Profile = {
+  id: number;
+  avatar: string;
+  address?: string;
+  email: string;
+  phone?: string;
+  birthDate?: Date;
+  introduction?: string;
+  nickName: string;
+  signature?: string;
+  gender: number;
+};
 
 export type UserDetail = {
   id: number;

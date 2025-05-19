@@ -7,12 +7,15 @@
       <div class="user-center">
         <div></div>
         <!-- User Center -->
-        <main class="flex-1 block gap-[1rem] md:flex">
-          <div class="form w-50%">
-            <UserInfo v-if="userInfo" :user-info="userInfo" />
+        <main class="flex-1 block relative">
+          <div class="absolute top-1 right-2">
+            <span class="cursor-pointer text-gradient" @click="isEdit = !isEdit">{{
+              isEdit ? '取消编辑' : '编辑'
+            }}</span>
           </div>
-          <div class="mt-2rem md:mt-5rem flex-1">
-            <div class="tab">
+          <UserInfo v-if="!isEdit" :user-info="userInfo" />
+          <div v-else class="w-full">
+            <div class="tab mb-1rem">
               <span
                 @click="toggleTab('info')"
                 class="tab-item"
@@ -26,7 +29,14 @@
                 >修改密码</span
               >
             </div>
-            <UpdatePwd v-if="currentTab === 'pwd'" />
+            <div class="grid place-items-center">
+              <UpdateProfile
+                :profile="userInfo?.profile"
+                v-if="currentTab === 'info'"
+                @success="updateProfileSuccess"
+              />
+              <UpdatePwd v-if="currentTab === 'pwd'" />
+            </div>
           </div>
         </main>
         <div></div>
@@ -41,6 +51,7 @@ import { getBlogUserInfo } from '~/api/config';
 import type { IUser } from '~/types';
 import UserInfo from './modules/user-info.vue';
 import UpdatePwd from './modules/update-pwd.vue';
+import UpdateProfile from './modules/update-profile.vue';
 
 defineOptions({
   name: 'UserCenter',
@@ -51,6 +62,7 @@ const userInfo = ref<IUser>();
 const route = useRoute();
 const id = route.params.id as unknown as number;
 const currentTab = ref('info');
+const isEdit = ref(false);
 
 const toggleTab = (tab: string) => {
   currentTab.value = tab;
@@ -60,6 +72,11 @@ function initUserInfo() {
   getBlogUserInfo(id).then(res => {
     userInfo.value = res.data;
   });
+}
+
+function updateProfileSuccess() {
+  isEdit.value = false;
+  initUserInfo();
 }
 
 onMounted(() => {

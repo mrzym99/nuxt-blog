@@ -1,18 +1,29 @@
 <template>
   <div class="description-item">
-    <div class="label" v-if="label">{{ label }}</div>
-    <div v-else class="no-label"></div>
+    <div class="label" :style="labelStyle" v-if="label">{{ label }}</div>
+    <div v-else class="no-label" :style="labelStyle"></div>
     <div class="value">
       <slot></slot>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-defineProps({
+const props = defineProps({
   label: {
     type: String,
     default: '',
   },
+  labelWidth: {
+    type: [Number, String],
+    default: 80,
+  },
+});
+
+const labelStyle = computed(() => {
+  const width = typeof props.labelWidth === 'number' ? `${props.labelWidth}px` : props.labelWidth;
+  return {
+    width,
+  };
 });
 </script>
 
