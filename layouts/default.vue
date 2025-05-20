@@ -24,7 +24,7 @@
               class="login-icon"
               to="/login/pwd-login"
               @click="showDrawer = false"
-              >登录</NuxtLink
+              >Login</NuxtLink
             >
             <User v-else />
           </ClientOnly>
@@ -47,7 +47,7 @@
     <Drawer v-if="!isLogin" v-model="showDrawer" position="right" width="60%" title="菜单">
       <div class="mobile-nav">
         <div v-if="user" class="pl-3">
-          <NuxtLink to="/user/profile" @click="showDrawer = false">
+          <NuxtLink to="/" @click="showDrawer = false">
             <img
               class="size-3rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
               :src="user?.avatar"
@@ -70,9 +70,9 @@
             class="login-icon"
             to="/login/pwd-login"
             @click="showDrawer = false"
-            >登录</NuxtLink
+            >Login</NuxtLink
           >
-          <div v-else class="login-icon" @click="logout">退出</div>
+          <div v-else class="login-icon" @click="logout">Log Out</div>
         </div>
       </div>
     </Drawer>

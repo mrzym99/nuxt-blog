@@ -8,7 +8,7 @@
         <div></div>
         <!-- User Center -->
         <main class="flex-1 block relative">
-          <div class="absolute top-1 right-2">
+          <div v-if="showOperation" class="absolute top-1 right-2">
             <span class="cursor-pointer text-gradient" @click="isEdit = !isEdit">{{
               isEdit ? '取消编辑' : '编辑'
             }}</span>
@@ -52,17 +52,24 @@ import type { IUser } from '~/types';
 import UserInfo from './modules/user-info.vue';
 import UpdatePwd from './modules/update-pwd.vue';
 import UpdateProfile from './modules/update-profile.vue';
+import { useUserStore } from '~/store';
+import { storeToRefs } from 'pinia';
 
 defineOptions({
   name: 'UserCenter',
 });
 
 const userInfo = ref<IUser>();
+const { user } = storeToRefs(useUserStore());
 
 const route = useRoute();
 const id = route.params.id as unknown as number;
 const currentTab = ref('info');
 const isEdit = ref(false);
+
+const showOperation = computed(() => {
+  return user.value && Number(user.value.id) === Number(id);
+});
 
 const toggleTab = (tab: string) => {
   currentTab.value = tab;

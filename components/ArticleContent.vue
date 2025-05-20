@@ -1,5 +1,9 @@
 <template>
   <div class="w-full my-2 min-h-10rem">
+    <ClientOnly>
+      <link rel="stylesheet" href="/tinymce/skins/ui/oxide/content.min.css" />
+      <link rel="stylesheet" href="/tinymce/skins/content/default/content.min.css" />
+    </ClientOnly>
     <div class="article-content">
       <div></div>
       <div>

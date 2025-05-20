@@ -9,8 +9,8 @@
     </template>
     <div class="user-panel">
       <div class="user-list">
-        <button class="user-item">
-          <NuxtLink class="user-name" :to="`/user-center/${user.id}`">user center</NuxtLink>
+        <button class="user-item" @click="toUserCenter">
+          <span class="user-name">User Center</span>
         </button>
         <button class="user-item" @click="logout">
           <span class="user-name">logout</span>
@@ -27,6 +27,11 @@ import { storeToRefs } from 'pinia';
 import { getToken } from '~/utils/auth';
 
 const { user } = storeToRefs(useUserStore());
+const router = useRouter();
+
+function toUserCenter() {
+  router.push(`/user-center/${user.value?.id}`);
+}
 
 function logout() {
   useUserStore().logout();
@@ -95,6 +100,7 @@ onMounted(() => {
     }
 
     .user-name {
+      text-transform: uppercase;
       font-size: 0.875rem;
       @include themed() {
         color: themed('text');

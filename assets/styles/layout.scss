@@ -235,12 +235,13 @@
 }
 
 .login-icon {
+  text-transform: uppercase;
   cursor: pointer;
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  width: 3rem;
+  display: inline-block !important;
+  text-align: center;
   height: 1.5rem;
+  line-height: 1.5rem;
+  padding: 0 0.75rem;
   border-radius: 0.75rem;
   transition: all 0.3s ease;
   @include themed() {
