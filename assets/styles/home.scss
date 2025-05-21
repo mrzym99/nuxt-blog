@@ -6,10 +6,10 @@
   @include bg;
 
   @include themed() {
-    background-color: rgba(themed('primary'), 0.5);
+    background-color: rgba(themed('primary'), 1);
   }
   @include responsive(md) {
-    height: 20rem;
+    height: 24rem;
   }
 
   h1 {

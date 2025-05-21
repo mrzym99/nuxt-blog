@@ -1,6 +1,5 @@
 import type { IUser } from '~/types';
-import { get, post } from '~/utils/request';
-import FormData from 'form-data';
+import { get } from '~/utils/request';
 
 // 获取博主信息
 export const getBloggerInfo = (username?: string) =>

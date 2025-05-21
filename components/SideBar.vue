@@ -6,7 +6,7 @@
       <div class="blog-card">
         <div class="profile">
           <div class="avatar">
-            <img :src="bloggerInfo?.profile.avatar || avatar" alt="Profile" />
+            <img :src="bloggerInfo?.profile.avatar" alt="Profile" />
           </div>
           <p class="text-xl font-bold mb-2">{{ bloggerInfo?.profile.nickName }}</p>
           <p class="mb-4">
@@ -61,7 +61,6 @@
 import TagCloud from '~/components/TagCloud.vue';
 import { getBloggerInfo, getParameter } from '~/api';
 import type { IUser } from '~/types';
-import avatar from '~/assets/images/avatar.png';
 
 const bloggerInfo = ref<IUser | null>(null);
 const loading = ref(true);

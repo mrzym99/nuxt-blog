@@ -1,13 +1,6 @@
 <template>
   <div>
-    <!-- Hero Section -->
-    <section :style="bgStyle" class="bg-gray-100 flex flex-col items-center justify-center blog-bg">
-      <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">zy</h1>
-      <p class="text-2xl lt-md:text-xl tracking-[1px] text-center mx-auto px-4">
-        「 真理往往简单明了 」
-      </p>
-    </section>
-    <!-- Main Content with Sidebar -->
+    <Smoke />
     <div class="container mx-auto lt-sm:py-8">
       <Loading :loading="loading">
         <div class="flex flex-col md:flex-row gap-8">
@@ -61,22 +54,23 @@ defineOptions({
   name: 'Home',
 });
 import { computed } from 'vue';
-import bg from '~/assets/images/bg.jpg';
 import SideBar from '~/components/SideBar.vue';
-import { getArticleList } from '~/api';
+import { getArticleList, getParameter } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 import { formatNumber } from '~/utils/tool';
+import Smoke from '~/components/Smoke.vue';
 
 const route = useRoute();
 const posts = ref<IArticle[]>([]);
 const loading = ref(true);
 const total = ref(0);
 const PAGE_SIZE = 10;
+const blogBg = ref('');
 
 const bgStyle = computed(() => {
   return {
-    backgroundImage: `url(${bg})`,
+    backgroundImage: `url(${blogBg.value})`,
   };
 });
 
@@ -94,6 +88,12 @@ async function getArticle() {
       ...item,
       slug: '/posts/' + item.id,
     };
+  });
+}
+
+async function getBgUrl() {
+  getParameter('blog_bg').then(res => {
+    blogBg.value = res.data;
   });
 }
 
@@ -123,6 +123,7 @@ watch(
 );
 
 onMounted(() => {
+  getBgUrl();
   getArticle();
 });
 </script>
