@@ -1,6 +1,6 @@
 <template>
   <div class="popover-container">
-    <div ref="triggerRef" class="popover-trigger" @click="togglePopover">
+    <div ref="triggerRef" class="popover-trigger">
       <slot name="trigger"></slot>
     </div>
     <div
@@ -37,6 +37,8 @@ type Position =
   | 'right-top'
   | 'right-bottom';
 
+type PopoverTrigger = 'click' | 'hover';
+
 const props = defineProps({
   position: {
     type: String as () => Position,
@@ -50,6 +52,10 @@ const props = defineProps({
     type: [String, Number],
     default: null,
   },
+  trigger: {
+    type: String as () => PopoverTrigger,
+    default: 'click',
+  },
 });
 
 const emit = defineEmits<{
@@ -62,6 +68,14 @@ const isVisible = ref(false);
 const actualPosition = ref(props.position);
 
 const newPosition = ref<any>(null);
+
+const bindEvents = () => {
+  if (props.trigger === 'click') {
+    triggerRef.value?.addEventListener('click', togglePopover);
+  } else {
+    triggerRef.value?.addEventListener('mouseenter', showPopover);
+  }
+};
 
 // 获取主位置（用于CSS类）
 const positionClass = computed(() => {
@@ -215,6 +229,23 @@ const updatePositionInViewport = () => {
   }
 };
 
+const showPopover = () => {
+  isVisible.value = true;
+  emit('update:visible', isVisible.value);
+
+  calcContentStyle();
+  // 在下一个渲染周期确保popover在视口内
+  window.setTimeout(() => {
+    contentRef.value?.addEventListener('mouseleave', hidePopover);
+    updatePositionInViewport();
+  }, 0);
+};
+
+const hidePopover = () => {
+  isVisible.value = false;
+  emit('update:visible', isVisible.value);
+};
+
 // 切换 Popover 显示状态
 const togglePopover = () => {
   isVisible.value = !isVisible.value;
@@ -265,6 +296,7 @@ const handleResize = () => {
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
   window.addEventListener('resize', handleResize);
+  bindEvents();
 });
 
 onUnmounted(() => {

@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="blog-bg"></div>
+  <div ref="container" class="home-bg"></div>
 </template>
 
 <script lang="ts" setup>

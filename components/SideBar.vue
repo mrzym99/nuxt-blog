@@ -23,13 +23,15 @@
           </div>
           <div class="social-links">
             <a
+              class="flex items-center gap-2 qq-link"
               alt="博客技术交流群"
               title="博客技术交流群"
               target="_blank"
               rel="noopener noreferrer"
               href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI"
             >
-              <img border="0" src="//pub.idqqimg.com/wpa/images/group.png" />
+              <Icon name="simple-icons:qq" size="1rem" />
+              加入 QQ 群
             </a>
           </div>
         </div>
@@ -42,10 +44,18 @@
 
       <!-- Friends -->
       <div class="blog-card">
-        <h3>Friends</h3>
-        <div class="recent-posts">
+        <h3>
+          Friends
+          <Popover position="bottom-left" :offset="8" :width="300" trigger="hover">
+            <template #trigger>
+              <button class="tip">tips</button>
+            </template>
+            <div>添加友链请</div>
+          </Popover>
+        </h3>
+        <div class="friends">
           <ul>
-            <li v-for="post in 1" :key="post">
+            <li>
               <NuxtLink to="http://mrzym.top/" target="_blank" rel="noopener noreferrer">
                 小张
               </NuxtLink>
@@ -79,3 +89,22 @@ onMounted(() => {
   initBlogInfo();
 });
 </script>
+
+<style lang="scss" scoped>
+.qq-link {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    background-color: var(--primary-color);
+    color: #fff !important;
+  }
+}
+
+.tip {
+  color: #ff8023;
+  margin-left: 1rem;
+}
+</style>

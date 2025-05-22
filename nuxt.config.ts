@@ -70,7 +70,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'https://nest-server.mrzym.top:3366',
         changeOrigin: true,
         prependPath: true,
       },

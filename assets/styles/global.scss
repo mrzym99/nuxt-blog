@@ -77,8 +77,33 @@ $breakpoint-xl: 1280px;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.3);
     z-index: 1;
+  }
+}
+
+.blog-bg {
+  @include bg;
+
+  @include themed() {
+    background-color: rgba(themed('primary'), 1);
+  }
+  @include responsive(md) {
+    height: 24rem;
+  }
+
+  h1 {
+    z-index: 2;
+    @include themed() {
+      color: themed('nav-text');
+    }
+  }
+  p {
+    z-index: 2;
+    @include themed() {
+      font-weight: 100;
+      color: rgba(themed('nav-text'), 0.9);
+    }
   }
 }
 

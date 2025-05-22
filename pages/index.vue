@@ -55,7 +55,7 @@ defineOptions({
 });
 import { computed } from 'vue';
 import SideBar from '~/components/SideBar.vue';
-import { getArticleList, getParameter } from '~/api';
+import { getArticleList } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 import { formatNumber } from '~/utils/tool';
@@ -66,13 +66,6 @@ const posts = ref<IArticle[]>([]);
 const loading = ref(true);
 const total = ref(0);
 const PAGE_SIZE = 10;
-const blogBg = ref('');
-
-const bgStyle = computed(() => {
-  return {
-    backgroundImage: `url(${blogBg.value})`,
-  };
-});
 
 async function getArticle() {
   const current = Number(route.query.current) || 1;
@@ -88,12 +81,6 @@ async function getArticle() {
       ...item,
       slug: '/posts/' + item.id,
     };
-  });
-}
-
-async function getBgUrl() {
-  getParameter('blog_bg').then(res => {
-    blogBg.value = res.data;
   });
 }
 
@@ -123,7 +110,6 @@ watch(
 );
 
 onMounted(() => {
-  getBgUrl();
   getArticle();
 });
 </script>

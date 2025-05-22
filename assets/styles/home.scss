@@ -1,9 +1,8 @@
 @use 'themes' as *;
 @use 'global' as *;
 
-.blog-bg {
+.home-bg {
   height: 28rem;
-  @include bg;
 
   @include themed() {
     background-color: rgba(themed('primary'), 1);
@@ -26,6 +25,7 @@
     }
   }
 }
+
 // Blog post styles
 .blog-post {
   border-radius: 0.5rem;
@@ -189,20 +189,22 @@
     }
   }
 
-  .recent-posts {
+  .friends {
     ul {
       list-style: none;
       padding: 0;
       margin: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
 
       li {
-        margin-bottom: 0.75rem;
-
         &:last-child {
           margin-bottom: 0;
         }
 
         a {
+          text-decoration: underline;
           @include themed() {
             color: themed('text-light');
             @include hover-effect {
