@@ -16,7 +16,7 @@
         <div class="nav-links">
           <NuxtLink to="/">Home</NuxtLink>
           <NuxtLink to="/about">About</NuxtLink>
-          <NuxtLink to="/archives/all">Archive</NuxtLink>
+          <NuxtLink to="/archive/all">Archive</NuxtLink>
           <ThemeSwitch />
           <ClientOnly>
             <NuxtLink
@@ -47,16 +47,17 @@
     <Drawer v-if="!isLogin" v-model="showDrawer" position="right" width="60%" title="菜单">
       <div class="mobile-nav">
         <div v-if="user" class="pl-3">
-          <NuxtLink to="/" @click="showDrawer = false">
+          <NuxtLink :to="`/user-center/${user?.id}`" @click="showDrawer = false">
             <img
               class="size-3rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
               :src="user?.avatar"
               :alt="user?.nickName"
-          /></NuxtLink>
+            />
+          </NuxtLink>
         </div>
         <NuxtLink to="/" class="mobile-nav-item" @click="showDrawer = false">Home</NuxtLink>
         <NuxtLink to="/about" class="mobile-nav-item" @click="showDrawer = false">About</NuxtLink>
-        <NuxtLink to="/archives/all" class="mobile-nav-item" @click="showDrawer = false"
+        <NuxtLink to="/archive/all" class="mobile-nav-item" @click="showDrawer = false"
           >Archive</NuxtLink
         >
         <a href="/rss.xml" target="_blank" class="mobile-nav-item" @click="showDrawer = false">

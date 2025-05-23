@@ -25,6 +25,11 @@ import { computed } from 'vue';
 import { marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
+import { useHead } from '#app';
+
+useHead({
+  title: '小张的博客 | About Me',
+});
 
 const readme = ref<string>('');
 

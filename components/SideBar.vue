@@ -6,7 +6,9 @@
       <div class="blog-card">
         <div class="profile">
           <div class="avatar">
-            <img :src="bloggerInfo?.profile.avatar" alt="Profile" />
+            <NuxtLink :to="`/user-center/${bloggerInfo?.id}`">
+              <img :src="bloggerInfo?.profile.avatar" alt="blogger" />
+            </NuxtLink>
           </div>
           <p class="text-xl font-bold mb-2">{{ bloggerInfo?.profile.nickName }}</p>
           <p class="mb-4">
@@ -41,29 +43,41 @@
       <div class="blog-card">
         <TagCloud />
       </div>
-
-      <!-- Friends -->
-      <div class="blog-card">
-        <h3>
-          Friends
-          <Popover position="bottom-left" :offset="8" :width="300" trigger="hover">
-            <template #trigger>
-              <button class="tip">tips</button>
-            </template>
-            <div>添加友链请</div>
-          </Popover>
-        </h3>
-        <div class="friends">
-          <ul>
-            <li>
-              <NuxtLink to="http://mrzym.top/" target="_blank" rel="noopener noreferrer">
-                小张
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-      </div>
     </Loading>
+    <!-- Friends -->
+    <div class="blog-card">
+      <h3>
+        Friends
+        <Popover position="bottom-left" :offset="8" :width="300" trigger="hover">
+          <template #trigger>
+            <button class="tip">tips</button>
+          </template>
+          <div class="text-[1rem] font-normal p-3 leading-loose">
+            <h3 class="!my-1">添加友链步骤</h3>
+            1.到博客源码地址，fork 项目<br />
+            2.找到 SideBar 组件<br />
+            3.仿照小张的 link 编写代码<br />
+            4.可在本地运行检查代码<br />
+            5.最后，向我提交 Pr<br />
+            <a
+              class="text-gradient underline"
+              href="https://gitee.com/mrzym/nuxt-blog-developd-by-cursor"
+              target="_blank"
+              >点我跳转博客源码地址</a
+            >
+          </div>
+        </Popover>
+      </h3>
+      <div class="friends">
+        <ul>
+          <li>
+            <NuxtLink to="http://mrzym.top/" target="_blank" rel="noopener noreferrer">
+              小张
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+    </div>
   </aside>
 </template>
 

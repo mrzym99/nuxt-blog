@@ -12,7 +12,7 @@
             <NuxtLink
               class="tag tag-all"
               :class="{ active: route.params.tag === 'all' }"
-              to="/archives/all"
+              to="/archive/all"
               :replace="true"
             >
               <strong>
@@ -20,7 +20,7 @@
               >
             </NuxtLink>
             <NuxtLink
-              :to="`/archives/${tag.name}`"
+              :to="`/archive/${tag.name}`"
               :replace="true"
               v-for="tag in allTags"
               :key="tag.name"
@@ -39,7 +39,7 @@
           </div>
           <div v-for="(yearPosts, year) in filteredPosts" :key="year" class="mb-6">
             <h2 class="title font-bold">{{ year }}</h2>
-            <div class="archives">
+            <div class="post-item">
               <article v-for="post in yearPosts" :key="post.id" class="blog-card">
                 <div class="flex justify-between items-start">
                   <div>
@@ -66,8 +66,14 @@
 import { useRoute } from 'vue-router';
 import { getAllTags } from '~/api';
 import type { IArticle } from '~/types/index';
+import { useHead } from '#app';
+
 defineOptions({
   name: 'Archives',
+});
+
+useHead({
+  title: `小张的博客 | Archive`,
 });
 
 type Tag = {
@@ -163,6 +169,7 @@ onMounted(() => {
 
 .title {
   margin: 0.8rem 0;
+
   @include themed() {
     color: themed('primary');
   }

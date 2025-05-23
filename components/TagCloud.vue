@@ -1,7 +1,7 @@
 <template>
   <!-- Tags Cloud -->
   <div class="tags-cloud">
-    <NuxtLink v-for="tag in allTags" :key="tag.name" :to="`/archives/${tag.name}`" class="tag">
+    <NuxtLink v-for="tag in allTags" :key="tag.name" :to="`/archive/${tag.name}`" class="tag">
       {{ tag.name }}
       <span class="ml-1 text-xs">({{ tag.count }})</span>
     </NuxtLink>

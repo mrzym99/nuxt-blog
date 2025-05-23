@@ -60,7 +60,7 @@ defineProps<{
 
 .profile {
   flex: 1;
-  padding: 8rem 1rem 2rem 1rem;
+  padding: 2rem 1rem 2rem 1rem;
   border-radius: 8px;
   @include themed() {
     border: 1px solid themed('border');

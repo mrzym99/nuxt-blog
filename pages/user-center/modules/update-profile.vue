@@ -10,7 +10,7 @@
             <VeeErrorMessage class="error-message" name="头像" key="avatar" />
           </Transition>
         </div>
-        <div class="flex-1 mt-2rem md:mt-0">
+        <div class="flex-1 max-w-500px mt-2rem md:mt-0">
           <div class="form-group mb-2">
             <label for="avatar">昵称</label>
             <VeeField

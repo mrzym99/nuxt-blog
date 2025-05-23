@@ -3,9 +3,8 @@
     <section class="h-6rem flex flex-col items-center justify-center blog-bg">
       <h1 class="leading-tight font-bold mb-6">User Center</h1>
     </section>
-    <div class="article-container mx-auto lt-sm:py-8">
+    <div class="container mx-auto py-8">
       <div class="user-center">
-        <div></div>
         <!-- User Center -->
         <main class="flex-1 block relative">
           <div v-if="showOperation" class="absolute top-1 right-2">
@@ -15,20 +14,7 @@
           </div>
           <UserInfo v-if="!isEdit" :user-info="userInfo" />
           <div v-else class="w-full">
-            <div class="tab mb-1rem">
-              <span
-                @click="toggleTab('info')"
-                class="tab-item"
-                :class="{ active: currentTab === 'info' }"
-                >修改个人信息</span
-              >
-              <span
-                @click="toggleTab('pwd')"
-                class="tab-item"
-                :class="{ active: currentTab === 'pwd' }"
-                >修改密码</span
-              >
-            </div>
+            <Tab class="mb-4" v-model="currentTab" :options="tabOptions" @change="toggleTab" />
             <div class="grid place-items-center">
               <UpdateProfile
                 :profile="userInfo?.profile"
@@ -39,7 +25,6 @@
             </div>
           </div>
         </main>
-        <div></div>
       </div>
     </div>
   </div>
@@ -54,6 +39,8 @@ import UpdatePwd from './modules/update-pwd.vue';
 import UpdateProfile from './modules/update-profile.vue';
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
+import Tab from '~/components/Tab.vue';
+import { useHead } from '#app';
 
 defineOptions({
   name: 'UserCenter',
@@ -66,6 +53,10 @@ const route = useRoute();
 const id = route.params.id as unknown as number;
 const currentTab = ref('info');
 const isEdit = ref(false);
+const tabOptions = [
+  { label: '修改个人信息', value: 'info' },
+  { label: '修改密码', value: 'pwd' },
+];
 
 const showOperation = computed(() => {
   return user.value && Number(user.value.id) === Number(id);
@@ -78,6 +69,10 @@ const toggleTab = (tab: string) => {
 function initUserInfo() {
   getBlogUserInfo(id).then(res => {
     userInfo.value = res.data;
+
+    useHead({
+      title: `小张的博客 | ${userInfo.value.profile.nickName}`,
+    });
   });
 }
 
@@ -97,10 +92,6 @@ onMounted(() => {
 @use '~/assets/styles/base.scss' as *;
 
 .user-center {
-  display: grid;
-  grid-template-columns: 200px 1fr 200px;
-  gap: 1rem;
-
   @include responsive(lg) {
     display: block;
   }

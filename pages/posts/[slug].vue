@@ -18,7 +18,7 @@
               class="tag"
               v-for="tag in article.tags"
               :key="tag.id"
-              @click="navigateTo(`/archives/${tag.name}`)"
+              @click="navigateTo(`/archive/${tag.name}`)"
             >
               {{ tag.name }}
             </span>
@@ -48,6 +48,7 @@ import { useArticleStore } from '~/store';
 import { getArticleDetail } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
+import { useHead } from '#app';
 
 const loading = ref(true);
 const { setCurrentArticle } = useArticleStore();
@@ -79,6 +80,9 @@ const getArticleInfo = async () => {
 
   Object.assign(article.value, result);
   setCurrentArticle(article.value);
+  useHead({
+    title: `${article.value.title}`,
+  });
 };
 
 onMounted(() => {

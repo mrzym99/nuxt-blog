@@ -6,7 +6,9 @@
       <div class="comment-form">
         <div class="form-header">
           <div class="avatar">
-            <img v-if="user" :src="user?.avatar" :alt="user?.nickName" />
+            <NuxtLink v-if="user" :to="`/user-center/${user?.id}`">
+              <img :src="user?.avatar" :alt="user?.nickName" />
+            </NuxtLink>
             <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
           </div>
           <div class="form-content">
@@ -51,7 +53,7 @@
             ></textarea>
             <div class="form-footer">
               <div class="form-tools">
-                <Popover position="bottom" :offset="8" :width="300">
+                <Popover position="bottom" :offset="8" :width="380">
                   <template #trigger>
                     <button class="tool-btn">😊</button>
                   </template>
@@ -91,20 +93,7 @@
 
       <div v-if="comments.length === 0" class="no-comments">暂无评论，快来抢沙发吧！</div>
       <template v-else>
-        <div class="tab">
-          <span
-            @click="toggleTab(CommentOrder.LATEST)"
-            class="tab-item"
-            :class="{ active: commentOrder === CommentOrder.LATEST }"
-            >最新</span
-          >
-          <span
-            @click="toggleTab(CommentOrder.HOT)"
-            class="tab-item"
-            :class="{ active: commentOrder === CommentOrder.HOT }"
-            >最热</span
-          >
-        </div>
+        <Tab v-model="commentOrder" :options="tabOptions" @change="toggleTab" />
         <TransitionGroup name="fade">
           <div
             v-for="comment in comments"
@@ -115,10 +104,12 @@
             }"
           >
             <div class="comment-avatar">
-              <img
-                :src="comment.commenter?.profile.avatar"
-                :alt="comment.commenter?.profile.nickName"
-              />
+              <NuxtLink :to="`/user-center/${comment.commenter?.id}`">
+                <img
+                  :src="comment.commenter?.profile.avatar"
+                  :alt="comment.commenter?.profile.nickName"
+                />
+              </NuxtLink>
             </div>
             <div class="comment-content">
               <div class="comment-header">
@@ -158,7 +149,9 @@
                   }"
                 >
                   <div class="reply-avatar">
-                    <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
+                    <NuxtLink :to="`/user-center/${reply.reply?.id}`">
+                      <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
+                    </NuxtLink>
                   </div>
                   <div class="reply-content">
                     <div class="reply-header">
@@ -216,7 +209,9 @@
               <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
                 <div class="form-header">
                   <div class="avatar">
-                    <img :src="user?.avatar" :alt="user?.nickName" />
+                    <NuxtLink :to="`/user-center/${user?.id}`">
+                      <img :src="user?.avatar" :alt="user?.nickName" />
+                    </NuxtLink>
                   </div>
                   <div class="form-content">
                     <textarea
@@ -280,6 +275,8 @@ import {
 import { useNuxtApp } from '#app';
 import { postCancelLike, postLike, uploadImg } from '~/api';
 import FormData from 'form-data';
+import Tab from './Tab.vue';
+import { emojiList } from '~/assets/constant/emoji';
 
 const props = defineProps<{
   type: CommentType;
@@ -294,6 +291,10 @@ type ReplyTo = {
 const { user } = storeToRefs(useUserStore());
 const { $toast } = useNuxtApp();
 const route = useRoute();
+const tabOptions = [
+  { label: '最新', value: CommentOrder.LATEST },
+  { label: '最热', value: CommentOrder.HOT },
+];
 
 // 评论内容
 const commentContent = ref('');
@@ -307,10 +308,10 @@ const currentPage = ref(1);
 const commentTotal = ref(0);
 const PAGE_SIZE = 5;
 const commentLoading = ref(false);
-const commentOrder = ref(CommentOrder.LATEST);
+const commentOrder = ref<string>(CommentOrder.LATEST);
 
 // 表情列表
-const emojis = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '✨', '🌟', '💡', '📝'];
+const emojis = emojiList;
 
 // 模拟评论数据
 const comments = ref<Array<Comment>>([]);
@@ -547,7 +548,7 @@ async function getReplies(parent: Comment) {
   parent.replies = replies;
 }
 
-const toggleTab = (tab: CommentOrder) => {
+const toggleTab = (tab: string) => {
   commentOrder.value = tab;
   currentPage.value = 1;
   getCommentList();
@@ -627,6 +628,7 @@ onMounted(() => {
 .comments-title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+
   @include themed() {
     color: themed('primary');
   }
@@ -636,6 +638,7 @@ onMounted(() => {
   .no-comments {
     text-align: center;
     padding: 1rem;
+
     @include themed() {
       color: themed('text-light');
     }
@@ -647,6 +650,7 @@ onMounted(() => {
   gap: 0.5rem;
   padding: 0.5rem 0;
   border-bottom: 1px solid;
+
   @include themed() {
     border-color: themed('border');
   }
@@ -660,6 +664,7 @@ onMounted(() => {
     transition: color 0.3s ease;
     font-size: 14px;
     margin-left: 0.25rem;
+
     @include themed() {
       color: themed('primary');
     }
@@ -696,6 +701,7 @@ onMounted(() => {
 
   .username {
     font-weight: 500;
+
     @include themed() {
       color: themed('text');
     }
@@ -703,6 +709,7 @@ onMounted(() => {
 
   .time {
     font-size: 0.875rem;
+
     @include themed() {
       color: themed('text-light');
     }
@@ -728,6 +735,7 @@ onMounted(() => {
     background: none;
     cursor: pointer;
     font-size: 0.875rem;
+
     @include themed() {
       color: themed('text-light');
 
@@ -742,6 +750,7 @@ onMounted(() => {
   margin-top: 1rem;
   padding-left: 1rem;
   border-left: 2px solid;
+
   @include themed() {
     border-color: themed('border');
   }
@@ -752,6 +761,7 @@ onMounted(() => {
   gap: 0.5rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid;
+
   @include themed() {
     border-color: themed('border');
   }
@@ -786,6 +796,7 @@ onMounted(() => {
 
   .reply-to {
     font-size: 0.875rem;
+
     @include themed() {
       color: themed('text-light');
     }
@@ -831,6 +842,7 @@ onMounted(() => {
   background: none;
   cursor: pointer;
   font-size: 0.875rem;
+
   @include themed() {
     color: themed('text-light');
 
@@ -844,6 +856,7 @@ onMounted(() => {
   margin: 1rem 0;
   padding: 1rem;
   border-radius: 0.5rem;
+
   @include themed() {
     background-color: themed('bg');
     border: 1px solid themed('border');
@@ -876,6 +889,7 @@ onMounted(() => {
       border-radius: 0.5rem;
       border: 1px solid;
       resize: vertical;
+
       @include themed() {
         background-color: themed('bg');
         border-color: themed('border');
@@ -900,6 +914,7 @@ onMounted(() => {
   margin-bottom: 1rem;
   padding: 0.8rem;
   border-radius: 0.5rem;
+
   @include themed() {
     background-color: themed('bg');
     border: 1px solid themed('border');
@@ -932,10 +947,12 @@ onMounted(() => {
     height: 100%;
     border-radius: 100%;
     transition: all 0.3s ease;
+
     @include themed() {
       color: themed('nav-text') !important;
       background-color: themed('primary');
     }
+
     &:hover {
       @include themed() {
         background-color: themed('secondary');
@@ -953,6 +970,7 @@ onMounted(() => {
       margin-bottom: 0.5rem;
       padding: 0.5rem;
       border-radius: 0.5rem;
+
       @include themed() {
         background-color: themed('bg');
         border: 1px solid themed('border');
@@ -969,6 +987,7 @@ onMounted(() => {
         i {
           width: 1rem;
           height: 1rem;
+
           @include themed() {
             color: themed('text');
 
@@ -990,6 +1009,7 @@ onMounted(() => {
       border-radius: 0.5rem;
       border: 1px solid;
       resize: vertical;
+
       @include themed() {
         background-color: themed('bg');
         border-color: themed('border');
@@ -1021,6 +1041,7 @@ onMounted(() => {
     border: none;
     background: none;
     cursor: pointer;
+
     @include themed() {
       color: themed('text-light');
 
@@ -1035,6 +1056,7 @@ onMounted(() => {
     border-radius: 0.25rem;
     border: none;
     cursor: pointer;
+
     @include themed() {
       background-color: themed('primary');
       color: white;
@@ -1057,6 +1079,8 @@ onMounted(() => {
     flex-wrap: wrap;
     gap: 0.5rem;
     padding: 0.5rem;
+    max-height: 20rem;
+    overflow: auto;
   }
 
   .emoji-item {
@@ -1079,6 +1103,7 @@ onMounted(() => {
     font-size: 0.875rem;
     font-weight: 500;
     margin-bottom: 0.75rem;
+
     @include themed() {
       color: themed('text');
     }
@@ -1089,6 +1114,7 @@ onMounted(() => {
     overflow-y: auto;
     padding: 0.5rem;
     border-radius: 0.5rem;
+
     @include themed() {
       background-color: themed('bg');
       border: 1px solid themed('border');
@@ -1119,6 +1145,7 @@ onMounted(() => {
     :deep(blockquote) {
       margin: 1em 0;
       padding-left: 1em;
+
       @include themed() {
         color: themed('text-light');
       }
@@ -1172,6 +1199,7 @@ onMounted(() => {
   margin: 1em 0;
   font-size: 16px;
   height: 20px;
+
   @include themed() {
     color: themed('primary');
   }
