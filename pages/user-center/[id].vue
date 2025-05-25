@@ -1,8 +1,6 @@
 <template>
   <div class="mx-auto">
-    <section class="h-6rem flex flex-col items-center justify-center blog-bg">
-      <h1 class="leading-tight font-bold mb-6">User Center</h1>
-    </section>
+    <PageHeader title="User Center" />
     <div class="container mx-auto py-8">
       <div class="user-center">
         <!-- User Center -->
@@ -40,7 +38,7 @@ import UpdateProfile from './modules/update-profile.vue';
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import Tab from '~/components/Tab.vue';
-import { useHead } from '#app';
+import PageHeader from '~/components/PageHeader.vue';
 
 defineOptions({
   name: 'UserCenter',
@@ -69,10 +67,6 @@ const toggleTab = (tab: string) => {
 function initUserInfo() {
   getBlogUserInfo(id).then(res => {
     userInfo.value = res.data;
-
-    useHead({
-      title: `小张的博客 | ${userInfo.value.profile.nickName}`,
-    });
   });
 }
 

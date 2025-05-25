@@ -50,18 +50,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onActivated } from 'vue';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 import { formatNumber } from '~/utils/tool';
 import Smoke from '~/components/Smoke.vue';
-import { useHead } from '#app';
 
-useHead({
-  title: '小张的博客 | Home',
-});
 defineOptions({
   name: 'Home',
 });

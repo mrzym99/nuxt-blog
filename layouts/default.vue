@@ -14,9 +14,9 @@
       <div class="nav-container">
         <!-- PC端导航链接 -->
         <div class="nav-links">
-          <NuxtLink to="/">Home</NuxtLink>
-          <NuxtLink to="/about">About</NuxtLink>
-          <NuxtLink to="/archive/all">Archive</NuxtLink>
+          <NuxtLink v-for="item in menuList" :to="item.path" :key="item.path">{{
+            item.name
+          }}</NuxtLink>
           <ThemeSwitch />
           <ClientOnly>
             <NuxtLink
@@ -118,6 +118,26 @@ const showDrawer = ref(false);
 const route = useRoute();
 const { getArticleHasCover } = storeToRefs(useArticleStore());
 const { user } = storeToRefs(useUserStore());
+
+type Menu = {
+  name: string;
+  path: string;
+};
+
+const menuList: Menu[] = [
+  {
+    name: 'Home',
+    path: '/',
+  },
+  {
+    name: 'About',
+    path: '/about',
+  },
+  {
+    name: 'Archive',
+    path: '/archive/all',
+  },
+];
 
 const isPost = computed(() => {
   return route.path.startsWith('/posts');

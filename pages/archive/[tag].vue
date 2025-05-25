@@ -1,8 +1,6 @@
 <template>
   <div class="mx-auto">
-    <section class="h-6rem flex flex-col items-center justify-center blog-bg">
-      <h1 class="leading-tight font-bold mb-6">Archive</h1>
-    </section>
+    <PageHeader title="Archive" />
     <div class="article-container mx-auto lt-sm:py-8">
       <div class="archive">
         <div></div>
@@ -66,14 +64,10 @@
 import { useRoute } from 'vue-router';
 import { getAllTags } from '~/api';
 import type { IArticle } from '~/types/index';
-import { useHead } from '#app';
+import PageHeader from '~/components/PageHeader.vue';
 
 defineOptions({
   name: 'Archives',
-});
-
-useHead({
-  title: `小张的博客 | Archive`,
 });
 
 type Tag = {

@@ -1,9 +1,6 @@
 <template>
   <div class="mx-auto">
-    <section class="blog-bg flex flex-col items-center justify-center h-6rem">
-      <h1 class="leading-tight font-bold mb-6">About Me</h1>
-    </section>
-
+    <PageHeader title="About Me" />
     <div class="container mx-auto lt-sm:py-8">
       <div class="flex flex-col md:flex-row gap-8">
         <main class="flex-1 p-1.5rem">
@@ -19,17 +16,13 @@
 
 <script setup lang="ts">
 import SideBar from '~/components/SideBar.vue';
+import PageHeader from '~/components/PageHeader.vue';
 import 'highlight.js/styles/github.css';
 
 import { computed } from 'vue';
 import { marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
-import { useHead } from '#app';
-
-useHead({
-  title: '小张的博客 | About Me',
-});
 
 const readme = ref<string>('');
 
