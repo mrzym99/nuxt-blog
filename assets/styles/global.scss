@@ -70,19 +70,21 @@ $breakpoint-xl: 1280px;
   background-repeat: no-repeat;
   transition: all $duration-slow ease;
 
-  &::before {
+  &::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    z-index: 1;
+    height: 40%; // 遮罩高度可调整
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), transparent);
+    pointer-events: none; // 确保不影响鼠标事件
+    z-index: 10; // 确保遮罩在最上层
   }
 }
 
 .blog-bg {
+  height: 28rem;
   @include bg;
 
   @include themed() {

@@ -1,6 +1,12 @@
 <template>
   <div>
-    <Smoke />
+    <!-- Hero Section -->
+    <section :style="bgStyle" class="bg-gray-100 flex flex-col items-center justify-center blog-bg">
+      <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">zy</h1>
+      <p class="text-2xl lt-md:text-xl tracking-[1px] text-center mx-auto px-4">
+        「 真理往往简单明了 」
+      </p>
+    </section>
     <div class="container mx-auto lt-sm:py-8">
       <Loading :loading="loading">
         <div class="flex flex-col md:flex-row gap-8">
@@ -50,13 +56,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated } from 'vue';
+import { computed } from 'vue';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 import { formatNumber } from '~/utils/tool';
-import Smoke from '~/components/Smoke.vue';
+import bg from '~/assets/images/bg.jpg';
 
 defineOptions({
   name: 'Home',
@@ -67,6 +73,12 @@ const posts = ref<IArticle[]>([]);
 const loading = ref(true);
 const total = ref(0);
 const PAGE_SIZE = 10;
+
+const bgStyle = computed(() => {
+  return {
+    backgroundImage: `url(${bg})`,
+  };
+});
 
 async function getArticle() {
   const current = Number(route.query.current) || 1;
