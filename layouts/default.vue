@@ -110,6 +110,7 @@
 import Drawer from '~/components/Drawer.vue';
 import { useArticleStore, useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
+import Dots from '~/components/Dots.vue';
 
 const isScrolled = ref(false);
 const isFixed = ref(false);

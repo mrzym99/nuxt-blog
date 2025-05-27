@@ -107,7 +107,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
 
-  @include bg;
+  @include mask;
 
   @include responsive(lg) {
     min-height: 24rem;

@@ -34,6 +34,9 @@
         </div>
       </div>
     </div>
+    <ClientOnly>
+      <Dots />
+    </ClientOnly>
   </div>
 </template>
 
@@ -47,6 +50,7 @@ import CodeLogin from './modules/code-login.vue';
 import GithubLogin from './modules/github-login.vue';
 import { getThirdLoginUrl } from '~/api';
 import ResetPwd from './modules/reset-pwd.vue';
+import Dots from '~/components/Dots.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -110,6 +114,7 @@ onBeforeMount(() => {
   grid-template-columns: 1fr 1fr;
   box-shadow: 0px 20px 80px 0px rgba(0, 0, 0, 0.3);
   background: themed('bg');
+  z-index: 2;
 
   @include responsive(md) {
     width: 100%;
@@ -137,7 +142,7 @@ onBeforeMount(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.1);
   }
 }
 

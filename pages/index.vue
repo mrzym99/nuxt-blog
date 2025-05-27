@@ -2,9 +2,9 @@
   <div>
     <!-- Hero Section -->
     <section :style="bgStyle" class="bg-gray-100 flex flex-col items-center justify-center blog-bg">
-      <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">zy</h1>
-      <p class="text-2xl lt-md:text-xl tracking-[1px] text-center mx-auto px-4">
-        「 真理往往简单明了 」
+      <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">Xiao Zhang</h1>
+      <p class="text-2xl lt-md:text-xl tracking-[2px] text-center mx-auto px-4">
+        「 东边日出西边雨，道是无晴却有晴 」
       </p>
     </section>
     <div class="container mx-auto lt-sm:py-8">

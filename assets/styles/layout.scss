@@ -271,9 +271,6 @@
 // Footer
 .footer {
   padding: 2rem 0;
-  @include themed() {
-    background-color: themed('border');
-  }
   margin-top: 4rem;
 
   .footer-content {

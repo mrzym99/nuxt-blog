@@ -146,9 +146,6 @@ onUnmounted(() => {
   transition: all $duration ease;
   display: flex;
   flex-direction: column;
-  @include themed() {
-    background-color: themed('bg');
-  }
 
   &.catalog-fixed {
     position: fixed;

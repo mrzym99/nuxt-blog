@@ -26,7 +26,7 @@ $theme-map: null !default;
   --secondary-color: #3b82f6;
   --text-color: #e5e7eb;
   --text-light: #9ca3af;
-  --bg-color: #1f2937;
+  --bg-color: #333;
   --border-color: #374151;
   --hover-color: #3b82f6;
   --nav-text-color: #fff;
@@ -38,7 +38,7 @@ $theme-map: null !default;
 [data-theme='purple'] {
   --primary-color: #a78bfa;
   --secondary-color: #7c3aed;
-  --text-color: #1f2937;
+  --text-color: #333;
   --text-light: #6b7280;
   --bg-color: #fff;
   --border-color: #e5e7eb;
@@ -53,7 +53,7 @@ $theme-map: null !default;
 [data-theme='green'] {
   --primary-color: #34d399;
   --secondary-color: #059669;
-  --text-color: #1f2937;
+  --text-color: #333;
   --text-light: #6b7280;
   --bg-color: #fff;
   --border-color: #e5e7eb;
@@ -81,7 +81,7 @@ $themes: (
     'secondary': #3b82f6,
     'text': #e5e7eb,
     'text-light': #9ca3af,
-    'bg': #1f2937,
+    'bg': #333,
     'border': #374151,
     'hover': #3b82f6,
     'nav-text': #fff,
@@ -89,7 +89,7 @@ $themes: (
   'purple': (
     'primary': #a78bfa,
     'secondary': #7c3aed,
-    'text': #1f2937,
+    'text': #333,
     'text-light': #6b7280,
     'bg': #fff,
     'border': #e5e7eb,
@@ -99,7 +99,7 @@ $themes: (
   'green': (
     'primary': #34d399,
     'secondary': #059669,
-    'text': #1f2937,
+    'text': #333,
     'text-light': #6b7280,
     'bg': #fff,
     'border': #e5e7eb,
