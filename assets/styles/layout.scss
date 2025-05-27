@@ -169,6 +169,8 @@
 }
 
 .nav {
+  max-width: $max-width;
+  margin: 0 auto;
   .menu-toggle {
     display: flex;
     align-items: center;
@@ -280,7 +282,6 @@
     gap: 0.5rem;
     justify-content: center;
     align-items: center;
-    max-width: $max-width;
     padding: 1rem 0 3rem 0;
   }
 

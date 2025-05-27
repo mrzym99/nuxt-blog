@@ -2,6 +2,22 @@
 import { defineNuxtConfig } from 'nuxt/config';
 
 export default defineNuxtConfig({
+  app: {
+    head: {
+      title: '小张的个人博客',
+      meta: [
+        { charset: 'utf-8' },
+        {
+          name: 'description',
+          content: 'Nuxt 3 Blog，分享知识，记录生活。',
+        },
+        {
+          name: 'keywords',
+          content: 'Nuxt, Nest, Blog, Nuxt3, Vue3',
+        },
+      ],
+    },
+  },
   ssr: true,
   devServer: {
     port: 8081,

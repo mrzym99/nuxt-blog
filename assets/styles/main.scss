@@ -3,8 +3,14 @@
 @use 'home' as *;
 @use 'layout' as *;
 
+html {
+  background: #f1f2f3;
+}
+
 body {
   font-family: $font-family;
+  max-width: $max-width;
+  margin: 0 auto !important;
   @include themed() {
     color: themed('text');
     background-color: themed('bg');
