@@ -9,7 +9,7 @@ import {
   type PwdLogin,
   type ThirdRegister,
 } from '~/api';
-import type { IArticle, UserDetail } from '~/types/index';
+import type { IArticle, Theme, UserDetail } from '~/types/index';
 import { setToken, removeToken } from '~/utils/auth';
 
 export const useArticleStore = defineStore('blogArticle', {
@@ -94,6 +94,20 @@ export const useUserStore = defineStore('user', {
     resetStore() {
       removeToken();
       this.removeUser();
+    },
+  },
+});
+
+export const useBlogStore = defineStore('blog', {
+  state: () => ({
+    theme: 'default' as Theme,
+  }),
+  getters: {
+    getTheme: state => state.theme,
+  },
+  actions: {
+    setTheme(theme: Theme) {
+      this.theme = theme;
     },
   },
 });

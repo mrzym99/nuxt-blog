@@ -135,7 +135,7 @@
     padding: 1.5rem;
     @include themed() {
       border-bottom: 1px solid themed('border');
-      background-color: themed('bg');
+      // background-color: themed('bg');
     }
     margin-bottom: 1.5rem;
 

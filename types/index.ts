@@ -4,6 +4,8 @@ type baseModel = {
   updatedAt?: Date | null;
 };
 
+export type Theme = 'default' | 'dark' | 'purple' | 'green';
+
 export interface IArticle extends baseModel {
   title: string;
   description?: string;

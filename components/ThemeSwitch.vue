@@ -12,8 +12,8 @@
           v-for="theme in themes"
           :key="theme.name"
           class="theme-item"
-          :class="{ active: currentTheme === theme.name }"
-          @click="setTheme(theme.name)"
+          :class="{ active: getTheme === theme.name }"
+          @click="toggleTheme(theme.name)"
         >
           <span class="theme-color" :style="{ backgroundColor: theme.color }"></span>
           <span class="theme-name">{{ theme.label }}</span>
@@ -26,19 +26,27 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import Popover from './Popover.vue';
+import type { Theme } from '~/types';
+import { useBlogStore } from '~/store/index';
+import { storeToRefs } from 'pinia';
 
-const themes = [
+const { getTheme } = storeToRefs(useBlogStore());
+
+const themes: Array<{
+  name: Theme;
+  label: string;
+  color: string;
+}> = [
   { name: 'default', label: '默认', color: '#00c6fb' },
   { name: 'dark', label: '暗色', color: '#60a5fa' },
   { name: 'purple', label: '紫色', color: '#a78bfa' },
   { name: 'green', label: '绿色', color: '#34d399' },
 ];
 
-const currentTheme = ref('default');
 const popoverRef = ref<InstanceType<typeof Popover>>();
 
-const setTheme = (theme: string) => {
-  currentTheme.value = theme;
+const toggleTheme = (theme: Theme) => {
+  useBlogStore().setTheme(theme);
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
   popoverRef.value?.close();
@@ -46,7 +54,7 @@ const setTheme = (theme: string) => {
 
 onMounted(() => {
   const savedTheme = localStorage.getItem('theme') || 'default';
-  setTheme(savedTheme);
+  toggleTheme(savedTheme as Theme);
 });
 </script>
 

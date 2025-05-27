@@ -4,7 +4,10 @@ import type { Texture } from 'pixi.js';
 import { Application, Graphics, Particle, ParticleContainer } from 'pixi.js';
 import { createNoise3D } from 'simplex-noise';
 import { useEventListener } from '@vueuse/core';
+import { useBlogStore } from '~/store';
+import { storeToRefs } from 'pinia';
 
+const { getTheme } = storeToRefs(useBlogStore());
 const el = useTemplateRef('el');
 
 let w = window.innerWidth;
@@ -13,6 +16,7 @@ let h = window.innerHeight;
 const SCALE = 200;
 const LENGTH = 5;
 const SPACING = 15;
+let app: Application | null = null;
 
 const noise3d = createNoise3D();
 
@@ -25,9 +29,9 @@ function getForceOnPoint(x: number, y: number, z: number) {
 
 const mountedScope = effectScope();
 
-function createDotTexture(app: Application) {
+function createDotTexture(application: Application) {
   const g = new Graphics().circle(0, 0, 1).fill(0xcccccc);
-  return app.renderer.generateTexture(g);
+  return application.renderer.generateTexture(g);
 }
 
 function addPoints({
@@ -56,15 +60,20 @@ function addPoints({
 
 async function setup() {
   if (el.value == null) return;
-  const savedTheme = localStorage.getItem('theme') || 'default';
-  const app = new Application();
+  if (app) {
+    existingPoints.clear(); // 清空已有粒子坐标
+    points.length = 0; // 清空粒子数组
+    safeDestroyApp();
+    el.value.innerHTML = ''; // 清空容器
+  }
+  app = new Application();
   await app.init({
     antialias: true,
     resolution: window.devicePixelRatio,
     resizeTo: el.value,
     eventMode: 'none',
     autoDensity: true,
-    background: savedTheme === 'dark' ? '#333333' : '#ffffff',
+    background: getTheme.value === 'dark' ? '#333333' : '#ffffff',
   });
   el.value.appendChild(app.canvas);
 
@@ -98,11 +107,32 @@ async function setup() {
       h = window.innerHeight;
       addPoints({ dotTexture, particleContainer });
     });
-    onScopeDispose(() => {
-      app?.destroy(true, { children: true, texture: true, textureSource: true });
-    });
   });
 }
+
+// 修改销毁逻辑
+const safeDestroyApp = () => {
+  if (!app) return;
+
+  try {
+    // 先停止ticker防止动画循环继续
+    app.ticker?.stop();
+
+    // 兼容性销毁方式
+    app?.destroy(true, { children: true, texture: true, textureSource: true });
+
+    app = null;
+  } catch (e) {
+    console.error('PIXI销毁失败:', e);
+  }
+};
+
+watch(
+  () => getTheme.value,
+  async () => {
+    await setup();
+  }
+);
 
 onMounted(async () => {
   await setup();
@@ -110,6 +140,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   mountedScope.stop();
+  app?.destroy(true, { children: true, texture: true, textureSource: true });
 });
 </script>
 

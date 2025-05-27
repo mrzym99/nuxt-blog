@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto">
-    <PageHeader title="About Me" />
-    <div class="container mx-auto lt-sm:py-8">
+    <PageHeader class="z-1" title="About Me" />
+    <div class="container mx-auto lt-sm:py-8 relative z-1">
       <div class="flex flex-col md:flex-row gap-8">
         <main class="flex-1 p-1.5rem">
           <p class="mb-6 text-xl">
@@ -11,12 +11,16 @@
         <SideBar />
       </div>
     </div>
+    <ClientOnly>
+      <Dots />
+    </ClientOnly>
   </div>
 </template>
 
 <script setup lang="ts">
 import SideBar from '~/components/SideBar.vue';
 import PageHeader from '~/components/PageHeader.vue';
+import Dots from '~/components/Dots.vue';
 import 'highlight.js/styles/github.css';
 
 import { computed } from 'vue';

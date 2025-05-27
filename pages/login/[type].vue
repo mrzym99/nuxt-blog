@@ -1,13 +1,20 @@
 <template>
   <div class="login">
     <div class="login-card">
-      <div class="login-bg w-full h-full">
+      <div
+        :style="{
+          '--mask-color': getTheme === 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
+        }"
+        class="login-bg w-full h-full"
+        @click="back"
+      >
         <img :src="loginBg" alt="" />
       </div>
       <div class="login-container w-full p-2rem">
         <div class="w-full flex justify-between">
           <h1 class="login-title">{{ titleMap[type] }}</h1>
-          <Icon class="back" name="ph:arrow-u-up-left-light" @click="back"></Icon>
+          <span></span>
+          <!-- <Icon class="back" name="ph:arrow-u-up-left-light" @click="back"></Icon> -->
         </div>
         <Transition name="fade">
           <component :is="componentId" />
@@ -34,10 +41,10 @@
         </div>
       </div>
     </div>
-    <ClientOnly>
-      <Dots />
-    </ClientOnly>
   </div>
+  <ClientOnly>
+    <Dots />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -51,6 +58,10 @@ import GithubLogin from './modules/github-login.vue';
 import { getThirdLoginUrl } from '~/api';
 import ResetPwd from './modules/reset-pwd.vue';
 import Dots from '~/components/Dots.vue';
+import { useBlogStore } from '~/store';
+import { storeToRefs } from 'pinia';
+
+const { getTheme } = storeToRefs(useBlogStore());
 
 const route = useRoute();
 const router = useRouter();
@@ -142,7 +153,7 @@ onBeforeMount(() => {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--mask-color);
   }
 }
 
