@@ -59,9 +59,6 @@ importers:
       marked:
         specifier: ^15.0.7
         version: 15.0.7
-      marked-highlight:
-        specifier: ^2.2.1
-        version: 2.2.1(marked@15.0.7)
       nprogress:
         specifier: ^0.2.0
         version: 0.2.0
@@ -3831,11 +3828,6 @@ packages:
   map-obj@4.3.0:
     resolution: {integrity: sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==}
     engines: {node: '>=8'}
-
-  marked-highlight@2.2.1:
-    resolution: {integrity: sha512-SiCIeEiQbs9TxGwle9/OwbOejHCZsohQRaNTY2u8euEXYt2rYUFoiImUirThU3Gd/o6Q1gHGtH9qloHlbJpNIA==}
-    peerDependencies:
-      marked: '>=4 <16'
 
   marked@15.0.7:
     resolution: {integrity: sha512-dgLIeKGLx5FwziAnsk4ONoGwHwGPJzselimvlVskE9XLN4Orv9u2VA3GWw/lYUqjfA0rUT/6fqKwfZJapP9BEg==}
@@ -10110,10 +10102,6 @@ snapshots:
   map-obj@1.0.1: {}
 
   map-obj@4.3.0: {}
-
-  marked-highlight@2.2.1(marked@15.0.7):
-    dependencies:
-      marked: 15.0.7
 
   marked@15.0.7: {}
 

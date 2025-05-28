@@ -75,24 +75,19 @@
         </div>
       </div>
       <div>
-        <Catalog
-          v-if="isMd && renderedContent"
-          :identifier="article.title"
-          :cover="article.cover"
-        />
+        <Catalog v-if="isMd" :identifier="article.title" :cover="article.cover" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import 'highlight.js/styles/atom-one-dark.css';
+import 'highlight.js/styles/github.css';
 
 import { computed, onBeforeUnmount } from 'vue';
 import { marked } from 'marked';
-import { markedHighlight } from 'marked-highlight';
-import Catalog from './Catalog.vue';
 import hljs from 'highlight.js';
+import Catalog from './Catalog.vue';
 import { formatDate, formatDuration } from '~/utils/tool';
 import { CommentType, LikeType, type IArticle } from '~/types/index';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
@@ -124,44 +119,34 @@ const startViewTimestamp = ref(0);
 const currentViewDuration = ref(0);
 const recommends = ref<IArticle[]>([]);
 
+const renderedContent = ref('');
+
 const isMd = computed(() => {
   return props.article.contentType === 'md';
 });
 
-// 配置marked-highlight
-marked.use(
-  markedHighlight({
-    langPrefix: 'hljs language-',
-    highlight(code: string, lang: string) {
-      if (lang && hljs.getLanguage(lang)) {
-        try {
-          return hljs.highlight(code, { language: lang }).value;
-        } catch (error) {
-          console.error('代码高亮错误:', error);
-        }
-      }
-      return code;
-    },
-  })
-);
+// 在 setup 外部创建固定 renderer 实例
+const baseRenderer = new marked.Renderer();
+(baseRenderer.heading as any) = (text: any) => {
+  const { depth, text: textContent } = text;
+  const id = `blog_${depth}_${Math.random().toString(36).substring(2, 12)}`;
+  return `<h${depth} id="${id}">${textContent}</h${depth}>`;
+};
+
+// 一次性全局配置
+marked.setOptions({
+  renderer: baseRenderer,
+  gfm: true,
+  breaks: true,
+});
 
 // 渲染 Markdown 内容
-const renderedContent = computed(() => {
-  // if (!isMd.value) return props.article.content;
-  const renderer = new marked.Renderer();
-  (renderer.heading as any) = (text: any) => {
-    const { depth, text: textContent } = text;
-    const id = `blog_${depth}_${Math.random().toString(36).substring(2, 12)}`;
-    return `<h${depth} id="${id}">${textContent}</h${depth}>`;
-  };
-
-  marked.setOptions({
-    renderer,
-    gfm: true,
+async function renderContent() {
+  renderedContent.value = await marked(props.article.content || '');
+  nextTick(() => {
+    hljs.highlightAll();
   });
-
-  return marked(props.article.content || '');
-});
+}
 
 const postedDays = computed(() => {
   const { createdAt, updatedAt } = props.article;
@@ -254,6 +239,7 @@ function initViewDuration() {
 }
 
 onMounted(() => {
+  renderContent();
   checkIsLike();
   handleGetLikeCount();
   handleGetRecommends();
@@ -314,7 +300,7 @@ onBeforeUnmount(() => {
 
   .article-body {
     width: 100%;
-    max-width: 1280px;
+    max-width: 880px;
     overflow: hidden;
     margin: 1rem 0 3rem 0;
     @include themed() {
