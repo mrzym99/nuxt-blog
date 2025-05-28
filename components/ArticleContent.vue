@@ -1,9 +1,5 @@
 <template>
   <div class="w-full my-2 min-h-10rem">
-    <ClientOnly>
-      <link rel="stylesheet" href="/tinymce/skins/ui/oxide/content.min.css" />
-      <link rel="stylesheet" href="/tinymce/skins/content/default/content.min.css" />
-    </ClientOnly>
     <div class="article-content">
       <div></div>
       <div>
@@ -37,7 +33,10 @@
             }}</a>
           </p>
         </div>
-        <div class="article-body markdown-body" v-html="renderedContent"></div>
+        <div class="article-body" v-if="isMd" v-html="renderedContent"></div>
+        <div class="article-body" v-else>
+          <RichTextPreview :content="article.content!" />
+        </div>
         <div class="w-full h-3rem flex justify-center items-center">
           <Icon
             name="ph:thumbs-up-duotone"
@@ -103,6 +102,7 @@ import { useNuxtApp } from '#app';
 import TagCloud from './TagCloud.vue';
 import { getRecommendArticle } from '~/api/article';
 import Comments from './Comments.vue';
+import RichTextPreview from './RichTextPreview.vue';
 
 const typeEnum = {
   original: '原创',
@@ -147,7 +147,7 @@ marked.use(
 
 // 渲染 Markdown 内容
 const renderedContent = computed(() => {
-  if (!isMd.value) return props.article.content;
+  // if (!isMd.value) return props.article.content;
   const renderer = new marked.Renderer();
   (renderer.heading as any) = (text: any) => {
     const { depth, text: textContent } = text;
@@ -314,6 +314,7 @@ onBeforeUnmount(() => {
 
   .article-body {
     width: 100%;
+    max-width: 1280px;
     overflow: hidden;
     margin: 1rem 0 3rem 0;
     @include themed() {
