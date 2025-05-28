@@ -31,6 +31,7 @@
     "highlight.js": "^11.11.1",
     "json5": "^2.2.3",
     "marked": "^15.0.7",
+    "marked-highlight": "^2.2.1",
     "nprogress": "^0.2.0",
     "nuxt": "^3.17.2",
     "ofetch": "^1.4.1",
