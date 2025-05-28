@@ -58,6 +58,8 @@ const handleMouseMove = (e: MouseEvent) => {
   let xOffset = percentage,
     yOffset = percentage;
 
+  console.log(percentage);
+
   images.forEach(image => {
     xOffset *= 1.3;
     yOffset *= 1.1;

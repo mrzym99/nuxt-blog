@@ -49,7 +49,7 @@
               v-model="commentContent"
               placeholder="写下你的评论..."
               rows="3"
-              @keydown.enter.prevent="handleSubmit"
+              @keydown.enter="handleSubmit"
             ></textarea>
             <div class="form-footer">
               <div class="form-tools">
@@ -218,7 +218,7 @@
                       v-model="commentContent"
                       :placeholder="`回复 @${replyTo.user.profile.nickName}`"
                       rows="3"
-                      @keydown.enter.prevent="handleSubmit"
+                      @keydown.enter="handleSubmit"
                     ></textarea>
                     <div class="form-footer">
                       <div class="form-actions">
@@ -331,9 +331,13 @@ const renderedContent = computed(() => {
 const renderComment = (comment: string) => {
   return marked.parse(comment, { renderer });
 };
-
 // 处理评论提交
-const handleSubmit = () => {
+const handleSubmit = (event: any) => {
+  if (event.ctrlKey || event.metaKey) {
+    commentContent.value += '\n';
+    return;
+  }
+  event.preventDefault();
   if (!commentContent.value.trim()) return;
   if (!user.value) {
     $toast.warning('请先登录');
@@ -889,6 +893,7 @@ onMounted(() => {
       border-radius: 0.5rem;
       border: 1px solid;
       resize: vertical;
+      white-space: pre-wrap;
 
       @include themed() {
         background-color: themed('bg');

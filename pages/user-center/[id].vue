@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto">
+  <div class="mx-auto relative z-2">
     <PageHeader title="User Center" />
     <div class="container mx-auto py-8">
       <div class="user-center">
@@ -26,6 +26,9 @@
       </div>
     </div>
   </div>
+  <ClientOnly>
+    <Dots />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -39,6 +42,7 @@ import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import Tab from '~/components/Tab.vue';
 import PageHeader from '~/components/PageHeader.vue';
+import Dots from '~/components/Dots.vue';
 
 defineOptions({
   name: 'UserCenter',

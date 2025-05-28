@@ -1,12 +1,7 @@
 <template>
   <div>
     <!-- Hero Section -->
-    <section :style="bgStyle" class="bg-gray-100 flex flex-col items-center justify-center blog-bg">
-      <h1 class="text-6xl text-center tracking-[3px] font-bold mb-6 lt-md:text-5xl">Xiao Zhang</h1>
-      <p class="text-2xl lt-md:text-xl tracking-[2px] text-center mx-auto px-4">
-        「 东边日出西边雨，道是无晴却有晴 」
-      </p>
-    </section>
+    <HomeHeader />
     <div class="container mx-auto lt-sm:py-8">
       <Loading :loading="loading">
         <div class="flex flex-col md:flex-row gap-8">
@@ -63,6 +58,7 @@ import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 import { formatNumber } from '~/utils/tool';
 import bg from '~/assets/images/bg.jpg';
+import HomeHeader from '~/components/HomeHeader.vue';
 
 defineOptions({
   name: 'Home',
