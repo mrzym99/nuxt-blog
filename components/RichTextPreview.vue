@@ -28,6 +28,9 @@ const iframeUrl = computed(() => {
               body {
                 color: ${getTheme.value === 'dark' ? '#fff' : ''};
               }
+              p  {
+                margin: 0.5rem 0;
+              }
            </style>
           </head>
           <body>

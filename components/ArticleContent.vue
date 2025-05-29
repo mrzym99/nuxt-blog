@@ -256,6 +256,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 @use '~/assets/styles/themes.scss' as *;
 @use '~/assets/styles/global.scss' as *;
+@use '~/assets/styles/article-content.scss' as *;
 
 .article-info {
   border: 1px solid;
@@ -319,7 +320,14 @@ onBeforeUnmount(() => {
     }
 
     :deep(p) {
-      @apply my-4 leading-relaxed;
+      @apply my-2 leading-relaxed;
+    }
+
+    :deep(ul) {
+      @apply list-disc pl-5;
+    }
+    :deep(ol) {
+      @apply list-decimal pl-5;
     }
 
     :deep(blockquote) {
