@@ -270,7 +270,8 @@ onBeforeUnmount(() => {
   width: 100%;
 
   display: grid;
-  grid-template-columns: 200px 1fr 200px;
+  //grid-template-columns: 200px 1fr 200px;
+  grid-template-columns: 200px minmax(0, 880px) 200px;
   gap: 1rem;
 
   @include responsive(lg) {
@@ -309,7 +310,7 @@ onBeforeUnmount(() => {
     }
 
     :deep(pre) {
-      @apply rounded-md p-4 my-4 overflow-x-auto;
+      @apply rounded-md p-2 my-4 overflow-x-auto;
       @include themed() {
         background-color: var(--code-bg-color);
       }
@@ -317,6 +318,9 @@ onBeforeUnmount(() => {
 
     :deep(code) {
       @apply font-mono text-sm;
+      @include themed() {
+        background-color: var(--code-bg-color);
+      }
     }
 
     :deep(p) {
