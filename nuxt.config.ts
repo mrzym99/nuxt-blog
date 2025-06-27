@@ -84,26 +84,29 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-14',
 
   nitro: {
-    devProxy: {
-      '/api': {
-        target: 'https://nest-server.mrzym.top:3366',
-        changeOrigin: true,
-        prependPath: true,
-      },
-      '/upload': {
-        target: 'http://localhost:3000/upload',
-        changeOrigin: true,
-        prependPath: true,
-      },
-    },
     routeRules: {
       '/': { prerender: true },
-      '/posts/**': { isr: true },
+      // '/posts/**': { isr: true },
       '/rss.xml': {
         headers: {
           'Content-Type': 'application/xml',
         },
       },
+      '/api/**': {
+        proxy: `${import.meta.env.VITE_API_BASE}/api/**`,
+      },
+    },
+  },
+  hooks: {
+    async 'prerender:routes'(ctx) {
+      const response = await fetch(
+        'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999'
+      );
+      const res = await response.json();
+      const pages = res.data.list.map((item: any) => `/posts/${item.id}`);
+      for (const page of pages) {
+        ctx.routes.add(page);
+      }
     },
   },
 });

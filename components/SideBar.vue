@@ -1,49 +1,46 @@
 <template>
   <aside class="sidebar md:w-50 lg:w-70">
-    <Loading :loading="loading">
-      <!-- Profile Card -->
-
-      <div class="blog-card">
-        <div class="profile">
-          <div class="avatar">
-            <NuxtLink :to="`/user-center/${bloggerInfo?.id}`">
-              <img :src="bloggerInfo?.profile.avatar" alt="blogger" />
-            </NuxtLink>
-          </div>
-          <p class="text-xl font-bold mb-2">{{ bloggerInfo?.profile.nickName }}</p>
-          <p class="mb-4">
-            {{ bloggerInfo?.profile.introduction }}
-          </p>
-          <p class="mb-4">{{ bloggerInfo?.profile.signature }}</p>
-          <div class="social-links">
-            <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
-              <Icon name="simple-icons:github" size="1.5rem" />
-            </a>
-            <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer">
-              <Icon name="simple-icons:gitee" size="1.5rem" />
-            </a>
-          </div>
-          <div class="social-links">
-            <a
-              class="flex items-center gap-2 qq-link"
-              alt="博客技术交流群"
-              title="博客技术交流群"
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI"
-            >
-              <Icon name="simple-icons:qq" size="1rem" />
-              加入 QQ 群
-            </a>
-          </div>
+    <!-- Profile Card -->
+    <div class="blog-card">
+      <div class="profile">
+        <div class="avatar">
+          <NuxtLink :to="`/user-center/${bloggerInfo?.id}`">
+            <img :src="bloggerInfo?.profile.avatar" alt="blogger" />
+          </NuxtLink>
+        </div>
+        <p class="text-xl font-bold mb-2">{{ bloggerInfo?.profile.nickName }}</p>
+        <p class="mb-4">
+          {{ bloggerInfo?.profile.introduction }}
+        </p>
+        <p class="mb-4">{{ bloggerInfo?.profile.signature }}</p>
+        <div class="social-links">
+          <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
+            <Icon name="simple-icons:github" size="1.5rem" />
+          </a>
+          <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer">
+            <Icon name="simple-icons:gitee" size="1.5rem" />
+          </a>
+        </div>
+        <div class="social-links">
+          <a
+            class="flex items-center gap-2 qq-link"
+            alt="博客技术交流群"
+            title="博客技术交流群"
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI"
+          >
+            <Icon name="simple-icons:qq" size="1rem" />
+            加入 QQ 群
+          </a>
         </div>
       </div>
+    </div>
 
-      <!-- Tags Cloud -->
-      <div class="blog-card">
-        <TagCloud />
-      </div>
-    </Loading>
+    <!-- Tags Cloud -->
+    <div class="blog-card">
+      <TagCloud />
+    </div>
     <!-- Friends -->
     <div class="blog-card">
       <h3>
@@ -84,23 +81,17 @@
 <script setup lang="ts">
 import TagCloud from '~/components/TagCloud.vue';
 import { getBloggerInfo, getParameter } from '~/api';
-import type { IUser } from '~/types';
+import { useAsyncData } from '#app';
 
-const bloggerInfo = ref<IUser | null>(null);
-const loading = ref(true);
+const { data: username } = await useAsyncData('username', async () => {
+  const res = await getParameter('blogger');
+  return res.data;
+});
 
-function initBlogInfo() {
-  getParameter('blogger').then(res => {
-    const username = res.data;
-    getBloggerInfo(username).then(res => {
-      bloggerInfo.value = res.data;
-      loading.value = false;
-    });
-  });
-}
-
-onMounted(() => {
-  initBlogInfo();
+const { data: bloggerInfo } = await useAsyncData('bloggerInfo', async () => {
+  if (!username.value) return null;
+  const res = await getBloggerInfo(username.value!);
+  return res.data;
 });
 </script>
 

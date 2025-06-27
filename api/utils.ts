@@ -1,9 +1,19 @@
-import { get, post } from '~/utils/request';
 import FormData from 'form-data';
+import { $http } from '~/utils/request';
 
 // 获取参数信息
-export const getParameter = (key?: string) => get<string>('/system/parameter/value/' + key, {});
+export const getParameter = (key?: string) =>
+  $http<string>({
+    method: 'get',
+    url: '/system/parameter/value/' + key,
+  });
 
-// 图片上传
 export const uploadImg = (data?: FormData) =>
-  post<string>('/tools/upload', data, { headers: { 'Content-Type': 'multipart/form-data' } });
+  $http({
+    method: 'post',
+    url: '/tools/upload',
+    data,
+    options: {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    },
+  });

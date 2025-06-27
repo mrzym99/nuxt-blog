@@ -142,9 +142,7 @@ async function getTags() {
   });
 }
 
-onMounted(() => {
-  getTags();
-});
+getTags();
 </script>
 
 <style lang="scss" scoped>

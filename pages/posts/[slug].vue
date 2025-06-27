@@ -1,59 +1,56 @@
 <template>
-  <Loading :loading="loading">
-    <div
-      :class="{
-        'transition-all duration-300': article.cover,
-        'article-header cover article-bg': article.cover,
-        'article-header': !article.cover,
-      }"
-      :style="{
-        backgroundImage: article.cover ? `url(${article.cover})` : 'none',
-      }"
-    >
-      <div class="article-container header-content z-10">
-        <div></div>
-        <div class="info-wrapper">
-          <div :class="['tags', article.cover ? 'white-tags' : '']">
-            <span
-              class="tag"
-              v-for="tag in article.tags"
-              :key="tag.id"
-              @click="navigateTo(`/archive/${tag.name}`)"
-            >
-              {{ tag.name }}
-            </span>
-          </div>
-          <h1>{{ article.title }}</h1>
-          <h3>{{ article.description }}</h3>
-          <div class="article-meta">
-            <span class="date"
-              >Posted By {{ article.author?.profile.nickName }} on
-              {{ article.createdAt && formatDate(article.createdAt) }}</span
-            >
-          </div>
+  <div
+    :class="{
+      'transition-all duration-300': articleDetail?.cover,
+      'article-header cover article-bg': articleDetail?.cover,
+      'article-header': !articleDetail?.cover,
+    }"
+    :style="{
+      backgroundImage: articleDetail?.cover ? `url(${articleDetail?.cover})` : 'none',
+    }"
+  >
+    <div class="article-container header-content z-10">
+      <div></div>
+      <div class="info-wrapper">
+        <div :class="['tags', articleDetail?.cover ? 'white-tags' : '']">
+          <span
+            class="tag"
+            v-for="tag in articleDetail?.tags"
+            :key="tag.id"
+            @click="navigateTo(`/archive/${tag.name}`)"
+          >
+            {{ tag.name }}
+          </span>
         </div>
-        <div></div>
+        <h1>{{ articleDetail?.title }}</h1>
+        <h3>{{ articleDetail?.description }}</h3>
+        <div class="article-meta">
+          <span class="date"
+            >Posted By {{ articleDetail?.author?.profile.nickName }} on
+            {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span
+          >
+        </div>
       </div>
+      <div></div>
     </div>
-    <div class="post-detail article-container">
-      <ArticleContent :article="article" />
-    </div>
-  </Loading>
+  </div>
+  <div class="post-detail article-container">
+    <ArticleContent :article="article" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { useArticleStore } from '~/store';
 import { getArticleDetail } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 import { useHead } from '#app';
+import { useAsyncData } from '#app';
 
-const loading = ref(true);
 const { setCurrentArticle } = useArticleStore();
 const route = useRoute();
-const slug = route.params.slug as string;
 
 const article = ref<IArticle>({
   id: 0,
@@ -73,21 +70,39 @@ const article = ref<IArticle>({
   author: null,
 });
 
-const getArticleInfo = async () => {
+const { data, refresh } = await useAsyncData('article', async () => {
+  const slug = route.params.slug as string;
   const res = await getArticleDetail(slug);
-  loading.value = false;
   const result = res.data;
 
-  Object.assign(article.value, result);
-  setCurrentArticle(article.value);
-  useHead({
-    title: `${article.value.title}`,
-  });
-};
-
-onMounted(() => {
-  getArticleInfo();
+  return result;
 });
+
+const articleDetail = computed(() => {
+  return Object.assign(article.value, data.value);
+});
+
+// 监听路由变化刷新数据
+watch(
+  () => route.params.slug,
+  () => {
+    refresh();
+  }
+);
+
+watch(
+  () => data.value,
+  () => {
+    nextTick(() => {
+      if (data.value) {
+        setCurrentArticle(data.value);
+        useHead({
+          title: `${data.value.title}`,
+        });
+      }
+    });
+  }
+);
 </script>
 
 <style lang="scss" scoped>

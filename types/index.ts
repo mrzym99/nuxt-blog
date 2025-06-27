@@ -160,6 +160,14 @@ export type Comment = {
   loading: boolean;
 };
 
+export interface IHttpOptions {
+  method: any;
+  url: string;
+  params?: any;
+  data?: any;
+  options?: any;
+}
+
 export interface IApiResponse<T extends any> {
   data: T;
   code: number;

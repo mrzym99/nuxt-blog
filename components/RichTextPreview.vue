@@ -50,10 +50,9 @@ const updateIframeHeight = () => {
   }
 };
 
-// 使用 ResizeObserver 监听内容尺寸变化
-const observer = new window.ResizeObserver(updateIframeHeight);
-
 onMounted(() => {
+  // 使用 ResizeObserver 监听内容尺寸变化
+  const observer = new window.ResizeObserver(updateIframeHeight);
   // iframe 加载完成后首次计算
   iframeRef.value?.addEventListener('load', updateIframeHeight);
 

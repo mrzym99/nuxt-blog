@@ -24,7 +24,6 @@ const startX = ref(0);
 
 const handleMouseEnter = (e: MouseEvent) => {
   startX.value = e.clientX;
-  console.log(e.clientX);
 
   const images = document.querySelectorAll<HTMLElement>('header > div > img');
   images.forEach(image => {

@@ -27,17 +27,13 @@ import { computed } from 'vue';
 import { marked } from 'marked';
 import { markedHighlight } from 'marked-highlight';
 import hljs from 'highlight.js';
+import { useFetch } from '#app';
 
 const readme = ref<string>('');
 
-async function readMeMd() {
-  try {
-    const res = await fetch('/about.md');
-    readme.value = await res.text();
-  } catch (error) {
-    console.log(error);
-  }
-}
+const { data } = await useFetch<string>('/about.md');
+
+readme.value = data.value ?? '';
 
 // 配置marked-highlight
 marked.use(
@@ -65,9 +61,5 @@ const renderedContent = computed(() => {
   });
 
   return marked(readme.value || '');
-});
-
-onMounted(() => {
-  readMeMd();
 });
 </script>

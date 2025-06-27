@@ -69,7 +69,7 @@
             <span>{{ formatDate(item.createdAt) }}</span>
           </p>
         </div>
-        <div class="w-fuu">
+        <div class="w-full">
           <h3>Comments</h3>
           <Comments :type="CommentType.ARTICLE" :target-id="article.id" />
         </div>
@@ -238,8 +238,9 @@ function initViewDuration() {
   }
 }
 
+renderContent();
+
 onMounted(() => {
-  renderContent();
   checkIsLike();
   handleGetLikeCount();
   handleGetRecommends();

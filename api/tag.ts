@@ -1,8 +1,17 @@
 import type { ITag } from '~/types';
-import { get } from '~/utils/request';
+import { $http, http } from '~/utils/request';
 
-// 获取文章列表
-export const getAllTags = (params?: any) => get<ITag[]>('/blog/tag/all', params);
+// 获取所有 tag
+export const getAllTags = (params?: any) =>
+  $http<ITag[]>({
+    method: 'get',
+    url: '/blog/tag/all',
+    params,
+  });
 
 // 获取文章详情
-export const getTagDetail = (id: string) => get(`/blog/tag/info/${id}`);
+export const getTagDetail = (id: string) =>
+  http({
+    method: 'get',
+    url: `/blog/tag/info/${id}`,
+  });
