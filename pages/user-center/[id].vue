@@ -52,6 +52,7 @@ const userInfo = ref<IUser>();
 const { user } = storeToRefs(useUserStore());
 
 const route = useRoute();
+const router = useRouter();
 const id = route.params.id as unknown as number;
 const currentTab = ref('info');
 const isEdit = ref(false);
@@ -78,6 +79,19 @@ function updateProfileSuccess() {
   isEdit.value = false;
   initUserInfo();
 }
+
+watch(
+  () => user.value,
+  () => {
+    if (!user.value) {
+      router.push('/');
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 
 onMounted(() => {
   initUserInfo();

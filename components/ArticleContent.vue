@@ -227,7 +227,10 @@ function visibleChange() {
   if (document.visibilityState === 'visible') {
     startViewTimestamp.value = Date.now();
   } else {
-    currentViewDuration.value += Date.now() - startViewTimestamp.value;
+    const elapse = Date.now() - Number(startViewTimestamp.value);
+    if (elapse > 1000) {
+      currentViewDuration.value += elapse;
+    }
   }
 }
 
@@ -238,7 +241,7 @@ function initViewDuration() {
   }
 }
 
-renderContent();
+isMd.value && renderContent();
 
 onMounted(() => {
   checkIsLike();
@@ -249,7 +252,10 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   // 计算总的阅读时长
-  handleAddViewDuration(currentViewDuration.value + Date.now() - startViewTimestamp.value);
+  const du = Number(currentViewDuration.value) + Date.now() - Number(startViewTimestamp.value);
+  if (typeof du === 'number') {
+    handleAddViewDuration(du % 8640000);
+  }
   document.removeEventListener('visibilitychange', visibleChange);
 });
 </script>

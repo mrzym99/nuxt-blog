@@ -12,15 +12,21 @@ export function initToast(toast: any) {
 }
 
 function getAuthorization() {
-  if (typeof window !== 'undefined') {
-    const token = getToken();
-    return `Bearer ${token}`;
+  try {
+    // 只在客户端环境中访问 localStorage
+    if (typeof window !== 'undefined') {
+      const token = getToken();
+      return `Bearer ${token}`;
+    }
+    return ''; // 服务端返回空字符串
+  } catch (e) {
+    console.log(e);
+    return '';
   }
-  return null;
 }
 
 async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
-  const { url, method, params, data, options: config } = options;
+  const { url, method, params, data, options: config = {} } = options;
   const baseURL = import.meta.env.VITE_API_BASE || '/api';
 
   const token = getAuthorization();
@@ -67,7 +73,7 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
 }
 
 async function $http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
-  const { url, method, params, data, options: config } = options;
+  const { url, method, params, data, options: config = {} } = options;
   const baseURL = import.meta.env.VITE_API_BASE || '/api';
 
   const token = getAuthorization();

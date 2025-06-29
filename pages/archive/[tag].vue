@@ -65,6 +65,7 @@ import { useRoute } from 'vue-router';
 import { getAllTags } from '~/api';
 import type { IArticle } from '~/types/index';
 import PageHeader from '~/components/PageHeader.vue';
+import { useAsyncData } from '#app';
 
 defineOptions({
   name: 'Archives',
@@ -78,15 +79,32 @@ type Tag = {
 };
 
 const route = useRoute();
-const allTags = ref<Tag[]>([]);
+// const allTags = ref<Tag[]>([]);
 const allPosts = ref<IArticle[]>([]);
+
+const { data: allTags } = await useAsyncData('allTags', async () => {
+  const res = await getAllTags();
+  allPosts.value = [];
+
+  return res.data
+    .map((tag: Tag) => {
+      return {
+        ...tag,
+        count: tag.articles.length,
+      };
+    })
+    .sort((a: Tag, b: Tag) => {
+      return b.count - a.count;
+    });
+});
 
 // 根据标签筛选文章
 const filteredPosts = computed(() => {
   const tagName = route.params.tag as string;
   if (!tagName) return groupedPosts.value;
   if (tagName === 'all') return groupedPosts.value;
-  const articles = allTags.value.find(tag => tag.name === tagName)?.articles || [];
+  const articles =
+    (allTags.value && allTags.value.find(tag => tag.name === tagName)?.articles) || [];
   return articleToGrops(articles);
 });
 
@@ -118,20 +136,7 @@ function articleToGrops(articles: IArticle[]) {
   return groups;
 }
 
-async function getTags() {
-  const res = await getAllTags();
-  allTags.value = res.data
-    .map((tag: Tag) => {
-      return {
-        ...tag,
-        count: tag.articles.length,
-      };
-    })
-    .sort((a: Tag, b: Tag) => {
-      return b.count - a.count;
-    });
-
-  allPosts.value = [];
+allTags.value &&
   allTags.value.forEach(tag => {
     tag.articles.forEach(article => {
       if (!allPosts.value.find(item => item.id === article.id)) {
@@ -140,9 +145,29 @@ async function getTags() {
       }
     });
   });
-}
 
-getTags();
+// async function getTags() {
+//   const res = await getAllTags();
+//   allTags.value = res.data
+//     .map((tag: Tag) => {
+//       return {
+//         ...tag,
+//         count: tag.articles.length,
+//       };
+//     })
+//     .sort((a: Tag, b: Tag) => {
+//       return b.count - a.count;
+//     });
+
+//   allTags.value.forEach(tag => {
+//     tag.articles.forEach(article => {
+//       if (!allPosts.value.find(item => item.id === article.id)) {
+//         article.slug = '/posts/' + article.id;
+//         allPosts.value.push(article);
+//       }
+//     });
+//   });
+// }
 </script>
 
 <style lang="scss" scoped>

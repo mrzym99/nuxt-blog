@@ -8,7 +8,7 @@
         <main class="flex-1">
           <div v-for="post in posts" :key="post.id" class="blog-post cursor-pointer">
             <div class="flex flex-col gap-4">
-              <div class="flex-1 blog-info" @click="navigateTo(post.slug)">
+              <NuxtLink class="flex-1 blog-info" :to="post.slug">
                 <h3 class="post-title">
                   {{ post.title }}
                 </h3>
@@ -25,7 +25,7 @@
                   <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
                   {{ formatNumber(post.viewCount) }}
                 </div>
-              </div>
+              </NuxtLink>
             </div>
           </div>
           <div class="py-4 flex justify-between items-center">
@@ -62,7 +62,7 @@ defineOptions({
 });
 
 const route = useRoute();
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 8;
 
 // 使用 useAsyncData 安全获取数据
 const { data, refresh } = await useAsyncData('home-posts', async () => {

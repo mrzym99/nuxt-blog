@@ -13,14 +13,14 @@
       <div></div>
       <div class="info-wrapper">
         <div :class="['tags', articleDetail?.cover ? 'white-tags' : '']">
-          <span
+          <NuxtLink
             class="tag"
             v-for="tag in articleDetail?.tags"
+            :to="'/archive/' + tag.name"
             :key="tag.id"
-            @click="navigateTo(`/archive/${tag.name}`)"
           >
             {{ tag.name }}
-          </span>
+          </NuxtLink>
         </div>
         <h1>{{ articleDetail?.title }}</h1>
         <h3>{{ articleDetail?.description }}</h3>
@@ -72,6 +72,7 @@ const article = ref<IArticle>({
 
 const { data, refresh } = await useAsyncData('article', async () => {
   const slug = route.params.slug as string;
+  if (!slug) return null;
   const res = await getArticleDetail(slug);
   const result = res.data;
 
