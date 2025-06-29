@@ -30,7 +30,14 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@pinia/nuxt',
     '@vee-validate/nuxt',
+    '@nuxtjs/sitemap',
   ],
+
+  sitemap: {
+    sources: [
+      // 'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999',
+    ],
+  },
 
   veeValidate: {
     autoImports: true,

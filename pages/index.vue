@@ -49,7 +49,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onActivated } from 'vue';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate, formatNumber } from '~/utils/tool';
@@ -111,6 +111,10 @@ watch(
     refresh();
   }
 );
+
+onActivated(() => {
+  refresh();
+});
 </script>
 
 <style lang="scss" scoped></style>
