@@ -33,11 +33,11 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
   ],
 
-  sitemap: {
-    sources: [
-      // 'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999',
-    ],
-  },
+  // sitemap: {
+  //   sources: [
+  //     'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999',
+  //   ],
+  // },
 
   veeValidate: {
     autoImports: true,
