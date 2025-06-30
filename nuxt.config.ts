@@ -32,12 +32,24 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxtjs/sitemap',
   ],
+  site: {
+    url: 'https://blog.mrzym.top',
+    name: '小张的个人博客',
+  },
+  sitemap: {
+    urls: async () => {
+      const response = await fetch(
+        'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999'
+      );
+      const res = await response.json();
+      const posts = Array.isArray(res.data.list) ? res.data.list : [];
 
-  // sitemap: {
-  //   sources: [
-  //     'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999',
-  //   ],
-  // },
+      return posts.map((post: any) => ({
+        loc: `/posts/${post.id}`,
+        lastmod: post.updatedAt,
+      }));
+    },
+  },
 
   veeValidate: {
     autoImports: true,
@@ -102,18 +114,6 @@ export default defineNuxtConfig({
       '/api/**': {
         proxy: `${import.meta.env.VITE_API_BASE}/api/**`,
       },
-    },
-  },
-  hooks: {
-    async 'prerender:routes'(ctx) {
-      const response = await fetch(
-        'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999'
-      );
-      const res = await response.json();
-      const pages = res.data.list.map((item: any) => `/posts/${item.id}`);
-      for (const page of pages) {
-        ctx.routes.add(page);
-      }
     },
   },
 });
