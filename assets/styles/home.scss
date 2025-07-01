@@ -29,7 +29,7 @@
 // Blog post styles
 .blog-post {
   border-radius: 0.5rem;
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
+  padding: 0.5rem 0.5rem 0.8rem 0.5rem;
   cursor: pointer;
   @include themed() {
     border-bottom: 1px solid themed('border');
@@ -56,7 +56,7 @@
     transition: all $duration ease;
     font-size: 1.5rem;
     line-height: $line-height-normal;
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
     letter-spacing: 2px;
     @include themed() {
       color: themed('text');
@@ -70,7 +70,7 @@
     transition: all $duration ease;
     color: var(--text-grey);
     font-style: italic;
-    margin-bottom: 1.2rem;
+    margin-bottom: 0.8rem;
     overflow-wrap: break-word;
     letter-spacing: 2px;
   }
@@ -132,16 +132,13 @@
 // Sidebar styles
 .sidebar {
   .blog-card {
-    padding: 1.5rem;
+    padding: 1rem;
     @include themed() {
       border-bottom: 1px solid themed('border');
-      // background-color: themed('bg');
     }
-    margin-bottom: 1.5rem;
 
     @include responsive(md) {
       padding: 1rem;
-      margin-bottom: 1rem;
     }
 
     &:last-child {
@@ -172,18 +169,17 @@
         object-fit: cover;
       }
     }
+  }
 
-    .social-links {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1rem;
+  .social-links {
+    display: flex;
+    gap: 1rem;
 
-      a {
-        @include themed() {
-          color: themed('text-light');
-          @include hover-effect {
-            color: themed('primary');
-          }
+    a {
+      @include themed() {
+        color: themed('text-light');
+        @include hover-effect {
+          color: themed('primary');
         }
       }
     }
@@ -219,7 +215,7 @@
 
 .post-item {
   .blog-card {
-    padding: 0 1rem 1.5rem 1rem;
+    padding: 0 1rem 1.2rem 1rem;
     @include themed() {
       border-bottom: 1px solid themed('border');
       background-color: themed('bg');

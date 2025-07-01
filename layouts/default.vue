@@ -7,7 +7,7 @@
       :class="{
         'nav-scrolled': isScrolled,
         'nav-fixed': isFixed,
-        'white-nav': isPost && !getArticleHasCover,
+        'white-nav': whiteNav,
       }"
     >
       <NuxtLink to="/" class="text-xl font-bold nav-blog-title"> M </NuxtLink>
@@ -110,7 +110,6 @@
 import Drawer from '~/components/Drawer.vue';
 import { useArticleStore, useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
-import Dots from '~/components/Dots.vue';
 
 const isScrolled = ref(false);
 const isFixed = ref(false);
@@ -140,12 +139,12 @@ const menuList: Menu[] = [
   },
 ];
 
-const isPost = computed(() => {
-  return route.path.startsWith('/posts');
+const whiteNav = computed(() => {
+  return route.path && route.path.startsWith('/posts') && !getArticleHasCover.value;
 });
 
 const isLogin = computed(() => {
-  return route.path.startsWith('/login');
+  return route.path && route.path.startsWith('/login');
 });
 
 const logout = () => {

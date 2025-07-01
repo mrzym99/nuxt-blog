@@ -94,14 +94,17 @@ watch(
 watch(
   () => data.value,
   () => {
-    nextTick(() => {
-      if (data.value) {
-        setCurrentArticle(data.value);
-        useHead({
-          title: `${data.value.title}`,
-        });
-      }
-    });
+    if (data.value) {
+      setCurrentArticle(data.value);
+
+      useHead({
+        title: `${data.value.title}`,
+      });
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
   }
 );
 </script>
@@ -119,25 +122,25 @@ watch(
 }
 
 .article-bg {
-  min-height: 28rem;
+  min-height: 24rem;
   display: flex;
   align-items: center;
 
   @include mask;
 
   @include responsive(lg) {
-    min-height: 24rem;
+    min-height: 20rem;
   }
 
   @include responsive(md) {
-    min-height: 20rem;
+    min-height: 16rem;
   }
 }
 
 .article-header {
   h1 {
-    font-size: 4rem;
-    margin: 1.4rem 0;
+    font-size: 2.4rem;
+    margin: 1rem 0;
     font-weight: 600;
     letter-spacing: 3px;
 
@@ -147,26 +150,14 @@ watch(
   }
 
   h3 {
-    font-size: 1.6rem;
-    margin: 0 0 3rem 0;
+    font-size: 1.2rem;
+    margin: 0 0 2rem 0;
     font-weight: 300;
     letter-spacing: 1px;
     font-style: italic;
 
     @include themed() {
       color: themed('text-light');
-    }
-  }
-
-  @include responsive(lg) {
-    h1 {
-      font-size: 3rem;
-      margin: 1.4rem 0;
-    }
-
-    h3 {
-      font-size: 1.6rem;
-      margin: 0 0 3rem 0;
     }
   }
 
@@ -239,11 +230,6 @@ watch(
 
 .info-wrapper {
   width: 100%;
-  padding-top: 6rem;
-  padding-bottom: 3rem;
-
-  @include responsive(md) {
-    padding-top: 4rem;
-  }
+  padding-top: 4rem;
 }
 </style>

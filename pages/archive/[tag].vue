@@ -41,12 +41,12 @@
               <article v-for="post in yearPosts" :key="post.id" class="blog-card">
                 <div class="flex justify-between items-start">
                   <div>
-                    <h3 class="!mb-5 !font-normal">
+                    <h3 class="!mb-3 !font-normal">
                       <NuxtLink :to="post.slug" class="hover:text-primary-color">
                         {{ post.title }}
                       </NuxtLink>
                     </h3>
-                    <p>{{ post.description }}</p>
+                    <p class="post-description">{{ post.description }}</p>
                   </div>
                   <time class="text-sm mt-1.5rem">{{ formatDate(post.createdAt) }}</time>
                 </div>
@@ -79,12 +79,10 @@ type Tag = {
 };
 
 const route = useRoute();
-// const allTags = ref<Tag[]>([]);
 const allPosts = ref<IArticle[]>([]);
 
 const { data: allTags } = await useAsyncData('allTags', async () => {
   const res = await getAllTags();
-  allPosts.value = [];
 
   return res.data
     .map((tag: Tag) => {
@@ -97,10 +95,23 @@ const { data: allTags } = await useAsyncData('allTags', async () => {
       return b.count - a.count;
     });
 });
+initPosts();
+function initPosts() {
+  allTags.value &&
+    allTags.value.forEach(tag => {
+      tag.articles.forEach(article => {
+        if (!allPosts.value.find(item => item.id === article.id)) {
+          article.slug = '/posts/' + article.id;
+          allPosts.value.push(article);
+        }
+      });
+    });
+}
 
 // 根据标签筛选文章
 const filteredPosts = computed(() => {
   const tagName = route.params.tag as string;
+
   if (!tagName) return groupedPosts.value;
   if (tagName === 'all') return groupedPosts.value;
   const articles =
@@ -135,39 +146,6 @@ function articleToGrops(articles: IArticle[]) {
 
   return groups;
 }
-
-allTags.value &&
-  allTags.value.forEach(tag => {
-    tag.articles.forEach(article => {
-      if (!allPosts.value.find(item => item.id === article.id)) {
-        article.slug = '/posts/' + article.id;
-        allPosts.value.push(article);
-      }
-    });
-  });
-
-// async function getTags() {
-//   const res = await getAllTags();
-//   allTags.value = res.data
-//     .map((tag: Tag) => {
-//       return {
-//         ...tag,
-//         count: tag.articles.length,
-//       };
-//     })
-//     .sort((a: Tag, b: Tag) => {
-//       return b.count - a.count;
-//     });
-
-//   allTags.value.forEach(tag => {
-//     tag.articles.forEach(article => {
-//       if (!allPosts.value.find(item => item.id === article.id)) {
-//         article.slug = '/posts/' + article.id;
-//         allPosts.value.push(article);
-//       }
-//     });
-//   });
-// }
 </script>
 
 <style lang="scss" scoped>
@@ -182,10 +160,14 @@ allTags.value &&
   @include responsive(lg) {
     display: block;
   }
+
+  .post-description {
+    color: var(--text-grey);
+  }
 }
 
 .title {
-  margin: 0.8rem 0;
+  margin: 0.5rem 0;
 
   @include themed() {
     color: themed('primary');

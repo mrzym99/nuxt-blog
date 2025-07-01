@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vee-validate/nuxt',
     '@nuxtjs/sitemap',
+    'nuxt-easy-lightbox',
   ],
   site: {
     url: 'https://blog.mrzym.top',

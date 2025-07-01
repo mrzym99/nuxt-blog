@@ -13,27 +13,29 @@
           {{ bloggerInfo?.profile.introduction }}
         </p>
         <p class="mb-4">{{ bloggerInfo?.profile.signature }}</p>
-        <div class="social-links">
-          <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
-            <Icon name="simple-icons:github" size="1.5rem" />
-          </a>
-          <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer">
-            <Icon name="simple-icons:gitee" size="1.5rem" />
-          </a>
-        </div>
-        <div class="social-links">
-          <a
-            class="flex items-center gap-2 qq-link"
-            alt="博客技术交流群"
-            title="博客技术交流群"
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI"
-          >
-            <Icon name="simple-icons:qq" size="1rem" />
-            加入 QQ 群
-          </a>
-        </div>
+      </div>
+    </div>
+    <div class="blog-card">
+      <div class="social-links mb-4">
+        <a href="https://github.com/mrzym99" target="_blank" rel="noopener noreferrer">
+          <Icon name="simple-icons:github" size="2rem" />
+        </a>
+        <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer">
+          <Icon name="simple-icons:gitee" size="2rem" />
+        </a>
+      </div>
+      <div class="social-links">
+        <a
+          class="flex items-center gap-2 qq-link"
+          alt="博客技术交流群"
+          title="博客技术交流群"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI"
+        >
+          <Icon name="simple-icons:qq" size="1rem" />
+          加入 QQ 群
+        </a>
       </div>
     </div>
 
@@ -43,7 +45,7 @@
     </div>
     <!-- Friends -->
     <div class="blog-card">
-      <h3>
+      <h3 class="!mt-0 !mb-4">
         Friends
         <Popover position="bottom-left" :offset="8" :width="300" trigger="hover">
           <template #trigger>

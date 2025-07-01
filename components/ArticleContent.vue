@@ -3,7 +3,7 @@
     <div class="article-content">
       <div></div>
       <div>
-        <div class="article-info p-1rem rounded-md my-4">
+        <div class="article-info p-1rem rounded-md mb-2">
           <p class="my-2 flex item-center justify-between flex-wrap w-full">
             <span>
               <span class="mr-2">文章类型: </span
@@ -143,9 +143,6 @@ marked.setOptions({
 // 渲染 Markdown 内容
 async function renderContent() {
   renderedContent.value = await marked(props.article.content || '');
-  nextTick(() => {
-    hljs.highlightAll();
-  });
 }
 
 const postedDays = computed(() => {
@@ -248,6 +245,10 @@ onMounted(() => {
   handleGetLikeCount();
   handleGetRecommends();
   initViewDuration();
+
+  nextTick(() => {
+    hljs.highlightAll();
+  });
 });
 
 onBeforeUnmount(() => {
@@ -311,7 +312,7 @@ onBeforeUnmount(() => {
     width: 100%;
     max-width: 880px;
     overflow: hidden;
-    margin: 1rem 0 3rem 0;
+    margin: 1rem 0;
     @include themed() {
       color: themed('text');
     }

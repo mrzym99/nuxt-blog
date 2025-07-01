@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- Hero Section -->
-    <HomeHeader />
+    <PageHeader class="z-1" title="Xiao Zhang's Blog" />
     <div class="container mx-auto lt-sm:py-8">
       <div class="flex flex-col md:flex-row gap-8">
         <!-- Blog Posts -->
         <main class="flex-1">
-          <div v-for="post in posts" :key="post.id" class="blog-post cursor-pointer">
+          <article v-for="post in posts" :key="post.id" class="blog-post cursor-pointer">
             <div class="flex flex-col gap-4">
               <NuxtLink class="flex-1 blog-info" :to="post.slug">
                 <h3 class="post-title">
@@ -27,7 +27,7 @@
                 </div>
               </NuxtLink>
             </div>
-          </div>
+          </article>
           <div class="py-4 flex justify-between items-center">
             <div>
               <NuxtLink class="pagination" v-if="showPrev" :to="`?current=${prev}`">
@@ -54,7 +54,6 @@ import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate, formatNumber } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
-import HomeHeader from '~/components/HomeHeader.vue';
 import { useAsyncData } from '#app';
 
 defineOptions({
