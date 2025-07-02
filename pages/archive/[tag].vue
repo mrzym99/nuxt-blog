@@ -31,7 +31,7 @@
               }"
             >
               <strong
-                >{{ tag.name }} <sup class="ml-1">{{ tag.count }}</sup></strong
+                >{{ tag.name }} <sup class="ml-1">{{ tag.count ? tag.count : null }}</sup></strong
               >
             </NuxtLink>
           </div>
@@ -118,15 +118,15 @@ const filteredPosts = computed(() => {
   if (tagName === 'all') return groupedPosts.value;
   const articles =
     (allTags.value && allTags.value.find(tag => tag.name === tagName)?.articles) || [];
-  return articleToGrops(articles);
+  return articleToGroups(articles);
 });
 
 // Group posts by year
 const groupedPosts = computed(() => {
-  return articleToGrops(allPosts.value);
+  return articleToGroups(allPosts.value);
 });
 
-function articleToGrops(articles: IArticle[]) {
+function articleToGroups(articles: IArticle[]) {
   const groups: Record<string, any> = {};
   articles.forEach(article => {
     const year = article.createdAt && new Date(article.createdAt).getFullYear().toString();
