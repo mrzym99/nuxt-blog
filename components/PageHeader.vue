@@ -1,22 +1,22 @@
 <template>
   <header ref="headerRef">
-    <div><img src="../assets//bilibili/banner.webp" /></div>
-    <div><img src="../assets//bilibili/cloud.webp" /></div>
-    <div><img src="../assets//bilibili/banner1.webp" /></div>
-    <div><img src="../assets//bilibili/banner3.webp" /></div>
-    <div><img src="../assets//bilibili/banner4.webp" /></div>
-    <div><img src="../assets//bilibili/banner5.webp" /></div>
-    <div><img src="../assets//bilibili/banner7.webp" /></div>
-    <div><img src="../assets//bilibili/banner8.webp" /></div>
-    <div><img class="car" src="../assets//bilibili/car.webp" /></div>
-    <div><img class="person" src="../assets//bilibili/characterSmall.webp" /></div>
-    <div><img src="../assets//bilibili/characterBig.webp" /></div>
-    <div><img src="../assets//bilibili/fence.webp" /></div>
-    <div><img src="../assets//bilibili/leftBottomGrass.webp" /></div>
-    <div><img src="../assets//bilibili/leftTopGrass.webp" /></div>
-    <div><img src="../assets//bilibili/rabbit.webp" /></div>
-    <div><img src="../assets//bilibili/banner2.webp" /></div>
-    <div><img src="../assets//bilibili/banner6.webp" /></div>
+    <div><img src="../assets/bilibili/banner.webp" /></div>
+    <div><img src="../assets/bilibili/cloud.webp" /></div>
+    <div><img src="../assets/bilibili/banner1.webp" /></div>
+    <div><img src="../assets/bilibili/banner3.webp" /></div>
+    <div><img src="../assets/bilibili/banner4.webp" /></div>
+    <div><img src="../assets/bilibili/banner5.webp" /></div>
+    <div><img src="../assets/bilibili/banner7.webp" /></div>
+    <div><img src="../assets/bilibili/banner8.webp" /></div>
+    <div><img class="car" src="../assets/bilibili/car.webp" /></div>
+    <div><img class="person" src="../assets/bilibili/characterSmall.webp" /></div>
+    <div><img src="../assets/bilibili/characterBig.webp" /></div>
+    <div><img src="../assets/bilibili/fence.webp" /></div>
+    <div><img src="../assets/bilibili/leftBottomGrass.webp" /></div>
+    <div><img src="../assets/bilibili/leftTopGrass.webp" /></div>
+    <div><img src="../assets/bilibili/rabbit.webp" /></div>
+    <div><img src="../assets/bilibili/banner2.webp" /></div>
+    <div><img src="../assets/bilibili/banner6.webp" /></div>
     <div>
       <video loop autoplay muted playsinline>
         <source src="../assets/bilibili/video.webm" type="video/webm" />

@@ -3,7 +3,7 @@
     <PageHeader class="z-1" title="About Me" />
     <div class="container mx-auto lt-sm:py-8 relative z-1">
       <div class="flex flex-col md:flex-row gap-8">
-        <main class="flex-1 p-1.5rem">
+        <main class="flex-1 p-1rem">
           <p class="mb-6 text-xl">
             <span v-html="renderedContent"></span>
           </p>

@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto">
-    <PageHeader title="Archive" />
+    <PageHeader class="z-1" title="Archive" />
     <div class="article-container mx-auto lt-sm:py-8">
       <div class="archive">
         <div></div>
@@ -95,7 +95,9 @@ const { data: allTags } = await useAsyncData('allTags', async () => {
       return b.count - a.count;
     });
 });
+
 initPosts();
+
 function initPosts() {
   allTags.value &&
     allTags.value.forEach(tag => {

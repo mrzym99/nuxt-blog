@@ -139,7 +139,10 @@ const menuList: Menu[] = [
   },
 ];
 
+const isMounted = ref(false);
+
 const whiteNav = computed(() => {
+  if (!isMounted.value) return false;
   return route.path && route.path.startsWith('/posts') && !getArticleHasCover.value;
 });
 
@@ -153,6 +156,7 @@ const logout = () => {
 };
 
 onMounted(() => {
+  isMounted.value = true;
   window.addEventListener('scroll', () => {
     const scrollTop = window.scrollY || document.documentElement.scrollTop;
     const isDown = lastScrollPosition.value < scrollTop;
