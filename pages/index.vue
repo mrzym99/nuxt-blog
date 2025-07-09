@@ -12,20 +12,20 @@
                 <h3 class="post-title">
                   {{ post.title }}
                 </h3>
-                <p class="post-description">{{ post.description }}</p>
-                <div class="post-meta">
-                  <span
-                    >Posted by {{ post.author?.profile.nickName }} on
-                    {{ post.createdAt && formatDate(post.createdAt) }}</span
-                  >
-                  <span v-if="post.likeCount" class="mx-2">·</span>
-                  <Icon v-if="post.likeCount" name="ph:thumbs-up-duotone" class="mr-1" />
-                  {{ formatNumber(post.likeCount) }}
-                  <span v-if="post.viewCount" class="mx-2">·</span>
-                  <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
-                  {{ formatNumber(post.viewCount) }}
-                </div>
               </NuxtLink>
+              <p class="post-description">{{ post.description }}</p>
+              <div class="post-meta">
+                <span
+                  >Posted by {{ post.author?.profile.nickName }} on
+                  {{ post.createdAt && formatDate(post.createdAt) }}</span
+                >
+                <span v-if="post.likeCount" class="mx-2">·</span>
+                <Icon v-if="post.likeCount" name="ph:thumbs-up-duotone" class="mr-1" />
+                {{ formatNumber(post.likeCount) }}
+                <span v-if="post.viewCount" class="mx-2">·</span>
+                <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
+                {{ formatNumber(post.viewCount) }}
+              </div>
             </div>
           </article>
           <div class="py-4 flex justify-between items-center">

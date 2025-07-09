@@ -2,7 +2,7 @@
   <div class="min-h-screen flex flex-col">
     <!-- Navigation -->
     <nav
-      v-if="!isLogin"
+      v-if="showLayout"
       class="nav"
       :class="{
         'nav-scrolled': isScrolled,
@@ -44,7 +44,7 @@
     </nav>
 
     <!-- 移动端抽屉菜单 -->
-    <Drawer v-if="!isLogin" v-model="showDrawer" position="right" width="60%" title="菜单">
+    <Drawer v-if="showLayout" v-model="showDrawer" position="right" width="60%" title="菜单">
       <div class="mobile-nav">
         <div v-if="user" class="pl-3">
           <NuxtLink :to="`/user-center/${user?.id}`" @click="showDrawer = false">
@@ -84,7 +84,7 @@
     </main>
 
     <!-- Footer -->
-    <footer v-if="!isLogin" class="footer">
+    <footer v-if="showLayout" class="footer">
       <div class="container">
         <div class="footer-content">
           <div class="social-links">
@@ -110,12 +110,14 @@
 import Drawer from '~/components/Drawer.vue';
 import { useArticleStore, useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
 const isScrolled = ref(false);
 const isFixed = ref(false);
 const lastScrollPosition = ref(0);
 const showDrawer = ref(false);
 const route = useRoute();
+const router = useRouter();
 const { getArticleHasCover } = storeToRefs(useArticleStore());
 const { user } = storeToRefs(useUserStore());
 
@@ -146,8 +148,10 @@ const whiteNav = computed(() => {
   return route.path && route.path.startsWith('/posts') && !getArticleHasCover.value;
 });
 
-const isLogin = computed(() => {
-  return route.path && route.path.startsWith('/login');
+const showLayout = computed(() => {
+  const routerNames = ['login-type', '404'];
+  const routeMeta = router.resolve(route.path);
+  return !routerNames.includes(routeMeta.name as string);
 });
 
 const logout = () => {

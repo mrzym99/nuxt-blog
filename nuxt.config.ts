@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config';
+import generateDynamicSitemap from './utils/sitemap';
 
 export default defineNuxtConfig({
   app: {
@@ -32,24 +33,17 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxtjs/sitemap',
     'nuxt-easy-lightbox',
+    '@nuxt/image',
   ],
   site: {
     url: 'https://blog.mrzym.top',
     name: '小张的个人博客',
   },
   sitemap: {
-    urls: async () => {
-      const response = await fetch(
-        'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999'
-      );
-      const res = await response.json();
-      const posts = Array.isArray(res.data.list) ? res.data.list : [];
-
-      return posts.map((post: any) => ({
-        loc: `/posts/${post.id}`,
-        lastmod: post.updatedAt,
-      }));
-    },
+    exclude: ['/login/**', '/user-center/**'],
+    urls: async () => await generateDynamicSitemap(),
+    cacheMaxAgeSeconds: 6 * 60 * 60,
+    autoLastmod: true,
   },
 
   veeValidate: {
@@ -111,9 +105,6 @@ export default defineNuxtConfig({
         headers: {
           'Content-Type': 'application/xml',
         },
-      },
-      '/api/**': {
-        proxy: `${import.meta.env.VITE_API_BASE}/api/**`,
       },
     },
   },
