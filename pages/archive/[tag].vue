@@ -42,7 +42,7 @@
                 <div class="flex justify-between items-start">
                   <div>
                     <h3 class="!mb-3 !font-normal">
-                      <NuxtLink :to="post.slug" class="hover:text-primary-color">
+                      <NuxtLink :to="`/posts/${post.id}`" class="hover:text-primary-color">
                         {{ post.title }}
                       </NuxtLink>
                     </h3>
@@ -103,7 +103,6 @@ function initPosts() {
     allTags.value.forEach(tag => {
       tag.articles.forEach(article => {
         if (!allPosts.value.find(item => item.id === article.id)) {
-          article.slug = '/posts/' + article.id;
           allPosts.value.push(article);
         }
       });

@@ -33,7 +33,6 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxtjs/sitemap',
     'nuxt-easy-lightbox',
-    '@nuxt/image',
   ],
   site: {
     url: 'https://blog.mrzym.top',
@@ -99,8 +98,6 @@ export default defineNuxtConfig({
 
   nitro: {
     routeRules: {
-      '/': { prerender: true },
-      // '/posts/**': { isr: true },
       '/rss.xml': {
         headers: {
           'Content-Type': 'application/xml',

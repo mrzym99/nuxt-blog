@@ -257,6 +257,7 @@ onBeforeUnmount(() => {
   if (typeof du === 'number') {
     handleAddViewDuration(du % 8640000);
   }
+
   document.removeEventListener('visibilitychange', visibleChange);
 });
 </script>

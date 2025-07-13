@@ -14,7 +14,6 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@nuxt/image": "1.10.0",
     "@nuxt/schema": "^3.16.1",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/sitemap": "7.4.3",
@@ -75,9 +74,6 @@
       "@parcel/watcher",
       "better-sqlite3",
       "esbuild"
-    ],
-    "overrides": {
-      "ipx": "^3.0.0"
-    }
+    ]
   }
 }
