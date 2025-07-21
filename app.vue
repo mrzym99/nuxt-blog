@@ -2,17 +2,13 @@
   <div>
     <NuxtLoadingIndicator />
     <NuxtLayout>
-      <NuxtPage :keepalive />
+      <NuxtPage />
     </NuxtLayout>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useHead } from '#app';
-
-const keepalive = {
-  include: ['Home', 'Archives'],
-};
 
 const route = useRoute();
 const titleMap: Record<string, string> = {

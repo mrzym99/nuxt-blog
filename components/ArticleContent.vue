@@ -33,7 +33,7 @@
             }}</a>
           </p>
         </div>
-        <div class="article-body" v-if="isMd" v-html="renderedContent"></div>
+        <div class="article-body" v-if="isMd" v-html="renderContent()"></div>
         <div class="article-body" v-else>
           <RichTextPreview :content="article.content!" />
         </div>
@@ -119,8 +119,6 @@ const startViewTimestamp = ref(0);
 const currentViewDuration = ref(0);
 const recommends = ref<IArticle[]>([]);
 
-const renderedContent = ref('');
-
 const isMd = computed(() => {
   return props.article.contentType === 'md';
 });
@@ -141,8 +139,8 @@ marked.setOptions({
 });
 
 // 渲染 Markdown 内容
-async function renderContent() {
-  renderedContent.value = await marked(props.article.content || '');
+function renderContent() {
+  return marked(props.article.content || '');
 }
 
 const postedDays = computed(() => {
@@ -237,8 +235,6 @@ function initViewDuration() {
     document.addEventListener('visibilitychange', visibleChange);
   }
 }
-
-isMd.value && renderContent();
 
 onMounted(() => {
   checkIsLike();

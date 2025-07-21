@@ -16,6 +16,14 @@ export default defineNuxtConfig({
           name: 'keywords',
           content: 'Nuxt, Nest, Blog, Nuxt3, Vue3',
         },
+        {
+          name: 'robots',
+          content: 'index, follow',
+        },
+        {
+          name: 'googlebot',
+          content: 'index, follow',
+        },
       ],
     },
   },
@@ -43,6 +51,19 @@ export default defineNuxtConfig({
     urls: async () => await generateDynamicSitemap(),
     cacheMaxAgeSeconds: 6 * 60 * 60,
     autoLastmod: true,
+    // 添加更多配置
+    defaults: {
+      changefreq: 'weekly',
+      priority: 0.8,
+      lastmod: new Date(),
+    },
+    // 确保sitemap可以被搜索引擎访问
+    xslColumns: [
+      { label: 'URL', width: '50%' },
+      { label: 'Last Modified', select: 'sitemap:lastmod', width: '25%' },
+      { label: 'Priority', select: 'sitemap:priority', width: '12.5%' },
+      { label: 'Change Frequency', select: 'sitemap:changefreq', width: '12.5%' },
+    ],
   },
 
   veeValidate: {
@@ -101,6 +122,13 @@ export default defineNuxtConfig({
       '/rss.xml': {
         headers: {
           'Content-Type': 'application/xml',
+        },
+      },
+      // 确保sitemap可以被访问
+      '/sitemap.xml': {
+        headers: {
+          'Content-Type': 'application/xml',
+          'Cache-Control': 'public, max-age=3600',
         },
       },
     },
