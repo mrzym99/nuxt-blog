@@ -49,12 +49,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onActivated } from 'vue';
+import { computed, onBeforeMount } from 'vue';
 import SideBar from '~/components/SideBar.vue';
 import { getArticleList } from '~/api';
 import { formatDate, formatNumber } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
 import { useAsyncData } from '#app';
+import { useArticleStore } from '~/store';
+import { storeToRefs } from 'pinia';
 
 defineOptions({
   name: 'Home',
@@ -62,6 +64,8 @@ defineOptions({
 
 const route = useRoute();
 const PAGE_SIZE = 8;
+const { getRefresh } = storeToRefs(useArticleStore());
+let timer: any = null;
 
 // 使用 useAsyncData 安全获取数据
 const { data, refresh } = await useAsyncData('home-posts', async () => {
@@ -111,8 +115,16 @@ watch(
   }
 );
 
-onActivated(() => {
-  refresh();
+onMounted(() => {
+  timer = window.setTimeout(() => {
+    getRefresh.value && refresh();
+    useArticleStore().setRefresh(false);
+  }, 300);
+});
+
+onBeforeMount(() => {
+  window.clearTimeout(timer);
+  timer = null;
 });
 </script>
 

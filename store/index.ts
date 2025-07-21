@@ -15,14 +15,19 @@ import { setToken, removeToken } from '~/utils/auth';
 export const useArticleStore = defineStore('blogArticle', {
   state: () => ({
     currentArticle: null as IArticle | null,
+    refresh: false as boolean,
   }),
   getters: {
     getCurrentArticle: state => state.currentArticle,
     getArticleHasCover: state => state.currentArticle?.cover,
+    getRefresh: state => state.refresh,
   },
   actions: {
     setCurrentArticle(article: IArticle) {
       this.currentArticle = article;
+    },
+    setRefresh(refresh: boolean) {
+      this.refresh = refresh;
     },
   },
 });

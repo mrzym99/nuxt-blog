@@ -98,6 +98,7 @@ import TagCloud from './TagCloud.vue';
 import { getRecommendArticle } from '~/api/article';
 import Comments from './Comments.vue';
 import RichTextPreview from './RichTextPreview.vue';
+import { useArticleStore } from '~/store';
 
 const typeEnum = {
   original: '原创',
@@ -110,6 +111,7 @@ type ArticleProps = {
 };
 
 const userStore = useUserStore();
+const articleStore = useArticleStore();
 
 const props = defineProps<ArticleProps>();
 
@@ -248,6 +250,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  articleStore.setRefresh(true);
   // 计算总的阅读时长
   const du = Number(currentViewDuration.value) + Date.now() - Number(startViewTimestamp.value);
   if (typeof du === 'number') {
