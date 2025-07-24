@@ -27,7 +27,7 @@ function getAuthorization() {
 
 async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
   const { url, method, params, data, options: config = {} } = options;
-  const baseURL = import.meta.env.VITE_API_BASE || '/api';
+  const baseURL = import.meta.env.VITE_API_BASE;
 
   const token = getAuthorization();
   config &&
@@ -74,7 +74,7 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
 
 async function $http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
   const { url, method, params, data, options: config = {} } = options;
-  const baseURL = import.meta.env.VITE_API_BASE || '/api';
+  const baseURL = import.meta.env.VITE_API_BASE;
 
   const token = getAuthorization();
   config &&

@@ -82,10 +82,9 @@
 </template>
 
 <script setup lang="ts">
-import 'highlight.js/styles/github.css';
-
 import { computed, onBeforeUnmount } from 'vue';
 import { marked } from 'marked';
+import 'highlight.js/styles/vs.css';
 import hljs from 'highlight.js';
 import Catalog from './Catalog.vue';
 import { formatDate, formatDuration } from '~/utils/tool';
@@ -133,6 +132,21 @@ const baseRenderer = new marked.Renderer();
   return `<h${depth} id="${id}">${textContent}</h${depth}>`;
 };
 
+baseRenderer.code = function ({ text, lang }) {
+  const validLanguage = lang && hljs.getLanguage(lang) ? lang : 'plaintext';
+  try {
+    const highlighted = hljs.highlight(text, { language: validLanguage }).value;
+    return `<pre><code class="hljs language-${validLanguage}">${highlighted}</code></pre>`;
+  } catch (e) {
+    // 如果高亮失败，返回原始代码
+    return `<pre><code class="hljs language-${validLanguage}">${text}</code></pre>`;
+  }
+};
+
+hljs.configure({
+  ignoreUnescapedHTML: true,
+});
+
 // 一次性全局配置
 marked.setOptions({
   renderer: baseRenderer,
@@ -147,6 +161,7 @@ function renderContent() {
 
 const postedDays = computed(() => {
   const { createdAt, updatedAt } = props.article;
+
   if (new Date(updatedAt!).getTime() === new Date(createdAt!).getTime()) return 0;
 
   return formatDate(new Date(updatedAt!));
@@ -245,7 +260,11 @@ onMounted(() => {
   initViewDuration();
 
   nextTick(() => {
-    hljs.highlightAll();
+    console.log(document);
+
+    if (typeof document !== 'undefined') {
+      hljs.highlightAll();
+    }
   });
 });
 
@@ -319,16 +338,11 @@ onBeforeUnmount(() => {
 
     :deep(pre) {
       @apply rounded-md p-2 my-4 overflow-x-auto;
-      @include themed() {
-        background-color: var(--code-bg-color);
-      }
     }
 
     :deep(code) {
       @apply font-mono text-sm;
-      @include themed() {
-        background-color: var(--code-bg-color);
-      }
+      background: #f6f8fa;
     }
 
     :deep(p) {
@@ -336,10 +350,10 @@ onBeforeUnmount(() => {
     }
 
     :deep(ul) {
-      @apply list-disc pl-5;
+      @apply list-disc pl-8;
     }
     :deep(ol) {
-      @apply list-decimal pl-5;
+      @apply list-decimal pl-8;
     }
 
     :deep(blockquote) {
@@ -347,6 +361,15 @@ onBeforeUnmount(() => {
       @include themed() {
         border-color: themed('primary');
         color: var(--text-secondary-color);
+      }
+    }
+  }
+
+  .article-body {
+    :deep(a) {
+      text-decoration: underline;
+      @include themed() {
+        color: themed('primary');
       }
     }
   }
