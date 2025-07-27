@@ -84,7 +84,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount } from 'vue';
 import { marked } from 'marked';
-import 'highlight.js/styles/vs.css';
 import hljs from 'highlight.js';
 import Catalog from './Catalog.vue';
 import { formatDate, formatDuration } from '~/utils/tool';
@@ -92,12 +91,21 @@ import { CommentType, LikeType, type IArticle } from '~/types/index';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
 import { postViewDuration } from '~/api/view';
 import { useUserStore } from '~/store';
-import { useNuxtApp } from '#app';
+import { useNuxtApp, useHead } from '#app';
 import TagCloud from './TagCloud.vue';
 import { getRecommendArticle } from '~/api/article';
 import Comments from './Comments.vue';
 import RichTextPreview from './RichTextPreview.vue';
 import { useArticleStore } from '~/store';
+
+useHead({
+  link: [
+    {
+      rel: 'stylesheet',
+      href: '/highlight/vs.min.css',
+    },
+  ],
+});
 
 const typeEnum = {
   original: '原创',
@@ -240,8 +248,9 @@ function visibleChange() {
     startViewTimestamp.value = Date.now();
   } else {
     const elapse = Date.now() - Number(startViewTimestamp.value);
-    if (elapse > 1000) {
+    if (!isNaN(elapse) && elapse > 1000) {
       currentViewDuration.value += elapse;
+      startViewTimestamp.value = Date.now();
     }
   }
 }
@@ -258,23 +267,16 @@ onMounted(() => {
   handleGetLikeCount();
   handleGetRecommends();
   initViewDuration();
-
-  nextTick(() => {
-    console.log(document);
-
-    if (typeof document !== 'undefined') {
-      hljs.highlightAll();
-    }
-  });
 });
 
 onBeforeUnmount(() => {
   articleStore.setRefresh(true);
   // 计算总的阅读时长
-  const du = Number(currentViewDuration.value) + Date.now() - Number(startViewTimestamp.value);
-  if (typeof du === 'number') {
-    handleAddViewDuration(du % 8640000);
-  }
+  const elapse = Date.now() - Number(startViewTimestamp.value);
+  const du = Number(currentViewDuration.value) + elapse;
+  console.log(du);
+
+  !isNaN(du) && handleAddViewDuration(du % 86400000);
 
   document.removeEventListener('visibilitychange', visibleChange);
 });

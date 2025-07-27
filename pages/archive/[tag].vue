@@ -164,6 +164,10 @@ function articleToGroups(articles: IArticle[]) {
 
   .post-description {
     color: var(--text-grey);
+    color: var(--text-grey);
+    font-style: italic;
+    overflow-wrap: break-word;
+    letter-spacing: 2px;
   }
 }
 

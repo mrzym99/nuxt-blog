@@ -118,14 +118,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-14',
 
   nitro: {
-    devProxy: {
-      // 本地代理
-      '/api': {
-        target: 'http://nest-server.mrzym.top:3366/',
-        changeOrigin: true,
-        prependPath: true,
-      },
-    },
     routeRules: {
       '/rss.xml': {
         headers: {

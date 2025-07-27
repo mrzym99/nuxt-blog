@@ -1,7 +1,7 @@
 async function getAllPosts() {
   try {
     const response = await fetch(
-      'https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999',
+      `${import.meta.env.VITE_API_BASE}/blog/article/list/front?currentPage=1&pageSize=9999`,
       {
         headers: {
           'User-Agent': 'Sitemap Generator',
@@ -31,7 +31,7 @@ async function getAllPosts() {
 
 async function getAllTags() {
   try {
-    const response = await fetch('https://nest-server.mrzym.top:3366/blog/tag/all', {
+    const response = await fetch(`${import.meta.env.VITE_API_BASE}/blog/tag/all`, {
       headers: {
         'User-Agent': 'Sitemap Generator',
       },
