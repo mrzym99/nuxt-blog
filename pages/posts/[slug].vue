@@ -1,42 +1,45 @@
 <template>
-  <div
-    :class="{
-      'transition-all duration-300': articleDetail?.cover,
-      'article-header cover article-bg': articleDetail?.cover,
-      'article-header': !articleDetail?.cover,
-    }"
-    :style="{
-      backgroundImage: articleDetail?.cover ? `url(${articleDetail?.cover})` : 'none',
-    }"
-  >
-    <div class="article-container header-content z-10">
-      <div></div>
-      <div class="info-wrapper">
-        <div :class="['tags', articleDetail?.cover ? 'white-tags' : '']">
-          <NuxtLink
-            class="tag"
-            v-for="tag in articleDetail?.tags"
-            :to="'/archive/' + tag.name"
-            :key="tag.id"
-          >
-            {{ tag.name }}
-          </NuxtLink>
+  <NotFound v-if="empty"> 文章未找到或已删除 </NotFound>
+  <template v-else>
+    <div
+      :class="{
+        'transition-all duration-300': articleDetail?.cover,
+        'article-header cover article-bg': articleDetail?.cover,
+        'article-header': !articleDetail?.cover,
+      }"
+      :style="{
+        backgroundImage: articleDetail?.cover ? `url(${articleDetail?.cover})` : 'none',
+      }"
+    >
+      <div class="article-container header-content z-10">
+        <div></div>
+        <div class="info-wrapper">
+          <div :class="['tags', articleDetail?.cover ? 'white-tags' : '']">
+            <NuxtLink
+              class="tag"
+              v-for="tag in articleDetail?.tags"
+              :to="'/archive/' + tag.name"
+              :key="tag.id"
+            >
+              {{ tag.name }}
+            </NuxtLink>
+          </div>
+          <h1>{{ articleDetail?.title }}</h1>
+          <h3>{{ articleDetail?.description }}</h3>
+          <div class="article-meta">
+            <span class="date"
+              >Posted By {{ articleDetail?.author?.profile.nickName }} on
+              {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span
+            >
+          </div>
         </div>
-        <h1>{{ articleDetail?.title }}</h1>
-        <h3>{{ articleDetail?.description }}</h3>
-        <div class="article-meta">
-          <span class="date"
-            >Posted By {{ articleDetail?.author?.profile.nickName }} on
-            {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span
-          >
-        </div>
+        <div></div>
       </div>
-      <div></div>
     </div>
-  </div>
-  <div class="post-detail article-container">
-    <ArticleContent :article="article" />
-  </div>
+    <div class="post-detail article-container">
+      <ArticleContent :article="article" />
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -69,14 +72,19 @@ const article = ref<IArticle>({
   originalUrl: '',
   author: null,
 });
+const empty = ref(false);
 
 const { data, refresh } = await useAsyncData('article', async () => {
   const slug = route.params.slug as string;
   if (!slug) return null;
-  const res = await getArticleDetail(slug);
-  const result = res.data;
-
-  return result;
+  try {
+    const res = await getArticleDetail(slug);
+    const result = res.data;
+    return result;
+  } catch (_err) {
+    empty.value = true;
+    return null;
+  }
 });
 
 const articleDetail = computed(() => {
