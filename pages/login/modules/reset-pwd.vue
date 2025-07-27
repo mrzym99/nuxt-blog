@@ -65,7 +65,7 @@
 import { ref } from 'vue';
 import { getEmailCaptcha, putResetPassword, type ResetPwd } from '~/api';
 import Button from '~/components/Button.vue';
-import useCountDown from '~/hooks/use-count-down';
+import useCountDown from '~/hooks/useCountDown';
 import { useNuxtApp } from '#app';
 
 const { $toast } = useNuxtApp();

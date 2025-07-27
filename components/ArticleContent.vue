@@ -33,7 +33,9 @@
             }}</a>
           </p>
         </div>
-        <div class="article-body" v-if="isMd" v-html="renderContent()"></div>
+        <div class="article-body" v-if="isMd">
+          <MdTextPreview :content="article.content!" />
+        </div>
         <div class="article-body" v-else>
           <RichTextPreview :content="article.content!" />
         </div>
@@ -83,29 +85,18 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount } from 'vue';
-import { marked } from 'marked';
-import hljs from 'highlight.js';
 import Catalog from './Catalog.vue';
 import { formatDate, formatDuration } from '~/utils/tool';
 import { CommentType, LikeType, type IArticle } from '~/types/index';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
 import { postViewDuration } from '~/api/view';
 import { useUserStore } from '~/store';
-import { useNuxtApp, useHead } from '#app';
+import { useNuxtApp } from '#app';
 import TagCloud from './TagCloud.vue';
 import { getRecommendArticle } from '~/api/article';
 import Comments from './Comments.vue';
 import RichTextPreview from './RichTextPreview.vue';
 import { useArticleStore } from '~/store';
-
-useHead({
-  link: [
-    {
-      rel: 'stylesheet',
-      href: '/highlight/vs.min.css',
-    },
-  ],
-});
 
 const typeEnum = {
   original: '原创',
@@ -131,41 +122,6 @@ const recommends = ref<IArticle[]>([]);
 const isMd = computed(() => {
   return props.article.contentType === 'md';
 });
-
-// 在 setup 外部创建固定 renderer 实例
-const baseRenderer = new marked.Renderer();
-(baseRenderer.heading as any) = (text: any) => {
-  const { depth, text: textContent } = text;
-  const id = `blog_${depth}_${Math.random().toString(36).substring(2, 12)}`;
-  return `<h${depth} id="${id}">${textContent}</h${depth}>`;
-};
-
-baseRenderer.code = function ({ text, lang }) {
-  const validLanguage = lang && hljs.getLanguage(lang) ? lang : 'plaintext';
-  try {
-    const highlighted = hljs.highlight(text, { language: validLanguage }).value;
-    return `<pre><code class="hljs language-${validLanguage}">${highlighted}</code></pre>`;
-  } catch (e) {
-    // 如果高亮失败，返回原始代码
-    return `<pre><code class="hljs language-${validLanguage}">${text}</code></pre>`;
-  }
-};
-
-hljs.configure({
-  ignoreUnescapedHTML: true,
-});
-
-// 一次性全局配置
-marked.setOptions({
-  renderer: baseRenderer,
-  gfm: true,
-  breaks: true,
-});
-
-// 渲染 Markdown 内容
-function renderContent() {
-  return marked(props.article.content || '');
-}
 
 const postedDays = computed(() => {
   const { createdAt, updatedAt } = props.article;
@@ -274,7 +230,6 @@ onBeforeUnmount(() => {
   // 计算总的阅读时长
   const elapse = Date.now() - Number(startViewTimestamp.value);
   const du = Number(currentViewDuration.value) + elapse;
-  console.log(du);
 
   !isNaN(du) && handleAddViewDuration(du % 86400000);
 
@@ -336,34 +291,6 @@ onBeforeUnmount(() => {
     margin: 1rem 0;
     @include themed() {
       color: themed('text');
-    }
-
-    :deep(pre) {
-      @apply rounded-md p-2 my-4 overflow-x-auto;
-    }
-
-    :deep(code) {
-      @apply font-mono text-sm;
-      background: #f6f8fa;
-    }
-
-    :deep(p) {
-      @apply my-2 leading-relaxed;
-    }
-
-    :deep(ul) {
-      @apply list-disc pl-8;
-    }
-    :deep(ol) {
-      @apply list-decimal pl-8;
-    }
-
-    :deep(blockquote) {
-      @apply pl-4 border-l-4 my-4 italic;
-      @include themed() {
-        border-color: themed('primary');
-        color: var(--text-secondary-color);
-      }
     }
   }
 

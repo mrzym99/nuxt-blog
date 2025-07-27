@@ -44,7 +44,7 @@ import { ref } from 'vue';
 import { getEmailCaptcha, type CodeLogin } from '~/api';
 import { useUserStore } from '~/store';
 import Button from '~/components/Button.vue';
-import useCountDown from '~/hooks/use-count-down';
+import useCountDown from '~/hooks/useCountDown';
 import { useNuxtApp } from '#app';
 
 const { $toast } = useNuxtApp();
