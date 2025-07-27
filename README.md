@@ -1,7 +1,9 @@
-# nuxt-blog-developd-by-cursor
+# nuxt-blog
 
-#### 介绍
+## 介绍
 
-## TODO
+nuxt3 开发的 SEO 友好型博客
 
-搜索页面
+## 技术栈
+
+Nuxt、Vue3、UnoCss、TypeScript、Pinia、Marked、highlight.js、vue-router、sass

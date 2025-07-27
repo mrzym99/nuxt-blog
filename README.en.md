@@ -1,37 +1,9 @@
-# nuxt-blog-developd-by-cursor
+# nuxt博客
 
-#### Description
+## 介绍
 
-由 cursor 开发的 nuxt 博客
+nuxt3开发的 SEO 友好型博客
 
-#### Software Architecture
+## 技术栈
 
-Software architecture description
-
-#### Installation
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Instructions
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### Contribution
-
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
-
-#### Gitee Feature
-
-1.  You can use Readme_XXX.md to support different languages, such as Readme_en.md, Readme_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+Nuxt、Vue3、UnoCss、TypeScript、Pinia、Marked、highlight.js、vue-router、sass

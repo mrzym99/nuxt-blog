@@ -12,9 +12,6 @@ const props = defineProps<{
   content: string;
 }>();
 
-const showLightBox = ref(false);
-const codes = ref<string[]>([]);
-const currentIndex = ref(0);
 const { marked } = useMdRender();
 
 // 渲染 Markdown 内容
