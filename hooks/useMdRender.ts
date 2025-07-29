@@ -13,7 +13,7 @@ export function useMdRender() {
     };
 
     baseRenderer.code = function ({ text, lang }) {
-      const validLanguage = lang && hljs.getLanguage(lang) ? lang : 'plaintext';
+      const validLanguage = lang && hljs.getLanguage(lang) ? lang : 'xml';
       try {
         const highlighted = hljs.highlight(text, { language: validLanguage }).value;
         return `<pre><code class="hljs language-${validLanguage}">${highlighted}</code></pre>`;

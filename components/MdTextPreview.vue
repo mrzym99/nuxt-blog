@@ -36,25 +36,27 @@ function copyCode(code: string) {
 // 添加复制按钮到代码块
 function addCopyButtons() {
   nextTick(() => {
+    if (!document) return;
     const codeBlocks = document.querySelectorAll('pre');
 
-    codeBlocks.forEach(block => {
-      // 检查是否已经添加过按钮
-      if (block.querySelector('.copy-button')) return;
+    codeBlocks.length &&
+      codeBlocks.forEach(block => {
+        // 检查是否已经添加过按钮
+        if (block.querySelector('.copy-button')) return;
 
-      const copyButton = document.createElement('button');
-      copyButton.className = 'copy-button';
-      copyButton.textContent = '复制';
-      copyButton.onclick = () => {
-        const codeElement = block.querySelector('code');
-        if (codeElement) {
-          copyCode(codeElement.textContent || '');
-        }
-      };
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-button';
+        copyButton.textContent = '复制';
+        copyButton.onclick = () => {
+          const codeElement = block.querySelector('code');
+          if (codeElement) {
+            copyCode(codeElement.textContent || '');
+          }
+        };
 
-      block.style.position = 'relative';
-      block.appendChild(copyButton);
-    });
+        block.style.position = 'relative';
+        block.appendChild(copyButton);
+      });
   });
 }
 
