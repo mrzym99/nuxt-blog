@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config';
-import generateDynamicSitemap from './utils/sitemap';
 
 export default defineNuxtConfig({
   app: {
@@ -48,7 +47,7 @@ export default defineNuxtConfig({
   },
   sitemap: {
     exclude: ['/login/**', '/user-center/**'],
-    urls: async () => await generateDynamicSitemap(),
+    sources: ['/api/__sitemap__/urls'],
     cacheMaxAgeSeconds: 6 * 60 * 60,
     autoLastmod: true,
     // 添加更多配置

@@ -1,7 +1,11 @@
+// server/api/__sitemap__/urls.ts
+import type { SitemapUrlInput } from '#sitemap/types';
+import { defineSitemapEventHandler } from '#imports';
+
 async function getAllPosts() {
   try {
     const response = await fetch(
-      `${import.meta.env.VITE_API_BASE}/blog/article/list/front?currentPage=1&pageSize=9999`,
+      `https://nest-server.mrzym.top:3366/blog/article/list/front?currentPage=1&pageSize=9999`,
       {
         headers: {
           'User-Agent': 'Sitemap Generator',
@@ -31,7 +35,7 @@ async function getAllPosts() {
 
 async function getAllTags() {
   try {
-    const response = await fetch(`${import.meta.env.VITE_API_BASE}/blog/tag/all`, {
+    const response = await fetch(`https://nest-server.mrzym.top:3366/blog/tag/all`, {
       headers: {
         'User-Agent': 'Sitemap Generator',
       },
@@ -57,7 +61,7 @@ async function getAllTags() {
   }
 }
 
-export default async function generateDynamicSitemap() {
+export default defineSitemapEventHandler(async () => {
   try {
     const posts = await getAllPosts();
     const tags = await getAllTags();
@@ -84,9 +88,9 @@ export default async function generateDynamicSitemap() {
       },
     ];
 
-    return [...staticPages, ...posts, ...tags];
+    return [...staticPages, ...posts, ...tags] as SitemapUrlInput[];
   } catch (error) {
     console.error('Error generating sitemap:', error);
     return [];
   }
-}
+});
