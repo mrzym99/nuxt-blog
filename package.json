@@ -1,0 +1,48 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write --ignore-unknown .",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@nuxt/eslint": "1.8.0",
+    "@nuxt/icon": "1.15.0",
+    "@nuxtjs/color-mode": "3.5.2",
+    "@nuxtjs/sitemap": "7.4.3",
+    "@pinia/nuxt": "0.11.2",
+    "@unocss/reset": "^66.4.2",
+    "@vee-validate/nuxt": "^4.15.1",
+    "eslint": "^9.0.0",
+    "form-data": "^4.0.4",
+    "highlight.js": "^11.11.1",
+    "marked": "^16.1.2",
+    "nuxt": "^4.0.1",
+    "nuxt-easy-lightbox": "1.1.0",
+    "nuxt-toast": "^1.1.4",
+    "pinia": "^3.0.3",
+    "pixi.js": "^8.12.0",
+    "sass": "^1.90.0",
+    "simplex-noise": "^4.0.3",
+    "vue": "^3.5.18",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@unocss/nuxt": "^66.4.1",
+    "@unocss/transformer-directives": "^66.4.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.4",
+    "prettier": "3.6.2",
+    "unocss": "^66.4.1"
+  }
+}

@@ -1,0 +1,168 @@
+@use 'themes' as *;
+
+// Variables
+$font-family:
+  Snell-Black,
+  EarlySummer-Subset,
+  EarlySummer,
+  ui-serif,
+  Georgia,
+  Cambria,
+  Times New Roman,
+  Times,
+  serif;
+
+$max-width: 1280px;
+
+$duration: 300ms;
+$duration-slow: 500ms;
+
+$line-height-normal: 1.4;
+$line-height-large: 1.7;
+
+$z-index-header: 1000;
+$z-index-modal: 2010;
+$z-index-mask: 2000;
+$z-index-popover: 3000;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Mixins
+@mixin responsive($breakpoint) {
+  @if $breakpoint == lt-sm {
+    @media (max-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == lt-md {
+    @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lt-lg {
+    @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if($breakpoint == gt-lg) {
+    @media (min-width: $breakpoint-lg) {
+      @content;
+    }
+  }
+}
+
+@mixin hover-effect {
+  transition: all $duration ease;
+  &:hover {
+    @content;
+  }
+}
+
+@mixin text-gradient {
+  background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient {
+  @include text-gradient;
+}
+
+@mixin mask {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all $duration-slow ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--mask-color);
+    z-index: 1;
+  }
+}
+
+// Typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 1rem 0;
+  line-height: $line-height-normal;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, 'PingFang SC', 'Hiragino Sans GB',
+    STHeiti, 'Microsoft YaHei', 'Microsoft JhengHei', 'Source Han Sans SC', 'Noto Sans CJK SC',
+    'Source Han Sans CN', 'Noto Sans SC', 'Source Han Sans TC', 'Noto Sans CJK TC',
+    'WenQuanYi Micro Hei', SimSun, sans-serif;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+h6 {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.error-message {
+  color: var(--error-color);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.like {
+  animation: like 0.2s ease-in-out forwards;
+}
+
+@keyframes like {
+  0% {
+    transform: scale(0.9);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    color: var(--primary-color);
+    transform: scale(1);
+  }
+}

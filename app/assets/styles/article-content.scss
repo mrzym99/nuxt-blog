@@ -1,0 +1,13 @@
+ul {
+}
+
+li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+  unicode-bidi: isolate;
+}
+
+li::marker {
+  color: red;
+  font-size: 30px;
+}

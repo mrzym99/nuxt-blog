@@ -1,0 +1,14 @@
+@use 'themes' as *;
+@use 'global' as *;
+@use 'home' as *;
+@use 'layout' as *;
+
+html {
+  font-family: $font-family;
+  background-color: var(--bg-color);
+}
+
+body {
+  color: var(--text-color);
+  margin: 0 !important;
+}

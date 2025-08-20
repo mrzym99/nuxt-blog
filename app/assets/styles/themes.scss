@@ -1,0 +1,40 @@
+// Theme variables
+:root {
+  --primary-color: #a78bfa;
+  --secondary-color: #7c3aed;
+  --text-color: #101418;
+  --text-light-color: #6b7280;
+  --disabled-color: #a3a3a3;
+  --bg-color: #f2f1f5;
+  --border-color: #aaaaaa;
+  --hover-color: #8b5cf6;
+  --nav-text-color: #fff;
+  --text-secondary-color: #6a737d;
+  --error-color: #f44336;
+  --white-color: #fff;
+  --mask-color: rgba(255, 255, 255, 0.1);
+  --tag-active-color: #2f93b4;
+  --tag-all-color: #679bb0;
+  --tag-grey-color: #b9b9b9;
+  --tag-light-color: #a3a4cf;
+  --tag-normal-color: #8ec79c;
+  --code-color: #fefefe;
+  // --mask-color: rgba(0, 0, 0, 0.3);
+}
+
+// Dark theme
+.dark-mode {
+  --text-color: #e5e7eb;
+  --text-light-color: #9ca3af;
+  --bg-color: #333;
+  --border-color: #666666;
+  --nav-text-color: #fff;
+  --text-secondary-color: #a0a0a0;
+  --white-color: #fff;
+  --mask-color: rgba(0, 0, 0, 0.3);
+  --tag-all-color: #4f7685;
+  --tag-grey-color: #a3a3a3;
+  --tag-light-color: #83849f;
+  --tag-normal-color: #7eaa88;
+  --code-color: #b4b4b4;
+}
