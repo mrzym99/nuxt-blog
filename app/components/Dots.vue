@@ -7,7 +7,7 @@ import { useEventListener } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 
 const colorMode = useColorMode();
-const el = useTemplateRef('el');
+const el = useTemplateRef<HTMLElement>('el');
 
 let w = window.innerWidth;
 let h = window.innerHeight;
@@ -144,10 +144,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    ref="el"
-    class="bg fixed size-screen left-0 right-0 top-0 bottom-0 pointer-events-none dark:invert"
-  />
+  <div ref="el" class="bg fixed size-screen left-0 right-0 top-0 bottom-0 pointer-events-none dark:invert" />
 </template>
 
 <style lang="scss" scoped>

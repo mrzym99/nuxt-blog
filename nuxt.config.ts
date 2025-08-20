@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     'nuxt-easy-lightbox',
     // 'nuxt-toast',
-    '@nuxt/eslint',
+    // '@nuxt/eslint',
     '@nuxtjs/color-mode',
   ],
   veeValidate: {
@@ -48,11 +48,6 @@ export default defineNuxtConfig({
       Field: 'VeeField',
       FieldArray: 'VeeFieldArray',
       ErrorMessage: 'VeeErrorMessage',
-    },
-  },
-  eslint: {
-    config: {
-      stylistic: true,
     },
   },
   unocss: {
