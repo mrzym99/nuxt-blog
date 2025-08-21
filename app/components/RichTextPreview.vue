@@ -43,8 +43,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 :deep(img) {
+  width: 100%;
   max-height: 480px !important;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 :deep(.vel-img) {
