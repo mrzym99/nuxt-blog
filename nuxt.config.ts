@@ -8,6 +8,10 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+        },
+        {
           name: 'description',
           content: 'Nuxt4 Blog，分享知识，记录生活。',
         },
@@ -52,6 +56,15 @@ export default defineNuxtConfig({
   },
   unocss: {
     nuxtLayers: true,
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "@/assets/styles/_variables.scss" as *;',
+        },
+      },
+    },
   },
   css: ['@unocss/reset/tailwind.css', '~/assets/styles/index.scss'],
   plugins: ['~/plugins/index.ts'],

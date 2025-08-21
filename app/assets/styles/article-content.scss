@@ -1,13 +1,16 @@
-ul {
-}
+.tinymce-content {
+  ul {
+    font-size: 20px;
+  }
 
-li {
-  display: list-item;
-  text-align: -webkit-match-parent;
-  unicode-bidi: isolate;
-}
+  li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    unicode-bidi: isolate;
+  }
 
-li::marker {
-  color: red;
-  font-size: 30px;
+  li::marker {
+    color: red;
+    font-size: 30px;
+  }
 }

@@ -1,11 +1,8 @@
 <template>
   <Popover v-if="user" ref="popoverRef" position="bottom-right" :width="200">
     <template #trigger>
-      <img
-        class="size-1.5rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
-        :src="user?.avatar"
-        :alt="user?.nickName"
-      />
+      <img class="size-1.5rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110" :src="user?.avatar"
+        :alt="user?.nickName" />
     </template>
     <div class="user-panel">
       <div class="user-list">
@@ -45,8 +42,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .user-panel {
   padding: 0.25rem;
 

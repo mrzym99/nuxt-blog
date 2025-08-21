@@ -1,4 +1,4 @@
-@use 'global' as *;
+@use '_variables' as *;
 
 .post-container {
   @include responsive(lt-lg) {
@@ -26,16 +26,12 @@
 
   .post-title {
     transition: all $duration ease;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     line-height: $line-height-normal;
     letter-spacing: 2px;
     color: var(--text-color);
     font-weight: normal;
     margin: 0 0 0.3rem 0;
-
-    @include responsive(lt-sm) {
-      font-size: 1.2rem;
-    }
   }
 
   .post-description {
@@ -47,7 +43,7 @@
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
 
     @include responsive(lt-sm) {
       font-size: 0.9rem;

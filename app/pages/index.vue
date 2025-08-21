@@ -2,24 +2,28 @@
   <!-- Blog Posts -->
   <main class="post-container relative w-full">
     <article v-for="post in posts" :key="post.id" class="blog-post">
-      <div class="flex flex-col gap-2">
-        <NuxtLink class="flex-1 blog-info" :to="post.slug">
-          <h3 class="post-title">
-            {{ post.title }}
-          </h3>
-        </NuxtLink>
+      <div class="flex flex-col gap-1">
+        <div class="flex">
+          <NuxtLink class="blog-info" :to="post.slug">
+            <h3 class="post-title">
+              {{ post.title }}
+            </h3>
+          </NuxtLink>
+          <span class="ml-1rem post-meta">{{ post.createdAt && formatDate(post.createdAt) }}</span>
+        </div>
         <span class="post-description" :title="post.description">{{ post.description }}</span>
-        <div class="post-meta">
-          <span
-            >Posted by {{ post.author?.profile.nickName }} on
-            {{ post.createdAt && formatDate(post.createdAt) }}</span
-          >
-          <span v-if="post.likeCount" class="mx-2">·</span>
-          <Icon v-if="post.likeCount" name="ph:thumbs-up-duotone" class="mr-1" />
-          {{ formatNumber(post.likeCount) }}
-          <span v-if="post.viewCount" class="mx-2">·</span>
-          <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
-          {{ formatNumber(post.viewCount) }}
+        <div class="post-meta flex items-center justify-between">
+          <span>
+            Posted by {{ post.author?.profile.nickName }}
+          </span>
+          <div class="flex items-center">
+            <Icon v-if="post.likeCount" name="ph:thumbs-up-duotone" class="mr-1" />
+            {{ formatNumber(post.likeCount) }}
+            <span v-if="post.likeCount && post.viewCount" class="mx-2">·</span>
+            <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
+            {{ formatNumber(post.viewCount) }}
+          </div>
+
         </div>
       </div>
     </article>

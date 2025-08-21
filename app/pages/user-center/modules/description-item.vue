@@ -28,15 +28,15 @@ const labelStyle = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .description-item {
   margin-bottom: 1rem;
   display: flex;
   align-items: flex-start;
+
   .no-label {
     width: 80px;
   }
+
   .label {
     position: relative;
     width: 80px;
@@ -50,6 +50,7 @@ const labelStyle = computed(() => {
       top: 0;
     }
   }
+
   .value {
     margin-left: 1rem;
     flex: 1;

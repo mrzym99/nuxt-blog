@@ -34,41 +34,33 @@ function copyCode(code: string) {
 
 // 添加复制按钮到代码块
 function addCopyButtons() {
-  nextTick(() => {
-    if (!document) return;
-    const codeBlocks = document.querySelectorAll('pre');
+  if (!document) return;
+  const codeBlocks = document.querySelectorAll('pre');
 
-    codeBlocks.length &&
-      codeBlocks.forEach(block => {
-        // 检查是否已经添加过按钮
-        if (block.querySelector('.copy-button')) return;
+  codeBlocks.length &&
+    codeBlocks.forEach(block => {
+      // 检查是否已经添加过按钮
+      if (block.querySelector('.copy-button')) return;
 
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-button';
-        copyButton.textContent = '复制';
-        copyButton.onclick = () => {
-          const codeElement = block.querySelector('code');
-          if (codeElement) {
-            copyCode(codeElement.textContent || '');
-          }
-        };
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.textContent = '复制';
+      copyButton.onclick = () => {
+        const codeElement = block.querySelector('code');
+        if (codeElement) {
+          copyCode(codeElement.textContent || '');
+        }
+      };
 
-        block.style.position = 'relative';
-        block.appendChild(copyButton);
-      });
-  });
+      block.style.position = 'relative';
+      block.appendChild(copyButton);
+    });
 }
 
-// 监听内容变化，重新添加复制按钮
-watch(
-  () => props.content,
-  () => {
-    props.content && addCopyButtons();
-  },
-  {
-    immediate: true,
-  }
-);
+
+onMounted(() => {
+  addCopyButtons();
+});
 </script>
 
 <template>
@@ -76,7 +68,6 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
 :deep(pre) {
   @apply relative rounded-md my-4 overflow-x-auto;
 
@@ -116,6 +107,7 @@ watch(
 :deep(ul) {
   @apply list-disc pl-8;
 }
+
 :deep(ol) {
   @apply list-decimal pl-8;
 }

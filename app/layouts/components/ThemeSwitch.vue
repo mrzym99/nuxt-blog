@@ -22,8 +22,6 @@ const setTheme = (theme: Theme) => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .theme-button {
   width: 1.5rem;
   height: 1.5rem;

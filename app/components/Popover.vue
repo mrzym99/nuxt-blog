@@ -3,18 +3,12 @@
     <div ref="triggerRef" class="popover-trigger">
       <slot name="trigger"></slot>
     </div>
-    <div
-      v-if="isVisible"
-      class="popover-content"
-      :class="[
-        positionClass,
-        {
-          'is-visible': isVisible,
-        },
-      ]"
-      :style="newPosition"
-      ref="contentRef"
-    >
+    <div v-if="isVisible" class="popover-content" :class="[
+      positionClass,
+      {
+        'is-visible': isVisible,
+      },
+    ]" :style="newPosition" ref="contentRef">
       <slot></slot>
     </div>
   </div>
@@ -311,8 +305,6 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .popover-container {
   position: relative;
   display: inline-block;

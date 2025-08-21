@@ -108,8 +108,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .post-detail {
   min-height: 100vh;
   background-color: var(--bg-color);

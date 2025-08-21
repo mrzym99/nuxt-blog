@@ -1,13 +1,7 @@
 <template>
   <div class="tab">
-    <span
-      v-for="option in options"
-      :key="option.value"
-      @click="handleChange(option.value)"
-      class="tab-item"
-      :class="{ active: modelValue === option.value }"
-      >{{ option.label }}</span
-    >
+    <span v-for="option in options" :key="option.value" @click="handleChange(option.value)" class="tab-item"
+      :class="{ active: modelValue === option.value }">{{ option.label }}</span>
   </div>
 </template>
 
@@ -35,8 +29,6 @@ const handleChange = (value: string) => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .tab {
   display: flex;
   gap: 1rem;

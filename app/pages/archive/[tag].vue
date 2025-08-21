@@ -3,32 +3,18 @@
     <!-- Blog Posts -->
     <main>
       <div class="tags-cloud">
-        <NuxtLink
-          class="tag tag-all"
-          :class="{ active: route.params.tag === 'all' }"
-          to="/archive/all"
-          :replace="true"
-        >
+        <NuxtLink class="tag tag-all" :class="{ active: route.params.tag === 'all' }" to="/archive/all" :replace="true">
           <strong>
-            All <sup>{{ allPosts.length }}</sup></strong
-          >
+            All <sup>{{ allPosts.length }}</sup></strong>
         </NuxtLink>
-        <NuxtLink
-          :to="`/archive/${tag.name}`"
-          :replace="true"
-          v-for="tag in allTags"
-          :key="tag.name"
-          class="tag"
+        <NuxtLink :to="`/archive/${tag.name}`" :replace="true" v-for="tag in allTags" :key="tag.name" class="tag"
           :class="{
             active: route.params.tag === tag.name,
             'tag-grey': tag.count <= 2,
             'tag-light': tag.count <= 5 && tag.count > 2,
             'tag-normal': tag.count > 5,
-          }"
-        >
-          <strong
-            >{{ tag.name }} <sup class="ml-1">{{ tag.count ? tag.count : null }}</sup></strong
-          >
+          }">
+          <strong>{{ tag.name }} <sup class="ml-1">{{ tag.count ? tag.count : null }}</sup></strong>
         </NuxtLink>
       </div>
       <div v-for="(yearPosts, year) in filteredPosts" :key="year" class="mb-6">
@@ -142,8 +128,6 @@ function articleToGroups(articles: IArticle[]) {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .archive {
   @include responsive(lt-lg) {
     display: block;

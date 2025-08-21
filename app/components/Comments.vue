@@ -37,20 +37,10 @@
               <button class="tool-btn" @click="triggerImageUpload" title="插入图片">
                 <Icon name="carbon:image" />
               </button>
-              <input
-                type="file"
-                ref="imageInput"
-                accept="image/*"
-                class="hidden"
-                @change="handleImageUpload"
-              />
+              <input type="file" ref="imageInput" accept="image/*" class="hidden" @change="handleImageUpload" />
             </div>
-            <textarea
-              v-model="commentContent"
-              placeholder="写下你的评论..."
-              rows="3"
-              @keydown.enter="handleSubmit"
-            ></textarea>
+            <textarea v-model="commentContent" placeholder="写下你的评论..." rows="3"
+              @keydown.enter="handleSubmit"></textarea>
             <div class="form-footer">
               <div class="form-tools">
                 <Popover position="bottom" :offset="8" :width="380">
@@ -59,12 +49,7 @@
                   </template>
                   <div class="emoji-picker">
                     <div class="emoji-list">
-                      <span
-                        v-for="emoji in emojis"
-                        :key="emoji"
-                        class="emoji-item"
-                        @click="insertEmoji(emoji)"
-                      >
+                      <span v-for="emoji in emojis" :key="emoji" class="emoji-item" @click="insertEmoji(emoji)">
                         {{ emoji }}
                       </span>
                     </div>
@@ -95,20 +80,12 @@
       <template v-else>
         <Tab v-model="commentOrder" :options="tabOptions" @change="toggleTab" />
         <TransitionGroup name="fade">
-          <div
-            v-for="comment in comments"
-            :key="comment.id"
-            class="comment-item"
-            :class="{
-              'focus-comment': hasScrollToView && routerCommentId && comment.id === routerCommentId,
-            }"
-          >
+          <div v-for="comment in comments" :key="comment.id" class="comment-item" :class="{
+            'focus-comment': hasScrollToView && routerCommentId && comment.id === routerCommentId,
+          }">
             <div class="comment-avatar">
               <NuxtLink :to="`/user-center/${comment.commenter?.id}`">
-                <img
-                  :src="comment.commenter?.profile.avatar"
-                  :alt="comment.commenter?.profile.nickName"
-                />
+                <img :src="comment.commenter?.profile.avatar" :alt="comment.commenter?.profile.nickName" />
               </NuxtLink>
             </div>
             <div class="comment-content">
@@ -119,20 +96,13 @@
               <div class="comment-text" v-html="renderComment(comment.content)"></div>
               <div class="comment-actions">
                 <button class="action-btn" @click="handleReply(comment)">回复</button>
-                <button
-                  v-if="user?.id === comment.commenter?.id"
-                  class="cancel-btn"
-                  @click="handleRevokeComment(comment)"
-                >
+                <button v-if="user?.id === comment.commenter?.id" class="cancel-btn"
+                  @click="handleRevokeComment(comment)">
                   撤回
                 </button>
-                <button
-                  :class="{
-                    like: comment.isLike,
-                  }"
-                  class="action-btn"
-                  @click="handleLikeComment(comment)"
-                >
+                <button :class="{
+                  like: comment.isLike,
+                }" class="action-btn" @click="handleLikeComment(comment)">
                   <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
                   {{ comment.likeCount ? comment.likeCount : 0 }}
                 </button>
@@ -140,14 +110,10 @@
 
               <!-- 子评论列表 -->
               <div v-if="comment.replyCount" class="replies-list">
-                <div
-                  v-for="reply in returnReplies(comment.replies, comment.fold)"
-                  :key="reply.id"
-                  class="reply-item"
+                <div v-for="reply in returnReplies(comment.replies, comment.fold)" :key="reply.id" class="reply-item"
                   :class="{
                     'focus-comment': hasScrollToView && routerReplyId && reply.id === routerReplyId,
-                  }"
-                >
+                  }">
                   <div class="reply-avatar">
                     <NuxtLink :to="`/user-center/${reply.reply?.id}`">
                       <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
@@ -166,43 +132,28 @@
                     <div class="reply-actions">
                       <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
 
-                      <button
-                        v-if="user?.id === reply.reply?.id"
-                        class="cancel-btn"
-                        @click="handleRevokeReply(comment, reply)"
-                      >
+                      <button v-if="user?.id === reply.reply?.id" class="cancel-btn"
+                        @click="handleRevokeReply(comment, reply)">
                         撤回
                       </button>
-                      <button
-                        :class="{
-                          like: reply.isLike,
-                        }"
-                        class="action-btn"
-                        @click="handleLikeReply(reply)"
-                      >
+                      <button :class="{
+                        like: reply.isLike,
+                      }" class="action-btn" @click="handleLikeReply(reply)">
                         <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
                         {{ reply.likeCount ? reply.likeCount : '' }}
                       </button>
                     </div>
                   </div>
                 </div>
-                <div
-                  class="more"
-                  v-if="comment.replies.length < (comment.replyCount || 0)"
-                  @click="loadMoreReplies(comment)"
-                >
-                  <Icon
-                    v-if="comment.loading"
-                    name="svg-spinners:90-ring-with-bg"
-                    size="1.5rem"
-                  ></Icon>
+                <div class="more" v-if="comment.replies.length < (comment.replyCount || 0)"
+                  @click="loadMoreReplies(comment)">
+                  <Icon v-if="comment.loading" name="svg-spinners:90-ring-with-bg" size="1.5rem"></Icon>
                   <span v-else>加载更多 </span>
                 </div>
               </div>
               <div class="fold-box" v-if="comment.replyCount && comment.replyCount > 2">
                 <span class="fold" @click="comment.fold = !comment.fold">
-                  {{ comment.fold ? '展开' : '收起' }}</span
-                >
+                  {{ comment.fold ? '展开' : '收起' }}</span>
               </div>
 
               <!-- 回复框 -->
@@ -214,20 +165,12 @@
                     </NuxtLink>
                   </div>
                   <div class="form-content">
-                    <textarea
-                      v-model="commentContent"
-                      :placeholder="`回复 @${replyTo.user.profile.nickName}`"
-                      rows="3"
-                      @keydown.enter="handleSubmit"
-                    ></textarea>
+                    <textarea v-model="commentContent" :placeholder="`回复 @${replyTo.user.profile.nickName}`" rows="3"
+                      @keydown.enter="handleSubmit"></textarea>
                     <div class="form-footer">
                       <div class="form-actions">
                         <button class="cancel-btn" @click="cancelReply">取消</button>
-                        <button
-                          class="reply-btn"
-                          :disabled="!commentContent.trim()"
-                          @click="handleSubmit"
-                        >
+                        <button class="reply-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
                           回复
                         </button>
                       </div>

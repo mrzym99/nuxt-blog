@@ -1,14 +1,10 @@
 <template>
   <div class="login">
     <div class="login-card">
-      <div
-        :style="{
-          '--mask-color':
-            colorMode.preference === 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
-        }"
-        class="login-bg w-full h-full"
-        @click="back"
-      >
+      <div :style="{
+        '--mask-color':
+          colorMode.preference === 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
+      }" class="login-bg w-full h-full" @click="back">
         <img :src="loginBg" alt="" />
       </div>
       <div class="login-container w-full p-2rem">
@@ -25,10 +21,7 @@
           <NuxtLink class="login-link" @click="thirdLogin('github')">GitHub</NuxtLink>
         </div>
         <div class="register-link">
-          <div
-            class="flex justify-between items-center"
-            v-if="['pwd-login', 'register'].includes(type)"
-          >
+          <div class="flex justify-between items-center" v-if="['pwd-login', 'register'].includes(type)">
             <NuxtLink class="text-gradient underline" to="/login/reset-pwd"> 忘记密码？ </NuxtLink>
             <div v-if="type === 'register'">
               已有账号？
@@ -110,8 +103,6 @@ onBeforeMount(() => {
 </script>
 
 <style scoped lang="scss">
-@use '~/assets/styles/global.scss' as *;
-
 .login {
   position: relative;
   width: 100%;
@@ -138,9 +129,11 @@ onBeforeMount(() => {
 
 .login-bg {
   position: relative;
+
   @include responsive(lt-md) {
     display: none;
   }
+
   img {
     width: 100%;
     height: 100%;

@@ -3,26 +3,16 @@
     <VeeForm @submit="handleLogin">
       <div class="form-group mb-2">
         <label class="mb-1" for="username">用户名</label>
-        <VeeField
-          v-model="loginForm.username"
-          name="username"
-          type="email"
-          placeholder="请输入用户名"
-          rules="required|username"
-        />
+        <VeeField v-model="loginForm.username" name="username" type="email" placeholder="请输入用户名"
+          rules="required|username" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="username" key="username" />
         </Transition>
       </div>
       <div class="form-group mb-5">
         <label class="mb-1" for="password">密码</label>
-        <VeeField
-          v-model="loginForm.password"
-          name="password"
-          type="password"
-          placeholder="请输入密码"
-          rules="required|password"
-        />
+        <VeeField v-model="loginForm.password" name="password" type="password" placeholder="请输入密码"
+          rules="required|password" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="password" />
         </Transition>
@@ -72,7 +62,6 @@ const handleLogin = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
 @use '~/assets/styles/base.scss' as *;
 
 .login-form {

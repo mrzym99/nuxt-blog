@@ -86,7 +86,6 @@ const handleClose = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
 .modal-mask {
   position: fixed;
   top: 0;

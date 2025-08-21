@@ -72,7 +72,7 @@ async function setup() {
     resizeTo: el.value,
     eventMode: 'none',
     autoDensity: true,
-    background: colorMode.preference === 'dark' ? '#1f1f1f' : '#f2f1f5',
+    background: colorMode.preference === 'dark' ? '#1f1f1f' : '#fff',
   });
   el.value.appendChild(app.canvas);
 

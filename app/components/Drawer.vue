@@ -69,8 +69,6 @@ const handleClose = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .drawer-mask {
   position: fixed;
   top: 0;

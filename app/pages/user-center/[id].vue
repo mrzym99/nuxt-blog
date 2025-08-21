@@ -13,11 +13,8 @@
           <div v-else class="w-full">
             <Tab class="mb-4" v-model="currentTab" :options="tabOptions" @change="toggleTab" />
             <div class="grid place-items-center">
-              <UpdateProfile
-                :profile="userInfo?.profile"
-                v-if="currentTab === 'info'"
-                @success="updateProfileSuccess"
-              />
+              <UpdateProfile :profile="userInfo?.profile" v-if="currentTab === 'info'"
+                @success="updateProfileSuccess" />
               <UpdatePwd v-if="currentTab === 'pwd'" />
             </div>
           </div>
@@ -97,7 +94,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
 @use '~/assets/styles/base.scss' as *;
 
 .user-center {

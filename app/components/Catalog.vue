@@ -8,11 +8,8 @@
       <nav class="catalog-nav">
         <ul>
           <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
-            <a
-              :class="{ active: activeHeading === heading.id }"
-              :href="'#' + heading.id"
-              @click.prevent="scrollToHeading(heading.id)"
-            >
+            <a :class="{ active: activeHeading === heading.id }" :href="'#' + heading.id"
+              @click.prevent="scrollToHeading(heading.id)">
               {{ heading.text }}
             </a>
           </li>
@@ -29,16 +26,9 @@
         <div class="catalog-drawer-content">
           <nav class="catalog-nav">
             <ul>
-              <li
-                v-for="heading in headings"
-                :key="heading.id"
-                :style="getHeadingStyle(heading.level)"
-              >
-                <a
-                  :class="{ active: activeHeading === heading.id }"
-                  :href="'#' + heading.id"
-                  @click.prevent="scrollToHeading(heading.id)"
-                >
+              <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
+                <a :class="{ active: activeHeading === heading.id }" :href="'#' + heading.id"
+                  @click.prevent="scrollToHeading(heading.id)">
                   {{ heading.text }}
                 </a>
               </li>
@@ -134,7 +124,6 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
 .catalog-pc {
   display: block;
   width: 200px;
@@ -180,6 +169,7 @@ onUnmounted(() => {
         text-decoration: none;
         font-size: 0.875rem;
         color: var(--text-light-color);
+
         @include hover-effect() {
           color: var(--primary-color);
         }
@@ -242,6 +232,7 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     color: var(--text-light-color);
+
     @include hover-effect() {
       color: var(--text-color);
     }

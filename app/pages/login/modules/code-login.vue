@@ -2,33 +2,17 @@
   <div class="login-form">
     <VeeForm @submit="handleLogin">
       <div class="form-group mb-2">
-        <VeeField
-          v-model="loginForm.email"
-          name="email"
-          type="email"
-          placeholder="请输入QQ邮箱"
-          rules="required|email"
-        />
+        <VeeField v-model="loginForm.email" name="email" type="email" placeholder="请输入QQ邮箱" rules="required|email" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="email" key="email" />
         </Transition>
       </div>
       <div class="form-group mb-2">
         <div class="flex items-center">
-          <VeeField
-            class="!w-75% code-input"
-            v-model="loginForm.code"
-            name="code"
-            placeholder="请输入验证码"
-            rules="required|code"
-          />
-          <Button
-            class="flex-1 code-button"
-            :loading="sendCodeLoading"
-            :disabled="isCounting"
-            @click="sendCode"
-            >{{ isCounting ? `${count}s` : '发送' }}</Button
-          >
+          <VeeField class="!w-75% code-input" v-model="loginForm.code" name="code" placeholder="请输入验证码"
+            rules="required|code" />
+          <Button class="flex-1 code-button" :loading="sendCodeLoading" :disabled="isCounting" @click="sendCode">{{
+            isCounting ? `${count}s` : '发送' }}</Button>
         </div>
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="code" />
@@ -95,7 +79,6 @@ const handleLogin = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
 @use '~/assets/styles/base.scss' as *;
 
 .login-form {

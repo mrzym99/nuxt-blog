@@ -1,5 +1,8 @@
 <template>
   <div class="w-full my-2 min-h-10rem">
+    <div class="flex items-center justify-end read-duration">
+      <span>阅读时长: </span><span>{{ formatDuration(article.viewDuration || 0) }}</span>
+    </div>
     <div class="article-content">
       <div class="article-body" v-if="isMd">
         <MdTextPreview :content="article.content!" />
@@ -8,52 +11,34 @@
         <RichTextPreview :content="article.content!" />
       </div>
       <div class="w-full h-3rem flex justify-center items-center">
-        <Icon
-          name="ph:thumbs-up-duotone"
-          @click="handleLike"
-          :class="{
-            'cursor-pointer': true,
-            like: isLike,
-          }"
-          size="1.8rem"
-        />
-        <span
-          v-if="likeCount"
-          :class="{
-            like: isLike,
-          }"
-          class="ml-1"
-          >{{ likeCount }}</span
-        >
+        <Icon name="ph:thumbs-up-duotone" @click="handleLike" :class="{
+          'cursor-pointer': true,
+          like: isLike,
+        }" size="1.8rem" />
+        <span v-if="likeCount" :class="{
+          like: isLike,
+        }" class="ml-1">{{ likeCount }}</span>
       </div>
       <div class="article-info mt-4 p-0.5rem rounded-md">
         <p class="my-2 flex item-center justify-between flex-wrap w-full">
           <span>
-            <span class="mr-2">文章类型: </span
-            ><span class="type">{{ typeEnum[article.type] }}</span></span
-          >
-          <span>
-            <span class="mr-2">阅读时长: </span
-            ><span>{{ formatDuration(article.viewDuration || 0) }}</span></span
-          >
+            <span class="mr-2">文章类型: </span><span class="type">{{ typeEnum[article.type] }}</span></span>
         </p>
         <p class="mb-2">
           <span class="mr-2">文章地址:</span>
           <ClientOnly>
             <span v-copy="postUrl" class="underline cursor-pointer text-gradient" href="#">{{
               postUrl
-            }}</span>
+              }}</span>
           </ClientOnly>
         </p>
         <p class="mb-2" v-if="postedDays">
           <span class="tip"> 文章在 {{ postedDays }} 修改过 </span>
         </p>
-
         <p v-if="article.originalUrl">
-          <span class="mr-2">原文地址: </span
-          ><a class="underline" :href="article.originalUrl" target="_blank">{{
+          <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
             article.originalUrl
-          }}</a>
+            }}</a>
         </p>
       </div>
       <div class="w-full">
@@ -71,7 +56,8 @@
       </div>
       <div class="w-full">
         <h3>Comments</h3>
-        <Comments :type="CommentType.ARTICLE" :target-id="article.id" />
+        等待完善～～～
+        <!-- <Comments :type="CommentType.ARTICLE" :target-id="article.id" /> -->
       </div>
     </div>
   </div>
@@ -232,12 +218,15 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-@use '~/assets/styles/article-content.scss' as *;
-
 .article-info {
-  font-size: 0.9rem;
   border: 1px solid;
+  font-weight: 400;
+  color: var(--text-light-color);
+  border-color: var(--border-color);
+}
+
+.read-duration {
+  font-size: 0.8rem;
   font-weight: 400;
   color: var(--text-light-color);
   border-color: var(--border-color);

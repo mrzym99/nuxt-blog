@@ -30,14 +30,9 @@
           <a href="https://gitee.com/mrzym" target="_blank" rel="noopener noreferrer">
             <Icon name="simple-icons:gitee" size="1.6rem" />
           </a>
-          <a
-            class="flex items-center gap-2 qq-link text-sm"
-            alt="博客技术交流群"
-            title="博客技术交流群"
-            target="_blank"
+          <a class="flex items-center gap-2 qq-link text-sm" alt="博客技术交流群" title="博客技术交流群" target="_blank"
             rel="noopener noreferrer"
-            href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI"
-          >
+            href="https://qm.qq.com/cgi-bin/qm/qr?k=qbJ2jOOHKKSNnJl5QTsGlBQW3nUyDda7&jump_from=webapi&authKey=rYys4wJtvbT6/TKf1ZAYZvquvVa46hmH/HEVCXpbXdHoSLAGyzruqMTvKlWcdslI">
             <Icon name="simple-icons:qq" size="1rem" />
             加入 QQ 群
           </a>
@@ -58,12 +53,8 @@
               3.仿照小张的 link 编写代码<br />
               4.可在本地运行检查代码<br />
               5.最后，向我提交 Pr<br />
-              <a
-                class="text-gradient underline"
-                href="https://gitee.com/mrzym/nuxt-blog-developd-by-cursor"
-                target="_blank"
-                >点我跳转博客源码地址</a
-              >
+              <a class="text-gradient underline" href="https://gitee.com/mrzym/nuxt-blog-developd-by-cursor"
+                target="_blank">点我跳转博客源码地址</a>
             </div>
           </Popover>
         </h3>
@@ -85,11 +76,7 @@
         </p>
       </div>
     </template>
-    <Catalog
-      v-if="showCateLog"
-      :identifier="getCurrentArticle!.title"
-      :cover="getCurrentArticle!.cover"
-    />
+    <Catalog v-if="showCateLog" :identifier="getCurrentArticle!.title" :cover="getCurrentArticle!.cover" />
   </aside>
 </template>
 
@@ -124,8 +111,6 @@ const { data: bloggerInfo } = await useAsyncData('bloggerInfo', async () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/global.scss' as *;
-
 .qq-link {
   padding: 0.2rem;
   border: 1px solid var(--border-color);
@@ -149,6 +134,7 @@ const { data: bloggerInfo } = await useAsyncData('bloggerInfo', async () => {
 
   a {
     color: var(--text-light-color);
+
     @include hover-effect {
       color: var(--primary-color);
     }
