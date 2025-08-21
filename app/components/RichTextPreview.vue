@@ -35,8 +35,6 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/article-content.scss' as *;
-
 :deep(img) {
   width: 100%;
   max-height: 480px !important;
