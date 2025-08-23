@@ -3,6 +3,7 @@
 @use 'layout' as *;
 @use 'home' as *;
 @use 'global' as *;
+@use 'highlight' as *;
 
 html {
   font-family: $font-family;

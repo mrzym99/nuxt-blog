@@ -11,6 +11,7 @@ const props = defineProps<{
   content: string;
 }>();
 
+const colorMode = useColorMode();
 const { marked } = useMdRender();
 
 // 渲染 Markdown 内容
@@ -57,9 +58,16 @@ function addCopyButtons() {
     });
 }
 
+watch(
+  () => colorMode.preference,
+  async () => {
+    document && document.documentElement.setAttribute('data-theme', colorMode.preference);
+  }
+);
 
 onMounted(() => {
   addCopyButtons();
+  document && document.documentElement.setAttribute('data-theme', colorMode.preference);
 });
 </script>
 

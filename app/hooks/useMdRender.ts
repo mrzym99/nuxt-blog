@@ -1,9 +1,9 @@
 import { marked, Renderer } from 'marked';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/vs.min.css';
 
 export function useMdRender() {
   let baseRenderer: Renderer | null = null;
+
   function init() {
     baseRenderer = new marked.Renderer();
     (baseRenderer.heading as any) = (text: any) => {

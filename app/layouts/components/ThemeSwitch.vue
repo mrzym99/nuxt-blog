@@ -32,11 +32,10 @@ const setTheme = (theme: Theme) => {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
 
   &:hover {
     color: var(--white-color);
-    transform: scale(1.1);
     background: var(--primary-color);
   }
 }
