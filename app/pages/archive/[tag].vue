@@ -46,7 +46,7 @@ import type { IArticle } from '~/types/index';
 import { useAsyncData } from '#app';
 
 defineOptions({
-  name: 'Archives',
+  name: 'Archive',
 });
 
 type Tag = {

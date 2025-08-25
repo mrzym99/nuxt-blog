@@ -10,49 +10,27 @@
 
   @include responsive(lt-sm) {
     gap: 1rem;
-    flex-direction: column;
+    flex-direction: auto;
   }
 
   @include responsive(lt-md) {
     gap: 1rem;
-    flex-direction: column;
-    padding: 3rem 3rem 1rem 3rem;
+    flex-direction: auto;
+    padding: 3rem 3rem 2rem 3rem;
   }
 
   @include responsive(lt-lg) {
-    padding: 3rem 3rem 1rem 3rem;
+    padding: 3rem 3rem 2rem 3rem;
     gap: 4rem;
-    height: 100vh;
-    overflow: hidden;
   }
 
   @include responsive(gt-lg) {
-    padding: 3rem 5rem 1rem 5rem;
+    padding: 3rem 5rem 2rem 5rem;
     gap: 10rem;
-    height: 100vh;
-    overflow: hidden;
   }
 
   .page-main {
-    flex: 1;
-    @include responsive(lt-sm) {
-      height: 100%;
-    }
-
-    @include responsive(lt-md) {
-      height: calc(100vh - 4rem);
-      overflow: auto;
-    }
-
-    @include responsive(lt-lg) {
-      height: calc(100vh - 4rem);
-      overflow: auto;
-    }
-
-    @include responsive(gt-lg) {
-      height: calc(100vh - 4rem);
-      overflow: auto;
-    }
+    min-height: calc(100vh - 5rem);
   }
 }
 
@@ -157,7 +135,7 @@
 
 // Sidebar styles
 .sidebar {
-  flex-shrink: 0;
+  position: fixed;
   height: calc(100vh - 100px);
   overflow: auto;
 
@@ -248,11 +226,11 @@
   }
 }
 
-.hide-scrollbar {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  &::-webkit-scrollbar {
-    /* Chrome */
-    display: none;
-  }
-}
+// .hide-scrollbar {
+//   scrollbar-width: none; /* Firefox */
+//   -ms-overflow-style: none; /* IE and Edge */
+//   &::-webkit-scrollbar {
+//     /* Chrome */
+//     display: none;
+//   }
+// }

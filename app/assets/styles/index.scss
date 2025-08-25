@@ -13,4 +13,6 @@ html {
 body {
   color: var(--text-color);
   margin: 0 !important;
+  height: 100vh;
+  overflow: auto;
 }

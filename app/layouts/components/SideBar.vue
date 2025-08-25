@@ -1,10 +1,10 @@
 <template>
-  <aside class="sidebar hide-scrollbar md:w-60 w-full">
+  <aside class="sidebar w-60">
     <!-- Menu -->
     <div class="blog-card !pt-0 lt-md:hidden">
       <Menus />
     </div>
-    <template v-if="!showCateLog">
+    <div v-show="!showCateLog">
       <!-- Profile Card -->
       <div class="blog-card">
         <div class="profile">
@@ -75,7 +75,7 @@
           <a class="text-gradient" href="https://nuxt.com/" target="_blank">Nuxt</a>
         </p>
       </div>
-    </template>
+    </div>
     <Catalog v-if="showCateLog" :identifier="getCurrentArticle!.title" :cover="getCurrentArticle!.cover" />
   </aside>
 </template>

@@ -1,37 +1,32 @@
 <template>
-  <NotFound v-if="error"> 文章未找到或已删除 </NotFound>
-  <template v-else>
-    <div v-if="articleDetail.id">
-      <div class="article-header">
-        <div class="info-wrapper">
-          <div class="tags-cloud">
-            <NuxtLink
-              class="tag"
-              v-for="tag in articleDetail?.tags"
-              :to="'/archive/' + tag.name"
-              :key="tag.id"
-            >
-              {{ tag.name }}
-            </NuxtLink>
+  <div>
+    <NotFound v-if="error"> 文章未找到或已删除 </NotFound>
+    <template v-else>
+      <div v-if="articleDetail.id">
+        <div class="article-header">
+          <div class="info-wrapper">
+            <div class="tags-cloud">
+              <NuxtLink class="tag" v-for="tag in articleDetail?.tags" :to="'/archive/' + tag.name" :key="tag.id">
+                {{ tag.name }}
+              </NuxtLink>
+            </div>
+            <h1>{{ articleDetail?.title }}</h1>
+            <div class="article-meta">
+              <span class="date">Posted By {{ articleDetail?.author?.profile.nickName }} on
+                {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span>
+            </div>
           </div>
-          <h1>{{ articleDetail?.title }}</h1>
-          <div class="article-meta">
-            <span class="date"
-              >Posted By {{ articleDetail?.author?.profile.nickName }} on
-              {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span
-            >
+          <div v-if="articleDetail?.cover" class="article-cover">
+            <img :src="articleDetail?.cover" alt="" />
           </div>
         </div>
-        <div v-if="articleDetail?.cover" class="article-cover">
-          <img :src="articleDetail?.cover" alt="" />
+        <div class="post-detail">
+          <ArticleContent :article="articleDetail" />
         </div>
       </div>
-      <div class="post-detail">
-        <ArticleContent :article="articleDetail" />
-      </div>
-    </div>
-    <NotFound v-else> 文章未找到或已删除 </NotFound>
-  </template>
+      <NotFound v-else> 文章未找到或已删除 </NotFound>
+    </template>
+  </div>
 </template>
 
 <script setup lang="ts">

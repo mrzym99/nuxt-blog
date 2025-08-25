@@ -1,13 +1,13 @@
 <template>
-  <div class="h-screen w-full">
-    <!-- Main Content -->
-    <div class="main-container">
-      <main class="page-main hide-scrollbar">
-        <div class="flex align-center justify-end md:hidden">
-          <Menus class="md:hidden" />
-        </div>
-        <slot />
-      </main>
+  <!-- Main Content -->
+  <div class="main-container">
+    <main class="page-main">
+      <div class="flex align-center justify-end md:hidden">
+        <Menus class="md:hidden" />
+      </div>
+      <slot />
+    </main>
+    <div class="hidden md:block relative w-60 flex-shrink-0">
       <SideBar />
     </div>
   </div>
