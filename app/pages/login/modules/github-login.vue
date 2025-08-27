@@ -36,7 +36,7 @@ import { getIsRegister, getThirdTypeAntToken, type ThirdRegister } from '~/api';
 import Button from '~/components/Button.vue';
 import { useUserStore } from '~/store';
 
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 const router = useRouter();
 const loading = ref(false);
 
@@ -62,7 +62,7 @@ function getCode() {
   if (route.query.code) {
     code.value = route.query.code as string;
   } else {
-    // toast.warning({ message: '获取三方登录授权码失败' });
+    $toast.warning('获取三方登录授权码失败');
   }
 }
 
@@ -92,14 +92,15 @@ function thirdLogin() {
       });
     })
     .catch(() => {
-      // toast.error({
-      //   message: '登录授权失效，请重新登录',
-      //   timeout: 200,
-      //   onClosed() {
-      //     router.back();
-      //   },
+      // $toast.error({
+      //   //   message: '登录授权失效，请重新登录',
+      //   //   timeout: 200,
+      //   //   onClosed() {
+      //   //     router.back();
+      //   //   },
+      //   });
       // });
-    });
+    })
 }
 
 const handleLogin = () => {
@@ -109,13 +110,14 @@ const handleLogin = () => {
     .thirdLogin(loginForm.value)
     .then(() => {
       loading.value = false;
-      // toast.success({
-      //   message: '登录成功',
-      //   timeout: 200,
-      //   onClosed() {
-      //     router.push('/');
-      //   },
-      // });
+      // $toast.success({
+      //   //   message: '登录成功',
+      //   //   timeout: 200,
+      //   //   onClosed() {
+      //   //     router.push('/');
+      //   //   },
+      //   // });
+      // })
     })
     .catch(() => {
       loading.value = false;
@@ -129,8 +131,6 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
-
 .register-form {
   width: 100%;
   margin-bottom: 20px;

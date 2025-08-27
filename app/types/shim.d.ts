@@ -1,5 +1,3 @@
-import type { NuxtToastApi } from 'nuxt-toast';
-
 declare module 'marked-highlight' {
   import { Marked } from 'marked';
 
@@ -13,8 +11,7 @@ declare module 'marked-highlight' {
   export default use;
 }
 
-declare module '#app' {
-  interface NuxtApp {
-    toast: NuxtToastApi;
-  }
-}
+// declare module '#app' {
+//   interface NuxtApp {
+//   }
+// }

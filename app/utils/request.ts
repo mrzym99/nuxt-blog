@@ -69,6 +69,7 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
 async function $http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
   const { url, method, params, data, options: config = {} } = options;
   const baseURL = import.meta.env.VITE_API_BASE;
+  const { $toast } = useNuxtApp();
 
   const token = getAuthorization();
   config &&
@@ -114,14 +115,14 @@ async function $http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
         //   removeToken();
         //   useUserStore().removeUser();
         useUserStore().removeUser();
-        // toast.error('登录状态已过期，请重新登录');
+        $toast.error('登录状态已过期，请重新登录');
         // }
       } else if (logoutCodes.includes(code)) {
         useUserStore().logout();
-        // toast.error('登录状态已过期，请重新登录');
+        $toast.error('登录状态已过期，请重新登录');
       } else {
         // // 处理其他状态码
-        // toast.error(res.message || '请求失败');
+        $toast.error(res.message || '请求失败');
       }
     },
   });

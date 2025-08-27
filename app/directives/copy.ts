@@ -1,10 +1,8 @@
 import { useNuxtApp } from '#app';
 
-// const toast = useToast();
-
 export const copy = {
   mounted(el: any, binding: any) {
-    const { toast } = useNuxtApp();
+    const { $toast } = useNuxtApp();
     // 复制处理函数
     const copyToClipboard = async () => {
       try {
@@ -13,10 +11,10 @@ export const copy = {
 
         window && window.navigator && (await window.navigator.clipboard.writeText(textToCopy));
 
-        // toast.success({ message: '已成功复制到剪切板' });
+        $toast.success('已成功复制到剪切板');
       } catch (err) {
         // 错误处理
-        // toast.error({ message: '复制失败' });
+        $toast.error('复制失败');
         console.error('复制失败:', err);
       }
     };

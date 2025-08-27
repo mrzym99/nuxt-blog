@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useMdRender } from '~/hooks/useMdRender';
 
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 
 defineOptions({
   name: 'MdPreview',
@@ -24,10 +24,10 @@ function copyCode(code: string) {
     window.navigator.clipboard
       .writeText(code)
       .then(() => {
-        // toast.success({ message: '复制成功' });
+        $toast.success('复制成功');
       })
       .catch(err => {
-        // toast.error({ message: '复制失败' });
+        $toast.error('复制失败');
         console.error('复制失败:', err);
       });
   }

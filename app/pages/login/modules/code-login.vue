@@ -30,7 +30,7 @@ import { useUserStore } from '~/store';
 import Button from '~/components/Button.vue';
 import useCountDown from '~/hooks/useCountDown';
 
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 const userStore = useUserStore();
 const router = useRouter();
 const loading = ref(false);
@@ -50,7 +50,7 @@ const sendCode = async () => {
     .then(() => {
       sendCodeLoading.value = false;
       start();
-      // toast.success({ message: '发送成功，请注意查收邮件' });
+      $toast.success('发送成功，请注意查收邮件');
     })
     .catch(() => {
       sendCodeLoading.value = false;
@@ -64,23 +64,22 @@ const handleLogin = () => {
     .codeLogin(loginForm.value)
     .then(() => {
       loading.value = false;
-      // toast.success({
-      //   message: '登录成功',
-      //   timeout: 200,
-      //   onClosed() {
-      //     router.push('/');
-      //   },
-      // });
+      // $toast.success({
+      //   //   message: '登录成功',
+      //   //   timeout: 200,
+      //   //   onClosed() {
+      //   //     router.push('/');
+      //   //   },
+      //   // });
+      // })
+      //   .catch(() => {
+      //     loading.value = false;
+      //   });
     })
-    .catch(() => {
-      loading.value = false;
-    });
-};
+}
 </script>
 
 <style lang="scss" scoped>
-
-
 .login-form {
   width: 100%;
   margin-bottom: 20px;

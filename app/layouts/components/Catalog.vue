@@ -8,13 +8,7 @@
       <nav class="catalog-nav">
         <ul>
           <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
-            <a
-              :class="{ active: activeHeading?.id === heading.id }"
-              :href="'#' + heading.id"
-              @click.prevent="scrollToHeading(heading.id)"
-            >
-              {{ heading.text }}
-            </a>
+            <a :class="{ active: activeHeading === heading.text }" :href="'#' + heading.text"> {{ heading.text }} </a>
           </li>
         </ul>
       </nav>
@@ -29,16 +23,9 @@
         <div class="catalog-drawer-content">
           <nav class="catalog-nav">
             <ul>
-              <li
-                v-for="heading in headings"
-                :key="heading.id"
-                :style="getHeadingStyle(heading.level)"
-              >
-                <a
-                  :class="{ active: activeHeading?.id === heading.id }"
-                  :href="'#' + heading.id"
-                  @click.prevent="scrollToHeading(heading.id)"
-                >
+              <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
+                <a :class="{ active: activeHeading === heading.text }" :href="'#' + heading.text"
+                  @click.prevent="scrollToHeading(heading.id)">
                   {{ heading.text }}
                 </a>
               </li>
@@ -53,6 +40,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import Drawer from '~/components/Drawer.vue';
+import { useDebounceFn } from '@vueuse/core';
 
 const props = defineProps<{
   identifier: string;
@@ -66,8 +54,10 @@ interface Heading {
 }
 
 const headings = ref<Heading[]>([]);
-const activeHeading = ref<Heading>();
+const activeHeading = ref<string>();
 const showDrawer = ref(false);
+const route = useRoute();
+
 // 获取标题样式
 const getHeadingStyle = (level: number): { paddingLeft: string } => {
   return {
@@ -90,6 +80,14 @@ const extractHeadings = () => {
     text: heading.textContent || '',
     level: parseInt(heading.tagName[1] || '1'),
   }));
+
+  const hash = route.hash.slice(1);
+  if (hash) {
+    const decodeHash = decodeURIComponent(hash);
+    activeHeading.value = decodeHash
+    scrollToHeading(decodeHash);
+  }
+
 };
 
 // 滚动到指定标题
@@ -104,6 +102,14 @@ const scrollToHeading = (id: string) => {
 // 处理滚动
 const handleScroll = () => {
   const headingElements = getHeadingElements();
+  if (!headingElements.length) return
+
+  if (window.scrollY < 150) {
+    activeHeading.value = ''
+    history.replaceState(history.state, '', window.location.pathname + window.location.search);
+    return
+  }
+
   // 更新当前激活的标题
   for (let i = headingElements.length - 1; i >= 0; i--) {
     const headingElement = headingElements[i];
@@ -111,40 +117,24 @@ const handleScroll = () => {
     const rect = headingElement.getBoundingClientRect();
     if (rect.top <= 100) {
       const heading = headings.value.find(item => item.id === headingElement.id);
-      activeHeading.value = heading;
-      history.replaceState(null, '', `#${heading?.text}`);
+      history.replaceState(history.state, '', `#${heading?.text}`);
+      activeHeading.value = heading?.text;
       break;
     }
   }
 };
 
-function navigateToTarget() {
-  const target = location.hash.slice(1);
-  if (target) {
-    const decoded = decodeURIComponent(target) 
-    const item = headings.value.find(item => item.text === decoded);
-    
-    if (item) {
-      const element = document.getElementById(item.id);
-      if (element) {
-        scrollToHeading(item.id);
-      }
-    }
-  } else {
-    activeHeading.value = headings.value[0];
-  }
-}
+const debounceScroll = useDebounceFn(handleScroll, 30);
 
 onMounted(() => {
   nextTick(() => {
     extractHeadings();
-    navigateToTarget();
   });
-  document.addEventListener('scroll', handleScroll);
+  document.addEventListener('scroll', debounceScroll);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('scroll', handleScroll);
+  document.removeEventListener('scroll', debounceScroll);
 });
 </script>
 

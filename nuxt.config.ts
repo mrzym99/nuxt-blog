@@ -29,6 +29,7 @@ export default defineNuxtConfig({
         },
       ],
     },
+    // pageTransition: { name: 'page', mode: 'out-in' },
   },
   ssr: true,
   devServer: {
@@ -41,10 +42,16 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     '@nuxtjs/sitemap',
     'nuxt-easy-lightbox',
-    // 'nuxt-toast',
     // '@nuxt/eslint',
     '@nuxtjs/color-mode',
+    'vue-sonner/nuxt',
   ],
+  vueSonner: {
+    css: true, // true by default to include css file
+  },
+  build: {
+    transpile: ['vue-sonner'],
+  },
   veeValidate: {
     autoImports: true,
     componentNames: {

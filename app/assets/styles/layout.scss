@@ -31,8 +31,8 @@
   }
 
   .page-main {
-    min-width: 0;
     flex: 1;
+    min-width: 0;
     min-height: calc(100vh - 5rem);
   }
 }

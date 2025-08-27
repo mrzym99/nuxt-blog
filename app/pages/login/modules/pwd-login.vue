@@ -31,7 +31,7 @@ import Button from '~/components/Button.vue';
 const userStore = useUserStore();
 const router = useRouter();
 const loading = ref(false);
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 
 const loginForm = ref<PwdLogin>({
   username: '',
@@ -47,13 +47,14 @@ const handleLogin = () => {
     .pwdLogin(loginForm.value)
     .then(() => {
       loading.value = false;
-      // toast.success({
-      //   message: '登录成功',
-      //   timeout: 200,
-      //   onClosed() {
-      //     router.back();
-      //   },
-      // });
+      // $toast.success({
+      //   //   message: '登录成功',
+      //   //   timeout: 200,
+      //   //   onClosed() {
+      //   //     router.back();
+      //   //   },
+      //   // });
+      // })
     })
     .catch(() => {
       loading.value = false;
@@ -62,8 +63,6 @@ const handleLogin = () => {
 </script>
 
 <style lang="scss" scoped>
-
-
 .login-form {
   width: 100%;
   margin-bottom: 20px;

@@ -42,7 +42,7 @@ import { getEmailCaptcha, putResetPassword, type ResetPwd } from '~/api';
 import Button from '~/components/Button.vue';
 import useCountDown from '~/hooks/useCountDown';
 
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 const router = useRouter();
 const loading = ref(false);
 const sendCodeLoading = ref(false);
@@ -63,7 +63,7 @@ const sendCode = async () => {
     .then(() => {
       sendCodeLoading.value = false;
       start();
-      // toast.success({ message: '发送成功，请注意查收邮件' });
+      $toast.success('发送成功，请注意查收邮件');
     })
     .catch(() => {
       sendCodeLoading.value = false;
@@ -75,7 +75,7 @@ const handleReset = () => {
   loading.value = true;
   putResetPassword(loginForm.value)
     .then(() => {
-      // toast.success({
+      //$toast.success({
       //   message: '重置成功',
       //   timeout: 200,
       //   onClosed() {
@@ -90,8 +90,6 @@ const handleReset = () => {
 </script>
 
 <style lang="scss" scoped>
-
-
 .login-form {
   width: 100%;
   margin-bottom: 20px;

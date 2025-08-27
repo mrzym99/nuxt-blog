@@ -8,7 +8,7 @@ export function useMdRender() {
     baseRenderer = new marked.Renderer();
     (baseRenderer.heading as any) = (text: any) => {
       const { depth, text: textContent } = text;
-      const id = `blog_${depth}_${Math.random().toString(36).substring(2, 12)}`;
+      const id = textContent;
       return `<h${depth} id="${id}">${textContent}</h${depth}>`;
     };
 

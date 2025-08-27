@@ -232,7 +232,7 @@ type ReplyTo = {
 };
 
 const { user } = storeToRefs(useUserStore());
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 const route = useRoute();
 const tabOptions = [
   { label: '最新', value: CommentOrder.LATEST },
@@ -283,7 +283,7 @@ const handleSubmit = (event: any) => {
   event.preventDefault();
   if (!commentContent.value.trim()) return;
   if (!user.value) {
-    // toast.warning({ message: '请先登录' });
+    $toast.warning('请先登录');
     return;
   }
   if (replyTo.value) {
@@ -338,14 +338,14 @@ const cancelReply = () => {
 const handleRevokeComment = (comment: Comment) => {
   postDeleteComment(comment.id).then(() => {
     comments.value = comments.value.filter(item => item.id !== comment.id);
-    // toast.success({ message: '撤回成功' });
+    $toast.success('撤回成功');
   });
 };
 
 const handleRevokeReply = (parent: Comment, reply: IReply) => {
   postDeleteReply(reply.id).then(() => {
     getReplies(parent);
-    // toast.success({ message: '撤回成功' });
+    $toast.success('撤回成功');
   });
 };
 

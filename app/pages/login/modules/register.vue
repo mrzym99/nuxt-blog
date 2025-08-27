@@ -48,7 +48,7 @@ import { getEmailCaptcha, postRegister, type Register } from '~/api';
 import Button from '~/components/Button.vue';
 import useCountDown from '~/hooks/useCountDown';
 
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 const router = useRouter();
 const loading = ref(false);
 const sendCodeLoading = ref(false);
@@ -65,7 +65,7 @@ const { count, start, isCounting } = useCountDown(60);
 
 const sendCode = async () => {
   if (!loginForm.value.email) {
-    // return toast.warning({ message: '请输入QQ邮箱' });
+    // return toast.warning('请输入QQ邮箱' });
   }
   sendCodeLoading.value = true;
   getEmailCaptcha(loginForm.value.email)
@@ -84,7 +84,7 @@ const handleLogin = () => {
   postRegister(loginForm.value)
     .then(() => {
       loading.value = false;
-      // toast.success({
+      //$toast.success({
       //   message: '注册成功，快去登录吧',
       //   timeout: 200,
       //   onClosed: () => {
@@ -99,8 +99,6 @@ const handleLogin = () => {
 </script>
 
 <style lang="scss" scoped>
-
-
 .register-form {
   width: 100%;
   margin-bottom: 20px;

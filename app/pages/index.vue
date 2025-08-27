@@ -1,6 +1,6 @@
 <template>
   <!-- Blog Posts -->
-  <main class="post-container relative w-full">
+  <main class="post-container relative w-full" :key="refreshKey">
     <transition-group name="list">
       <article v-for="post in posts" :key="post.id" class="blog-post">
         <div class="flex flex-col gap-1">
@@ -54,6 +54,7 @@ defineOptions({
 const target = useTemplateRef<HTMLDivElement>('target')
 const PAGE_SIZE = 10;
 const { getRefresh, getCurrentArticle } = storeToRefs(useArticleStore());
+const refreshKey = ref(1)
 let timer: any = null;
 const currentPage = ref(1);
 const loading = ref(false);
@@ -104,30 +105,23 @@ async function loadMore() {
 // TODO 优化接口
 async function refreshArticle() {
   if (!getCurrentArticle.value || !getCurrentArticle.value.id) return
-  const res = await getArticleDetail(getCurrentArticle.value.id.toString());
-  const index = data.value?.list.findIndex(item => item.id == res.data.id);
-
+  const index = data.value?.list.findIndex(item => item.id == getCurrentArticle.value?.id);
 
   const { data: likeCount } = await getLikeCount({
     targetId: getCurrentArticle.value.id,
     type: LikeType.ARTICLE,
   });
   if (index !== undefined && index != -1 && data.value) {
-    data.value.list[index]!.viewCount = res.data.viewCount
+    const viewCount = data.value.list[index]?.viewCount ?? 0
+    data.value.list[index]!.viewCount = viewCount + 1
     data.value.list[index]!.likeCount = likeCount
+    forceUpdate()
   }
-
-
 }
 
-// TODO 滚动到指定 current 
-// 监听路由变化刷新数据
-// watch(
-//   () => route.query.current,
-//   () => {
-//     refresh();
-//   }
-// );
+function forceUpdate() {
+  refreshKey.value++;
+}
 
 function infiniteScroll() {
   const { stop } = useIntersectionObserver(
@@ -151,7 +145,7 @@ onActivated(() => {
   if (getRefresh.value) {
     timer = window.setTimeout(() => {
       refreshArticle()
-    }, 500);
+    }, 300);
   }
 });
 

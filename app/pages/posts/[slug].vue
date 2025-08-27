@@ -16,9 +16,9 @@
                 {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span>
             </div>
           </div>
-          <!-- <div v-if="articleDetail?.cover" class="article-cover">
+          <div v-if="articleDetail?.cover" class="article-cover">
             <img :src="articleDetail?.cover" alt="" />
-          </div> -->
+          </div>
         </div>
         <div class="post-detail">
           <ArticleContent :article="articleDetail" />

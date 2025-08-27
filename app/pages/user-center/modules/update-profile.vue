@@ -13,12 +13,7 @@
         <div class="flex-1 max-w-500px mt-2rem md:mt-0">
           <div class="form-group mb-2">
             <label for="avatar">昵称</label>
-            <VeeField
-              v-model="loginForm.nickName"
-              name="nickName"
-              placeholder="请输入昵称"
-              rules="required"
-            />
+            <VeeField v-model="loginForm.nickName" name="nickName" placeholder="请输入昵称" rules="required" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="昵称" key="nickName" />
             </Transition>
@@ -26,25 +21,11 @@
           <div class="form-group mb-2">
             <label for="avatar">性别</label>
             <div class="mr-1rem flex items-center">
-              <VeeField
-                class="radio"
-                v-model="loginForm.gender"
-                name="性别"
-                rules="required"
-                type="radio"
-                :value="1"
-              />
+              <VeeField class="radio" v-model="loginForm.gender" name="性别" rules="required" type="radio" :value="1" />
               男
             </div>
             <div class="flex items-center">
-              <VeeField
-                class="radio"
-                name="性别"
-                v-model="loginForm.gender"
-                rules="required"
-                type="radio"
-                :value="0"
-              />
+              <VeeField class="radio" name="性别" v-model="loginForm.gender" rules="required" type="radio" :value="0" />
               女
             </div>
 
@@ -54,51 +35,28 @@
           </div>
           <div class="form-group mb-2">
             <label for="avatar">生日</label>
-            <VeeField
-              v-model="loginForm.birthDate"
-              type="date"
-              name="生日"
-              placeholder="请输入生日"
-            />
+            <VeeField v-model="loginForm.birthDate" type="date" name="生日" placeholder="请输入生日" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="生日" key="birthDate" />
             </Transition>
           </div>
           <div class="form-group mb-2">
             <label for="avatar">地址</label>
-            <VeeField
-              v-model="loginForm.address"
-              name="地址"
-              placeholder="请输入地址"
-              as="textarea"
-              rows="2"
-            />
+            <VeeField v-model="loginForm.address" name="地址" placeholder="请输入地址" as="textarea" rows="2" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="地址" key="address" />
             </Transition>
           </div>
           <div class="form-group mb-2">
             <label for="avatar">个人介绍</label>
-            <VeeField
-              v-model="loginForm.introduction"
-              name="个人介绍"
-              as="textarea"
-              rows="2"
-              placeholder="请输入个人介绍"
-            />
+            <VeeField v-model="loginForm.introduction" name="个人介绍" as="textarea" rows="2" placeholder="请输入个人介绍" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="个人介绍" key="introduction" />
             </Transition>
           </div>
           <div class="form-group mb-2">
             <label for="avatar">个性签名</label>
-            <VeeField
-              v-model="loginForm.signature"
-              name="个性签名"
-              as="textarea"
-              rows="2"
-              placeholder="请输入个性签名"
-            />
+            <VeeField v-model="loginForm.signature" name="个性签名" as="textarea" rows="2" placeholder="请输入个性签名" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="个性签名" key="signature" />
             </Transition>
@@ -120,7 +78,7 @@ import Button from '~/components/Button.vue';
 import type { Profile } from '~/types';
 import ImageUpload from '~/components/ImageUpload.vue';
 
-// const toast = useToast();
+const { $toast } = useNuxtApp()
 const loading = ref(false);
 
 const props = defineProps<{
@@ -150,7 +108,7 @@ const handleReset = () => {
   loading.value = true;
   putUpdateProfile(loginForm.value)
     .then(() => {
-      // toast.success({ message: '修改成功' });
+      $toast.success('修改成功');
       loading.value = false;
       emit('success');
     })
@@ -176,8 +134,6 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-
-
 .login-form {
   width: 100%;
   margin-bottom: 20px;
