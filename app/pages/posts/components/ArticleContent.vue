@@ -65,15 +65,18 @@
 
 <script setup lang="ts">
 import { computed, onBeforeUnmount } from 'vue';
+
+import TagCloud from '~/components/TagCloud.vue';
+import Comments from '~/components/Comments.vue';
+import MdTextPreview from './MdTextPreview.vue';
+import RichTextPreview from './RichTextPreview.vue';
+
 import { formatDate } from '~/utils/tool';
 import { CommentType, LikeType, type IArticle } from '~/types/index';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
 import { postViewDuration } from '~/api/view';
-import { useUserStore } from '~/store';
-import TagCloud from './TagCloud.vue';
 import { getRecommendArticle } from '~/api/article';
-import Comments from './Comments.vue';
-import RichTextPreview from './RichTextPreview.vue';
+import { useUserStore } from '~/store';
 import { useArticleStore } from '~/store';
 
 // const toast = useToast();

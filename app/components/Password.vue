@@ -39,5 +39,5 @@ const showPassword = ref(false);
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/base.scss' as *;
+
 </style>

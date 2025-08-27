@@ -8,8 +8,11 @@
       <nav class="catalog-nav">
         <ul>
           <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
-            <a :class="{ active: activeHeading === heading.id }" :href="'#' + heading.id"
-              @click.prevent="scrollToHeading(heading.id)">
+            <a
+              :class="{ active: activeHeading?.id === heading.id }"
+              :href="'#' + heading.id"
+              @click.prevent="scrollToHeading(heading.id)"
+            >
               {{ heading.text }}
             </a>
           </li>
@@ -26,9 +29,16 @@
         <div class="catalog-drawer-content">
           <nav class="catalog-nav">
             <ul>
-              <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
-                <a :class="{ active: activeHeading === heading.id }" :href="'#' + heading.id"
-                  @click.prevent="scrollToHeading(heading.id)">
+              <li
+                v-for="heading in headings"
+                :key="heading.id"
+                :style="getHeadingStyle(heading.level)"
+              >
+                <a
+                  :class="{ active: activeHeading?.id === heading.id }"
+                  :href="'#' + heading.id"
+                  @click.prevent="scrollToHeading(heading.id)"
+                >
                   {{ heading.text }}
                 </a>
               </li>
@@ -42,7 +52,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
-import Drawer from './Drawer.vue';
+import Drawer from '~/components/Drawer.vue';
 
 const props = defineProps<{
   identifier: string;
@@ -56,10 +66,8 @@ interface Heading {
 }
 
 const headings = ref<Heading[]>([]);
-const activeHeading = ref('');
+const activeHeading = ref<Heading>();
 const showDrawer = ref(false);
-let container: HTMLElement | null = null;
-
 // 获取标题样式
 const getHeadingStyle = (level: number): { paddingLeft: string } => {
   return {
@@ -67,12 +75,16 @@ const getHeadingStyle = (level: number): { paddingLeft: string } => {
   };
 };
 
+function getHeadingElements() {
+  const content = document.querySelector('.article-body');
+  if (!content) return [];
+
+  return content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+}
 // 提取标题
 const extractHeadings = () => {
-  const content = document.querySelector('.article-body');
-  if (!content) return;
+  const headingElements = getHeadingElements();
 
-  const headingElements = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
   headings.value = Array.from(headingElements).map(heading => ({
     id: heading.id,
     text: heading.textContent || '',
@@ -91,35 +103,48 @@ const scrollToHeading = (id: string) => {
 
 // 处理滚动
 const handleScroll = () => {
-  const content = document.querySelector('.article-body');
-  if (!content) return;
-
-  const headingElements = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
+  const headingElements = getHeadingElements();
   // 更新当前激活的标题
   for (let i = headingElements.length - 1; i >= 0; i--) {
-    const heading = headingElements[i];
-    if (!heading) return;
-    const rect = heading.getBoundingClientRect();
+    const headingElement = headingElements[i];
+    if (!headingElement) return;
+    const rect = headingElement.getBoundingClientRect();
     if (rect.top <= 100) {
-      activeHeading.value = heading.id;
+      const heading = headings.value.find(item => item.id === headingElement.id);
+      activeHeading.value = heading;
+      history.replaceState(null, '', `#${heading?.text}`);
       break;
     }
   }
 };
 
+function navigateToTarget() {
+  const target = location.hash.slice(1);
+  if (target) {
+    const decoded = decodeURIComponent(target) 
+    const item = headings.value.find(item => item.text === decoded);
+    
+    if (item) {
+      const element = document.getElementById(item.id);
+      if (element) {
+        scrollToHeading(item.id);
+      }
+    }
+  } else {
+    activeHeading.value = headings.value[0];
+  }
+}
+
 onMounted(() => {
   nextTick(() => {
     extractHeadings();
+    navigateToTarget();
   });
-  window.addEventListener('scroll', handleScroll);
-  container = document.querySelector('.page-main');
-  container && container.addEventListener('scroll', handleScroll);
+  document.addEventListener('scroll', handleScroll);
 });
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-  container && container.removeEventListener('scroll', handleScroll);
+  document.removeEventListener('scroll', handleScroll);
 });
 </script>
 

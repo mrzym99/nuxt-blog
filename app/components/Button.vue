@@ -1,5 +1,5 @@
 <template>
-  <button type="submit" :disabled="loading || disabled">
+  <button class="btn" type="submit" :disabled="loading || disabled">
     <slot></slot>
     <Icon class="ml-2" v-if="loading" name="svg-spinners:90-ring-with-bg" size="1.2rem"></Icon>
   </button>

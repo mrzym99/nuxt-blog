@@ -90,7 +90,7 @@ const handleReset = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/base.scss' as *;
+
 
 .login-form {
   width: 100%;

@@ -1,8 +1,9 @@
 @use '_variables' as *;
 @use 'themes' as *;
 @use 'layout' as *;
-@use 'home' as *;
-@use 'global' as *;
+@use 'blog' as *;
+@use 'blog-post' as *;
+@use 'form' as *;
 @use 'highlight' as *;
 
 html {

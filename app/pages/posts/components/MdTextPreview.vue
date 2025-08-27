@@ -104,7 +104,6 @@ onMounted(() => {
 
 :deep(code) {
   @apply font-mono text-sm;
-  text-shadow: none !important;
   background: var(--code-color) !important;
 }
 

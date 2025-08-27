@@ -94,7 +94,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/base.scss' as *;
+
 
 .user-center {
   @include responsive(lt-lg) {

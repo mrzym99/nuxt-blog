@@ -99,7 +99,7 @@ const handleLogin = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '~/assets/styles/base.scss' as *;
+
 
 .register-form {
   width: 100%;

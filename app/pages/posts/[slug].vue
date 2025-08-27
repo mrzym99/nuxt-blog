@@ -16,9 +16,9 @@
                 {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span>
             </div>
           </div>
-          <div v-if="articleDetail?.cover" class="article-cover">
+          <!-- <div v-if="articleDetail?.cover" class="article-cover">
             <img :src="articleDetail?.cover" alt="" />
-          </div>
+          </div> -->
         </div>
         <div class="post-detail">
           <ArticleContent :article="articleDetail" />
@@ -30,14 +30,18 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from '#app';
+import { useAsyncData } from '#app';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
+
+import ArticleContent from './components/ArticleContent.vue';
+
 import { useArticleStore } from '~/store';
 import { getArticleDetail } from '~/api';
 import { formatDate } from '~/utils/tool';
 import type { IArticle } from '~/types/index';
-import { useHead } from '#app';
-import { useAsyncData } from '#app';
+
 
 const { setCurrentArticle } = useArticleStore();
 const route = useRoute();
@@ -92,6 +96,16 @@ watch(
 
       useHead({
         title: `${data.value.title}`,
+        meta: [
+          {
+            name: 'description',
+            content: `${data.value.description}`,
+          },
+          {
+            name: 'keywords',
+            content: `${data.value.tags.map(tag => tag.name).join(', ')}`,
+          },
+        ],
       });
     }
   },

@@ -1,10 +1,10 @@
 <template>
-  <aside class="sidebar w-60">
+  <aside class="sidebar hide-scrollbar w-60 lt-md:w-full">
     <!-- Menu -->
     <div class="blog-card !pt-0 lt-md:hidden">
       <Menus />
     </div>
-    <div v-show="!showCateLog">
+    <div class="lt-md:hidden" v-show="!showCateLog">
       <!-- Profile Card -->
       <div class="blog-card">
         <div class="profile">
@@ -44,7 +44,7 @@
           Friends
           <Popover position="bottom-left" :offset="8" :width="300" trigger="hover">
             <template #trigger>
-              <button class="tip">tips</button>
+              <span class="tip">tips</span>
             </template>
             <div class="text-[1rem] font-normal p-3 leading-loose">
               <h3 class="!my-1">添加友链步骤</h3>
@@ -83,7 +83,7 @@
 <script setup lang="ts">
 import { getBloggerInfo, getParameter } from '~/api';
 import { useAsyncData } from '#app';
-import Catalog from '~/components/Catalog.vue';
+import Catalog from '~/layouts/components/Catalog.vue';
 import { useArticleStore } from '~/store';
 import Menus from './Menus.vue';
 
