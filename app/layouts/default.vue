@@ -1,14 +1,16 @@
 <template>
-  <!-- Main Content -->
-  <div class="main-container">
-    <main class="page-main">
-      <div class="flex align-center justify-end md:hidden">
-        <Header />
+  <div class="h-screen w-full">
+    <!-- Main Content -->
+    <div class="main-container">
+      <main class="page-main">
+        <div class="flex align-center justify-end md:hidden">
+          <Header />
+        </div>
+        <slot />
+      </main>
+      <div class="relative w-60 lt-md:w-full flex-shrink-0">
+        <SideBar />
       </div>
-      <slot />
-    </main>
-    <div class="relative w-60 lt-md:w-full flex-shrink-0">
-      <SideBar />
     </div>
     <Toaster position="top-right" :theme="theme" />
   </div>
