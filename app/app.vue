@@ -4,12 +4,17 @@
     <NuxtLayout>
       <NuxtPage :keepalive="keepalive" />
     </NuxtLayout>
+    <Toaster position="top-left" :theme="theme" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useHead } from '#app';
 import { getTitle } from '~/utils/title';
+import type { Theme } from '~/types';
+const theme = computed(() => {
+  return useColorMode().preference as Theme
+});
 
 const keepalive = {
   include: ['Home', 'Archive'],

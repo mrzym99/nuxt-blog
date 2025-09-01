@@ -92,14 +92,8 @@ function thirdLogin() {
       });
     })
     .catch(() => {
-      // $toast.error({
-      //   //   message: '登录授权失效，请重新登录',
-      //   //   timeout: 200,
-      //   //   onClosed() {
-      //   //     router.back();
-      //   //   },
-      //   });
-      // });
+      $toast.error('登录授权失效，请重新登录')
+      router.back();
     })
 }
 
@@ -110,14 +104,13 @@ const handleLogin = () => {
     .thirdLogin(loginForm.value)
     .then(() => {
       loading.value = false;
-      // $toast.success({
-      //   //   message: '登录成功',
-      //   //   timeout: 200,
-      //   //   onClosed() {
-      //   //     router.push('/');
-      //   //   },
-      //   // });
-      // })
+      $toast.promise(() => new Promise((resolve) => setTimeout(resolve, 1000)), {
+        loading: '登录成功，即将返回',
+        success: () => {
+          router.back();
+          return '欢迎回来，' + useUserStore().user?.nickName
+        },
+      })
     })
     .catch(() => {
       loading.value = false;

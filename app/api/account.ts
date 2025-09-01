@@ -16,7 +16,6 @@ export type CodeLogin = {
 export type Register = {
   email: string;
   code: string;
-  username: string;
   password: string;
   confirmPassword: string;
 };

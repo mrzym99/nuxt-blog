@@ -1,35 +1,40 @@
 <template>
   <div class="login">
     <div class="login-card">
-      <div :style="{
-        '--mask-color':
-          colorMode.preference === 'dark' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.3)',
-      }" class="login-bg w-full h-full" @click="back">
-        <img :src="loginBg" alt="" />
+      <div class="login-header">
+        <NuxtLink to="/">
+          <h3 class="m-0">M</h3>
+        </NuxtLink>
+        <ThemeSwitch />
       </div>
-      <div class="login-container w-full p-2rem">
+      <div class="login-container w-full m-1rem p-1rem">
         <div class="w-full flex justify-between">
-          <h1 class="login-title">{{ titleMap[type] }}</h1>
+          <h2 class="login-title">{{ titleMap[type] }}</h2>
           <span></span>
-          <!-- <Icon class="back" name="ph:arrow-u-up-left-light" @click="back"></Icon> -->
         </div>
         <Transition name="fade">
           <component :is="componentId" />
         </Transition>
-        <div class="link-container" v-if="type === 'pwd-login'">
-          <NuxtLink class="login-link" to="/login/code-login">验证码</NuxtLink>
-          <NuxtLink class="login-link" @click="thirdLogin('github')">GitHub</NuxtLink>
+        <div class="link-container" v-if="showLoginType">
+          <NuxtLink v-if="type !== 'pwd-login'" class="login-link" to="/login/pwd-login" replace>密码登录</NuxtLink>
+          <NuxtLink v-if="type !== 'code-login'" class="login-link" to="/login/code-login" replace>验证码</NuxtLink>
+          <NuxtLink v-if="type !== 'github-login'" class="login-link" @click="thirdLogin('github')" replace>GitHub
+          </NuxtLink>
         </div>
-        <div class="register-link">
-          <div class="flex justify-between items-center" v-if="['pwd-login', 'register'].includes(type)">
-            <NuxtLink class="text-gradient underline" to="/login/reset-pwd"> 忘记密码？ </NuxtLink>
-            <div v-if="type === 'register'">
-              已有账号？
-              <NuxtLink class="text-gradient underline" to="/login/pwd-login"> 去登录 </NuxtLink>
+        <div class="bottom-link">
+          <div class="flex justify-between items-center" v-if="showBottomLink">
+            <div>
+              <NuxtLink v-if="!['register', 'reset-pwd', 'code-login'].includes(type)" class="text-gradient underline"
+                to="/login/reset-pwd" replace> 忘记密码？
+              </NuxtLink>
+            </div>
+            <div v-if="type === 'register' || type === 'reset-pwd'">
+              {{ type === 'register' ? '已有账号？' : '想起来了？' }}
+              <NuxtLink class="text-gradient underline" to="/login/pwd-login" replace> 去登录 </NuxtLink>
             </div>
             <div v-else>
               没有账号？
-              <NuxtLink class="text-gradient underline" to="/login/register"> 去注册 </NuxtLink>
+              <NuxtLink class="text-gradient underline" to="/login/register" replace> 去注册 </NuxtLink>
             </div>
           </div>
         </div>
@@ -45,20 +50,19 @@
 import { type Component, onBeforeMount } from 'vue';
 import PwdLogin from './modules/pwd-login.vue';
 import Register from './modules/register.vue';
-import loginBg from '~/assets/images/login-bg.jpeg';
-import { getToken } from '~/utils/auth';
 import CodeLogin from './modules/code-login.vue';
 import GithubLogin from './modules/github-login.vue';
 import { getThirdLoginUrl } from '~/api';
 import ResetPwd from './modules/reset-pwd.vue';
 import Dots from '~/components/Dots.vue';
-import { storeToRefs } from 'pinia';
+import ThemeSwitch from '~/components/ThemeSwitch.vue';
+import { useUserStore } from '~/store';
+import { isLoggedIn } from '~/utils/auth';
 
 definePageMeta({
   layout: 'blank',
 });
 
-const colorMode = useColorMode();
 const route = useRoute();
 const router = useRouter();
 
@@ -82,6 +86,14 @@ const titleMap: Record<loginType, string> = {
 
 const type = computed(() => route.params.type as loginType);
 
+const showLoginType = computed(() => {
+  return ['pwd-login', 'code-login', 'github-login'].includes(type.value);
+});
+
+const showBottomLink = computed(() => {
+  return ['pwd-login', 'code-login', 'register', 'reset-pwd'].includes(type.value);
+});
+
 const componentId = computed(() => {
   return loginMap[type.value];
 });
@@ -91,12 +103,8 @@ const thirdLogin = async (type: string) => {
   if (window) window.location.href = res.data;
 };
 
-const back = () => {
-  router.back();
-};
-
 onBeforeMount(() => {
-  if (getToken()) {
+  if (isLoggedIn()) {
     router.push('/');
   }
 });
@@ -112,57 +120,50 @@ onBeforeMount(() => {
 }
 
 .login-card {
+  position: relative;
+  display: flex;
+  align-items: center;
   max-width: 800px;
-  min-height: 80vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  width: 24rem;
+  min-height: 72vh;
   box-shadow: 0px 20px 80px 0px rgba(0, 0, 0, 0.3);
-  background: var(--bg-color);
   z-index: 2;
+
+  @include responsive(lt-sm) {
+    width: 100%;
+    height: 100vh;
+  }
 
   @include responsive(lt-md) {
     width: 100%;
     height: 100vh;
-    display: block;
   }
 }
 
-.login-bg {
-  position: relative;
-
-  @include responsive(lt-md) {
-    display: none;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    object-fit: cover;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--mask-color);
-  }
+.login-header {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 3;
 }
 
 .login-container {
   z-index: 2;
   max-width: 460px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border-radius: 12px;
 
-  background: var(--bg-color);
+  @include responsive(lt-sm) {
+    height: 100%;
+  }
 
   @include responsive(lt-md) {
     height: 100%;
@@ -209,7 +210,7 @@ onBeforeMount(() => {
   }
 }
 
-.register-link {
+.bottom-link {
   width: 100%;
 }
 </style>

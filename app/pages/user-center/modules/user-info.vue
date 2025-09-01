@@ -2,13 +2,9 @@
   <div class="user-info w-full block md:flex gap-[2rem]">
     <div class="flex flex-col items-start" style="flex-shrink: 0">
       <DescriptionItem label-width="0" class="flex justify-center">
-        <img
-          class="avatar w-16rem h-16rem object-fit rounded-full"
-          :src="userInfo?.profile.avatar"
-          alt="avatar"
-        />
+        <img class="avatar w-8rem h-8rem  object-fit rounded-full" :src="userInfo?.profile.avatar" alt="avatar" />
       </DescriptionItem>
-      <DescriptionItem label-width="60px">
+      <DescriptionItem label-width="0">
         <p class="text-2xl font-bold">{{ userInfo?.profile.nickName }}</p>
       </DescriptionItem>
     </div>
@@ -55,7 +51,7 @@ defineProps<{
 
 .profile {
   flex: 1;
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 1rem;
   border-radius: 8px;
   border: 1px solid var(--border-color);
 }

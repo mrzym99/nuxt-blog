@@ -1,27 +1,33 @@
 <template>
-  <Popover v-if="user" ref="popoverRef" position="bottom-right" :width="200">
-    <template #trigger>
-      <img class="size-1.5rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110" :src="user?.avatar"
-        :alt="user?.nickName" />
-    </template>
-    <div class="user-panel">
-      <div class="user-list">
-        <button class="user-item" @click="toUserCenter">
-          <span class="user-name">User Center</span>
-        </button>
-        <button class="user-item" @click="logout">
-          <span class="user-name">logout</span>
-        </button>
+  <ClientOnly>
+    <Popover v-if="user" ref="popoverRef" position="bottom-right" :width="200">
+      <template #trigger>
+        <img class="avatar size-1.6rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
+          :src="user?.avatar" :alt="user?.nickName" />
+      </template>
+      <div class="user-panel">
+        <div class="user-list">
+          <button class="user-item" @click="toUserCenter">
+            <span class="user-name">User Center</span>
+          </button>
+          <button class="user-item" @click="ToSetting">
+            <span class="user-name">Setting</span>
+          </button>
+          <button class="user-item" @click="logout">
+            <span class="user-name">logout</span>
+          </button>
+        </div>
       </div>
-    </div>
-  </Popover>
+    </Popover>
+    <NuxtLink v-else class="to-login" to="/login/pwd-login">Login</NuxtLink>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
 import Popover from './Popover.vue';
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
-import { getToken } from '~/utils/auth';
+import { isLoggedIn } from '~/utils/auth';
 
 const { user } = storeToRefs(useUserStore());
 const router = useRouter();
@@ -30,18 +36,26 @@ function toUserCenter() {
   router.push(`/user-center/${user.value?.id}`);
 }
 
+function ToSetting() {
+  router.push('/setting');
+}
+
 function logout() {
   useUserStore().logout();
 }
 
 onMounted(() => {
-  if (!user.value && getToken()) {
+  if (!user.value && isLoggedIn()) {
     useUserStore().setUser();
   }
 });
 </script>
 
 <style lang="scss" scoped>
+.avatar {
+  border: 1px solid var(--border-color);
+}
+
 .user-panel {
   padding: 0.25rem;
 
@@ -74,10 +88,6 @@ onMounted(() => {
       background-color: var(--border-color);
     }
 
-    &.active {
-      background-color: var(--border-color);
-    }
-
     .user-color {
       width: 1.25rem;
       height: 1.25rem;
@@ -92,8 +102,9 @@ onMounted(() => {
       color: var(--text-color);
     }
 
-    &.active .user-color {
-      border-color: var(--primary-color);
+    .active {
+      color: var(--text-color);
+      background-color: var(--primary-color);
     }
   }
 }

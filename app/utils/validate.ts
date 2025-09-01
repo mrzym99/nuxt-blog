@@ -1,6 +1,6 @@
 import { REG_USER_NAME, REG_PWD, REG_CODE_FOUR } from '~/assets/constant';
 import { defineRule } from 'vee-validate';
-const defineCustomeRules = () => {
+const defineCustomRules = () => {
   defineRule('username', (value: string) => {
     if (value && !REG_USER_NAME.test(value)) {
       return '用户名格式不正确，邮箱或6-18位字符，包含字母、数字';
@@ -59,4 +59,4 @@ const defineCustomeRules = () => {
   });
 };
 
-export default defineCustomeRules;
+export default defineCustomRules;

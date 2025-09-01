@@ -54,7 +54,7 @@ const labelStyle = computed(() => {
   .value {
     margin-left: 1rem;
     flex: 1;
-    color: var(--text-light-color);
+    color: var(--text-color);
   }
 }
 </style>

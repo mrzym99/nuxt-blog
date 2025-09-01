@@ -13,6 +13,10 @@ export function removeToken() {
   return localStorage.removeItem(`${appName}-token`);
 }
 
+export function isLoggedIn() {
+  return !!getToken();
+}
+
 export async function handleRefreshToken() {
   const token = getToken();
   if (!token) return false;

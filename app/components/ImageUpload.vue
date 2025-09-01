@@ -1,11 +1,8 @@
 <template>
   <div class="avatar-upload">
     <!-- 头像预览和上传区域 -->
-    <div
-      class="avatar-preview"
-      :style="{ backgroundImage: `url(${previewImage || modelValue})` }"
-      @click="triggerFileInput"
-    >
+    <div class="avatar-preview" :style="{ backgroundImage: `url(${previewImage || modelValue})` }"
+      @click="triggerFileInput">
       <div v-if="isUploading" class="upload-mask">
         <div class="loading-spinner"></div>
       </div>
@@ -91,18 +88,14 @@ const handleFileSelect = async (e: Event) => {
   @apply flex flex-col items-center;
 
   .avatar-preview {
-    @apply w-[16rem] h-[16rem] rounded-full bg-gray-100 bg-cover bg-center 
-           cursor-pointer border-2 border-solid border-gray-300
-           relative overflow-hidden;
+    @apply w-[8rem] h-[8rem] rounded-full bg-gray-100 bg-cover bg-center cursor-pointer border-2 border-solid border-gray-300 relative overflow-hidden;
 
     .edit-overlay {
-      @apply absolute inset-0 bg-black bg-opacity-40 flex items-center 
-             justify-center opacity-0 transition-opacity;
+      @apply absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 transition-opacity;
     }
 
     .upload-mask {
-      @apply absolute inset-0 bg-black bg-opacity-60 flex items-center 
-             justify-center;
+      @apply absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center;
     }
 
     &:hover .edit-overlay {
@@ -111,8 +104,7 @@ const handleFileSelect = async (e: Event) => {
   }
 
   .loading-spinner {
-    @apply w-8 h-8 border-4 border-white border-t-transparent 
-           rounded-full animate-spin;
+    @apply w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin;
   }
 
   .error-message {

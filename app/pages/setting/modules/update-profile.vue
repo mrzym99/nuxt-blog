@@ -12,14 +12,14 @@
         </div>
         <div class="flex-1 max-w-500px mt-2rem md:mt-0">
           <div class="form-group mb-2">
-            <label for="avatar">昵称</label>
+            <label for="nickName">昵称</label>
             <VeeField v-model="loginForm.nickName" name="nickName" placeholder="请输入昵称" rules="required" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="昵称" key="nickName" />
             </Transition>
           </div>
           <div class="form-group mb-2">
-            <label for="avatar">性别</label>
+            <label for="gender">性别</label>
             <div class="mr-1rem flex items-center">
               <VeeField class="radio" v-model="loginForm.gender" name="性别" rules="required" type="radio" :value="1" />
               男
@@ -34,28 +34,28 @@
             </Transition>
           </div>
           <div class="form-group mb-2">
-            <label for="avatar">生日</label>
+            <label for="birthDate">生日</label>
             <VeeField v-model="loginForm.birthDate" type="date" name="生日" placeholder="请输入生日" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="生日" key="birthDate" />
             </Transition>
           </div>
           <div class="form-group mb-2">
-            <label for="avatar">地址</label>
+            <label for="address">地址</label>
             <VeeField v-model="loginForm.address" name="地址" placeholder="请输入地址" as="textarea" rows="2" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="地址" key="address" />
             </Transition>
           </div>
           <div class="form-group mb-2">
-            <label for="avatar">个人介绍</label>
+            <label for="introduction">个人介绍</label>
             <VeeField v-model="loginForm.introduction" name="个人介绍" as="textarea" rows="2" placeholder="请输入个人介绍" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="个人介绍" key="introduction" />
             </Transition>
           </div>
           <div class="form-group mb-2">
-            <label for="avatar">个性签名</label>
+            <label for="signature">个性签名</label>
             <VeeField v-model="loginForm.signature" name="个性签名" as="textarea" rows="2" placeholder="请输入个性签名" />
             <Transition name="fade">
               <VeeErrorMessage class="error-message" name="个性签名" key="signature" />

@@ -47,14 +47,13 @@ const handleLogin = () => {
     .pwdLogin(loginForm.value)
     .then(() => {
       loading.value = false;
-      // $toast.success({
-      //   //   message: '登录成功',
-      //   //   timeout: 200,
-      //   //   onClosed() {
-      //   //     router.back();
-      //   //   },
-      //   // });
-      // })
+      $toast.promise(() => new Promise((resolve) => setTimeout(resolve, 1500)), {
+        loading: '登录成功，即将返回',
+        success: () => {
+          router.back();
+          return '欢迎回来，' + userStore.user?.nickName
+        },
+      })
     })
     .catch(() => {
       loading.value = false;

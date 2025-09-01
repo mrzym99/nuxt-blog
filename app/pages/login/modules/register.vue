@@ -19,12 +19,6 @@
         </Transition>
       </div>
       <div class="form-group mb-2">
-        <VeeField v-model="loginForm.username" name="用户名" placeholder="请输入自定义的用户名" rules="username" />
-        <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="用户名" key="username" />
-        </Transition>
-      </div>
-      <div class="form-group mb-2">
         <VeeField v-model="loginForm.password" name="密码" placeholder="请输入密码" rules="required|password" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="密码" key="password" />
@@ -56,7 +50,6 @@ const sendCodeLoading = ref(false);
 const loginForm = ref<Register>({
   email: '',
   code: '',
-  username: '',
   password: '',
   confirmPassword: '',
 });
@@ -84,13 +77,8 @@ const handleLogin = () => {
   postRegister(loginForm.value)
     .then(() => {
       loading.value = false;
-      //$toast.success({
-      //   message: '注册成功，快去登录吧',
-      //   timeout: 200,
-      //   onClosed: () => {
-      //     router.push({ path: '/login/pwd-login' });
-      //   },
-      // });
+      $toast.success('注册成功，快去登录吧')
+      router.push({ path: '/login/pwd-login' });
     })
     .catch(() => {
       loading.value = false;
