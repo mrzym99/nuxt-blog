@@ -4,7 +4,9 @@
     <NuxtLayout>
       <NuxtPage :keepalive="keepalive" />
     </NuxtLayout>
-    <Toaster position="top-left" :theme="theme" />
+    <ClientOnly>
+      <Toaster position="top-left" :theme="theme" />
+    </ClientOnly>
   </div>
 </template>
 
@@ -13,7 +15,7 @@ import { useHead } from '#app';
 import { getTitle } from '~/utils/title';
 import type { Theme } from '~/types';
 const theme = computed(() => {
-  return useColorMode().preference as Theme
+  return useColorMode().preference as Theme;
 });
 
 const keepalive = {
