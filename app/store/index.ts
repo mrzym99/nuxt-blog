@@ -38,13 +38,17 @@ export const useUserStore = defineStore('user', {
   }),
   getters: {
     getUser: state => state.user,
-    hasLogin: () => getToken(),
   },
   actions: {
     setUser() {
       getUserInfo().then(res => {
         this.user = res.data;
       });
+    },
+    initUserInfo() {
+      if (!this.user) {
+        this.setUser();
+      }
     },
     removeUser() {
       this.user = null;
@@ -92,12 +96,9 @@ export const useUserStore = defineStore('user', {
       });
     },
     logout() {
-      getLogout().then(() => {
-        this.resetStore();
-      });
+      this.resetStore();
     },
     resetStore() {
-      removeToken();
       this.removeUser();
     },
   },

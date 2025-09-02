@@ -2,19 +2,18 @@
   <div class="login-form">
     <VeeForm @submit="handleLogin">
       <div class="form-group mb-2">
-        <label class="mb-1" for="username">用户名</label>
-        <VeeField v-model="loginForm.username" name="username" type="email" placeholder="请输入用户名"
-          rules="required|username" />
+        <label class="mb-1" for="用户名">用户名</label>
+        <VeeField v-model="loginForm.username" name="用户名" type="email" placeholder="请输入用户名" rules="required|username" />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="username" key="username" />
+          <VeeErrorMessage class="error-message" name="用户名" key="username" />
         </Transition>
       </div>
       <div class="form-group mb-5">
-        <label class="mb-1" for="password">密码</label>
-        <VeeField v-model="loginForm.password" name="password" type="password" placeholder="请输入密码"
+        <label class="mb-1" for="密码">密码</label>
+        <VeeField v-model="loginForm.password" name="密码" type="password" placeholder="请输入密码"
           rules="required|password" />
         <Transition name="fade">
-          <VeeErrorMessage class="error-message" name="password" />
+          <VeeErrorMessage class="error-message" name="密码" key="password" />
         </Transition>
       </div>
       <Button :loading="loading" type="submit"> 登录 </Button>

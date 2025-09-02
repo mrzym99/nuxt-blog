@@ -1,33 +1,34 @@
 <template>
-  <ClientOnly>
-    <Popover v-if="user" ref="popoverRef" position="bottom-right" :width="200">
-      <template #trigger>
-        <img class="avatar size-1.6rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
-          :src="user?.avatar" :alt="user?.nickName" />
-      </template>
-      <div class="user-panel">
-        <div class="user-list">
-          <button class="user-item" @click="toUserCenter">
-            <span class="user-name">User Center</span>
-          </button>
-          <button class="user-item" @click="ToSetting">
-            <span class="user-name">Setting</span>
-          </button>
-          <button class="user-item" @click="logout">
-            <span class="user-name">logout</span>
-          </button>
+  <div class="min-w-2rem flex align-center justify-center">
+    <ClientOnly>
+      <NuxtLink v-if="!user" class="to-login" to="/login/pwd-login">Login</NuxtLink>
+      <Popover v-else ref="popoverRef" position="bottom-right" :width="200">
+        <template #trigger>
+          <img class="avatar size-2rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
+            :src="user?.avatar" :alt="user?.nickName" />
+        </template>
+        <div class="user-panel">
+          <div class="user-list">
+            <button class="user-item" @click="toUserCenter">
+              <span class="user-name">User Center</span>
+            </button>
+            <button class="user-item" @click="ToSetting">
+              <span class="user-name">Setting</span>
+            </button>
+            <button class="user-item" @click="logout">
+              <span class="user-name">logout</span>
+            </button>
+          </div>
         </div>
-      </div>
-    </Popover>
-    <NuxtLink v-else class="to-login" to="/login/pwd-login">Login</NuxtLink>
-  </ClientOnly>
+      </Popover>
+    </ClientOnly>
+  </div>
 </template>
 
 <script setup lang="ts">
 import Popover from './Popover.vue';
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
-import { isLoggedIn } from '~/utils/auth';
 
 const { user } = storeToRefs(useUserStore());
 const router = useRouter();
@@ -43,12 +44,6 @@ function ToSetting() {
 function logout() {
   useUserStore().logout();
 }
-
-onMounted(() => {
-  if (!user.value && isLoggedIn()) {
-    useUserStore().setUser();
-  }
-});
 </script>
 
 <style lang="scss" scoped>

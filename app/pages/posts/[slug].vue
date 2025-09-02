@@ -5,7 +5,7 @@
       <div v-if="articleDetail.id">
         <div class="article-header">
           <div class="info-wrapper">
-            <div class="tags-cloud">
+            <div class="tag-cloud">
               <NuxtLink class="tag" v-for="tag in articleDetail?.tags" :to="'/archive/' + tag.name" :key="tag.id">
                 {{ tag.name }}
               </NuxtLink>

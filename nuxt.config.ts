@@ -45,6 +45,7 @@ export default defineNuxtConfig({
     // '@nuxt/eslint',
     '@nuxtjs/color-mode',
     'vue-sonner/nuxt',
+    'nuxt-svgo',
   ],
   vueSonner: {
     css: true, // true by default to include css file
@@ -74,7 +75,7 @@ export default defineNuxtConfig({
     },
   },
   css: ['@unocss/reset/tailwind.css', '~/assets/styles/index.scss'],
-  plugins: ['~/plugins/index.ts'],
+  plugins: ['~/plugins/index.ts', '~/plugins/vee.ts', '~/plugins/auth.ts'],
   icon: {
     localApiEndpoint: '/nuxt-icon',
   },

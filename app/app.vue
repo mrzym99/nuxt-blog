@@ -5,7 +5,9 @@
       <NuxtPage :keepalive="keepalive" />
     </NuxtLayout>
     <ClientOnly>
-      <Toaster position="top-left" :theme="theme" />
+      <Toaster :toast-options="{
+        duration: 2000
+      }" position="top-right" :theme="theme" />
     </ClientOnly>
   </div>
 </template>
@@ -14,6 +16,7 @@
 import { useHead } from '#app';
 import { getTitle } from '~/utils/title';
 import type { Theme } from '~/types';
+
 const theme = computed(() => {
   return useColorMode().preference as Theme;
 });

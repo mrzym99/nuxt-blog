@@ -2,7 +2,7 @@
   <div class="archive py-2">
     <!-- Blog Posts -->
     <main>
-      <div class="tags-cloud">
+      <div class="tag-cloud">
         <NuxtLink class="tag tag-all" :class="{ active: route.params.tag === 'all' }" to="/archive/all" :replace="true">
           <strong>
             All <sup>{{ allPosts.length }}</sup></strong>

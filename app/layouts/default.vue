@@ -7,6 +7,9 @@
           <Header />
         </div>
         <slot />
+        <div class="md:hidden">
+          <CopyRight />
+        </div>
       </main>
       <div class="relative w-64 lt-md:w-full flex-shrink-0">
         <SideBar />
@@ -18,6 +21,7 @@
 <script setup lang="ts">
 import SideBar from './components/SideBar.vue';
 import Header from './components/Header.vue';
+import CopyRight from './components/CopyRight.vue';
 </script>
 
 <style lang="scss" scoped></style>

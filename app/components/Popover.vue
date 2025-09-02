@@ -308,7 +308,7 @@ defineExpose({
 .popover-container {
   position: relative;
   display: inline-block;
-  z-index: 1;
+  z-index: $z-index-popover;
 }
 
 .popover-content {

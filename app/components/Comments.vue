@@ -4,78 +4,23 @@
     <div class="comments-list">
       <!-- 主评论输入框 -->
       <div class="comment-form">
-        <div class="form-header">
-          <div class="avatar">
-            <NuxtLink v-if="user" :to="`/user-center/${user?.id}`">
-              <img :src="user?.avatar" :alt="user?.nickName" />
-            </NuxtLink>
-            <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
-          </div>
+        <ClientOnly>
           <div class="form-content">
-            <div class="markdown-toolbar">
-              <button class="tool-btn" @click="insertText('**', '**')" title="加粗">
-                <Icon name="carbon:text-bold" />
-              </button>
-              <button class="tool-btn" @click="insertText('*', '*')" title="斜体">
-                <Icon name="carbon:text-italic" />
-              </button>
-              <button class="tool-btn" @click="insertText('__', '__')" title="下划线">
-                <Icon name="carbon:text-underline" />
-              </button>
-              <button class="tool-btn" @click="insertText('> ')" title="引用">
-                <Icon name="carbon:quotes" />
-              </button>
-              <button class="tool-btn" @click="insertText('`', '`')" title="代码">
-                <Icon name="carbon:code" />
-              </button>
-              <button class="tool-btn" @click="insertText('```\n', '\n```')" title="代码块">
-                <Icon name="carbon:code-block" />
-              </button>
-              <button class="tool-btn" @click="insertText('@')" title="@用户">
-                <Icon name="carbon:user-avatar" />
-              </button>
-              <button class="tool-btn" @click="triggerImageUpload" title="插入图片">
-                <Icon name="carbon:image" />
-              </button>
-              <input type="file" ref="imageInput" accept="image/*" class="hidden" @change="handleImageUpload" />
+            <div class="avatar">
+              <NuxtLink v-if="user" :to="`/user-center/${user?.id}`">
+                <img :src="user?.avatar" :alt="user?.nickName" />
+              </NuxtLink>
+              <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
             </div>
-            <textarea v-model="commentContent" placeholder="写下你的评论..." rows="3"
-              @keydown.enter="handleSubmit"></textarea>
-            <div class="form-footer">
-              <div class="form-tools">
-                <Popover position="bottom" :offset="8" :width="380">
-                  <template #trigger>
-                    <button class="tool-btn">😊</button>
-                  </template>
-                  <div class="emoji-picker">
-                    <div class="emoji-list">
-                      <span v-for="emoji in emojis" :key="emoji" class="emoji-item" @click="insertEmoji(emoji)">
-                        {{ emoji }}
-                      </span>
-                    </div>
-                  </div>
-                </Popover>
-                <Popover position="bottom-left" :offset="8">
-                  <template #trigger>
-                    <button class="preview-button flex items-center">
-                      <Icon name="ph:eye" size="1.25rem" />
-                    </button>
-                  </template>
-                  <div class="preview-panel">
-                    <div class="w-300px min-h-10rem" v-html="renderedContent"></div>
-                  </div>
-                </Popover>
-              </div>
-              <div class="form-actions">
-                <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
-                  发表评论
-                </button>
-              </div>
-            </div>
+            <Editor :read-only="!user" v-model="commentContent" style="height: 200px;" />
           </div>
-        </div>
+          <div class="form-actions">
+            <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
+              发表评论
+            </button>
+          </div>
+        </ClientOnly>
       </div>
-
       <div v-if="comments.length === 0" class="no-comments">暂无评论，快来抢沙发吧！</div>
       <template v-else>
         <Tab v-model="commentOrder" :options="tabOptions" @change="toggleTab" />
@@ -158,25 +103,7 @@
 
               <!-- 回复框 -->
               <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
-                <div class="form-header">
-                  <div class="avatar">
-                    <NuxtLink :to="`/user-center/${user?.id}`">
-                      <img :src="user?.avatar" :alt="user?.nickName" />
-                    </NuxtLink>
-                  </div>
-                  <div class="form-content">
-                    <textarea v-model="commentContent" :placeholder="`回复 @${replyTo.user.profile.nickName}`" rows="3"
-                      @keydown.enter="handleSubmit"></textarea>
-                    <div class="form-footer">
-                      <div class="form-actions">
-                        <button class="cancel-btn" @click="cancelReply">取消</button>
-                        <button class="reply-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
-                          回复
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -220,6 +147,7 @@ import { postCancelLike, postLike, uploadImg } from '~/api';
 import FormData from 'form-data';
 import Tab from './Tab.vue';
 import { emojiList } from '~/assets/constant/emoji';
+import Editor from './Editor.vue';
 
 const props = defineProps<{
   type: CommentType;
@@ -737,11 +665,6 @@ onMounted(() => {
   }
 }
 
-.form-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
 .cancel-btn {
   display: flex;
   align-items: center;
@@ -777,16 +700,12 @@ onMounted(() => {
   background-color: var(--bg-color);
   border: 1px solid var(--border-color);
 
-  .form-header {
-    display: flex;
-    gap: 0.5rem;
-  }
-
   .avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     overflow: hidden;
+    margin-right: 0.5rem;
 
     img {
       width: 100%;
@@ -796,52 +715,21 @@ onMounted(() => {
   }
 
   .form-content {
-    flex: 1;
-
-    textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      border: 1px solid;
-      resize: vertical;
-      white-space: pre-wrap;
-
-      background-color: var(--bg-color);
-      border-color: var(--border-color);
-      color: var(--text-color);
-
-      &:focus {
-        outline: none;
-        border-color: var(--primary-color);
-      }
-    }
-  }
-
-  .form-footer {
     display: flex;
-    justify-content: flex-end;
-    margin-top: 0.5rem;
   }
 }
 
 .comment-form {
   margin-bottom: 1rem;
-  padding: 0.8rem;
   border-radius: 0.5rem;
-
   background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
-
-  .form-header {
-    display: flex;
-    gap: 0.5rem;
-  }
 
   .avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     overflow: hidden;
+    margin-right: 0.5rem;
 
     img {
       width: 100%;
@@ -869,91 +757,18 @@ onMounted(() => {
   }
 
   .form-content {
-    flex: 1;
-
-    .markdown-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.25rem;
-      margin-bottom: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-
-      background-color: var(--bg-color);
-      border: 1px solid var(--border-color);
-
-      .tool-btn {
-        padding: 0.25rem;
-        border: none;
-        background: none;
-        cursor: pointer;
-        border-radius: 0.25rem;
-        transition: all 0.3s ease;
-
-        i {
-          width: 1rem;
-          height: 1rem;
-
-          color: var(--text-color);
-
-          &:hover {
-            color: var(--primary-color);
-          }
-        }
-
-        i {
-          font-size: 1.25rem;
-        }
-      }
-    }
-
-    textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      border: 1px solid;
-      resize: vertical;
-
-      background-color: var(--bg-color);
-      border-color: var(--border-color);
-      color: var(--text-color);
-
-      &:focus {
-        outline: none;
-        border-color: var(--primary-color);
-      }
-    }
+    display: flex;
   }
 
-  .form-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  .form-actions {
     margin-top: 0.5rem;
-  }
-
-  .form-tools {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .tool-btn {
-    padding: 0.25rem 0.5rem;
-    border: none;
-    background: none;
-    cursor: pointer;
-
-    color: var(--text-light-color);
-
-    &:hover {
-      color: var(--primary-color);
-    }
+    justify-content: flex-end;
   }
 
   .submit-btn {
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
+    padding: 0.3rem 1rem;
+    border-radius: 0.2rem;
     border: none;
     cursor: pointer;
 
@@ -967,117 +782,6 @@ onMounted(() => {
 
     &:hover:not(:disabled) {
       opacity: 0.9;
-    }
-  }
-}
-
-.emoji-picker {
-  .emoji-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    max-height: 20rem;
-    overflow: auto;
-  }
-
-  .emoji-item {
-    cursor: pointer;
-    padding: 0.25rem;
-    font-size: 1.2rem;
-
-    &:hover {
-      color: var(--primary-color);
-    }
-  }
-}
-
-.preview-panel {
-  padding: 1rem;
-
-  .preview-title {
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.75rem;
-
-    color: var(--text-color);
-  }
-
-  .preview-content {
-    max-height: 300px;
-    overflow-y: auto;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-
-    background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-
-    :deep(p) {
-      margin: 0.5em 0;
-    }
-
-    :deep(code) {
-      padding: 0.2em 0.4em;
-      border-radius: 0.25rem;
-      font-family: monospace;
-    }
-
-    :deep(pre) {
-      padding: 1em;
-      border-radius: 0.5rem;
-      overflow-x: auto;
-      margin: 1em 0;
-
-      code {
-        background-color: transparent;
-        padding: 0;
-      }
-    }
-
-    :deep(blockquote) {
-      margin: 1em 0;
-      padding-left: 1em;
-
-      color: var(--text-light-color);
-    }
-
-    :deep(ul),
-    :deep(ol) {
-      padding-left: 1.5em;
-      margin: 0.5em 0;
-    }
-
-    :deep(a) {
-      color: var(--primary-color);
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-
-    :deep(img) {
-      max-width: 100%;
-      height: auto;
-      border-radius: 0.5rem;
-      margin: 0.5em 0;
-    }
-
-    :deep(table) {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 0.5em 0;
-
-      th,
-      td {
-        border: 1px solid var(--border-color);
-        padding: 0.5em;
-        text-align: left;
-      }
-
-      th {
-        background-color: var(--border-color);
-      }
     }
   }
 }

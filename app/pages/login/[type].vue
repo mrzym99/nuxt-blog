@@ -122,6 +122,7 @@ onBeforeMount(() => {
 .login-card {
   position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
   max-width: 800px;
   width: 24rem;

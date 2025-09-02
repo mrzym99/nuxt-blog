@@ -1,6 +1,6 @@
 <template>
   <!-- Tags Cloud -->
-  <div class="tags-cloud">
+  <div class="tag-cloud">
     <NuxtLink v-for="tag in allTags" :key="tag.name" :to="`/archive/${tag.name}`" class="tag">
       {{ tag.name }}
       <span class="ml-1 text-xs">({{ tag.count }})</span>
@@ -12,7 +12,7 @@
 import { getAllTags } from '~/api';
 import type { ITag } from '~/types/index';
 
-const { data } = await useAsyncData('tags-clould', async () => {
+const { data } = await useAsyncData('tag-clould', async () => {
   const res = await getAllTags();
   return res.data;
 });

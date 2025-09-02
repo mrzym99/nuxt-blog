@@ -69,7 +69,11 @@
         </div>
       </div>
       <div class="blog-card">
-        <p>Copyright © Zy 2025</p>
+        <p>
+          Copyright ©
+          <a class="text-gradient" href="https://github.com/mrzym99" target="_blank">Zym</a>
+          2025
+        </p>
         <p>
           Powered by
           <a class="text-gradient" href="https://nuxt.com/" target="_blank">Nuxt</a>

@@ -18,7 +18,6 @@ pnpm preview
 ```
 
 # TODO
-Validate Form
 Comments 
 code refactor
 image lightbox

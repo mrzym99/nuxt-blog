@@ -49,12 +49,10 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
         if (expiredCodes.includes(code)) {
           const flag = await handleRefreshToken();
           if (flag) {
-            return $fetch(baseURL + url, {
-              method: method,
-              body: data,
-              query: params,
-              ...config,
-            });
+            return http(options);
+          } else {
+            removeToken();
+            useUserStore().logout();
           }
         } else if (logoutCodes.includes(code)) {
           removeToken();
@@ -116,12 +114,10 @@ async function $http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
         if (expiredCodes.includes(code)) {
           const flag = await handleRefreshToken();
           if (flag) {
-            return $fetch(baseURL + url, {
-              method: method,
-              body: data,
-              query: params,
-              ...config,
-            });
+            return (await $http(options)).data;
+          } else {
+            removeToken();
+            useUserStore().logout();
           }
         } else if (logoutCodes.includes(code)) {
           removeToken();
