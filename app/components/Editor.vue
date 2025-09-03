@@ -11,13 +11,15 @@ import attachment from '@/assets/icons/attachment.svg?raw'
 import type { IUser } from '~/types'
 import { uploadImg } from '~/api';
 import FormData from 'form-data';
-
+import * as Emoji from 'quill2-emoji';
+import 'quill2-emoji/dist/style.css';
 
 const props = defineProps<{
   // HTML model value, supports v-model
   modelValue?: string | null
   // Quill initialization options
   options?: QuillOptions
+  height?: number | string
   semantic?: boolean
   readOnly?: boolean
 }>()
@@ -37,6 +39,12 @@ const quillEditor = ref<HTMLElement>()
 const model = ref<string | null>()
 const userList = ref<IUser[]>([])
 
+const editorStyle = computed(() => {
+  return {
+    height: typeof props.height === 'number' ? `${props.height}px` : props.height,
+  }
+})
+
 const defaultOptions: QuillOptions = {
   theme: 'snow',
   placeholder: '',
@@ -49,7 +57,7 @@ const defaultOptions: QuillOptions = {
         [{ background: [] }],
         [{ align: [] }],
         [{ list: 'ordered' }, { list: 'bullet' }],
-        ['image'],
+        ['image', 'emoji'],
       ],
       handlers: {
         image: fileHandler('image'), // 正确放置 handlers
@@ -62,8 +70,10 @@ const defaultOptions: QuillOptions = {
           quillInstance?.history.redo()
           updateHistoryStatus()
         },
+        emoji: () => { },
       },
     },
+    "emoji-toolbar": true,
     mention: {
       blotName: 'styled-mention',
       allowedChars: /^[\u4E00-\u9FA5\w]*$/, // 允许中文/英文/数字/下划线
@@ -160,6 +170,13 @@ function registerMention() {
   }
 }
 
+function registerEmoji() {
+  Quill.register("modules/emoji", Emoji, true);
+  // Quill.register('modules/emoji-shortname', ShortNameEmoji, true)
+  // Quill.register('modules/emoji-toolbar', ToolbarEmoji, true)
+  // Quill.register('modules/emoji-textarea', TextAreaEmoji, true)
+}
+
 function customIcons() {
   const icons = Quill.import('ui/icons') as any
   icons.undo = undo
@@ -170,6 +187,7 @@ function customIcons() {
 // Editor initialization, returns Quill instance
 const initialize = async () => {
   registerMention()
+  registerEmoji()
   customIcons()
   userList.value = []
   Object.assign(defaultOptions, props.options)
@@ -314,7 +332,7 @@ defineExpose<{
 
 <template>
   <div class="quill-container">
-    <div ref="quillEditor" />
+    <div ref="quillEditor" :style="editorStyle" />
   </div>
 </template>
 
@@ -322,9 +340,6 @@ defineExpose<{
 .quill-container {
   width: 100%;
   height: 100%;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
   line-height: normal;
 
   :deep(.ql-toolbar) {
@@ -337,12 +352,17 @@ defineExpose<{
   }
 
   :deep(.ql-container) {
-    flex: 1;
     font-size: 16px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
       'Helvetica Neue', sans-serif;
+
+
+    img {
+      max-width: 80px;
+      object-fit: cover;
+    }
   }
 
   :deep(.ql-blank::before) {

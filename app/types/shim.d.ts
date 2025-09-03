@@ -11,6 +11,8 @@ declare module 'marked-highlight' {
   export default use;
 }
 
+declare module 'quill2-emoji' {}
+
 // declare module '#app' {
 //   interface NuxtApp {
 //   }

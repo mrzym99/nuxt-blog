@@ -49,7 +49,7 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
         if (expiredCodes.includes(code)) {
           const flag = await handleRefreshToken();
           if (flag) {
-            return http(options);
+            return (await http(options)).data;
           } else {
             removeToken();
             useUserStore().logout();
@@ -66,7 +66,6 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
           });
         }
       }
-
       return response;
     },
     onRequestError({ request, options, error }) {

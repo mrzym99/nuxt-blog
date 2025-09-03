@@ -35,6 +35,9 @@ importers:
       '@vueuse/core':
         specifier: ^13.7.0
         version: 13.7.0(vue@3.5.19(typescript@5.9.2))
+      bad-words:
+        specifier: ^4.0.0
+        version: 4.0.0
       form-data:
         specifier: ^4.0.4
         version: 4.0.4
@@ -65,6 +68,9 @@ importers:
       quill-mention:
         specifier: ^6.1.1
         version: 6.1.1
+      quill2-emoji:
+        specifier: ^0.1.2
+        version: 0.1.2
       sass:
         specifier: ^1.90.0
         version: 1.90.0
@@ -1990,6 +1996,13 @@ packages:
   b4a@1.6.7:
     resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
 
+  bad-words@4.0.0:
+    resolution: {integrity: sha512-fLjG/I0N3I7xhurqGnGitSRD10UeEE63a7hyXtutQDpxo4+Eal+i7veWeZxZJPNtsl6X1mUIoWPwt8gQ7NMQUw==}
+    engines: {node: '>=8.0.0'}
+
+  badwords-list@2.0.1-4:
+    resolution: {integrity: sha512-FxfZUp7B9yCnesNtFQS9v6PvZdxTYa14Q60JR6vhjdQdWI4naTjJIyx22JzoER8ooeT8SAAKoHLjKfCV7XgYUQ==}
+
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
 
@@ -2834,6 +2847,10 @@ packages:
 
   function-bind@1.1.2:
     resolution: {integrity: sha512-7XHNxH7qX9xG5mIwxkhumTox/MIRNcOgDrxWsMt2pAr23WHp6MrRlN7FBSFpCpr+oVO0F744iUgR82nJMfG2SA==}
+
+  fuse.js@3.6.1:
+    resolution: {integrity: sha512-hT9yh/tiinkmirKrlv4KWOjztdoZo1mx9Qh4KvWqC7isoXwdUY3PNWUxceF4/qO9R6riA2C29jdTOeQOIROjgw==}
+    engines: {node: '>=6'}
 
   fuse.js@7.1.0:
     resolution: {integrity: sha512-trLf4SzuuUxfusZADLINj+dE8clK1frKdmqiJNb1Es75fmI5oY6X2mxLVUciLLjxqw/xr72Dhy+lER6dGd02FQ==}
@@ -4134,6 +4151,9 @@ packages:
 
   quill-mention@6.1.1:
     resolution: {integrity: sha512-Ay8lHScPotDa/qSWJry2mxOg8YZxW3UAqlsgwjxXMDwNGv8+g3ydvgpBOq5firdcE+I++tpNTuYubFaNAnejMg==}
+
+  quill2-emoji@0.1.2:
+    resolution: {integrity: sha512-/tK9YehdPD3ajCGaVCPvB9GgrcFHJUScs4rdYoqjuf+WLQUHuAA6wMypgQxTPLH6EFg19x9gbbUP5Mxf5oPgpQ==}
 
   quill@2.0.3:
     resolution: {integrity: sha512-xEYQBqfYx/sfb33VJiKnSJp8ehloavImQ2A6564GAbqG55PGw1dAWUn1MUbQB62t0azawUS2CZZhWCjO8gRvTw==}
@@ -7236,6 +7256,12 @@ snapshots:
 
   b4a@1.6.7: {}
 
+  bad-words@4.0.0:
+    dependencies:
+      badwords-list: 2.0.1-4
+
+  badwords-list@2.0.1-4: {}
+
   balanced-match@1.0.2: {}
 
   bare-events@2.6.1:
@@ -8121,6 +8147,8 @@ snapshots:
     optional: true
 
   function-bind@1.1.2: {}
+
+  fuse.js@3.6.1: {}
 
   fuse.js@7.1.0: {}
 
@@ -9620,6 +9648,10 @@ snapshots:
   quill-mention@6.1.1:
     dependencies:
       quill: 2.0.3
+
+  quill2-emoji@0.1.2:
+    dependencies:
+      fuse.js: 3.6.1
 
   quill@2.0.3:
     dependencies:

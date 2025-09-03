@@ -29,7 +29,7 @@
           <ClientOnly>
             <span v-copy="postUrl" class="underline cursor-pointer text-gradient">{{
               postUrl
-              }}</span>
+            }}</span>
           </ClientOnly>
         </p>
         <p class="mb-2" v-if="postedDays">
@@ -38,7 +38,7 @@
         <p v-if="article.originalUrl">
           <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
             article.originalUrl
-            }}</a>
+          }}</a>
         </p>
       </div>
       <div class="w-full">
@@ -55,8 +55,8 @@
         </p>
       </div>
       <div class="w-full">
-        <!-- <h3>Comments</h3> -->
-        <!-- <Comments :type="CommentType.ARTICLE" :target-id="article.id" /> -->
+        <h3>Comments</h3>
+        <Comments :type="CommentType.ARTICLE" :target-id="article.id" />
       </div>
     </div>
   </div>

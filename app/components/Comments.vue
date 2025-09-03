@@ -1,5 +1,5 @@
 <template>
-  <div ref="commentRef" class="comments-section">
+  <div ref="commentRef" class="comments-section pb-20rem">
     <!-- 评论列表 -->
     <div class="comments-list">
       <!-- 主评论输入框 -->
@@ -12,7 +12,7 @@
               </NuxtLink>
               <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
             </div>
-            <Editor :read-only="!user" v-model="commentContent" style="height: 200px;" />
+            <Editor :read-only="!user" v-model="commentContent" :height="120" />
           </div>
           <div class="form-actions">
             <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
@@ -40,7 +40,7 @@
               </div>
               <div class="comment-text" v-html="renderComment(comment.content)"></div>
               <div class="comment-actions">
-                <button class="action-btn" @click="handleReply(comment)">回复</button>
+                <button class="action-btn" @click="handleReply(comment)" style="color: var(--primary-color)">回复</button>
                 <button v-if="user?.id === comment.commenter?.id" class="cancel-btn"
                   @click="handleRevokeComment(comment)">
                   撤回
@@ -49,7 +49,7 @@
                   like: comment.isLike,
                 }" class="action-btn" @click="handleLikeComment(comment)">
                   <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
-                  {{ comment.likeCount ? comment.likeCount : 0 }}
+                  {{ comment.likeCount ? comment.likeCount : '' }}
                 </button>
               </div>
 
@@ -75,8 +75,8 @@
                     </div>
                     <div class="reply-text" v-html="renderComment(reply.content)"></div>
                     <div class="reply-actions">
-                      <button class="action-btn" @click="handleReply(comment, reply)">回复</button>
-
+                      <button class="action-btn" style="color: var(--primary-color);"
+                        @click="handleReply(comment, reply)">回复</button>
                       <button v-if="user?.id === reply.reply?.id" class="cancel-btn"
                         @click="handleRevokeReply(comment, reply)">
                         撤回
@@ -98,17 +98,33 @@
               </div>
               <div class="fold-box" v-if="comment.replyCount && comment.replyCount > 2">
                 <span class="fold" @click="comment.fold = !comment.fold">
-                  {{ comment.fold ? '展开' : '收起' }}</span>
+                  {{ comment.fold ? `展开 ${comment.replies.length} 条回复` : '收起' }}</span>
               </div>
 
               <!-- 回复框 -->
               <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
-
+                <ClientOnly>
+                  <div class="form-content">
+                    <div class="avatar">
+                      <NuxtLink v-if="user" :to="`/user-center/${user?.id}`">
+                        <img :src="user?.avatar" :alt="user?.nickName" />
+                      </NuxtLink>
+                      <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
+                    </div>
+                    <Editor :read-only="!user" v-model="commentContent"
+                      :placeholder="`回复 @${replyTo.user.profile.nickName}`" :height="120" />
+                  </div>
+                  <div class="form-actions w-full">
+                    <button class="cancel-btn" @click="cancelReply">取消</button>
+                    <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
+                      回复
+                    </button>
+                  </div>
+                </ClientOnly>
               </div>
             </div>
           </div>
         </TransitionGroup>
-
         <div class="more" v-if="comments.length < commentTotal" @click="loadMoreComments">
           <Icon v-if="commentLoading" name="svg-spinners:90-ring-with-bg" size="1.5rem"></Icon>
           <span v-else>加载更多 </span>
@@ -119,8 +135,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue';
-import Popover from './Popover.vue';
+import { ref, computed } from 'vue';
 import { marked } from 'marked';
 import {
   type IReply,
@@ -143,11 +158,10 @@ import {
   postDeleteReply,
 } from '~/api/comment';
 import { useNuxtApp } from '#app';
-import { postCancelLike, postLike, uploadImg } from '~/api';
-import FormData from 'form-data';
+import { postCancelLike, postLike } from '~/api';
 import Tab from './Tab.vue';
-import { emojiList } from '~/assets/constant/emoji';
 import Editor from './Editor.vue';
+import { cleanWords } from '~/utils/filter-bad-words'
 
 const props = defineProps<{
   type: CommentType;
@@ -180,40 +194,25 @@ const commentTotal = ref(0);
 const PAGE_SIZE = 5;
 const commentLoading = ref(false);
 const commentOrder = ref<string>(CommentOrder.LATEST);
-
-// 表情列表
-const emojis = emojiList;
-
-// 模拟评论数据
 const comments = ref<Array<Comment>>([]);
 
 const renderer = new marked.Renderer();
 
 renderer.image = ({ href, title, text }: any) => {
-  return `<img src="${href}" alt="${text}" title="${title}" style="max-height: 20rem;object-fit: cover;" />`;
+  return `<img src="${href}" alt="${text}" title="${title}" style="max-height: 80px;object-fit: cover;" />`;
 };
-
-// 渲染 Markdown 内容
-const renderedContent = computed(() => {
-  if (!commentContent.value) return '';
-  return marked.parse(commentContent.value, { renderer });
-});
-
 const renderComment = (comment: string) => {
   return marked.parse(comment, { renderer });
 };
 // 处理评论提交
 const handleSubmit = (event: any) => {
-  if (event.ctrlKey || event.metaKey) {
-    commentContent.value += '\n';
-    return;
-  }
   event.preventDefault();
   if (!commentContent.value.trim()) return;
   if (!user.value) {
     $toast.warning('请先登录');
     return;
   }
+  commentContent.value = cleanWords(commentContent.value.trim())
   if (replyTo.value) {
     const newReply: CreateReply = {
       parentId: replyTo.value.parent.id,
@@ -322,12 +321,6 @@ const handleLikeReply = (comment: IReply) => {
     });
   }
 };
-
-// 插入表情
-const insertEmoji = (emoji: string) => {
-  commentContent.value += emoji;
-};
-
 // 格式化时间
 const formatTime = (date?: Date | null | undefined) => {
   if (!date) return null;
@@ -340,50 +333,6 @@ const formatTime = (date?: Date | null | undefined) => {
   if (diff < 2592000000) return `${Math.floor(diff / 86400000)}天前`;
   return date!.toLocaleDateString();
 };
-
-// 插入文本
-const insertText = (before: string, after: string = '') => {
-  const textarea = document.querySelector('textarea') as HTMLTextAreaElement;
-  if (!textarea) return;
-
-  const start = textarea.selectionStart;
-  const end = textarea.selectionEnd;
-  const text = textarea.value;
-  const selectedText = text.substring(start, end);
-
-  const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
-  commentContent.value = newText;
-
-  // 恢复光标位置
-  nextTick(() => {
-    textarea.focus();
-    textarea.setSelectionRange(start + before.length, end + before.length);
-  });
-};
-
-// 触发图片上传
-const triggerImageUpload = () => {
-  imageInput.value?.click();
-};
-
-// 处理图片上传
-const handleImageUpload = async (event: Event) => {
-  const input = event.target as HTMLInputElement;
-  const file = input.files?.[0];
-  if (!file) return;
-
-  try {
-    const formData = new FormData();
-    formData.append('image', file);
-    const res = await uploadImg(formData);
-    insertText(`![${file.name}](${res.data})`);
-  } catch (error) {
-    console.error('图片上传失败:', error);
-  } finally {
-    input.value = '';
-  }
-};
-
 function loadMoreComments() {
   currentPage.value += 1;
   getCommentList();
@@ -406,7 +355,7 @@ async function loadMoreReplies(parent: Comment) {
 }
 
 function returnReplies(replies: IReply[], fold: boolean): IReply[] {
-  return fold ? replies.slice(0, 2) : replies;
+  return fold ? replies.slice(0, 0) : replies;
 }
 
 async function getReplies(parent: Comment) {
@@ -519,7 +468,6 @@ onMounted(() => {
   gap: 0.5rem;
   padding: 0.5rem 0;
   border-bottom: 1px solid;
-
   border-color: var(--border-color);
 
   &:last-child {
@@ -530,8 +478,8 @@ onMounted(() => {
     cursor: pointer;
     transition: color 0.3s ease;
     font-size: 14px;
-    margin-left: 0.25rem;
-
+    margin-left: 0.2rem;
+    font-size: 0.8rem;
     color: var(--primary-color);
 
     &:hover {
@@ -559,23 +507,27 @@ onMounted(() => {
   .comment-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin: 0.5rem 0;
   }
 
   .username {
+    font-size: 0.8rem;
     font-weight: 500;
-
     color: var(--text-color);
   }
 
   .time {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 
     color: var(--text-light-color);
   }
 
   .comment-text {
     color: var(--text-color);
+
+    :deep(img) {
+      max-width: 80px;
+    }
   }
 
   .comment-actions {
@@ -587,11 +539,11 @@ onMounted(() => {
   .action-btn {
     display: flex;
     align-items: center;
-    padding: 0.25rem 0.5rem;
+    padding: 0;
     border: none;
     background: none;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 
     color: var(--text-light-color);
 
@@ -602,23 +554,23 @@ onMounted(() => {
 }
 
 .replies-list {
-  margin-top: 1rem;
-  padding-left: 1rem;
-  border-left: 2px solid;
-
-  border-color: var(--border-color);
+  margin-top: 0.5rem;
 }
 
 .reply-item {
   display: flex;
   gap: 0.5rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid;
+  padding-left: 0.5rem;
+  margin-bottom: 0.8rem;
+  border-left: 2px solid;
+  border-color: var(--primary-color);
 
-  border-color: var(--border-color);
+  &:nth-of-type(even) {
+    border-color: var(--primary-light-color);
+  }
 
   &:last-child {
-    border-bottom: none;
+    margin-bottom: 0;
   }
 }
 
@@ -646,7 +598,7 @@ onMounted(() => {
   }
 
   .reply-to {
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 
     color: var(--text-light-color);
 
@@ -662,43 +614,34 @@ onMounted(() => {
   .reply-actions {
     display: flex;
     margin-top: 0.5rem;
+    gap: 0.8rem;
   }
 }
 
 .cancel-btn {
   display: flex;
   align-items: center;
-  padding: 0.25rem 0.5rem;
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 0.875rem;
-  color: var(--error-color);
+  font-size: 0.8rem;
+  color: var(--disabled-color);
 }
 
 .reply-btn {
   display: flex;
   align-items: center;
-  padding: 0.25rem 0.5rem;
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 0.875rem;
-
-  color: var(--text-light-color);
-
-  &:hover {
-    color: var(--primary-color);
-  }
+  font-size: 0.8rem;
+  color: var(--primary-color);
 }
 
 .reply-form {
-  margin: 1rem 0;
-  padding: 1rem;
+  margin: 0.5rem 0;
   border-radius: 0.5rem;
-
   background-color: var(--bg-color);
-  border: 1px solid var(--border-color);
 
   .avatar {
     width: 32px;
@@ -720,7 +663,7 @@ onMounted(() => {
 }
 
 .comment-form {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   border-radius: 0.5rem;
   background-color: var(--bg-color);
 
@@ -760,29 +703,32 @@ onMounted(() => {
     display: flex;
   }
 
-  .form-actions {
-    margin-top: 0.5rem;
-    display: flex;
-    justify-content: flex-end;
+}
+
+.form-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-end;
+}
+
+.submit-btn {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.3rem;
+  border-radius: 0.2rem;
+  border: none;
+  cursor: pointer;
+
+  background-color: var(--primary-color);
+  color: white;
+
+  &:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
   }
 
-  .submit-btn {
-    padding: 0.3rem 1rem;
-    border-radius: 0.2rem;
-    border: none;
-    cursor: pointer;
-
-    background-color: var(--primary-color);
-    color: white;
-
-    &:disabled {
-      background-color: var(--border-color);
-      cursor: not-allowed;
-    }
-
-    &:hover:not(:disabled) {
-      opacity: 0.9;
-    }
+  &:hover:not(:disabled) {
+    opacity: 0.9;
   }
 }
 
