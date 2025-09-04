@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-links">
+  <div class="header nav-links mb-1rem">
     <NuxtLink :class="{
       active: route.path === item.path,
     }" v-for="item in menuList" :to="item.path" :key="item.path">{{ item.name }}
@@ -34,3 +34,15 @@ const menuList: Menu[] = [
   },
 ];
 </script>
+
+<style lang="scss" scoped>
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+</style>

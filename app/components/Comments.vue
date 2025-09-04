@@ -1,5 +1,5 @@
 <template>
-  <div ref="commentRef" class="comments-section pb-20rem">
+  <div ref="commentRef" class="comments-section pb-2rem">
     <!-- 评论列表 -->
     <div class="comments-list">
       <!-- 主评论输入框 -->
@@ -25,7 +25,7 @@
       <template v-else>
         <Tab v-model="commentOrder" :options="tabOptions" @change="toggleTab" />
         <TransitionGroup name="fade">
-          <div v-for="comment in comments" :key="comment.id" class="comment-item" :class="{
+          <div v-for="comment in comments" :key="comment.id" :id="'comment' + comment.id" class="comment-item" :class="{
             'focus-comment': hasScrollToView && routerCommentId && comment.id === routerCommentId,
           }">
             <div class="comment-avatar">
@@ -55,8 +55,8 @@
 
               <!-- 子评论列表 -->
               <div v-if="comment.replyCount" class="replies-list">
-                <div v-for="reply in returnReplies(comment.replies, comment.fold)" :key="reply.id" class="reply-item"
-                  :class="{
+                <div v-for="reply in returnReplies(comment.replies, comment.fold)" :key="reply.id"
+                  :id="'reply' + reply.id" class="reply-item" :class="{
                     'focus-comment': hasScrollToView && routerReplyId && reply.id === routerReplyId,
                   }">
                   <div class="reply-avatar">
@@ -96,11 +96,10 @@
                   <span v-else>加载更多 </span>
                 </div>
               </div>
-              <div class="fold-box" v-if="comment.replyCount && comment.replyCount > 2">
+              <div class="fold-box" v-if="comment.replyCount">
                 <span class="fold" @click="comment.fold = !comment.fold">
                   {{ comment.fold ? `展开 ${comment.replies.length} 条回复` : '收起' }}</span>
               </div>
-
               <!-- 回复框 -->
               <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
                 <ClientOnly>
@@ -162,6 +161,7 @@ import { postCancelLike, postLike } from '~/api';
 import Tab from './Tab.vue';
 import Editor from './Editor.vue';
 import { cleanWords } from '~/utils/filter-bad-words'
+import { useIntersectionObserver } from '@vueuse/core';
 
 const props = defineProps<{
   type: CommentType;
@@ -184,9 +184,7 @@ const tabOptions = [
 // 评论内容
 const commentContent = ref('');
 const replyTo = ref<ReplyTo | null>(null);
-const imageInput = ref<HTMLInputElement | null>(null);
 const commentRef = ref<HTMLElement | null>(null);
-let observer: any = null;
 const hasScrollToView = ref(false);
 
 const currentPage = ref(1);
@@ -265,6 +263,7 @@ const cancelReply = () => {
 const handleRevokeComment = (comment: Comment) => {
   postDeleteComment(comment.id).then(() => {
     comments.value = comments.value.filter(item => item.id !== comment.id);
+    commentTotal.value -= 1
     $toast.success('撤回成功');
   });
 };
@@ -378,7 +377,7 @@ const toggleTab = (tab: string) => {
   getCommentList();
 };
 
-async function getCommentList() {
+async function getCommentList(commentId?: number, replyId?: number) {
   commentLoading.value = true;
   const res = await getParentComments({
     currentPage: currentPage.value,
@@ -386,6 +385,8 @@ async function getCommentList() {
     targetId: props.targetId,
     type: CommentType.ARTICLE,
     commentOrder: commentOrder.value,
+    commentId,
+    replyId
   });
   const { list, total } = res.data;
   const listWidthFold = list.map(v => {
@@ -398,6 +399,7 @@ async function getCommentList() {
   comments.value = currentPage.value === 1 ? listWidthFold : comments.value.concat(listWidthFold);
   commentTotal.value = total - 0;
   commentLoading.value = false;
+
 }
 
 // 判断是否带 replyId commentId
@@ -409,38 +411,47 @@ const routerCommentId = computed(() => {
   return Number(route.query.commentId) || null;
 });
 
-onMounted(() => {
-  if (window.IntersectionObserver) {
-    observer = new window.IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            getCommentList();
-            observer.unobserve(entry.target);
-            observer.disconnect();
-            observer = null;
-            window &&
-              window.setTimeout(() => {
-                hasScrollToView.value = true;
-              }, 500);
-          }
-        });
-      },
-      {
-        root: null,
-        rootMargin: '200px 0px',
-        threshold: 0.1,
-      }
-    );
-    observer.observe(commentRef.value);
-  }
+const target = useTemplateRef<HTMLDivElement>('commentRef')
 
+function loadComment() {
+  const { stop } = useIntersectionObserver(
+    target,
+    ([entry]) => {
+      if (entry && entry.isIntersecting) {
+        getCommentList();
+        stop();
+      }
+    },
+    {
+      rootMargin: '0% 0% 40% 0%',
+    }
+  )
+}
+
+function navigateToTarget(target: string) {
+  const element = document.getElementById(target);
+  const scrollTop = element?.getBoundingClientRect().top || 0;
+  const offsetHeight = element?.offsetHeight || 0;
+  window.scrollBy({ top: scrollTop + offsetHeight, behavior: 'smooth' });
+  requestAnimationFrame(() => {
+    hasScrollToView.value = true;
+  });
+}
+
+onMounted(async () => {
   if (window) {
     if (routerReplyId.value || routerCommentId.value) {
-      commentRef.value?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+      // TODO 后端把目标 comment、replies 展示到评论第一条
+      await getCommentList()
+      setTimeout(() => {
+        if (routerReplyId.value) {
+          navigateToTarget('reply' + routerReplyId.value);
+        } else {
+          navigateToTarget('comment' + routerCommentId.value);
+        }
+      }, 1000);
+    } else {
+      loadComment()
     }
   }
 });
@@ -644,11 +655,15 @@ onMounted(() => {
   background-color: var(--bg-color);
 
   .avatar {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
     border-radius: 50%;
     overflow: hidden;
+    font-size: 0.8rem;
     margin-right: 0.5rem;
+    flex-shrink: 0;
 
     img {
       width: 100%;
@@ -671,8 +686,11 @@ onMounted(() => {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    line-height: 40px;
+    text-align: center;
     overflow: hidden;
     margin-right: 0.5rem;
+    flex-shrink: 0;
 
     img {
       width: 100%;
@@ -681,28 +699,28 @@ onMounted(() => {
     }
   }
 
-  .to-login {
-    cursor: pointer;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    border-radius: 100%;
-    transition: all 0.3s ease;
-
-    color: var(--nav-text-color) !important;
-    background-color: var(--primary-color);
-
-    &:hover {
-      background-color: var(--secondary-color);
-    }
-  }
-
   .form-content {
     display: flex;
   }
 
+}
+
+.to-login {
+  cursor: pointer;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  transition: all 0.3s ease;
+
+  color: var(--nav-text-color) !important;
+  background-color: var(--primary-color);
+
+  &:hover {
+    background-color: var(--secondary-color);
+  }
 }
 
 .form-actions {
@@ -750,10 +768,16 @@ onMounted(() => {
 .focus-comment {
   outline: 2px solid transparent;
   background: transparent;
-  animation: outline ease-in-out 1.2s;
+  animation: outline ease-in-out 3s;
 }
 
 @keyframes outline {
+  40% {
+    border-radius: 3px;
+    outline-color: var(--primary-color);
+    background: rgba(255, 0, 0, 0.1);
+  }
+
   100% {
     border-radius: 3px;
     outline-color: var(--primary-color);

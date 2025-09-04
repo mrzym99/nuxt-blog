@@ -12,14 +12,18 @@ export function useMdRender() {
       return `<h${depth} id="${id}">${textContent}</h${depth}>`;
     };
 
+    baseRenderer.image = ({ href, title, text }) => {
+      return `<a href="${href}" target="_blank"><img src="${href}" alt="${text}" title="${title}"></a>`;
+    };
+
     baseRenderer.code = function ({ text, lang }) {
       const validLanguage = lang && hljs.getLanguage(lang) ? lang : 'xml';
       try {
         const highlighted = hljs.highlight(text, { language: validLanguage }).value;
-        return `<pre><code class="hljs language-${validLanguage}">${highlighted}</code></pre>`;
+        return `<pre><button data-code="${encodeURIComponent(text)}" class="md-code-copy-button">copy</button><code class="hljs language-${validLanguage}">${highlighted}</code></pre>`;
       } catch (e) {
         // 如果高亮失败，返回原始代码
-        return `<pre><code class="hljs language-${validLanguage}">${text}</code></pre>`;
+        return `<pre><button data-code="${encodeURIComponent(text)}" class="md-code-copy-button">copy</button><code class="hljs language-${validLanguage}">${text}</code></pre>`;
       }
     };
 

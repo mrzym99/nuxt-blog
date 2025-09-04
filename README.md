@@ -18,8 +18,12 @@ pnpm preview
 ```
 
 # TODO
-Comments 
 code refactor
-image lightbox
 image lazy loading
+
+filter words
+article search
+recommend 减少一些
+评论搜寻
+token 刷新还有问题
 

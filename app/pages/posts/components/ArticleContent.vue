@@ -5,10 +5,10 @@
     </div>
     <div class="article-content">
       <div class="article-body" v-if="isMd">
-        <MdTextPreview :content="article.content!" />
+        <MdTextPreview id="blogGallery" :content="article.content!" />
       </div>
       <div class="article-body" v-else>
-        <RichTextPreview :content="article.content!" />
+        <RichTextPreview id="blogGallery" :content="article.content!" />
       </div>
       <div class="w-full h-3rem flex justify-center items-center">
         <Icon name="ph:thumbs-up-duotone" @click="handleLike" :class="{
@@ -69,6 +69,8 @@ import TagCloud from '~/components/TagCloud.vue';
 import Comments from '~/components/Comments.vue';
 import MdTextPreview from './MdTextPreview.vue';
 import RichTextPreview from './RichTextPreview.vue';
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
 
 import { formatDate } from '~/utils/tool';
 import { CommentType, LikeType, type IArticle } from '~/types/index';
@@ -94,6 +96,7 @@ const userStore = useUserStore();
 const articleStore = useArticleStore();
 
 const props = defineProps<ArticleProps>();
+let lightbox: PhotoSwipeLightbox | null = null
 
 const isLike = ref(false);
 const likeCount = ref<number>(0);
@@ -200,11 +203,50 @@ function initViewDuration() {
   }
 }
 
+function addimageView() {
+  const container = document.getElementById('blogGallery')
+  const images = container!.querySelectorAll('img');
+  if (!images.length) return
+  images.forEach((img) => {
+    // 动态加载图片以获取宽高
+    const image = new Image();
+    image.src = img.src;
+    image.onload = () => {
+      const parent = img.parentElement
+      if (parent) {
+        if (parent.tagName === 'a') {
+          parent.setAttribute('data-pswp-width', image.width + '')
+          parent.setAttribute('data-pswp-height', image.height + '')
+        } else {
+          const anchor = document.createElement('a');
+          anchor.href = image.src;
+          anchor.setAttribute('target', '_blank');
+          anchor.setAttribute('data-pswp-width', image.width + '');
+          anchor.setAttribute('data-pswp-height', image.height + '');
+          anchor.appendChild(img);
+          parent.replaceWith(anchor);
+        }
+      }
+    };
+    image.onerror = () => {
+      console.error('Failed to load image:', img.src);
+    };
+  });
+
+  lightbox = new PhotoSwipeLightbox({
+    gallery: '#blogGallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+  });
+  lightbox.init();
+}
+
 onMounted(() => {
   checkIsLike();
   handleGetLikeCount();
   handleGetRecommends();
   initViewDuration();
+  addimageView()
 });
 
 onBeforeUnmount(() => {
@@ -216,6 +258,8 @@ onBeforeUnmount(() => {
   !isNaN(du) && handleAddViewDuration(du % 86400000);
 
   document.removeEventListener('visibilitychange', visibleChange);
+
+  lightbox && lightbox.destroy()
 });
 </script>
 

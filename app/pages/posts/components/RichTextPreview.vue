@@ -6,32 +6,10 @@ defineOptions({
 defineProps<{
   content: string;
 }>();
-
-const showLightBox = ref(false);
-const images = ref<string[]>([]);
-const currentIndex = ref(0);
-
-function collectImagesAndAddListener() {
-  const imageList = document.querySelectorAll('img');
-  imageList.forEach(image => {
-    images.value.push(image.src);
-  });
-  imageList.forEach((image, index) => {
-    image.addEventListener('click', () => {
-      showLightBox.value = true;
-      currentIndex.value = index;
-    });
-  });
-}
-
-onMounted(() => {
-  collectImagesAndAddListener();
-});
 </script>
 
 <template>
   <div class="tinymce-content" v-html="content"></div>
-  <VueEasyLightbox :visible="showLightBox" :imgs="images" :index="currentIndex" @hide="showLightBox = false" />
 </template>
 
 <style lang="scss" scoped>

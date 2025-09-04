@@ -41,7 +41,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vee-validate/nuxt',
     '@nuxtjs/sitemap',
-    'nuxt-easy-lightbox',
     // '@nuxt/eslint',
     '@nuxtjs/color-mode',
     'vue-sonner/nuxt',

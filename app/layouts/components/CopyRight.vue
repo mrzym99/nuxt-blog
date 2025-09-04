@@ -1,5 +1,5 @@
 <template>
-  <div class="flex  flex-col  align-center justify-center">
+  <div class="flex flex-col align-center justify-center py-4">
     <p class="text-center">Copyright ©
       <a class="text-gradient" href="https://github.com/mrzym99" target="_blank">Zym</a>
       2025

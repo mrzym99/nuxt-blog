@@ -4,6 +4,10 @@
   @include text-gradient;
 }
 
+.border-color {
+  border-color: var(--border-color);
+}
+
 // Typography
 h1,
 h2,

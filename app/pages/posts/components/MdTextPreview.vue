@@ -34,28 +34,12 @@ function copyCode(code: string) {
 }
 
 // 添加复制按钮到代码块
-function addCopyButtons() {
-  if (!document) return;
-  const codeBlocks = document.querySelectorAll('pre');
-
-  codeBlocks.length &&
-    codeBlocks.forEach(block => {
-      // 检查是否已经添加过按钮
-      if (block.querySelector('.copy-button')) return;
-
-      const copyButton = document.createElement('button');
-      copyButton.className = 'copy-button';
-      copyButton.textContent = '复制';
-      copyButton.onclick = () => {
-        const codeElement = block.querySelector('code');
-        if (codeElement) {
-          copyCode(codeElement.textContent || '');
-        }
-      };
-
-      block.style.position = 'relative';
-      block.appendChild(copyButton);
-    });
+function handleCopy(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains('md-code-copy-button')) {
+    const code = decodeURIComponent(target.getAttribute('data-code') || '');
+    copyCode(code);
+  }
 }
 
 watch(
@@ -66,8 +50,12 @@ watch(
 );
 
 onMounted(() => {
-  addCopyButtons();
+  document.body.addEventListener('click', handleCopy);
   document && document.documentElement.setAttribute('data-theme', colorMode.preference);
+});
+
+onBeforeUnmount(() => {
+  document.body.removeEventListener('click', handleCopy);
 });
 </script>
 
@@ -80,13 +68,13 @@ onMounted(() => {
   @apply relative rounded-md my-4 overflow-x-auto;
 
   &:hover {
-    .copy-button {
+    .md-code-copy-button {
       @apply block;
     }
   }
 }
 
-:deep(.copy-button) {
+:deep(.md-code-copy-button) {
   display: none;
   position: absolute;
   top: 0.5rem;

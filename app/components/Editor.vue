@@ -52,11 +52,11 @@ const defaultOptions: QuillOptions = {
   modules: {
     toolbar: {
       container: [
-        ['undo', 'redo'],
+        // ['undo', 'redo'],
         ['bold', 'italic', 'underline'],
         [{ background: [] }],
         [{ align: [] }],
-        [{ list: 'ordered' }, { list: 'bullet' }],
+        // [{ list: 'ordered' }, { list: 'bullet' }],
         ['image', 'emoji'],
       ],
       handlers: {
