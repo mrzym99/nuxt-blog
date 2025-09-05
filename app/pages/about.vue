@@ -98,8 +98,17 @@
               />
             </div>
 
-            <h3>contact me</h3>
-            email: 2715158815@qq.com
+             <h3>📧 Leave a message</h3>
+
+            <p class="py-1">I'm glad to hear from you! if you have any questions or suggestions, feel free to reach out.</p>
+            <p class="py-1">我非常欢迎您的来信！如果您有任何问题或建议，请随时与我联系。</p>
+            <p class="pt-4 text-1rem">
+              如果您有时间也可以给我留下评论，我会尽快回复您~
+              <br>
+              <NuxtLink class="text-1rem" to="/posts/49?commentId=29">留言</NuxtLink>
+            </p>
+            <h3>📧 Contact me</h3>
+            <p class="text-1rem"><a href="mailto:2715158815@qq.com">email: 2715158815@qq.com</a></p>
           </div>
         </main>
       </div>
@@ -116,7 +125,15 @@ import Dots from '~/components/Dots.vue';
 
 <style lang="scss" scoped>
 img {
-  width: 80px;
-  height: 80px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: underline;
 }
 </style>
