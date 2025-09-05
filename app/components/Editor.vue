@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import Quill from 'quill'
-import type { Delta, EmitterSource, QuillOptions, Range } from 'quill'
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { Mention, MentionBlot } from 'quill-mention' // 插件
-import 'quill/dist/quill.snow.css'
-import 'quill-mention/dist/quill.mention.min.css'
-import undo from '@/assets/icons/undo.svg?raw'
-import redo from '@/assets/icons/redo.svg?raw'
-import attachment from '@/assets/icons/attachment.svg?raw'
-import type { IUser } from '~/types'
+import Quill from 'quill';
+import type { Delta, EmitterSource, QuillOptions, Range } from 'quill';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { Mention, MentionBlot } from 'quill-mention'; // 插件
+import 'quill/dist/quill.snow.css';
+import 'quill-mention/dist/quill.mention.min.css';
+import undo from '@/assets/icons/undo.svg?raw';
+import redo from '@/assets/icons/redo.svg?raw';
+import attachment from '@/assets/icons/attachment.svg?raw';
+import type { IUser } from '~/types';
 import { uploadImg } from '~/api';
 import FormData from 'form-data';
 import * as Emoji from 'quill2-emoji';
@@ -16,34 +16,40 @@ import 'quill2-emoji/dist/style.css';
 
 const props = defineProps<{
   // HTML model value, supports v-model
-  modelValue?: string | null
+  modelValue?: string | null;
   // Quill initialization options
-  options?: QuillOptions
-  height?: number | string
-  semantic?: boolean
-  readOnly?: boolean
-}>()
+  options?: QuillOptions;
+  height?: number | string;
+  semantic?: boolean;
+  readOnly?: boolean;
+}>();
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
-  (e: 'textChange', { delta, oldContent, source }: { delta: Delta; oldContent: Delta; source: EmitterSource }): void
-  (e: 'selectionChange', { range, oldRange, source }: { range: Range; oldRange: Range; source: EmitterSource }): void
-  (e: 'editorChange', eventName: 'textChange' | 'selectionChange'): void
-  (e: 'blur', quill: Quill): void
-  (e: 'focus', quill: Quill): void
-  (e: 'ready', quill: Quill): void
-}>()
+  (e: 'update:modelValue', value: string): void;
+  (
+    e: 'textChange',
+    { delta, oldContent, source }: { delta: Delta; oldContent: Delta; source: EmitterSource }
+  ): void;
+  (
+    e: 'selectionChange',
+    { range, oldRange, source }: { range: Range; oldRange: Range; source: EmitterSource }
+  ): void;
+  (e: 'editorChange', eventName: 'textChange' | 'selectionChange'): void;
+  (e: 'blur', quill: Quill): void;
+  (e: 'focus', quill: Quill): void;
+  (e: 'ready', quill: Quill): void;
+}>();
 
-let quillInstance: Quill | null = null
-const quillEditor = ref<HTMLElement>()
-const model = ref<string | null>()
-const userList = ref<IUser[]>([])
+let quillInstance: Quill | null = null;
+const quillEditor = ref<HTMLElement>();
+const model = ref<string | null>();
+const userList = ref<IUser[]>([]);
 
 const editorStyle = computed(() => {
   return {
     height: typeof props.height === 'number' ? `${props.height}px` : props.height,
-  }
-})
+  };
+});
 
 const defaultOptions: QuillOptions = {
   theme: 'snow',
@@ -53,281 +59,284 @@ const defaultOptions: QuillOptions = {
     toolbar: {
       container: [
         // ['undo', 'redo'],
-        ['bold', 'italic', 'underline'],
-        [{ background: [] }],
-        [{ align: [] }],
-        // [{ list: 'ordered' }, { list: 'bullet' }],
-        ['image', 'emoji'],
+        [
+          'bold',
+          'italic',
+          'underline',
+          'code-block',
+          'image',
+          'emoji',
+          { background: [] },
+          { align: [] },
+          { list: 'ordered' },
+          { list: 'bullet' },
+        ],
       ],
       handlers: {
         image: fileHandler('image'), // 正确放置 handlers
         attachment: fileHandler(),
         undo: () => {
-          quillInstance?.history.undo()
-          updateHistoryStatus()
+          quillInstance?.history.undo();
+          updateHistoryStatus();
         },
         redo: () => {
-          quillInstance?.history.redo()
-          updateHistoryStatus()
+          quillInstance?.history.redo();
+          updateHistoryStatus();
         },
-        emoji: () => { },
+        emoji: () => {},
       },
     },
-    "emoji-toolbar": true,
+    'emoji-toolbar': true,
     mention: {
       blotName: 'styled-mention',
       allowedChars: /^[\u4E00-\u9FA5\w]*$/, // 允许中文/英文/数字/下划线
       mentionDenotationChars: ['@'], // 触发字符
       source(searchTerm: any, renderList: any, mentionChar: any) {
         // 这里可以换成后端接口
-        const users = userList.value.map((u) => {
+        const users = userList.value.map(u => {
           return {
             id: u.id,
             value: u.profile.nickName,
             avatar: u.profile.avatar,
             email: u.profile.email,
-          }
-        })
-        const matches = users.filter(u => u.value.toLowerCase().includes(searchTerm.toLowerCase()))
-        renderList(matches, searchTerm)
+          };
+        });
+        const matches = users.filter(u => u.value.toLowerCase().includes(searchTerm.toLowerCase()));
+        renderList(matches, searchTerm);
       },
       renderItem(item: any) {
-        const container = document.createElement('div')
-        container.className = 'mention-list-item'
+        const container = document.createElement('div');
+        container.className = 'mention-list-item';
 
-        const avatarWrapper = document.createElement('div')
-        avatarWrapper.className = 'mention-avatar'
+        const avatarWrapper = document.createElement('div');
+        avatarWrapper.className = 'mention-avatar';
 
         if (item.avatar) {
-          const avatarImg = document.createElement('img')
-          avatarImg.src = item.avatar
-          avatarImg.alt = item.value
-          avatarImg.className = 'mention-avatar-img'
-          avatarWrapper.appendChild(avatarImg)
+          const avatarImg = document.createElement('img');
+          avatarImg.src = item.avatar;
+          avatarImg.alt = item.value;
+          avatarImg.className = 'mention-avatar-img';
+          avatarWrapper.appendChild(avatarImg);
+        } else {
+          avatarWrapper.textContent = item.value.charAt(0).toUpperCase();
         }
-        else {
-          avatarWrapper.textContent = item.value.charAt(0).toUpperCase()
-        }
 
-        const text = document.createElement('div')
-        text.className = 'mention-text'
+        const text = document.createElement('div');
+        text.className = 'mention-text';
 
-        const name = document.createElement('div')
-        name.className = 'mention-name'
-        name.innerText = item.value
+        const name = document.createElement('div');
+        name.className = 'mention-name';
+        name.innerText = item.value;
 
-        const email = document.createElement('div')
-        email.className = 'mention-email'
-        email.innerText = item.email
+        const email = document.createElement('div');
+        email.className = 'mention-email';
+        email.innerText = item.email;
 
-        text.appendChild(name)
-        text.appendChild(email)
+        text.appendChild(name);
+        text.appendChild(email);
 
-        container.appendChild(avatarWrapper)
-        container.appendChild(text)
+        container.appendChild(avatarWrapper);
+        container.appendChild(text);
 
-        return container
+        return container;
       },
       onSelect(item: any, insertItem: any) {
-        insertItem({ ...item, value: `${item.value} ` })
+        insertItem({ ...item, value: `${item.value} ` });
       },
     },
   },
-}
+};
 
 watch(
   () => props.readOnly,
-  (val) => {
-    quillInstance?.enable(!val)
+  val => {
+    quillInstance?.enable(!val);
   }
-)
+);
 
 // Convert modelValue HTML to Delta and replace editor content
 const pasteHTML = (quill: Quill) => {
-  model.value = props.modelValue
-  const oldContent = quill.getContents()
-  const delta = quill.clipboard.convert({ html: props.modelValue ?? '' })
-  quill.setContents(delta)
-  emit('textChange', { delta, oldContent, source: 'api' })
-}
+  model.value = props.modelValue;
+  const oldContent = quill.getContents();
+  const delta = quill.clipboard.convert({ html: props.modelValue ?? '' });
+  quill.setContents(delta);
+  emit('textChange', { delta, oldContent, source: 'api' });
+};
 
 function registerMention() {
   class StyledMentionBlot extends MentionBlot {
     static override render(data: any) {
-      const element = document.createElement('span')
-      element.innerText = data.value
-      element.setAttribute('mention-id', data.id)
-      return element
+      const element = document.createElement('span');
+      element.innerText = data.value;
+      element.setAttribute('mention-id', data.id);
+      return element;
     }
   }
-  StyledMentionBlot.blotName = 'styled-mention'
+  StyledMentionBlot.blotName = 'styled-mention';
   if (!Quill.imports['formats/styled-mention']) {
-    Quill.register('formats/styled-mention', StyledMentionBlot, true)
+    Quill.register('formats/styled-mention', StyledMentionBlot, true);
   }
 
   if (!Quill.imports['modules/mention']) {
-    Quill.register('modules/mention', Mention, true)
+    Quill.register('modules/mention', Mention, true);
   }
 }
 
 function registerEmoji() {
-  Quill.register("modules/emoji", Emoji, true);
+  Quill.register('modules/emoji', Emoji, true);
   // Quill.register('modules/emoji-shortname', ShortNameEmoji, true)
   // Quill.register('modules/emoji-toolbar', ToolbarEmoji, true)
   // Quill.register('modules/emoji-textarea', TextAreaEmoji, true)
 }
 
 function customIcons() {
-  const icons = Quill.import('ui/icons') as any
-  icons.undo = undo
-  icons.redo = redo
-  icons.attachment = attachment
+  const icons = Quill.import('ui/icons') as any;
+  icons.undo = undo;
+  icons.redo = redo;
+  icons.attachment = attachment;
 }
 
 // Editor initialization, returns Quill instance
 const initialize = async () => {
-  registerMention()
-  registerEmoji()
-  customIcons()
-  userList.value = []
-  Object.assign(defaultOptions, props.options)
-  const quill = new Quill(quillEditor.value as HTMLElement, defaultOptions)
+  registerMention();
+  registerEmoji();
+  customIcons();
+  userList.value = [];
+  Object.assign(defaultOptions, props.options);
+  const quill = new Quill(quillEditor.value as HTMLElement, defaultOptions);
 
   // Set editor initial model
   if (props.modelValue) {
-    pasteHTML(quill)
+    pasteHTML(quill);
   }
 
   // Handle editor selection change, emit blur and focus
   quill.on('selection-change', (range: any, oldRange: any, source: any) => {
     if (!range) {
-      emit('blur', quill)
+      emit('blur', quill);
+    } else {
+      emit('focus', quill);
     }
-    else {
-      emit('focus', quill)
-    }
-    updateHistoryStatus()
-    emit('selectionChange', { range, oldRange, source })
-  })
+    updateHistoryStatus();
+    emit('selectionChange', { range, oldRange, source });
+  });
 
   // Handle editor text change
   quill.on('text-change', (delta: any, oldContent: any, source: any) => {
-    model.value = props.semantic ? quill.getSemanticHTML() : quill.root.innerHTML
-    updateHistoryStatus()
-    emit('textChange', { delta, oldContent, source })
-  })
+    model.value = props.semantic ? quill.getSemanticHTML() : quill.root.innerHTML;
+    updateHistoryStatus();
+    emit('textChange', { delta, oldContent, source });
+  });
 
   // Handle editor change
   quill.on('editor-change', (eventName: 'textChange' | 'selectionChange') => {
-    emit('editorChange', eventName)
-  })
+    emit('editorChange', eventName);
+  });
 
-  emit('ready', quill)
+  emit('ready', quill);
 
-  quillInstance = quill
-  updateHistoryStatus()
+  quillInstance = quill;
+  updateHistoryStatus();
 
-  return quill
-}
+  return quill;
+};
 
 function updateHistoryStatus() {
   if (!quillInstance) {
-    return
+    return;
   }
-  const undoBtn = document.querySelector('.ql-undo') as HTMLButtonElement
-  const redoBtn = document.querySelector('.ql-redo') as HTMLButtonElement
+  const undoBtn = document.querySelector('.ql-undo') as HTMLButtonElement;
+  const redoBtn = document.querySelector('.ql-redo') as HTMLButtonElement;
   if (!undoBtn || !redoBtn) {
-    return
+    return;
   }
-  undoBtn.disabled = quillInstance.history.stack.undo.length === 0
-  redoBtn.disabled = quillInstance.history.stack.redo.length === 0
+  undoBtn.disabled = quillInstance.history.stack.undo.length === 0;
+  redoBtn.disabled = quillInstance.history.stack.redo.length === 0;
 }
 
 // Watch modelValue and paste HTML if has changes
 watch(
   () => props.modelValue,
-  (newValue) => {
+  newValue => {
     if (!quillInstance) {
-      return
+      return;
     }
     if (newValue && newValue !== model.value) {
-      pasteHTML(quillInstance)
+      pasteHTML(quillInstance);
       // Update HTML model depending on type
-      model.value = props.semantic ? quillInstance.getSemanticHTML() : quillInstance.root.innerHTML
+      model.value = props.semantic ? quillInstance.getSemanticHTML() : quillInstance.root.innerHTML;
+    } else if (!newValue) {
+      quillInstance.setContents([]);
     }
-    else if (!newValue) {
-      quillInstance.setContents([])
-    }
-  },
-)
+  }
+);
 
 // Watch model and update modelValue if has changes
 watch(model, (newValue, oldValue) => {
   if (!quillInstance) {
-    return
+    return;
   }
   if (newValue && newValue !== oldValue) {
-    emit('update:modelValue', newValue)
+    emit('update:modelValue', newValue);
+  } else if (!newValue) {
+    quillInstance.setContents([]);
   }
-  else if (!newValue) {
-    quillInstance.setContents([])
-  }
-})
+});
 
 function getQuillInstance() {
-  return quillInstance
+  return quillInstance;
 }
 
 function fileHandler(type?: string) {
   return () => {
-    const input = document.createElement('input')
-    input.setAttribute('type', 'file')
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
     if (type) {
-      input.setAttribute('accept', `${type}/*`)
+      input.setAttribute('accept', `${type}/*`);
     }
-    input.click()
+    input.click();
 
     input.onchange = async () => {
-      const file = input.files?.[0]
+      const file = input.files?.[0];
       if (!file) {
-        return
+        return;
       }
 
-      const formData = new FormData()
-      formData.append('file', file)
-      uploadImg(formData).then((res) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      uploadImg(formData).then(res => {
         if (quillInstance) {
-          const index = quillInstance.getSelection()?.index || 0
+          const index = quillInstance.getSelection()?.index || 0;
 
           switch (type) {
             case 'image':
-              quillInstance.insertEmbed(index, 'image', res.data)
-              break
+              quillInstance.insertEmbed(index, 'image', res.data);
+              break;
             default: {
-              quillInstance.insertEmbed(index, 'link', res.data)
-              break
+              quillInstance.insertEmbed(index, 'link', res.data);
+              break;
             }
           }
         }
-      })
-    }
-  }
+      });
+    };
+  };
 }
 
 onMounted(() => {
-  initialize()
-})
+  initialize();
+});
 
 onBeforeUnmount(() => {
-  quillInstance = null
-})
+  quillInstance = null;
+});
 
 // Expose init function
 defineExpose<{
-  getQuillInstance: () => Quill | null
+  getQuillInstance: () => Quill | null;
 }>({
   getQuillInstance,
-})
+});
 </script>
 
 <template>
@@ -355,14 +364,19 @@ defineExpose<{
     font-size: 16px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
       'Helvetica Neue', sans-serif;
 
-
     img {
-      max-width: 80px;
+      max-width: $comment-image-max-width !important;
       object-fit: cover;
     }
+  }
+
+  :deep(.ql-code-block-container) {
+    color: var(--text-color) !important;
+    background: var(--code-color) !important;
   }
 
   :deep(.ql-blank::before) {

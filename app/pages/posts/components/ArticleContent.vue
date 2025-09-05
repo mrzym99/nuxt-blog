@@ -301,7 +301,7 @@ onBeforeUnmount(() => {
 
   .article-body {
     width: 100%;
-    max-width: 880px;
+    max-width: $small-max-width;
     overflow: hidden;
     margin: 1rem 0;
     color: var(--text-color);

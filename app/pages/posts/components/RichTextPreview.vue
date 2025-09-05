@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 defineOptions({
-  name: 'TinymcePreview',
+  name: 'RichTextPreview',
 });
 
 defineProps<{
@@ -9,17 +9,13 @@ defineProps<{
 </script>
 
 <template>
-  <div class="tinymce-content" v-html="content"></div>
+  <div  v-html="content"></div>
 </template>
 
 <style lang="scss" scoped>
 :deep(img) {
-  max-height: 480px !important;
+  max-height: $content-image-max-height !important;
   object-fit: cover;
-}
-
-:deep(.vel-img) {
-  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.3);
 }
 
 :deep(table),
@@ -31,8 +27,8 @@ defineProps<{
 :deep(code) {
   @apply font-mono text-sm inline-block rounded-md p-4 w-full my-2;
   text-shadow: none !important;
-  color: #333;
-  background: #f4f2f0 !important;
+  color: var(--text-color) !important;
+  background: var(--code-color) !important;
 }
 
 :deep(ol) {

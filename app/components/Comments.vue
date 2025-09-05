@@ -38,19 +38,21 @@
                 <span class="username">{{ comment.commenter?.profile.nickName }}</span>
                 <span class="time">{{ formatTime(comment?.createdAt) }}</span>
               </div>
-              <div class="comment-text" v-html="renderComment(comment.content)"></div>
+              <div class="comment-text">
+                <CommentText :content="comment.content" />
+              </div>
               <div class="comment-actions">
                 <button class="action-btn" @click="handleReply(comment)" style="color: var(--primary-color)">回复</button>
                 <button v-if="user?.id === comment.commenter?.id" class="cancel-btn"
                   @click="handleRevokeComment(comment)">
                   撤回
                 </button>
-                <button :class="{
+                <!-- <button :class="{
                   like: comment.isLike,
                 }" class="action-btn" @click="handleLikeComment(comment)">
                   <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
                   {{ comment.likeCount ? comment.likeCount : '' }}
-                </button>
+                </button> -->
               </div>
 
               <!-- 子评论列表 -->
@@ -73,7 +75,9 @@
                       </span>
                       <span class="time">{{ formatTime(reply?.createdAt) }}</span>
                     </div>
-                    <div class="reply-text" v-html="renderComment(reply.content)"></div>
+                    <div class="reply-text">
+                      <CommentText :content="reply.content" />
+                    </div>
                     <div class="reply-actions">
                       <button class="action-btn" style="color: var(--primary-color);"
                         @click="handleReply(comment, reply)">回复</button>
@@ -81,12 +85,12 @@
                         @click="handleRevokeReply(comment, reply)">
                         撤回
                       </button>
-                      <button :class="{
+                      <!-- <button :class="{
                         like: reply.isLike,
                       }" class="action-btn" @click="handleLikeReply(reply)">
                         <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
                         {{ reply.likeCount ? reply.likeCount : '' }}
-                      </button>
+                      </button> -->
                     </div>
                   </div>
                 </div>
@@ -134,8 +138,10 @@
 </template>
 
 <script setup lang="ts">
+import { useNuxtApp } from '#app';
 import { ref, computed } from 'vue';
-import { marked } from 'marked';
+import { useUserStore } from '~/store';
+import { storeToRefs } from 'pinia';
 import {
   type IReply,
   CommentType,
@@ -146,8 +152,7 @@ import {
   LikeType,
   CommentOrder,
 } from '@/types/index';
-import { useUserStore } from '~/store';
-import { storeToRefs } from 'pinia';
+
 import {
   getReplyList,
   getParentComments,
@@ -156,10 +161,10 @@ import {
   postDeleteComment,
   postDeleteReply,
 } from '~/api/comment';
-import { useNuxtApp } from '#app';
 import { postCancelLike, postLike } from '~/api';
 import Tab from './Tab.vue';
 import Editor from './Editor.vue';
+import CommentText from './CommentText.vue';
 import { cleanWords } from '~/utils/filter-bad-words'
 import { useIntersectionObserver } from '@vueuse/core';
 
@@ -194,14 +199,6 @@ const commentLoading = ref(false);
 const commentOrder = ref<string>(CommentOrder.LATEST);
 const comments = ref<Array<Comment>>([]);
 
-const renderer = new marked.Renderer();
-
-renderer.image = ({ href, title, text }: any) => {
-  return `<img src="${href}" alt="${text}" title="${title}" style="max-height: 80px;object-fit: cover;" />`;
-};
-const renderComment = (comment: string) => {
-  return marked.parse(comment, { renderer });
-};
 // 处理评论提交
 const handleSubmit = (event: any) => {
   event.preventDefault();
