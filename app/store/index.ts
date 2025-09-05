@@ -46,9 +46,7 @@ export const useUserStore = defineStore('user', {
       });
     },
     initUserInfo() {
-      if (!this.user) {
-        this.setUser();
-      }
+      this.setUser();
     },
     removeUser() {
       this.user = null;
