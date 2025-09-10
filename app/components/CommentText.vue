@@ -4,14 +4,16 @@ defineOptions({
   name: 'CommentText',
 });
 
-defineProps<{
+const props = defineProps<{
   content: string;
+  id: string;
 }>();
 
 let lightbox: PhotoSwipeLightbox | null = null
 
 function addimageView() {
-  const container = document.getElementById('commentGallery')
+  const container = document.getElementById('commentGallery' + props.id)
+
   const images = container!.querySelectorAll('img');
   if (!images.length) return
   images.forEach((img) => {
@@ -36,7 +38,7 @@ function addimageView() {
   });
 
   lightbox = new PhotoSwipeLightbox({
-    gallery: '#commentGallery',
+    gallery: '#commentGallery' + props.id,
     children: 'a',
     pswpModule: () => import('photoswipe'),
   });
@@ -53,7 +55,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div id="commentGallery">
+  <div :id="'commentGallery' + id">
     <div v-html="content"></div>
   </div>
 </template>

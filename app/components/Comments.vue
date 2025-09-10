@@ -39,7 +39,7 @@
                 <span class="time">{{ formatTime(comment?.createdAt) }}</span>
               </div>
               <div class="comment-text">
-                <CommentText :content="comment.content" />
+                <CommentText :content="comment.content" :id="'c' + comment.id" />
               </div>
               <div class="comment-actions">
                 <button class="action-btn" @click="handleReply(comment)" style="color: var(--primary-color)">回复</button>
@@ -80,7 +80,7 @@
                           <span class="time">{{ formatTime(reply?.createdAt) }}</span>
                         </div>
                         <div class="reply-text">
-                          <CommentText :content="reply.content" />
+                          <CommentText :content="reply.content" :id="'r' + reply.id" />
                         </div>
                         <div class="reply-actions">
                           <button class="action-btn" style="color: var(--primary-color);"

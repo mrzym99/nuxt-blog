@@ -1,10 +1,11 @@
 <template>
   <div>
     <NuxtLoadingIndicator />
-    <NuxtLayout v-if="ready">
-      <NuxtPage :keepalive="keepalive" />
-    </NuxtLayout>
-    <Loading :loading="true" v-else />
+    <Loading :loading="!ready">
+      <NuxtLayout>
+        <NuxtPage :keepalive="keepalive" />
+      </NuxtLayout>
+    </Loading>
     <ClientOnly>
       <Toaster :toast-options="{
         duration: 2000

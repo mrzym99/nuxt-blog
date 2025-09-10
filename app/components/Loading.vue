@@ -3,7 +3,7 @@
     <div v-if="loading" class="loading-container min-h-50rem">
       <div class="loading-spinner">
         <div class="spinner"></div>
-        <p class="loading-text">加载中...</p>
+        <p class="loading-text">Loading...</p>
       </div>
     </div>
     <div v-else>
@@ -30,12 +30,12 @@ defineProps<{
 }
 
 .spinner {
-  @apply w-12 h-12 border-4 border-t-transparent rounded-full;
+  @apply w-8 h-8 border-2 border-t-transparent rounded-full;
   animation: spin 1s linear infinite;
 }
 
 .loading-text {
-  @apply mt-4 text-lg;
+  @apply mt-2 text-lg;
 }
 
 @keyframes spin {
