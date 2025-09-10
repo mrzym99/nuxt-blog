@@ -1,6 +1,11 @@
 import { postRefreshToken } from '~/api';
 
 const appName = import.meta.env.VITE_APP_NAME;
+
+export function resetStorage() {
+  localStorage.clear();
+}
+
 export function setToken(token: string) {
   localStorage.setItem(`${appName}-token`, token);
 }

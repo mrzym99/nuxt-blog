@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import {
-  getLogout,
   getUserInfo,
   postCodeLogin,
   postLogin,
@@ -97,6 +96,7 @@ export const useUserStore = defineStore('user', {
       this.resetStore();
     },
     resetStore() {
+      removeToken();
       this.removeUser();
     },
   },

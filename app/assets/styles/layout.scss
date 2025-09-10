@@ -7,7 +7,6 @@
   flex-direction: row;
   max-width: $max-width;
   width: 100%;
-  padding: 1rem;
 
   @include responsive(lt-sm) {
     gap: 1rem;
@@ -17,7 +16,6 @@
   @include responsive(lt-md) {
     gap: 1rem;
     flex-direction: column;
-    padding: 3rem 3rem 2rem 3rem;
   }
 
   @include responsive(lt-lg) {

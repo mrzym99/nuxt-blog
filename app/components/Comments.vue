@@ -24,9 +24,9 @@
       <div v-if="comments.length === 0" class="no-comments">暂无评论，快来抢沙发吧！</div>
       <template v-else>
         <Tab v-model="commentOrder" :options="tabOptions" @change="toggleTab" />
-        <TransitionGroup name="fade">
+        <TransitionGroup name="fade-in">
           <div v-for="comment in comments" :key="comment.id" :id="'comment' + comment.id" class="comment-item" :class="{
-            'focus-comment': hasScrollToView && routerCommentId && comment.id === routerCommentId,
+            'focus-comment': hasScrollToView && showCommentFocus && routerCommentId && comment.id === routerCommentId,
           }">
             <div class="comment-avatar">
               <NuxtLink :to="`/user-center/${comment.commenter?.id}`">
@@ -47,83 +47,114 @@
                   @click="handleRevokeComment(comment)">
                   撤回
                 </button>
-                <!-- <button :class="{
+                <button :class="{
                   like: comment.isLike,
                 }" class="action-btn" @click="handleLikeComment(comment)">
                   <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
                   {{ comment.likeCount ? comment.likeCount : '' }}
-                </button> -->
+                </button>
               </div>
 
               <!-- 子评论列表 -->
               <div v-if="comment.replyCount" class="replies-list">
-                <div v-for="reply in returnReplies(comment.replies, comment.fold)" :key="reply.id"
-                  :id="'reply' + reply.id" class="reply-item" :class="{
-                    'focus-comment': hasScrollToView && routerReplyId && reply.id === routerReplyId,
-                  }">
-                  <div class="reply-avatar">
-                    <NuxtLink :to="`/user-center/${reply.reply?.id}`">
-                      <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
-                    </NuxtLink>
+                <TransitionGroup name="fade-in">
+                  <div v-for="reply in returnReplies(comment.replies, comment.fold)" :key="reply.id"
+                    :id="'reply' + reply.id" class="reply-item" :class="{
+                      'focus-comment': hasScrollToView && showCommentFocus && routerReplyId && reply.id === routerReplyId,
+                    }">
+                    <div class="reply-item-box">
+                      <div class="reply-avatar">
+                        <NuxtLink :to="`/user-center/${reply.reply?.id}`">
+                          <img :src="reply.reply.profile.avatar" :alt="reply.reply.profile.nickName" />
+                        </NuxtLink>
+                      </div>
+                      <div class="reply-content">
+                        <div class="reply-header">
+                          <span>
+                            <span class="username">{{ reply.reply.profile.nickName }}</span>
+                            <span v-if="reply.replyTo" class="reply-to">
+                              回复
+                              <span class="reply-to-user">@{{ reply.replyTo.profile.nickName }}</span>
+                            </span>
+                          </span>
+                          <span class="time">{{ formatTime(reply?.createdAt) }}</span>
+                        </div>
+                        <div class="reply-text">
+                          <CommentText :content="reply.content" />
+                        </div>
+                        <div class="reply-actions">
+                          <button class="action-btn" style="color: var(--primary-color);"
+                            @click="handleReply(comment, reply)">回复</button>
+                          <button v-if="user?.id === reply.reply?.id" class="cancel-btn"
+                            @click="handleRevokeReply(comment, reply)">
+                            撤回
+                          </button>
+                          <button :class="{
+                            like: reply.isLike,
+                          }" class="action-btn" @click="handleLikeReply(reply)">
+                            <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
+                            {{ reply.likeCount ? reply.likeCount : '' }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- reply 回复框 -->
+                    <transition name="fade-in">
+                      <div v-if="replyTo && replyTo.id === reply.id" class="reply-form">
+                        <ClientOnly>
+                          <div class="form-content">
+                            <div class="avatar">
+                              <NuxtLink v-if="user" :to="`/user-center/${user?.id}`">
+                                <img :src="user?.avatar" :alt="user?.nickName" />
+                              </NuxtLink>
+                              <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
+                            </div>
+                            <Editor :read-only="!user" v-model="commentContent"
+                              :placeholder="`回复 @${replyTo.user.profile.nickName}`" :height="120" />
+                          </div>
+                          <div class="form-actions w-full">
+                            <button class="cancel-btn" @click="cancelReply">取消</button>
+                            <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
+                              回复
+                            </button>
+                          </div>
+                        </ClientOnly>
+                      </div>
+                    </transition>
                   </div>
-                  <div class="reply-content">
-                    <div class="reply-header">
-                      <span class="username">{{ reply.reply.profile.nickName }}</span>
-                      <span v-if="reply.replyTo" class="reply-to">
-                        回复
-                        <span class="reply-to-user">@{{ reply.replyTo.profile.nickName }}</span>
-                      </span>
-                      <span class="time">{{ formatTime(reply?.createdAt) }}</span>
-                    </div>
-                    <div class="reply-text">
-                      <CommentText :content="reply.content" />
-                    </div>
-                    <div class="reply-actions">
-                      <button class="action-btn" style="color: var(--primary-color);"
-                        @click="handleReply(comment, reply)">回复</button>
-                      <button v-if="user?.id === reply.reply?.id" class="cancel-btn"
-                        @click="handleRevokeReply(comment, reply)">
-                        撤回
-                      </button>
-                      <!-- <button :class="{
-                        like: reply.isLike,
-                      }" class="action-btn" @click="handleLikeReply(reply)">
-                        <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
-                        {{ reply.likeCount ? reply.likeCount : '' }}
-                      </button> -->
-                    </div>
-                  </div>
-                </div>
-                <div class="more" v-if="comment.replies.length < (comment.replyCount || 0)"
-                  @click="loadMoreReplies(comment)">
-                  <Icon v-if="comment.loading" name="svg-spinners:90-ring-with-bg" size="1.5rem"></Icon>
-                  <span v-else>加载更多 </span>
-                </div>
+                </TransitionGroup>
               </div>
               <div class="fold-box" v-if="comment.replyCount">
                 <span class="fold" @click="comment.fold = !comment.fold">
                   {{ comment.fold ? `展开 ${comment.replies.length} 条回复` : '收起' }}</span>
               </div>
-              <!-- 回复框 -->
-              <div v-if="replyTo && replyTo.parent.id === comment.id" class="reply-form">
-                <ClientOnly>
-                  <div class="form-content">
-                    <div class="avatar">
-                      <NuxtLink v-if="user" :to="`/user-center/${user?.id}`">
-                        <img :src="user?.avatar" :alt="user?.nickName" />
-                      </NuxtLink>
-                      <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
+              <!-- comment 回复框 -->
+              <transition name="fade-in">
+                <div v-if="replyTo && !replyTo.id && replyTo.parent.id === comment.id" class="reply-form">
+                  <ClientOnly>
+                    <div class="form-content">
+                      <div class="avatar">
+                        <NuxtLink v-if="user" :to="`/user-center/${user?.id}`">
+                          <img :src="user?.avatar" :alt="user?.nickName" />
+                        </NuxtLink>
+                        <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
+                      </div>
+                      <Editor :read-only="!user" v-model="commentContent"
+                        :placeholder="`回复 @${replyTo.user.profile.nickName}`" :height="120" />
                     </div>
-                    <Editor :read-only="!user" v-model="commentContent"
-                      :placeholder="`回复 @${replyTo.user.profile.nickName}`" :height="120" />
-                  </div>
-                  <div class="form-actions w-full">
-                    <button class="cancel-btn" @click="cancelReply">取消</button>
-                    <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
-                      回复
-                    </button>
-                  </div>
-                </ClientOnly>
+                    <div class="form-actions w-full">
+                      <button class="cancel-btn" @click="cancelReply">取消</button>
+                      <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
+                        回复
+                      </button>
+                    </div>
+                  </ClientOnly>
+                </div>
+              </transition>
+              <div class="more" v-if="!comment.fold && comment.replies.length < (comment.replyCount || 0)"
+                @click="loadMoreReplies(comment)">
+                <Icon v-if="comment.loading" name="svg-spinners:90-ring-with-bg" size="1.2rem"></Icon>
+                <span class="text-sm" v-else>加载更多 </span>
               </div>
             </div>
           </div>
@@ -160,13 +191,14 @@ import {
   postReply,
   postDeleteComment,
   postDeleteReply,
+  getCommentIdByReplyId,
 } from '~/api/comment';
 import { postCancelLike, postLike } from '~/api';
 import Tab from './Tab.vue';
 import Editor from './Editor.vue';
 import CommentText from './CommentText.vue';
-import { cleanWords } from '~/utils/filter-bad-words'
 import { useIntersectionObserver } from '@vueuse/core';
+import { TransitionGroup } from 'vue';
 
 const props = defineProps<{
   type: CommentType;
@@ -174,6 +206,7 @@ const props = defineProps<{
 }>();
 
 type ReplyTo = {
+  id?: number
   parent: Comment;
   user: IUser;
 };
@@ -191,6 +224,7 @@ const commentContent = ref('');
 const replyTo = ref<ReplyTo | null>(null);
 const commentRef = ref<HTMLElement | null>(null);
 const hasScrollToView = ref(false);
+const showCommentFocus = ref(true)
 
 const currentPage = ref(1);
 const commentTotal = ref(0);
@@ -207,7 +241,6 @@ const handleSubmit = (event: any) => {
     $toast.warning('请先登录');
     return;
   }
-  commentContent.value = cleanWords(commentContent.value.trim())
   if (replyTo.value) {
     const newReply: CreateReply = {
       parentId: replyTo.value.parent.id,
@@ -246,6 +279,7 @@ const handleSubmit = (event: any) => {
 // 处理回复
 const handleReply = (comment: Comment, reply?: IReply) => {
   replyTo.value = {
+    id: reply?.id,
     parent: comment,
     user: reply ? reply.reply! : comment.commenter!,
   };
@@ -334,7 +368,7 @@ function loadMoreComments() {
   getCommentList();
 }
 
-async function loadMoreReplies(parent: Comment) {
+async function loadMoreReplies(parent: Comment, targetId?: number) {
   const len = parent.replies ? parent.replies.length : 0;
   const currentPage = Math.floor(len / PAGE_SIZE) + 1;
   parent.loading = true;
@@ -344,10 +378,21 @@ async function loadMoreReplies(parent: Comment) {
     pageSize: PAGE_SIZE,
   });
 
-  const replies = res.data.list;
+  const { list, total } = res.data;
   parent.fold = false;
   parent.loading = false;
-  parent.replies = parent.replies ? parent.replies.concat(replies) : replies;
+  parent.replies = parent.replies && parent.replies.length ? parent.replies.concat([...list]) : list;
+
+  if (targetId) {
+    const targetReply = list.find(l => l.id === targetId)
+    if (targetReply) {
+      setTimeout(() => {
+        navigateToTarget('reply' + routerReplyId.value);
+      }, 1000)
+    } else {
+      await loadMoreReplies(parent, targetId)
+    }
+  }
 }
 
 function returnReplies(replies: IReply[], fold: boolean): IReply[] {
@@ -374,7 +419,7 @@ const toggleTab = (tab: string) => {
   getCommentList();
 };
 
-async function getCommentList(commentId?: number, replyId?: number) {
+async function getCommentList(commentId?: number) {
   commentLoading.value = true;
   const res = await getParentComments({
     currentPage: currentPage.value,
@@ -382,30 +427,52 @@ async function getCommentList(commentId?: number, replyId?: number) {
     targetId: props.targetId,
     type: CommentType.ARTICLE,
     commentOrder: commentOrder.value,
-    commentId,
-    replyId
   });
   const { list, total } = res.data;
   const listWidthFold = list.map(v => {
     return {
       ...v,
       loading: false,
-      fold: true,
+      fold: v.id !== commentId
     };
   });
+
   comments.value = currentPage.value === 1 ? listWidthFold : comments.value.concat(listWidthFold);
   commentTotal.value = total - 0;
   commentLoading.value = false;
 
+  if (commentId) {
+    const targetComment = comments.value.find(item => item.id === commentId)
+    if (!targetComment) {
+      if (comments.value.length < commentTotal.value) {
+        currentPage.value += 1
+        await getCommentList(commentId)
+      }
+    } else {
+      if (routerReplyId.value) {
+        if (targetComment.replies.find(r => r.id === routerReplyId.value)) {
+          setTimeout(() => {
+            navigateToTarget('reply' + routerReplyId.value);
+          })
+        } else {
+          loadMoreReplies(targetComment, routerReplyId.value)
+        }
+      } else {
+        setTimeout(() => {
+          navigateToTarget('comment' + commentId);
+        }, 1000);
+      }
+    }
+  }
 }
 
 // 判断是否带 replyId commentId
 const routerReplyId = computed(() => {
-  return Number(route.query.replyId) || null;
+  return Number(route.query.replyId) || undefined;
 });
 
 const routerCommentId = computed(() => {
-  return Number(route.query.commentId) || null;
+  return Number(route.query.commentId) || undefined;
 });
 
 const target = useTemplateRef<HTMLDivElement>('commentRef')
@@ -432,21 +499,23 @@ function navigateToTarget(target: string) {
   window.scrollBy({ top: scrollTop + offsetHeight, behavior: 'smooth' });
   requestAnimationFrame(() => {
     hasScrollToView.value = true;
+    setTimeout(() => {
+      showCommentFocus.value = false
+    }, 3000)
   });
 }
 
 onMounted(async () => {
   if (window) {
-    if (routerReplyId.value || routerCommentId.value) {
-      // TODO 后端把目标 comment、replies 展示到评论第一条
-      await getCommentList()
-      setTimeout(() => {
-        if (routerReplyId.value) {
-          navigateToTarget('reply' + routerReplyId.value);
-        } else {
-          navigateToTarget('comment' + routerCommentId.value);
-        }
-      }, 1000);
+    if (routerReplyId.value) {
+      const res = await getCommentIdByReplyId(routerReplyId.value)
+      const commentId = res.data
+      if (commentId) {
+        await getCommentList(commentId)
+      }
+    }
+    else if (routerCommentId.value) {
+      await getCommentList(routerCommentId.value)
     } else {
       loadComment()
     }
@@ -566,21 +635,29 @@ onMounted(async () => {
 }
 
 .reply-item {
-  display: flex;
-  gap: 0.5rem;
   padding-left: 0.5rem;
   margin-bottom: 0.8rem;
-  border-left: 2px solid;
-  border-color: var(--primary-color);
 
   &:nth-of-type(even) {
-    border-color: var(--primary-light-color);
+    .reply-item-box {
+      border-color: var(--primary-light-color);
+    }
   }
+
 
   &:last-child {
     margin-bottom: 0;
   }
+
+  &-box {
+    display: flex;
+    gap: 0.5rem;
+    border-left: 2px solid;
+    border-color: var(--primary-color);
+
+  }
 }
+
 
 .reply-avatar {
   width: 32px;
@@ -601,9 +678,10 @@ onMounted(async () => {
   .reply-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: space-between;
     margin-bottom: 0.5rem;
   }
+
 
   .reply-to {
     font-size: 0.8rem;
@@ -751,7 +829,7 @@ onMounted(async () => {
   text-align: center;
   cursor: pointer;
   transition: color 0.3s ease;
-  margin: 1em 0;
+  margin: 0.3em 0;
   font-size: 16px;
   height: 20px;
 
@@ -763,7 +841,6 @@ onMounted(async () => {
 }
 
 .focus-comment {
-  outline: 2px solid transparent;
   background: transparent;
   animation: outline ease-in-out 3s;
 }
@@ -771,13 +848,11 @@ onMounted(async () => {
 @keyframes outline {
   40% {
     border-radius: 3px;
-    outline-color: var(--primary-color);
     background: rgba(255, 0, 0, 0.1);
   }
 
   100% {
     border-radius: 3px;
-    outline-color: var(--primary-color);
     background: rgba(255, 0, 0, 0.1);
   }
 }

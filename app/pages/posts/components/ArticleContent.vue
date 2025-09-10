@@ -1,7 +1,7 @@
 <template>
   <div class="w-full my-2 min-h-10rem">
     <div class="flex items-center justify-end read-duration">
-      <span>阅读时长: </span><span>{{ formatDuration(article.viewDuration || 0) }}</span>
+      <span>阅读时长: </span><span>{{ formatDuration(viewDuration || 0) }}</span>
     </div>
     <div class="article-content">
       <div class="article-body" v-if="isMd">
@@ -29,7 +29,7 @@
           <ClientOnly>
             <span v-copy="postUrl" class="underline cursor-pointer text-gradient">{{
               postUrl
-            }}</span>
+              }}</span>
           </ClientOnly>
         </p>
         <p class="mb-2" v-if="postedDays">
@@ -38,7 +38,7 @@
         <p v-if="article.originalUrl">
           <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
             article.originalUrl
-          }}</a>
+            }}</a>
         </p>
       </div>
       <div class="w-full">
@@ -70,12 +70,11 @@ import Comments from '~/components/Comments.vue';
 import MdTextPreview from './MdTextPreview.vue';
 import RichTextPreview from './RichTextPreview.vue';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
-import 'photoswipe/style.css';
 
 import { formatDate } from '~/utils/tool';
 import { CommentType, LikeType, type IArticle } from '~/types/index';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
-import { postViewDuration } from '~/api/view';
+import { getViewDuration, postViewDuration } from '~/api/view';
 import { getRecommendArticle } from '~/api/article';
 import { useUserStore } from '~/store';
 import { useArticleStore } from '~/store';
@@ -99,6 +98,7 @@ const props = defineProps<ArticleProps>();
 let lightbox: PhotoSwipeLightbox | null = null
 
 const isLike = ref(false);
+const viewDuration = ref<number>(0)
 const likeCount = ref<number>(0);
 const startViewTimestamp = ref(0);
 const currentViewDuration = ref(0);
@@ -168,6 +168,15 @@ async function handleGetLikeCount() {
     type: LikeType.ARTICLE,
   });
   likeCount.value = res.data as number;
+}
+
+async function handleGetViewDuration() {
+  const res = await getViewDuration({
+    type: LikeType.ARTICLE,
+    targetId: props.article.id,
+    userId: userStore.user?.id
+  })
+  viewDuration.value = res.data as number
 }
 
 async function handleAddViewDuration(duration: number) {
@@ -242,6 +251,7 @@ function addimageView() {
 }
 
 onMounted(() => {
+  handleGetViewDuration()
   checkIsLike();
   handleGetLikeCount();
   handleGetRecommends();

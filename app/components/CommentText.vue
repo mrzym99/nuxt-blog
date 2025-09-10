@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
 defineOptions({
   name: 'CommentText',
 });
@@ -6,10 +7,55 @@ defineOptions({
 defineProps<{
   content: string;
 }>();
+
+let lightbox: PhotoSwipeLightbox | null = null
+
+function addimageView() {
+  const container = document.getElementById('commentGallery')
+  const images = container!.querySelectorAll('img');
+  if (!images.length) return
+  images.forEach((img) => {
+    // 动态加载图片以获取宽高
+    const image = new Image();
+    image.src = img.src;
+    image.onload = () => {
+      const parent = img.parentElement
+      if (parent) {
+        const anchor = document.createElement('a');
+        anchor.href = image.src;
+        anchor.setAttribute('target', '_blank');
+        anchor.setAttribute('data-pswp-width', image.width + '');
+        anchor.setAttribute('data-pswp-height', image.height + '');
+        anchor.appendChild(img);
+        parent.replaceWith(anchor);
+      }
+    };
+    image.onerror = () => {
+      console.error('Failed to load image:', img.src);
+    };
+  });
+
+  lightbox = new PhotoSwipeLightbox({
+    gallery: '#commentGallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+  });
+  lightbox.init();
+}
+
+onMounted(() => {
+  addimageView()
+});
+
+onBeforeUnmount(() => {
+  lightbox && lightbox.destroy();
+});
 </script>
 
 <template>
-  <div v-html="content"></div>
+  <div id="commentGallery">
+    <div v-html="content"></div>
+  </div>
 </template>
 
 <style lang="scss" scoped>

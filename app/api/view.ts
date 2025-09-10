@@ -8,14 +8,6 @@ export const postViewDuration = (data?: any) =>
     data,
   });
 
-// 获取浏览次数
-export const getViewCount = (params?: any) =>
-  $http({
-    method: 'get',
-    url: '/blog/view/viewDuration',
-    params,
-  });
-
 // 获取浏览时长
 export const getViewDuration = (params?: any) =>
   $http({

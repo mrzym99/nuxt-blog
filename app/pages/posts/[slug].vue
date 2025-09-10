@@ -6,6 +6,7 @@
         <div class="article-header">
           <div class="info-wrapper">
             <div class="tag-cloud">
+              <Back class="back" />
               <NuxtLink class="tag" v-for="tag in articleDetail?.tags" :to="'/archive/' + tag.name" :key="tag.id">
                 {{ tag.name }}
               </NuxtLink>
@@ -139,12 +140,21 @@ watch(
 }
 
 .article-header {
+  position: relative;
+
   h1 {
     font-size: 2rem;
     margin: 1rem 0;
     font-weight: 600;
     letter-spacing: 3px;
     color: var(--text-color);
+  }
+
+  @include responsive(lt-sm) {
+    h1 {
+      font-size: 1.8rem;
+      margin: 1rem 0;
+    }
   }
 
   @include responsive(lt-md) {

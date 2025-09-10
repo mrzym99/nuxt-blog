@@ -73,7 +73,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ['@unocss/reset/tailwind.css', '~/assets/styles/index.scss'],
+  css: ['@unocss/reset/tailwind.css', 'photoswipe/style.css', '~/assets/styles/index.scss'],
   plugins: ['~/plugins/index.ts', '~/plugins/vee.ts', '~/plugins/auth.ts'],
   icon: {
     localApiEndpoint: '/nuxt-icon',

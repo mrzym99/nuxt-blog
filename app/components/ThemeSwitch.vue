@@ -12,8 +12,7 @@ import type { Theme } from '~/types';
 const colorMode = useColorMode();
 
 const toggleTheme = () => {
-  const theme = colorMode.preference === 'dark' ? 'light' : 'dark';
-  setTheme(theme);
+  setTheme(colorMode.value === 'dark' ? 'light' : 'dark');
 };
 
 const setTheme = (theme: Theme) => {

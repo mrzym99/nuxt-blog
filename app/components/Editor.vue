@@ -22,6 +22,7 @@ const props = defineProps<{
   height?: number | string;
   semantic?: boolean;
   readOnly?: boolean;
+  placeholder?: string
 }>();
 
 const emit = defineEmits<{
@@ -53,7 +54,7 @@ const editorStyle = computed(() => {
 
 const defaultOptions: QuillOptions = {
   theme: 'snow',
-  placeholder: '',
+  placeholder: props.placeholder || '请输入',
   readOnly: props.readOnly,
   modules: {
     toolbar: {
@@ -83,7 +84,7 @@ const defaultOptions: QuillOptions = {
           quillInstance?.history.redo();
           updateHistoryStatus();
         },
-        emoji: () => {},
+        emoji: () => { },
       },
     },
     'emoji-toolbar': true,
@@ -372,6 +373,10 @@ defineExpose<{
       max-width: $comment-image-max-width !important;
       object-fit: cover;
     }
+  }
+
+  :deep(.ql-editor.ql-blank::before) {
+    color: var(--placeholder-color);
   }
 
   :deep(.ql-code-block-container) {

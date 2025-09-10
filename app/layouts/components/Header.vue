@@ -41,8 +41,9 @@ const menuList: Menu[] = [
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  height: 54px;
+  padding: 0 1rem;
   border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0;
 }
 </style>

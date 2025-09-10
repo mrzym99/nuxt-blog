@@ -215,13 +215,14 @@ onUnmounted(() => {
   .catalog-toggle {
     display: flex;
     align-items: center;
-    padding: 1.2rem 0rem;
+    padding: 0.6rem 0rem;
     border-radius: 0.25rem;
     border: none;
     cursor: pointer;
     font-size: 1rem;
     background-color: var(--primary-color);
     color: var(--white-color);
+    opacity: 0.7;
 
     &:hover {
       opacity: 0.9;

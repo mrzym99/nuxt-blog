@@ -33,6 +33,13 @@ export const postReply = (data?: any) =>
     data,
   });
 
+// 通过回复id获取评论id
+export const getCommentIdByReplyId = (id?: number) =>
+  $http({
+    method: 'get',
+    url: '/blog/comment/getCommentIdByReplyId/' + id,
+  });
+
 // 撤回评论
 export const postDeleteComment = (id?: number) =>
   $http({

@@ -49,13 +49,11 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
         if (expiredCodes.includes(code)) {
           const flag = await handleRefreshToken();
           if (flag) {
-            return (await http(options)).data;
+            response._data = await http(options);
           } else {
-            removeToken();
             useUserStore().logout();
           }
         } else if (logoutCodes.includes(code)) {
-          removeToken();
           useUserStore().logout();
           $toast.error('登录状态已过期，请重新登录');
         } else {
@@ -66,7 +64,6 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
           });
         }
       }
-      return response;
     },
     onRequestError({ request, options, error }) {
       // 处理请求错误
@@ -113,7 +110,7 @@ async function $http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
         if (expiredCodes.includes(code)) {
           const flag = await handleRefreshToken();
           if (flag) {
-            return (await $http(options)).data;
+            response._data = await $http(options);
           } else {
             removeToken();
             useUserStore().logout();

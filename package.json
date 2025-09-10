@@ -21,7 +21,6 @@
     "@vee-validate/nuxt": "^4.15.1",
     "@vee-validate/rules": "^4.15.1",
     "@vueuse/core": "^13.7.0",
-    "bad-words": "^4.0.0",
     "form-data": "^4.0.4",
     "highlight.js": "^11.11.1",
     "marked": "^16.2.0",

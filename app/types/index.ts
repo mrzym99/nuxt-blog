@@ -21,7 +21,6 @@ export interface IArticle extends baseModel {
   author: IUser | null;
   viewCount?: number;
   likeCount?: number;
-  viewDuration?: number;
 }
 
 export interface IUser extends baseModel {

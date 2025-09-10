@@ -9,7 +9,7 @@ export const getAllTags = (params?: any) =>
     params,
   });
 
-// 获取文章详情
+// 获取标签详情
 export const getTagDetail = (id: string) =>
   http({
     method: 'get',

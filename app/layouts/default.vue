@@ -6,7 +6,9 @@
         <div class="flex align-center justify-end md:hidden">
           <Header />
         </div>
-        <slot />
+        <div class="lt-sm:p-1rem lt-md:p-2rem">
+          <slot />
+        </div>
         <div class="md:hidden">
           <CopyRight />
         </div>
