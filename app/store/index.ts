@@ -34,18 +34,25 @@ export const useArticleStore = defineStore('blogArticle', {
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null as UserDetail | null,
+    ready: false,
   }),
   getters: {
     getUser: state => state.user,
   },
   actions: {
     setUser() {
-      getUserInfo().then(res => {
-        this.user = res.data;
+      return new Promise<void>(resolve => {
+        getUserInfo().then(res => {
+          this.user = res.data;
+          resolve();
+        });
       });
     },
-    initUserInfo() {
-      this.setUser();
+    async initUserInfo() {
+      await this.setUser();
+    },
+    setReady() {
+      this.ready = true;
     },
     removeUser() {
       this.user = null;

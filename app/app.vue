@@ -1,9 +1,10 @@
 <template>
   <div>
     <NuxtLoadingIndicator />
-    <NuxtLayout>
+    <NuxtLayout v-if="ready">
       <NuxtPage :keepalive="keepalive" />
     </NuxtLayout>
+    <Loading :loading="true" v-else />
     <ClientOnly>
       <Toaster :toast-options="{
         duration: 2000
@@ -16,6 +17,11 @@
 import { useHead } from '#app';
 import { getTitle } from '~/utils/title';
 import type { Theme } from '~/types';
+import { useUserStore } from './store';
+import { storeToRefs } from 'pinia';
+import Loading from '~/components/Loading.vue';
+
+const { ready } = storeToRefs(useUserStore())
 
 const theme = computed(() => {
   return useColorMode().preference as Theme;

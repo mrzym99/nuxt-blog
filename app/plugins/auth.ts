@@ -4,9 +4,10 @@ import { isLoggedIn } from '~/utils/auth';
 
 export default defineNuxtPlugin(({ hook }) => {
   const userStore = useUserStore();
-  hook('app:mounted', () => {
+  hook('app:mounted', async () => {
     if (isLoggedIn()) {
-      userStore.initUserInfo();
+      await userStore.initUserInfo();
     }
+    userStore.setReady();
   });
 });
