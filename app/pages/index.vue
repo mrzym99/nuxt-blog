@@ -102,7 +102,6 @@ async function loadMore() {
   loading.value = false
 }
 
-// TODO 优化接口
 async function refreshArticle() {
   if (!getCurrentArticle.value || !getCurrentArticle.value.id) return
   const index = data.value?.list.findIndex(item => item.id == getCurrentArticle.value?.id);

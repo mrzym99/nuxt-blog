@@ -22,3 +22,5 @@ code refactor
 
 article search es
 es search
+
+类型问题

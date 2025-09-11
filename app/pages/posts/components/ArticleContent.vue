@@ -29,7 +29,7 @@
           <ClientOnly>
             <span v-copy="postUrl" class="underline cursor-pointer text-gradient">{{
               postUrl
-            }}</span>
+              }}</span>
           </ClientOnly>
         </p>
         <p class="mb-2" v-if="postedDays">
@@ -38,7 +38,7 @@
         <p v-if="article.originalUrl">
           <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
             article.originalUrl
-          }}</a>
+            }}</a>
         </p>
       </div>
       <div class="w-full">
@@ -78,8 +78,12 @@ import { getViewDuration, postViewDuration } from '~/api/view';
 import { getRecommendArticle } from '~/api/article';
 import { useUserStore } from '~/store';
 import { useArticleStore } from '~/store';
+import useIdleDetection from '~/utils/idle-detection';
+import Timer from '~/utils/timer'
 
 const { $toast } = useNuxtApp()
+const timeClock = new Timer()
+const SILENT = 12 // 允许用户离开时间
 
 type ArticleProps = {
   article: IArticle;
@@ -93,6 +97,12 @@ const typeEnum = {
 
 const userStore = useUserStore();
 const articleStore = useArticleStore();
+const {
+  startDetection,
+  stopDetection
+} = useIdleDetection(timeClock.start.bind(timeClock), () => {
+  timeClock.pause.bind(timeClock)(SILENT * 1000)
+}, SILENT)
 
 const props = defineProps<ArticleProps>();
 let lightbox: PhotoSwipeLightbox | null = null
@@ -100,8 +110,6 @@ let lightbox: PhotoSwipeLightbox | null = null
 const isLike = ref(false);
 const viewDuration = ref<number>(0)
 const likeCount = ref<number>(0);
-const startViewTimestamp = ref(0);
-const currentViewDuration = ref(0);
 const recommends = ref<IArticle[]>([]);
 
 const isMd = computed(() => {
@@ -193,25 +201,6 @@ async function handleGetRecommends() {
   recommends.value = res.data as IArticle[];
 }
 
-function visibleChange() {
-  if (document.visibilityState === 'visible') {
-    startViewTimestamp.value = Date.now();
-  } else {
-    const elapse = Date.now() - Number(startViewTimestamp.value);
-    if (!isNaN(elapse) && elapse > 1000) {
-      currentViewDuration.value += elapse;
-      startViewTimestamp.value = Date.now();
-    }
-  }
-}
-
-function initViewDuration() {
-  startViewTimestamp.value = Date.now();
-  if (document) {
-    document.addEventListener('visibilitychange', visibleChange);
-  }
-}
-
 function addimageView() {
   const container = document.getElementById('blogGallery')
   const images = container!.querySelectorAll('img');
@@ -251,24 +240,21 @@ function addimageView() {
 }
 
 onMounted(() => {
+  timeClock.start()
+  startDetection()
   handleGetViewDuration()
-  checkIsLike();
+  checkIsLike()
   handleGetLikeCount();
   handleGetRecommends();
-  initViewDuration();
   addimageView()
 });
 
 onBeforeUnmount(() => {
   articleStore.setRefresh(true);
-  // 计算总的阅读时长
-  const elapse = Date.now() - Number(startViewTimestamp.value);
-  const du = Number(currentViewDuration.value) + elapse;
-
-  !isNaN(du) && handleAddViewDuration(du % 86400000);
-
-  document.removeEventListener('visibilitychange', visibleChange);
-
+  // 添加阅读时长
+  const elapse = Math.round(timeClock.time)
+  !isNaN(elapse) && handleAddViewDuration(elapse % 86400000);
+  stopDetection()
   lightbox && lightbox.destroy()
 });
 </script>

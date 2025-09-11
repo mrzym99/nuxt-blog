@@ -73,7 +73,7 @@ export const getEmailCaptcha = (email: string) =>
   $http({
     method: 'post',
     url: '/auth/email/send',
-    params: { email },
+    data: { email },
   });
 
 // 验证码登录

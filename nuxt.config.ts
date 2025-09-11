@@ -110,5 +110,11 @@ export default defineNuxtConfig({
     storage: 'localStorage', // or 'sessionStorage' or 'cookie'
     storageKey: 'nuxt-color-mode',
   },
-  nitro: {},
+  nitro: {
+    devProxy: {
+      '/upload': {
+        target: 'http://127.0.0.1:3000/upload',
+      },
+    },
+  },
 });
