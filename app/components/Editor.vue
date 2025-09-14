@@ -155,6 +155,15 @@ watch(
   }
 );
 
+watch(
+  () => props.placeholder,
+  val => {
+    if (val && document) {
+      document.querySelector('.ql-editor')!.setAttribute("data-placeholder", val);
+    }
+  }
+);
+
 // Convert modelValue HTML to Delta and replace editor content
 const pasteHTML = (quill: Quill) => {
   model.value = props.modelValue;
@@ -185,9 +194,6 @@ function registerMention() {
 
 function registerEmoji() {
   Quill.register('modules/emoji', Emoji, true);
-  // Quill.register('modules/emoji-shortname', ShortNameEmoji, true)
-  // Quill.register('modules/emoji-toolbar', ToolbarEmoji, true)
-  // Quill.register('modules/emoji-textarea', TextAreaEmoji, true)
 }
 
 function customIcons() {

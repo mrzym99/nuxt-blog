@@ -33,7 +33,7 @@ export default defineNuxtConfig({
   },
   ssr: true,
   devServer: {
-    port: 8080,
+    port: 8048,
   },
   modules: [
     '@unocss/nuxt',

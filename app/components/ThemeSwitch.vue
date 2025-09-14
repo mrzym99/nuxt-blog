@@ -94,7 +94,6 @@ const setTheme = (theme: Theme) => {
       background: var(--primary-color);
     }
 
-
   }
 
   .active {

@@ -12,7 +12,8 @@
               </NuxtLink>
               <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
             </div>
-            <Editor :read-only="!user" v-model="commentContent" :height="120" />
+            <Editor :placeholder="user?.id ? '请输入' : '先登录才能愉快的评论哦'" :read-only="!user" v-model="commentContent"
+              :height="120" />
           </div>
           <div class="form-actions">
             <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
@@ -110,7 +111,8 @@
                               <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
                             </div>
                             <Editor :read-only="!user" v-model="commentContent"
-                              :placeholder="`回复 @${replyTo.user.profile.nickName}`" :height="120" />
+                              :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'"
+                              :height="120" />
                           </div>
                           <div class="form-actions w-full">
                             <button class="cancel-btn" @click="cancelReply">取消</button>
@@ -140,7 +142,8 @@
                         <NuxtLink class="to-login" to="/login/pwd-login">登录</NuxtLink>
                       </div>
                       <Editor :read-only="!user" v-model="commentContent"
-                        :placeholder="`回复 @${replyTo.user.profile.nickName}`" :height="120" />
+                        :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'"
+                        :height="120" />
                     </div>
                     <div class="form-actions w-full">
                       <button class="cancel-btn" @click="cancelReply">取消</button>

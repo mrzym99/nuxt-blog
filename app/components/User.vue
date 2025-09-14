@@ -2,23 +2,16 @@
   <div class="min-w-2rem flex align-center justify-center">
     <ClientOnly>
       <NuxtLink v-if="!user" class="to-login" to="/login/pwd-login">Login</NuxtLink>
-      <Popover v-else ref="popoverRef" position="bottom-right" :width="200">
+      <Popover v-else ref="popoverRef" position="bottom-right" :width="160">
         <template #trigger>
           <img class="avatar size-2rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
             :src="user?.avatar" :alt="user?.nickName" />
         </template>
-        <div class="user-panel">
-          <div class="user-list">
-            <button class="user-item" @click="toUserCenter">
-              <span class="user-name">User Center</span>
-            </button>
-            <button class="user-item" @click="ToSetting">
-              <span class="user-name">Setting</span>
-            </button>
-            <button class="user-item" @click="logout">
-              <span class="user-name">logout</span>
-            </button>
-          </div>
+        <div class="panel">
+          <button v-for="item in menuList" :key="item.label" class="item" @click="item.click">
+            <Icon :name="item.icon" size="1.5rem" />
+            <span class="name">{{ item.label }}</span>
+          </button>
         </div>
       </Popover>
     </ClientOnly>
@@ -32,6 +25,24 @@ import { storeToRefs } from 'pinia';
 
 const { user } = storeToRefs(useUserStore());
 const router = useRouter();
+
+const menuList = [
+  {
+    label: 'User Center',
+    icon: 'ph:user-circle',
+    click: toUserCenter,
+  },
+  {
+    label: 'Settings',
+    icon: 'ph:gear',
+    click: ToSetting,
+  },
+  {
+    label: 'Logout',
+    icon: 'ion:md-log-out',
+    click: logout,
+  },
+];
 
 function toUserCenter() {
   router.push(`/user-center/${user.value?.id}`);
@@ -51,39 +62,30 @@ function logout() {
   border: 1px solid var(--border-color);
 }
 
-.user-panel {
-  padding: 0.25rem;
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 
-  .user-title {
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  .user-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .user-item {
+  .item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem;
+    gap: 0.5rem;
+    border-radius: 0.3rem;
+    padding: 0.3rem;
     border: none;
     background: none;
     cursor: pointer;
-    border-radius: 0.5rem;
     transition: all $duration ease;
     width: 100%;
     text-align: left;
 
     &:hover {
-      background-color: var(--border-color);
+      color: var(--white-color);
+      background-color: var(--primary-color);
     }
 
-    .user-color {
+    .color {
       width: 1.25rem;
       height: 1.25rem;
       border-radius: 50%;
@@ -91,15 +93,9 @@ function logout() {
       transition: all $duration ease;
     }
 
-    .user-name {
-      text-transform: uppercase;
-      font-size: 0.875rem;
-      color: var(--text-color);
-    }
-
     .active {
       color: var(--text-color);
-      background-color: var(--primary-color);
+      background: var(--tag-all-color) !important;
     }
   }
 }

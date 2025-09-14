@@ -1,7 +1,8 @@
 <template>
   <div class="w-full my-2 min-h-10rem">
-    <div class="flex items-center justify-end read-duration">
-      <span>阅读时长: </span><span>{{ formatDuration(viewDuration || 0) }}</span>
+    <div class="flex items-center justify-between read-duration">
+      <span v-if="hasUpdated"><span class="tip"> Updated On {{ hasUpdated }} </span></span>
+      <span>阅读时长:<span class="ml-2">{{ formatDuration(viewDuration || 0) }}</span></span>
     </div>
     <div class="article-content">
       <div class="article-body" v-if="isMd">
@@ -29,21 +30,14 @@
           <ClientOnly>
             <span v-copy="postUrl" class="underline cursor-pointer text-gradient">{{
               postUrl
-              }}</span>
+            }}</span>
           </ClientOnly>
-        </p>
-        <p class="mb-2" v-if="postedDays">
-          <span class="tip"> 文章在 {{ postedDays }} 修改过 </span>
         </p>
         <p v-if="article.originalUrl">
           <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
             article.originalUrl
-            }}</a>
+          }}</a>
         </p>
-      </div>
-      <div class="w-full">
-        <h3>Tags</h3>
-        <TagCloud />
       </div>
       <div class="w-full">
         <h3>Recomends</h3>
@@ -65,7 +59,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount } from 'vue';
 
-import TagCloud from '~/components/TagCloud.vue';
 import Comments from '~/components/Comments.vue';
 import MdTextPreview from './MdTextPreview.vue';
 import RichTextPreview from './RichTextPreview.vue';
@@ -120,7 +113,7 @@ const postUrl = computed(() => {
   return window.location.href.split('#')[0];
 });
 
-const postedDays = computed(() => {
+const hasUpdated = computed(() => {
   const { createdAt, updatedAt } = props.article;
 
   if (new Date(updatedAt!).getTime() === new Date(createdAt!).getTime()) return 0;
@@ -274,6 +267,10 @@ onBeforeUnmount(() => {
   border-color: var(--border-color);
 }
 
+.tip {
+  color: #dc8e56;
+}
+
 .article-content {
   width: 100%;
 
@@ -282,9 +279,7 @@ onBeforeUnmount(() => {
     color: var(--text-light-color);
   }
 
-  .tip {
-    color: #ff8023;
-  }
+
 
   .type {
     cursor: pointer;
