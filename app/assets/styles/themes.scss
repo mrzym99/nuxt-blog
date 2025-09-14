@@ -21,6 +21,7 @@
   --tag-normal-color: #8ec79c;
   --code-color: #fafafa;
   --placeholder-color: rgba(167, 167, 167, 0.5);
+  --shadow-color: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 // Dark theme
@@ -38,4 +39,5 @@
   --tag-light-color: #83849f;
   --tag-normal-color: #7eaa88;
   --code-color: #1a1a1a;
+  --shadow-color: 0 2px 8px rgba(255, 255, 255, 0.15);
 }

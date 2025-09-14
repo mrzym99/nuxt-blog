@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { onUnmounted, useTemplateRef, effectScope, onScopeDispose } from 'vue';
+import { onUnmounted, useTemplateRef, effectScope } from 'vue';
 import type { Texture } from 'pixi.js';
 import { Application, Graphics, Particle, ParticleContainer } from 'pixi.js';
 import { createNoise3D } from 'simplex-noise';
 import { useEventListener } from '@vueuse/core';
-import { storeToRefs } from 'pinia';
 
 const colorMode = useColorMode();
 const el = useTemplateRef<HTMLElement>('el');
@@ -72,7 +71,7 @@ async function setup() {
     resizeTo: el.value,
     eventMode: 'none',
     autoDensity: true,
-    background: colorMode.preference === 'dark' ? '#1f1f1f' : '#fff',
+    background: colorMode.value === 'dark' ? '#1f1f1f' : '#fff',
   });
   el.value.appendChild(app.canvas);
 

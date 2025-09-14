@@ -314,7 +314,7 @@ defineExpose({
 .popover-content {
   position: fixed;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-color);
   padding: 0.5rem;
   min-width: 100px;
   max-width: 600px;

@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar hide-scrollbar w-64 lt-md:w-full">
+  <aside class="sidebar hide-scrollbar w-66 lt-md:w-full">
     <!-- Menu -->
     <div class="blog-card !pt-1 !pb-2 lt-md:hidden">
       <Menus />
