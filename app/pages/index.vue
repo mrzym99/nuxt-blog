@@ -12,7 +12,7 @@
             </NuxtLink>
             <span class="ml-1rem post-meta">{{ post.createdAt && formatDate(post.createdAt) }}</span>
           </div>
-          <span class="post-description" :title="post.description">{{ post.description }}</span>
+          <span v-if="post.description" class="post-description" :title="post.description">{{ post.description }}</span>
           <div class="post-meta flex items-center justify-between">
             <span>
               Posted by {{ post.author?.profile.nickName }}
@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount } from 'vue';
-import { getArticleDetail, getArticleList, getLikeCount } from '~/api';
+import { getArticleList, getLikeCount } from '~/api';
 import { formatDate, formatNumber } from '~/utils/tool';
 import { LikeType, type IArticle } from '~/types/index';
 import { useAsyncData } from '#app';
