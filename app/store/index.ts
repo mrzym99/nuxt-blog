@@ -42,10 +42,15 @@ export const useUserStore = defineStore('user', {
   actions: {
     setUser() {
       return new Promise<void>(resolve => {
-        getUserInfo().then(res => {
-          this.user = res.data;
-          resolve();
-        });
+        getUserInfo()
+          .then(res => {
+            this.user = res.data;
+            resolve();
+          })
+          .catch(() => {
+            this.user = null;
+            resolve();
+          });
       });
     },
     async initUserInfo() {

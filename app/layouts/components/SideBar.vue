@@ -1,8 +1,11 @@
 <template>
-  <aside class="sidebar hide-scrollbar w-66 lt-md:w-full">
+  <aside class="sidebar hide-scrollbar w-60 lt-md:w-full">
     <!-- Menu -->
     <div class="blog-card !pt-1 !pb-2 lt-md:hidden">
       <Menus />
+    </div>
+    <div class="blog-card !pt-1 !pb-2 lt-md:hidden">
+      <Tools />
     </div>
     <div class="lt-md:hidden" v-show="!showCateLog">
       <!-- Profile Card -->
@@ -90,6 +93,7 @@ import { useAsyncData } from '#app';
 import Catalog from '~/layouts/components/Catalog.vue';
 import { useArticleStore } from '~/store';
 import Menus from './Menus.vue';
+import Tools from './Tools.vue';
 
 const route = useRoute();
 const showCateLog = computed(() => {

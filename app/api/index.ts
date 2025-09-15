@@ -6,3 +6,4 @@ export * from './comment';
 export * from './account';
 export * from './utils';
 export * from './config';
+export * from './search';

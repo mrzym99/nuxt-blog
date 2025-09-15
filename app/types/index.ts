@@ -23,6 +23,29 @@ export interface IArticle extends baseModel {
   likeCount?: number;
 }
 
+export type IContent = {
+  start: string;
+  keyword: string;
+  end: string;
+};
+
+export interface IArticleSearch extends baseModel {
+  title: IContent;
+  description?: IContent;
+  cover?: string;
+  tags: ITag[];
+  slug: string;
+  content?: IContent;
+  contentType: ContentType;
+  order?: number | null;
+  top?: number | null;
+  type: ArticleType;
+  originalUrl?: string;
+  author: IUser | null;
+  viewCount?: number;
+  likeCount?: number;
+}
+
 export interface IUser extends baseModel {
   username: string;
   status?: number;

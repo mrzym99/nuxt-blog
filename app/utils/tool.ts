@@ -27,3 +27,21 @@ export const formatDuration = (timestamp: number): string => {
     return `${hours}小时`;
   }
 };
+
+export const strToStartEnd = (str: string, keyword: string) => {
+  const length = str.length;
+  const index = str.indexOf(keyword);
+  if (index !== -1) {
+    return {
+      start: str.substring(0, index),
+      keyword,
+      end: str.substring(index + keyword.length, index + length),
+    };
+  }
+
+  return {
+    start: str.substring(0, length),
+    keyword: '',
+    end: '',
+  };
+};

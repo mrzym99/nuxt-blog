@@ -55,8 +55,6 @@ const toggleTheme = (theme: Theme) => {
 };
 
 const setTheme = (theme: Theme) => {
-  console.log(theme);
-
   colorMode.preference = theme;
 };
 </script>
@@ -70,6 +68,7 @@ const setTheme = (theme: Theme) => {
 
   .title {
     &:hover {
+      scale: 1.1;
       color: var(--primary-color);
     }
   }

@@ -11,7 +11,7 @@
               <div class="modal-title">{{ title }}</div>
             </slot>
             <button class="close-btn" @click="handleClose">
-              <i class="i-carbon-close"></i>
+              <Icon name="ph:x" size="2rem" />
             </button>
           </div>
           <div class="modal-content">
@@ -30,16 +30,17 @@
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps<{
-  modelValue: boolean;
   width?: string | number;
   title?: string;
   closeOnMaskClick?: boolean;
   fullscreen?: boolean;
 }>();
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void;
+const emits = defineEmits<{
+  (e: 'close'): void;
 }>();
+
+const modelValue = defineModel()
 
 // 移动端检测
 const isMobile = ref(false);
@@ -65,6 +66,7 @@ const modalStyle = computed(() => {
       height: '100%',
       maxWidth: 'none',
       margin: 0,
+      borderRadius: 0,
     };
   }
   return {
@@ -81,8 +83,19 @@ const handleMaskClick = () => {
 
 // 处理关闭
 const handleClose = () => {
-  emit('update:modelValue', false);
+  modelValue.value = false;
+  emits('close');
 };
+
+watch(() => modelValue.value, () => {
+  nextTick(() => {
+    if (modelValue.value) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+})
 </script>
 
 <style lang="scss" scoped>
@@ -114,8 +127,8 @@ const handleClose = () => {
 
 .modal {
   position: relative;
-  max-width: 90%;
-  max-height: 90vh;
+  min-width: 30%;
+  min-height: 20vh;
   margin: 20px;
   background-color: var(--bg-color);
   border: 1px solid var(--border-color);
@@ -128,9 +141,7 @@ const handleClose = () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
-    border-bottom: 1px solid;
-    border-color: var(--border-color);
+    padding: 0.8rem 1rem;
 
     .modal-title {
       font-size: 1.25rem;
@@ -139,27 +150,18 @@ const handleClose = () => {
     }
 
     .close-btn {
-      padding: 0.25rem;
-      border: none;
-      background: none;
       cursor: pointer;
-      border-radius: 0.25rem;
       transition: all $duration;
       color: var(--text-light-color);
 
       &:hover {
-        background-color: var(--hover-color);
         color: var(--primary-color);
-      }
-
-      i {
-        font-size: 1.25rem;
       }
     }
   }
 
   .modal-content {
-    padding: 1rem;
+    padding: 0.8rem 1rem;
     flex: 1;
     overflow-y: auto;
   }

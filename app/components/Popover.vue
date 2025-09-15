@@ -308,7 +308,6 @@ defineExpose({
 .popover-container {
   position: relative;
   display: inline-block;
-  z-index: $z-index-popover;
 }
 
 .popover-content {
@@ -324,6 +323,7 @@ defineExpose({
     opacity 0.15s ease,
     transform 0.15s ease;
   background: var(--bg-color);
+  z-index: $z-index-popover;
 
   &.is-visible {
     opacity: 1;

@@ -1,5 +1,6 @@
 <template>
   <div class="header nav-links mb-1rem">
+    <Search />
     <NuxtLink :class="{
       active: route.path === item.path,
     }" v-for="item in menuList" :to="item.path" :key="item.path">{{ item.name }}
@@ -11,6 +12,7 @@
 
 <script lang="ts" setup>
 import ThemeSwitch from '~/components/ThemeSwitch.vue';
+import Search from '~/components/Search.vue';
 import User from '~/components/User.vue';
 const route = useRoute();
 
