@@ -43,15 +43,15 @@ function handleCopy(event: MouseEvent) {
 }
 
 watch(
-  () => colorMode.preference,
+  () => colorMode.value,
   async () => {
-    document && document.documentElement.setAttribute('data-theme', colorMode.preference);
+    document && document.documentElement.setAttribute('data-theme', colorMode.value);
   }
 );
 
 onMounted(() => {
   document.body.addEventListener('click', handleCopy);
-  document && document.documentElement.setAttribute('data-theme', colorMode.preference);
+  document && document.documentElement.setAttribute('data-theme', colorMode.value);
 });
 
 onBeforeUnmount(() => {

@@ -34,12 +34,12 @@ const labelStyle = computed(() => {
   align-items: flex-start;
 
   .no-label {
-    width: 80px;
+    width: 70px;
   }
 
   .label {
     position: relative;
-    width: 80px;
+    width: 70px;
     text-align: right;
     color: var(--text-color);
 

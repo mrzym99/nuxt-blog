@@ -10,8 +10,7 @@
       </div>
       <div class="form-group mb-5">
         <label class="mb-1" for="密码">密码</label>
-        <VeeField v-model="loginForm.password" name="密码" type="password" placeholder="请输入密码"
-          rules="required|password" />
+        <Password class="w-full" v-model="loginForm.password" name="密码" placeholder="请输入密码" rules="required|password" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="密码" key="password" />
         </Transition>

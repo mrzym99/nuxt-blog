@@ -16,9 +16,6 @@
       </div>
     </div>
   </div>
-  <ClientOnly>
-    <Dots />
-  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -30,7 +27,6 @@ import UpdateProfile from './modules/update-profile.vue';
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import Tab from '~/components/Tab.vue';
-import Dots from '~/components/Dots.vue';
 
 defineOptions({
   name: 'UserCenter',

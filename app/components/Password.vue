@@ -1,20 +1,12 @@
 <template>
   <div class="relative">
     <Transition name="fade">
-      <VeeField
-        v-bind="$attrs"
-        v-model="model"
-        :type="showPassword ? 'text' : 'password'"
-        :name="name"
-        :placeholder="placeholder"
-        :rules="rules"
-      />
+      <VeeField v-bind="$attrs" v-model="model" :type="showPassword ? 'text' : 'password'" :name="name"
+        :placeholder="placeholder" :rules="rules" />
     </Transition>
     <span class="absolute right-2 top-3 cursor-pointer text-gray-400">
-      <Transition>
-        <Icon v-if="showPassword" name="ph:eye-slash" @click="showPassword = false"></Icon>
-        <Icon v-else name="ph:eye" @click="showPassword = true"></Icon>
-      </Transition>
+      <Icon v-if="showPassword" name="ph:eye-slash" @click="showPassword = false"></Icon>
+      <Icon v-else name="ph:eye" @click="showPassword = true"></Icon>
     </span>
   </div>
 </template>
@@ -38,6 +30,4 @@ defineProps({
 const showPassword = ref(false);
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

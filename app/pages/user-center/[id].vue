@@ -3,15 +3,15 @@
     <div class="py-8">
       <div class="user-center">
         <!-- User Center -->
+        <div class="header mb-4">
+          个人中心
+        </div>
         <main class="flex-1 block relative">
           <UserInfo :user-info="userInfo" />
         </main>
       </div>
     </div>
   </div>
-  <ClientOnly>
-    <Dots />
-  </ClientOnly>
 </template>
 
 <script setup lang="ts">
@@ -22,7 +22,6 @@ import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import { isLoggedIn } from '~/utils/auth';
 import UserInfo from './modules/user-info.vue';
-import Dots from '~/components/Dots.vue';
 
 
 defineOptions({
@@ -55,5 +54,13 @@ onMounted(() => {
   @include responsive(lt-lg) {
     display: block;
   }
+}
+
+.header {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
 }
 </style>

@@ -19,13 +19,13 @@
         </Transition>
       </div>
       <div class="form-group mb-2">
-        <VeeField v-model="loginForm.password" name="密码" placeholder="请输入密码" rules="required|password" />
+        <Password class="w-full" v-model="loginForm.password" name="密码" placeholder="请输入密码" rules="required|password" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="密码" key="password" />
         </Transition>
       </div>
       <div class="form-group mb-2">
-        <VeeField v-model="loginForm.confirmPassword" name="确认密码" placeholder="请输入确认密码"
+        <Password class="w-full" v-model="loginForm.confirmPassword" name="确认密码" placeholder="请输入确认密码"
           rules="required|confirmPassword:@密码" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="确认密码" key="confirmPassword" />
