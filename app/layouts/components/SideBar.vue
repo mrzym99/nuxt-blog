@@ -56,7 +56,7 @@
               3.仿照小张的 link 编写代码<br />
               4.可在本地运行检查代码<br />
               5.最后，向我提交 Pr<br />
-              <a class="text-gradient underline" href="https://gitee.com/mrzym/nuxt-blog-developd-by-cursor"
+              <a class="text-gradient" href="https://gitee.com/mrzym/nuxt-blog-developd-by-cursor"
                 target="_blank">点我跳转博客源码地址</a>
             </div>
           </Popover>

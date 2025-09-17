@@ -118,7 +118,7 @@ const handleScroll = () => {
     if (rect.top <= 100) {
       const heading = headings.value.find(item => item.id === headingElement.id);
       history.replaceState(history.state, '', `#${heading?.text}`);
-      activeHeading.value = heading?.text;
+      activeHeading.value = heading?.text ?? ''
       break;
     }
   }

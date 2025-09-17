@@ -2,7 +2,7 @@
   <div>
     <NotFound v-if="error"> 文章未找到或已删除 </NotFound>
     <template v-else>
-      <div v-if="articleDetail.id">
+      <div v-if="articleDetail">
         <div class="article-header">
           <div class="info-wrapper">
             <div class="tag-cloud">
@@ -33,7 +33,6 @@
 <script setup lang="ts">
 import { useHead } from '#app';
 import { useAsyncData } from '#app';
-import { ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 import ArticleContent from './components/ArticleContent.vue';
@@ -41,29 +40,10 @@ import ArticleContent from './components/ArticleContent.vue';
 import { useArticleStore } from '~/store';
 import { getArticleDetail } from '~/api';
 import { formatDate } from '~/utils/tool';
-import type { IArticle } from '~/types/index';
 
 
 const { setCurrentArticle } = useArticleStore();
 const route = useRoute();
-
-const article = ref<IArticle>({
-  id: 0,
-  title: '',
-  description: '',
-  cover: '',
-  tags: [],
-  slug: '',
-  createdAt: null,
-  updatedAt: null,
-  content: '',
-  contentType: 'md',
-  order: null,
-  top: null,
-  type: 'original',
-  originalUrl: '',
-  author: null,
-});
 
 const { data, refresh, error } = await useAsyncData('article', async () => {
   const slug = route.params.slug as string;
@@ -78,7 +58,7 @@ const { data, refresh, error } = await useAsyncData('article', async () => {
 });
 
 const articleDetail = computed(() => {
-  return Object.assign(article.value, data.value);
+  return data.value
 });
 
 // 监听路由变化刷新数据

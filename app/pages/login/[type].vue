@@ -24,17 +24,17 @@
         <div class="bottom-link">
           <div class="flex justify-between items-center" v-if="showBottomLink">
             <div>
-              <NuxtLink v-if="!['register', 'reset-pwd', 'code-login'].includes(type)" class="text-gradient underline"
-                to="/login/reset-pwd" replace> 忘记密码？
+              <NuxtLink v-if="!['register', 'reset-pwd', 'code-login'].includes(type)"
+                class="text-gradient" to="/login/reset-pwd" replace> 忘记密码？
               </NuxtLink>
             </div>
             <div v-if="type === 'register' || type === 'reset-pwd'">
               {{ type === 'register' ? '已有账号？' : '想起来了？' }}
-              <NuxtLink class="text-gradient underline" to="/login/pwd-login" replace> 去登录 </NuxtLink>
+              <NuxtLink class="text-gradient" to="/login/pwd-login" replace> 去登录 </NuxtLink>
             </div>
             <div v-else>
               没有账号？
-              <NuxtLink class="text-gradient underline" to="/login/register" replace> 去注册 </NuxtLink>
+              <NuxtLink class="text-gradient" to="/login/register" replace> 去注册 </NuxtLink>
             </div>
           </div>
         </div>

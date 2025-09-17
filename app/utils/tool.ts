@@ -55,5 +55,6 @@ export const diffNowWord = (date?: Date | null | undefined) => {
   if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`;
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`;
   if (diff < 2592000000) return `${Math.floor(diff / 86400000)}天前`;
-  return date!.toLocaleDateString();
+
+  return formatDate(date);
 };

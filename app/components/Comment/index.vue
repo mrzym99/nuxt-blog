@@ -112,8 +112,6 @@ import { storeToRefs } from 'pinia';
 import { useIntersectionObserver } from '@vueuse/core';
 import { TransitionGroup } from 'vue';
 
-import Tab from './Tab.vue';
-
 import {
   type IReply,
   CommentType,
@@ -136,10 +134,10 @@ import {
 } from '~/api/comment';
 import { postCancelLike, postLike } from '~/api';
 
-import CommentInput from './Comment/Input.vue';
-import CommentAvatar from './Comment/Avatar.vue';
-import CommentCard from './Comment/CommentCard.vue';
-import ReplyCard from './Comment/ReplyCard.vue';
+import CommentInput from './Input.vue';
+import CommentAvatar from './Avatar.vue';
+import CommentCard from './CommentCard.vue';
+import ReplyCard from './ReplyCard.vue';
 
 
 const props = defineProps<{

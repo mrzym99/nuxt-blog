@@ -9,7 +9,7 @@
       <p v-if="article.originalUrl">
         <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
           article.originalUrl
-        }}</a>
+          }}</a>
       </p>
     </div>
     <div class="article-content">
@@ -35,7 +35,7 @@
       <div class="w-full">
         <h3>推荐</h3>
         <p class="recommend-item" v-for="item in recommends">
-          <NuxtLink :to="'/posts/' + item.id" class="underline">
+          <NuxtLink :to="'/posts/' + item.id">
             <span class="text-gradient">{{ item.title }}</span>
           </NuxtLink>
           <span>{{ formatDate(item.createdAt) }}</span>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount } from 'vue';
 
-import Comments from '~/components/Comments.vue';
+import Comments from '~/components/Comment/index.vue';
 import MdTextPreview from './MdTextPreview.vue';
 import RichTextPreview from './RichTextPreview.vue';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
@@ -96,10 +96,6 @@ const recommends = ref<IArticle[]>([]);
 
 const isMd = computed(() => {
   return props.article.contentType === 'md';
-});
-
-const postUrl = computed(() => {
-  return window.location.href.split('#')[0];
 });
 
 const hasUpdated = computed(() => {
@@ -244,7 +240,6 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .type-tag {
   display: inline-block;
-  margin-left: 10px;
   padding: 1px 10px;
   color: var(--white-color);
   border-radius: 3px;
@@ -259,6 +254,7 @@ onBeforeUnmount(() => {
 }
 
 .tip {
+  margin-right: 10px;
   color: #dc8e56;
 }
 
@@ -270,26 +266,13 @@ onBeforeUnmount(() => {
     color: var(--text-light-color);
   }
 
-
-
-  .type {
-    cursor: pointer;
-    padding: 0.1rem 0.8rem;
-    font-size: 0.875rem;
-    color: var(--nav-text-color);
-    background: var(--primary-color);
-    border-radius: 5px;
-  }
-
   .article-body {
     width: 100%;
     max-width: $small-max-width;
     overflow: hidden;
     margin: 1rem 0;
     color: var(--text-color);
-  }
 
-  .article-body {
     :deep(a) {
       text-decoration: underline;
       color: var(--primary-color);
@@ -303,7 +286,7 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   align-items: center;
   padding: 0 0 0.5rem 0;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: var(--text-light-color);
 }
 </style>
