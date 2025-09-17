@@ -42,7 +42,7 @@ import Modal from './Modal.vue';
 import { useDebounceFn } from '@vueuse/core';
 import { getSearchList } from '~/api';
 
-const modelValue = defineModel()
+const modelValue = defineModel<boolean>()
 
 const inputRef = ref<HTMLInputElement | null>(null)
 const keyword = ref<string>('')

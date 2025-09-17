@@ -1,5 +1,5 @@
 <template>
-  <div class="tab">
+  <div class="tab" :class="{ 'tab-border': showBorder, 'tab-spread': !showBorder }">
     <span v-for="option in options" :key="option.value" @click="handleChange(option.value)" class="tab-item"
       :class="{ active: modelValue === option.value }">{{ option.label }}</span>
   </div>
@@ -13,9 +13,12 @@ type Tab = {
 
 const modelValue = defineModel<string>();
 
-defineProps<{
+const props = withDefaults(defineProps<{
   options: Array<Tab>;
-}>();
+  showBorder?: boolean;
+}>(), {
+  showBorder: true
+});
 
 const emit = defineEmits<{
   (e: 'change', value: string): void;
@@ -31,10 +34,7 @@ const handleChange = (value: string) => {
 <style lang="scss" scoped>
 .tab {
   display: flex;
-  gap: 1rem;
-  padding: 0.5rem;
-
-  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 0;
 
   .active {
     color: var(--primary-color) !important;
@@ -46,10 +46,21 @@ const handleChange = (value: string) => {
     cursor: pointer;
 
     color: var(--text-light-color);
+    padding: 0 0.5rem;
 
     &:hover {
       color: var(--primary-color);
     }
+  }
+}
+
+.tab-border {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tab-spread {
+  span:not(:last-child) {
+    border-right: 1px solid var(--border-color);
   }
 }
 </style>

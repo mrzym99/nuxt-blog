@@ -7,3 +7,5 @@ export const REG_CODE_SIX = /^\d{6}$/;
 
 /** Four digit code reg */
 export const REG_CODE_FOUR = /^[A-Za-z0-9]{4}$/;
+
+export const TOAST_DURATION = 2000;

@@ -40,7 +40,7 @@ const emits = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const modelValue = defineModel()
+const modelValue = defineModel<boolean>()
 
 // 移动端检测
 const isMobile = ref(false);

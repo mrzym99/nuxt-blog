@@ -18,7 +18,7 @@ const props = defineProps<{
   // HTML model value, supports v-model
   modelValue?: string | null;
   // Quill initialization options
-  options?: QuillOptions;
+  toolbarContainer?: Array<any>;
   height?: number | string;
   semantic?: boolean;
   readOnly?: boolean;
@@ -48,6 +48,7 @@ const userList = ref<IUser[]>([]);
 
 const editorStyle = computed(() => {
   return {
+    transition: 'height 0.3s ease',
     height: typeof props.height === 'number' ? `${props.height}px` : props.height,
   };
 });
@@ -58,7 +59,7 @@ const defaultOptions: QuillOptions = {
   readOnly: props.readOnly,
   modules: {
     toolbar: {
-      container: [
+      container: props.toolbarContainer ? props.toolbarContainer : [
         // ['undo', 'redo'],
         [
           'bold',
@@ -209,7 +210,6 @@ const initialize = async () => {
   registerEmoji();
   customIcons();
   userList.value = [];
-  Object.assign(defaultOptions, props.options);
   const quill = new Quill(quillEditor.value as HTMLElement, defaultOptions);
 
   // Set editor initial model
@@ -361,6 +361,8 @@ defineExpose<{
   :deep(.ql-toolbar) {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+    padding: 3px;
+    border: 1px solid var(--border-color);
 
     .ql-stroke {
       stroke: var(--text-color) !important;
@@ -368,12 +370,14 @@ defineExpose<{
   }
 
   :deep(.ql-container) {
-    font-size: 16px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+    font-size: 14px;
+    color: var(--text-color);
     font-family:
       -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
       'Helvetica Neue', sans-serif;
+    border: 1px solid var(--border-color);
 
     img {
       max-width: $comment-image-max-width !important;

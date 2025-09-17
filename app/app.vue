@@ -8,19 +8,23 @@
     </Loading>
     <ClientOnly>
       <Toaster :toast-options="{
-        duration: 2000
+        duration: TOAST_DURATION
       }" position="top-right" :theme="theme" />
+      <BackTop />
     </ClientOnly>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useHead } from '#app';
+import { storeToRefs } from 'pinia';
+
+import Loading from '~/components/Loading.vue';
+
 import { getTitle } from '~/utils/title';
 import type { Theme } from '~/types';
 import { useUserStore } from './store';
-import { storeToRefs } from 'pinia';
-import Loading from '~/components/Loading.vue';
+import { TOAST_DURATION } from '~/assets/constant';
 
 const { ready } = storeToRefs(useUserStore())
 

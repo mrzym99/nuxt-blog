@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-const model = defineModel();
+const model = defineModel<string>();
 defineProps({
   name: {
     type: String,

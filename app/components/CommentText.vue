@@ -28,7 +28,9 @@ function addimageView() {
         anchor.setAttribute('target', '_blank');
         anchor.setAttribute('data-pswp-width', image.width + '');
         anchor.setAttribute('data-pswp-height', image.height + '');
-        anchor.appendChild(img);
+        while (parent.firstChild) {
+          anchor.appendChild(parent.firstChild);
+        }
         parent.replaceWith(anchor);
       }
     };

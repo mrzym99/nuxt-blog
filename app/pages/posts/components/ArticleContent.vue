@@ -1,8 +1,16 @@
 <template>
   <div class="w-full my-2 min-h-10rem">
-    <div class="flex items-center justify-between read-duration">
-      <span v-if="hasUpdated"><span class="tip"> Updated On {{ hasUpdated }} </span></span>
+    <div class="flex items-center justify-between read-duration mb-2">
+      <span><span class="tip" v-if="hasUpdated"> Updated On {{ hasUpdated }} </span> <span class="type-tag">{{
+        typeEnum[article.type] }}</span></span>
       <span>阅读时长:<span class="ml-2">{{ formatDuration(viewDuration || 0) }}</span></span>
+    </div>
+    <div class="text-sm mb-12">
+      <p v-if="article.originalUrl">
+        <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
+          article.originalUrl
+        }}</a>
+      </p>
     </div>
     <div class="article-content">
       <div class="article-body" v-if="isMd">
@@ -20,37 +28,18 @@
           like: isLike,
         }" class="ml-1">{{ likeCount }}</span>
       </div>
-      <div class="article-info mt-4 p-0.5rem rounded-md">
-        <p class="my-2 flex item-center justify-between flex-wrap w-full">
-          <span>
-            <span class="mr-2">文章类型: </span><span class="type">{{ typeEnum[article.type] }}</span></span>
-        </p>
-        <p class="mb-2">
-          <span class="mr-2">文章地址:</span>
-          <ClientOnly>
-            <span v-copy="postUrl" class="underline cursor-pointer text-gradient">{{
-              postUrl
-            }}</span>
-          </ClientOnly>
-        </p>
-        <p v-if="article.originalUrl">
-          <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
-            article.originalUrl
-          }}</a>
-        </p>
+      <div class="w-full">
+        <h3>评论</h3>
+        <Comments :type="CommentType.ARTICLE" :target-id="article.id" />
       </div>
       <div class="w-full">
-        <h3>Recomends</h3>
+        <h3>推荐</h3>
         <p class="recommend-item" v-for="item in recommends">
-          <NuxtLink :to="'/posts/' + item.id">
+          <NuxtLink :to="'/posts/' + item.id" class="underline">
             <span class="text-gradient">{{ item.title }}</span>
           </NuxtLink>
           <span>{{ formatDate(item.createdAt) }}</span>
         </p>
-      </div>
-      <div class="w-full">
-        <h3>Comments</h3>
-        <Comments :type="CommentType.ARTICLE" :target-id="article.id" />
       </div>
     </div>
   </div>
@@ -253,11 +242,13 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-.article-info {
-  border: 1px solid;
-  font-weight: 400;
-  color: var(--text-light-color);
-  border-color: var(--border-color);
+.type-tag {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 1px 10px;
+  color: var(--white-color);
+  border-radius: 3px;
+  background: var(--primary-color);
 }
 
 .read-duration {
@@ -311,7 +302,7 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.3rem 0;
+  padding: 0 0 0.5rem 0;
   font-size: 1rem;
   color: var(--text-light-color);
 }
