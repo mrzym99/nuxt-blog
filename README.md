@@ -26,4 +26,4 @@ code refactor
 
 搜索增加一个空的提示信息
 
-recommends 放其他位置
+评论、 目录有问题

@@ -1,18 +1,6 @@
 <template>
   <div class="w-full my-2 min-h-10rem">
-    <div class="flex items-center justify-between read-duration mb-2">
-      <span><span class="tip" v-if="hasUpdated"> Updated On {{ hasUpdated }} </span> <span class="type-tag">{{
-        typeEnum[article.type] }}</span></span>
-      <span>阅读时长:<span class="ml-2">{{ formatDuration(viewDuration || 0) }}</span></span>
-    </div>
-    <div class="text-sm mb-12">
-      <p v-if="article.originalUrl">
-        <span class="mr-2">原文地址: </span><a class="underline" :href="article.originalUrl" target="_blank">{{
-          article.originalUrl
-          }}</a>
-      </p>
-    </div>
-    <div class="article-content">
+    <div :id="ARTICLE_CONTENT_ID" class="article-content">
       <div class="article-body" v-if="isMd">
         <MdTextPreview id="blogGallery" :content="article.content!" />
       </div>
@@ -30,7 +18,7 @@
       </div>
       <div class="w-full">
         <h3>评论</h3>
-        <Comments :type="CommentType.ARTICLE" :target-id="article.id" />
+        <Comments :type="CommentEnum.ARTICLE" :target-id="article.id" />
       </div>
       <div class="w-full">
         <h3>推荐</h3>
@@ -54,9 +42,11 @@ import RichTextPreview from './RichTextPreview.vue';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 
 import { formatDate } from '~/utils/tool';
-import { CommentType, LikeType, type IArticle } from '~/types/index';
+import { ARTICLE_CONTENT_ID } from '~/constants';
+import type { IArticle } from '~/types/index';
+import { CommentEnum, LikeEnum } from '~/enum';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
-import { getViewDuration, postViewDuration } from '~/api/view';
+import { postViewDuration } from '~/api/view';
 import { getRecommendArticle } from '~/api/article';
 import { useUserStore } from '~/store';
 import { useArticleStore } from '~/store';
@@ -69,12 +59,6 @@ const SILENT = 12 // 允许用户离开时间
 
 type ArticleProps = {
   article: IArticle;
-};
-
-const typeEnum = {
-  original: '原创',
-  transport: '转载',
-  translate: '翻译',
 };
 
 const userStore = useUserStore();
@@ -90,7 +74,6 @@ const props = defineProps<ArticleProps>();
 let lightbox: PhotoSwipeLightbox | null = null
 
 const isLike = ref(false);
-const viewDuration = ref<number>(0)
 const likeCount = ref<number>(0);
 const recommends = ref<IArticle[]>([]);
 
@@ -111,7 +94,7 @@ async function handleLike() {
     const res = await postCancelLike({
       userId: userStore.user?.id,
       targetId: props.article.id,
-      type: LikeType.ARTICLE,
+      type: LikeEnum.ARTICLE,
     });
 
     if (res.code === 200) {
@@ -122,7 +105,7 @@ async function handleLike() {
     const res = await postLike({
       userId: userStore.user?.id,
       targetId: props.article.id,
-      type: LikeType.ARTICLE,
+      type: LikeEnum.ARTICLE,
     });
 
     if (res.code === 200) {
@@ -138,7 +121,7 @@ async function checkIsLike() {
   const res = await getIsLike({
     userId: userStore.user?.id,
     targetId: props.article.id,
-    type: LikeType.ARTICLE,
+    type: LikeEnum.ARTICLE,
   });
 
   if (res.data) {
@@ -151,24 +134,15 @@ async function checkIsLike() {
 async function handleGetLikeCount() {
   const res = await getLikeCount({
     targetId: props.article.id,
-    type: LikeType.ARTICLE,
+    type: LikeEnum.ARTICLE,
   });
   likeCount.value = res.data as number;
-}
-
-async function handleGetViewDuration() {
-  const res = await getViewDuration({
-    type: LikeType.ARTICLE,
-    targetId: props.article.id,
-    userId: userStore.user?.id
-  })
-  viewDuration.value = res.data as number
 }
 
 async function handleAddViewDuration(duration: number) {
   await postViewDuration({
     targetId: props.article.id,
-    type: LikeType.ARTICLE,
+    type: LikeEnum.ARTICLE,
     duration,
     userId: userStore.user?.id,
   });
@@ -220,7 +194,6 @@ function addimageView() {
 onMounted(() => {
   timeClock.start()
   startDetection()
-  handleGetViewDuration()
   checkIsLike()
   handleGetLikeCount();
   handleGetRecommends();
@@ -238,26 +211,6 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-.type-tag {
-  display: inline-block;
-  padding: 1px 10px;
-  color: var(--white-color);
-  border-radius: 3px;
-  background: var(--primary-color);
-}
-
-.read-duration {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: var(--text-light-color);
-  border-color: var(--border-color);
-}
-
-.tip {
-  margin-right: 10px;
-  color: #dc8e56;
-}
-
 .article-content {
   width: 100%;
 
@@ -268,7 +221,6 @@ onBeforeUnmount(() => {
 
   .article-body {
     width: 100%;
-    max-width: $small-max-width;
     overflow: hidden;
     margin: 1rem 0;
     color: var(--text-color);

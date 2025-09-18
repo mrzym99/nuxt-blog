@@ -24,7 +24,7 @@ const useIdleDetection = (start: () => void, callback: () => void, timeout = 15)
     beginTime = currentTime;
     pageTimer = setTimeout(() => {
       callback();
-      console.log('页面停一次');
+      // console.log('页面停一次');
     }, timeout * 1000);
   };
 

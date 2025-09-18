@@ -1,7 +1,7 @@
 <template>
   <div class="min-w-2rem flex align-center justify-center">
     <ClientOnly>
-      <NuxtLink v-if="!user" class="to-login" to="/login/pwd-login">Login</NuxtLink>
+      <NuxtLink v-if="!user" class="to-login" to="/login/pwd-login">登录</NuxtLink>
       <Popover v-else ref="popoverRef" position="bottom-right" :width="160">
         <template #trigger>
           <img class="avatar size-2rem rounded-full cursor-pointer duration-300 ease-in-out hover:scale-110"
@@ -28,17 +28,17 @@ const router = useRouter();
 
 const menuList = [
   {
-    label: 'User Center',
+    label: '个人中心',
     icon: 'ph:user-circle',
     click: toUserCenter,
   },
   {
-    label: 'Settings',
+    label: '用户设置',
     icon: 'ph:gear',
     click: ToSetting,
   },
   {
-    label: 'Logout',
+    label: '退出',
     icon: 'ion:md-log-out',
     click: logout,
   },

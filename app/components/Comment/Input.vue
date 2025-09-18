@@ -28,15 +28,18 @@ const options = [
 const content = defineModel<string>();
 
 const { user } = storeToRefs(useUserStore());
+const hasFocus = ref(false);
 
-const editorHeight = ref(60);
+const editorHeight = computed(() => {
+  return user.value && hasFocus.value ? '120px' : '60px';
+});
 
 function focus() {
-  editorHeight.value = 120;
+  hasFocus.value = true;
 }
 
 function blur() {
-  editorHeight.value = 60;
+  hasFocus.value = false;
 }
 </script>
 

@@ -1,4 +1,4 @@
-import { REG_USER_NAME, REG_PWD, REG_CODE_FOUR } from '~/assets/constant';
+import { REG_USER_NAME, REG_PWD, REG_CODE_FOUR } from '~/constants';
 import { defineRule } from 'vee-validate';
 const defineCustomRules = () => {
   defineRule('username', (value: string) => {

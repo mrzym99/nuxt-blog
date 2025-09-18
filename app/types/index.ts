@@ -1,3 +1,7 @@
+import type { CommentEnum } from '~/enum';
+
+export type Recordable = Record<string, any>;
+
 type baseModel = {
   id: number;
   createdAt?: Date | null;
@@ -98,39 +102,10 @@ export type thirdToken = {
   access_token: string;
 };
 
-export enum LikeType {
-  ARTICLE = 'article',
-  COMMENT = 'comment',
-  REPLY = 'reply',
-}
-
-export enum CommentType {
-  ARTICLE = 'article',
-  ALBUM = 'album',
-}
-
-export enum CommentOrder {
-  HOT = 'hot',
-  LATEST = 'latest',
-}
-
 export type ArticleType = 'original' | 'transport' | 'translate';
 
-export enum ArticleEnum {
-  ORIGINAL = 'original', // 原创
-  TRANSPORT = 'transport', // 转载
-  TRANSLATE = 'translate', // 翻译
-}
-
-export type ContentType = 'md' | 'richtext';
-
-export enum ContentEnum {
-  MD = 'md', // markdown
-  RICHTEXT = 'richtext', // rich text
-}
-
 export type CreateComment = {
-  type: CommentType;
+  type: CommentEnum;
   targetId: Number;
   content: string;
   commenterId?: number; // 评论人
@@ -145,7 +120,7 @@ export type CreateReply = {
 
 // 类型定义
 export interface IComment extends baseModel {
-  type: CommentType;
+  type: CommentEnum;
   targetId: Number;
   content: string;
   likeCount: number;
@@ -163,9 +138,11 @@ export interface IReply extends baseModel {
   isLike: boolean;
 }
 
+export type ContentType = 'md' | 'richtext';
+
 export type Comment = {
   id: number;
-  type?: CommentType;
+  type?: CommentEnum;
   targetId?: Number;
   content: string;
   parentId?: number;

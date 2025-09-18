@@ -1,16 +1,14 @@
 <template>
   <div class="nav-links ">
+    <Search />
     <NuxtLink :class="{
       active: route.path === item.path,
     }" v-for="item in menuList" :to="item.path" :key="item.path">{{ item.name }}
     </NuxtLink>
-    <User />
   </div>
-
 </template>
 
 <script lang="ts" setup>
-import User from '~/components/User.vue';
 const route = useRoute();
 
 type Menu = {
@@ -20,16 +18,20 @@ type Menu = {
 
 const menuList: Menu[] = [
   {
-    name: 'Home',
+    name: '首页',
     path: '/',
   },
   {
-    name: 'About',
+    name: '关于',
     path: '/about',
   },
   {
-    name: 'Archive',
+    name: '归档',
     path: '/archive/all',
+  },
+  {
+    name: '留言',
+    path: '',
   },
 ];
 </script>

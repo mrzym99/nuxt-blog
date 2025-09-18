@@ -13,7 +13,7 @@
           <CopyRight />
         </div>
       </main>
-      <div class="relative w-60 lt-md:w-full flex-shrink-0">
+      <div class="relative w-52 lt-md:w-full flex-shrink-0">
         <SideBar />
       </div>
     </div>

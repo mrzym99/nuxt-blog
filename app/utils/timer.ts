@@ -21,7 +21,6 @@ export default class Timer {
   pause(redundant: number = 0) {
     if (this.r) {
       this.t += performance.now() - this.s;
-      console.log(this.t, redundant);
       // 减去冗余时间 ms
       if (this.t >= redundant) {
         this.t -= redundant;

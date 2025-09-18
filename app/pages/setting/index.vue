@@ -1,19 +1,16 @@
 <template>
   <div class="relative z-2">
-    <div class="py-8">
-      <div class="user-center">
-        <!-- User Center -->
-        <main class="flex-1 block relative">
-          <div class="w-full">
-            <Tab class="mb-4" v-model="currentTab" :options="tabOptions" @change="toggleTab" />
-            <div class="grid place-items-center">
-              <UpdateProfile :profile="userInfo?.profile" v-if="currentTab === 'info'"
-                @success="updateProfileSuccess" />
-              <UpdatePwd v-if="currentTab === 'pwd'" />
-            </div>
+    <div class="user-center">
+      <!-- User Center -->
+      <main class="flex-1 block relative">
+        <div class="w-full">
+          <Tab class="mb-4" v-model="currentTab" :options="tabOptions" @change="toggleTab" />
+          <div class="grid place-items-center">
+            <UpdateProfile :profile="userInfo?.profile" v-if="currentTab === 'info'" @success="updateProfileSuccess" />
+            <UpdatePwd v-if="currentTab === 'pwd'" />
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   </div>
 </template>

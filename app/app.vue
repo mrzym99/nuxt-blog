@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NuxtLoadingIndicator />
     <Loading :loading="!ready">
       <NuxtLayout>
         <NuxtPage :keepalive="keepalive" />
@@ -24,7 +23,7 @@ import Loading from '~/components/Loading.vue';
 import { getTitle } from '~/utils/title';
 import type { Theme } from '~/types';
 import { useUserStore } from './store';
-import { TOAST_DURATION } from '~/assets/constant';
+import { TOAST_DURATION } from '~/constants';
 
 const { ready } = storeToRefs(useUserStore())
 

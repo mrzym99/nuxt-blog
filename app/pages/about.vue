@@ -65,15 +65,8 @@
         </main>
       </div>
     </div>
-    <ClientOnly>
-      <Dots />
-    </ClientOnly>
   </div>
 </template>
-
-<script setup lang="ts">
-import Dots from '~/components/Dots.vue';
-</script>
 
 <style lang="scss" scoped>
 img {

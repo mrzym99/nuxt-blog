@@ -114,14 +114,16 @@ import { TransitionGroup } from 'vue';
 
 import {
   type IReply,
-  CommentType,
   type IUser,
   type CreateReply,
   type CreateComment,
   type Comment,
-  LikeType,
-  CommentOrder,
 } from '@/types/index';
+import {
+  CommentEnum,
+  LikeEnum,
+  CommentOrderEnum
+} from '@/enum';
 
 import {
   getReplyList,
@@ -141,7 +143,7 @@ import ReplyCard from './ReplyCard.vue';
 
 
 const props = defineProps<{
-  type: CommentType;
+  type: CommentEnum;
   targetId: number;
 }>();
 
@@ -155,8 +157,8 @@ const { user } = storeToRefs(useUserStore());
 const { $toast } = useNuxtApp()
 const route = useRoute();
 const tabOptions = [
-  { label: '最新', value: CommentOrder.LATEST },
-  { label: '最热', value: CommentOrder.HOT },
+  { label: '最新', value: CommentOrderEnum.LATEST },
+  { label: '最热', value: CommentOrderEnum.HOT },
 ];
 
 // 评论内容
@@ -171,7 +173,7 @@ const currentPage = ref(1);
 const commentTotal = ref(0);
 const PAGE_SIZE = 5;
 const commentLoading = ref(false);
-const commentOrder = ref<string>(CommentOrder.LATEST);
+const commentOrder = ref<string>(CommentOrderEnum.LATEST);
 const comments = ref<Array<Comment>>([]);
 
 // 处理评论提交
@@ -260,7 +262,7 @@ const handleLikeComment = (comment: Comment) => {
     postCancelLike({
       userId: user?.value?.id,
       targetId: comment.id,
-      type: LikeType.COMMENT,
+      type: LikeEnum.COMMENT,
     }).then(() => {
       comment.likeCount--;
       comment.isLike = false;
@@ -269,7 +271,7 @@ const handleLikeComment = (comment: Comment) => {
     postLike({
       userId: user?.value?.id,
       targetId: comment.id,
-      type: LikeType.COMMENT,
+      type: LikeEnum.COMMENT,
     }).then(() => {
       comment.likeCount++;
       comment.isLike = true;
@@ -283,7 +285,7 @@ const handleLikeReply = (comment: IReply) => {
     postCancelLike({
       userId: user?.value?.id,
       targetId: comment.id,
-      type: LikeType.REPLY,
+      type: LikeEnum.REPLY,
     }).then(() => {
       comment.likeCount--;
       comment.isLike = false;
@@ -292,7 +294,7 @@ const handleLikeReply = (comment: IReply) => {
     postLike({
       userId: user?.value?.id,
       targetId: comment.id,
-      type: LikeType.REPLY,
+      type: LikeEnum.REPLY,
     }).then(() => {
       comment.likeCount++;
       comment.isLike = true;
@@ -362,7 +364,7 @@ async function getCommentList(commentId?: number) {
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
     targetId: props.targetId,
-    type: CommentType.ARTICLE,
+    type: CommentEnum.ARTICLE,
     commentOrder: commentOrder.value,
   });
   const { list, total } = res.data;

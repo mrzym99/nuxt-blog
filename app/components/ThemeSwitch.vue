@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { ThemeEnum } from '~/assets/constant/theme';
+import { ThemeEnum } from '~/enum';
 import type { Theme } from '~/types';
 const colorMode = useColorMode();
 

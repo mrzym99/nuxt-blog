@@ -1,12 +1,10 @@
 <template>
-  <div class="nav-links my-2">
-    <Search />
+  <div class="nav-links my-2 justify-end gap-1rem px-0.6rem">
     <ThemeSwitch />
+    <User />
   </div>
 </template>
 
 <script lang="ts" setup>
-import Search from '~/components/Search.vue';
-import ThemeSwitch from '../../components/ThemeSwitch.vue';
-
+import User from '~/components/User.vue';
 </script>

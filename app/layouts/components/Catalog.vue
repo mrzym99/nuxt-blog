@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- PC 端目录 -->
-    <div class="catalog-pc">
+    <div class="catalog-pc ">
       <div class="catalog-header">
         <h3>目录</h3>
       </div>
-      <nav class="catalog-nav">
+      <nav class="catalog-nav hide-scrollbar">
         <ul>
           <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
             <a :class="{ active: activeHeading === heading.text }" :href="'#' + heading.text"> {{ heading.text }} </a>
@@ -40,11 +40,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import Drawer from '~/components/Drawer.vue';
-import { useDebounceFn } from '@vueuse/core';
+import { requestAnimationFrameThrottle } from '~/utils/frame-throttle';
 
 const props = defineProps<{
-  identifier: string;
-  cover?: string;
+  articleId: number;
 }>();
 
 interface Heading {
@@ -57,6 +56,7 @@ const headings = ref<Heading[]>([]);
 const activeHeading = ref<string>();
 const showDrawer = ref(false);
 const route = useRoute();
+const headerSection = ref<HTMLElement>();
 
 // 获取标题样式
 const getHeadingStyle = (level: number): { paddingLeft: string } => {
@@ -69,7 +69,7 @@ function getHeadingElements() {
   const content = document.querySelector('.article-body');
   if (!content) return [];
 
-  return content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  return content.querySelectorAll('h1, h2, h3, h4, h5, h6')
 }
 // 提取标题
 const extractHeadings = () => {
@@ -79,7 +79,7 @@ const extractHeadings = () => {
     id: heading.id,
     text: heading.textContent || '',
     level: parseInt(heading.tagName[1] || '1'),
-  }));
+  }))
 
   const hash = route.hash.slice(1);
   if (hash) {
@@ -104,7 +104,7 @@ const handleScroll = () => {
   const headingElements = getHeadingElements();
   if (!headingElements.length) return
 
-  if (window.scrollY < 150) {
+  if (window.scrollY < 80) {
     activeHeading.value = ''
     history.replaceState(history.state, '', window.location.pathname + window.location.search);
     return
@@ -115,7 +115,8 @@ const handleScroll = () => {
     const headingElement = headingElements[i];
     if (!headingElement) return;
     const rect = headingElement.getBoundingClientRect();
-    if (rect.top <= 100) {
+
+    if ((rect.top <= 100)) {
       const heading = headings.value.find(item => item.id === headingElement.id);
       history.replaceState(history.state, '', `#${heading?.text}`);
       activeHeading.value = heading?.text ?? ''
@@ -124,17 +125,22 @@ const handleScroll = () => {
   }
 };
 
-const debounceScroll = useDebounceFn(handleScroll, 30);
+const rafThrottleScroll = requestAnimationFrameThrottle(handleScroll);
 
-onMounted(() => {
+watch(() => props.articleId, () => {
   nextTick(() => {
     extractHeadings();
   });
-  document.addEventListener('scroll', debounceScroll);
+}, {
+  immediate: true
+});
+
+onMounted(() => {
+  document.addEventListener('scroll', rafThrottleScroll);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('scroll', debounceScroll);
+  document.removeEventListener('scroll', rafThrottleScroll);
 });
 </script>
 
@@ -142,11 +148,13 @@ onUnmounted(() => {
 .catalog-pc {
   display: block;
   width: 200px;
-  padding: 1rem;
+  padding: 1rem 0;
   border-radius: 0.5rem;
   transition: all $duration ease;
   display: flex;
   flex-direction: column;
+  max-height: 560px;
+  overflow: auto;
 
   @include responsive(lt-sm) {
     display: none;

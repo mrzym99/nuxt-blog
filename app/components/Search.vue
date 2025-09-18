@@ -1,32 +1,37 @@
 <template>
   <div class="w-1.5rem h-1.5rem">
-    <Icon class="search-icon" name="ph:magnifying-glass" size="1.5rem" @click="openSearch">Open Modal</Icon>
+    <Icon class="search-icon" name="ph:magnifying-glass" size="1.4rem" @click="openSearch">Open Modal</Icon>
     <Modal v-model="modelValue" fullscreen @close="handleClose">
-      <div class="w-60vw mx-auto lt-sm:w-full">
+      <div class="w-52vw mx-auto lt-sm:w-full">
         <input :value="keyword" ref="inputRef" class="search-input" type="text" placeholder="Search..."
           @input="handleInput" />
         <div class="search-result">
           <template v-if="searchResult">
-            <div v-for="([rKey, values]) in Object.entries(searchResult)" :key="rKey">
-              <div class="search-item" v-for="item in values" :key="item.id">
-                <div class="search-item-title" @click="modelValue = false">
-                  <NuxtLink :to="item.slug">
-                    <span v-if="item.title?.start">{{ item.title.start }}</span>
-                    <span class="keyword" v-if="item.title?.keyword">{{ item.title?.keyword }}</span>
-                    <span v-if="item.title?.end">{{ item.title?.end }}</span>
-                  </NuxtLink>
-                </div>
-                <div class="search-item-description">
-                  <span v-if="item.description?.start">{{ item.description.start }}</span>
-                  <span class="keyword" v-if="item.description?.keyword">{{ item.description?.keyword }}</span>
-                  <span v-if="item.description?.end">{{ item.description?.end }}</span>
-                </div>
-                <div class="search-item-content">
-                  <span v-if="item.content?.start" v-html="item.content.start"></span>
-                  <span class="keyword" v-if="item.content?.keyword" v-html="item.content.keyword"></span>
-                  <span v-if="item.content?.end" v-html="item.content.end"></span>
+            <div v-if="!isEmpty">
+              <div v-for="([rKey, values]) in Object.entries(searchResult)" :key="rKey">
+                <div class="search-item" v-for="item in values" :key="item.id">
+                  <div class="search-item-title" @click="modelValue = false">
+                    <NuxtLink :to="item.slug">
+                      <span v-if="item.title?.start">{{ item.title.start }}</span>
+                      <span class="keyword" v-if="item.title?.keyword">{{ item.title?.keyword }}</span>
+                      <span v-if="item.title?.end">{{ item.title?.end }}</span>
+                    </NuxtLink>
+                  </div>
+                  <div class="search-item-description">
+                    <span v-if="item.description?.start">{{ item.description.start }}</span>
+                    <span class="keyword" v-if="item.description?.keyword">{{ item.description?.keyword }}</span>
+                    <span v-if="item.description?.end">{{ item.description?.end }}</span>
+                  </div>
+                  <div class="search-item-content">
+                    <span v-if="item.content?.start" v-html="item.content.start"></span>
+                    <span class="keyword" v-if="item.content?.keyword" v-html="item.content.keyword"></span>
+                    <span v-if="item.content?.end" v-html="item.content.end"></span>
+                  </div>
                 </div>
               </div>
+            </div>
+            <div v-else class="empty">
+              试试搜索其他内容吧。。。
             </div>
           </template>
         </div>
@@ -62,6 +67,10 @@ const handleClose = () => {
 }
 
 const searchResult = ref<Record<string, Array<IArticleSearch>> | null>(null)
+
+const isEmpty = computed(() => {
+  return searchResult.value ? Object.values(searchResult.value).every(item => !item || !item.length) : true
+})
 
 const handleSearch = useDebounceFn(async () => {
   if (!keyword.value) {
@@ -169,5 +178,11 @@ watch(() => keyword.value, () => {
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
+}
+
+.empty {
+  padding: 2rem 0.3rem;
+  font-size: 1.2rem;
+  color: var(--text-color);
 }
 </style>

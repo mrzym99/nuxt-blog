@@ -1,5 +1,5 @@
 <template>
-  <aside class="sidebar hide-scrollbar w-60 lt-md:w-full">
+  <aside class="sidebar hide-scrollbar w-52 lt-md:w-full">
     <!-- Menu -->
     <div class="blog-card !pt-1 !pb-2 lt-md:hidden">
       <Menus />
@@ -83,7 +83,7 @@
         </p>
       </div>
     </div>
-    <Catalog v-if="showCateLog" :identifier="getCurrentArticle!.title" :cover="getCurrentArticle!.cover" />
+    <Catalog v-if="showCateLog" :articleId="getCurrentArticle!.id" />
   </aside>
 </template>
 

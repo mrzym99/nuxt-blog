@@ -9,3 +9,13 @@ export const REG_CODE_SIX = /^\d{6}$/;
 export const REG_CODE_FOUR = /^[A-Za-z0-9]{4}$/;
 
 export const TOAST_DURATION = 2000;
+
+export const ARTICLE_HEADER_ID = 'blogArticleHeader';
+
+export const ARTICLE_CONTENT_ID = 'blogArticleContent';
+
+export const ArticleTypeName = {
+  original: '原创',
+  transport: '转载',
+  translate: '翻译',
+};

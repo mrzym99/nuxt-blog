@@ -296,6 +296,7 @@ function getQuillInstance() {
 
 function fileHandler(type?: string) {
   return () => {
+    if (props.readOnly) return;
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     if (type) {
