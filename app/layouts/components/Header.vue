@@ -23,16 +23,20 @@ type Menu = {
 
 const menuList: Menu[] = [
   {
-    name: 'Home',
+    name: '首页',
     path: '/',
   },
   {
-    name: 'About',
-    path: '/about',
+    name: '归档',
+    path: '/archive/all',
   },
   {
-    name: 'Archive',
-    path: '/archive/all',
+    name: '留言',
+    path: '',
+  },
+  {
+    name: '关于',
+    path: '/about',
   },
 ];
 </script>

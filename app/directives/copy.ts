@@ -1,7 +1,8 @@
 import { useNuxtApp } from '#app';
+import type { DirectiveBinding } from 'vue';
 
 export const copy = {
-  mounted(el: any, binding: any) {
+  mounted(el: HTMLElement & { handler?: (e: Event) => void }, binding: DirectiveBinding) {
     const { $toast } = useNuxtApp();
     // 复制处理函数
     const copyToClipboard = async () => {
@@ -21,7 +22,10 @@ export const copy = {
     el.addEventListener('click', copyToClipboard);
     el.handler = copyToClipboard;
   },
-  unmounted(el: any) {
-    document.removeEventListener('click', el.handler);
+  unmounted(el: HTMLElement & { handler?: (e: Event) => void }) {
+    if (el.handler) {
+      document.removeEventListener('click', el.handler);
+      delete el.handler;
+    }
   },
 };

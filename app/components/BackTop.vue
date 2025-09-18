@@ -36,7 +36,7 @@ onBeforeUnmount(() => {
 <template>
   <transition name="fade">
     <span class="back-top right-4rem bottom-4rem lt-sm:right-0.2rem lt-sm:bottom-2rem" v-if="showBackTop">
-      <Icon name="ph:arrow-circle-up-duotone" size="2rem" @click="backTop" />
+      <Icon name="ph:arrow-circle-up" size="2rem" @click="backTop" />
     </span>
   </transition>
 </template>

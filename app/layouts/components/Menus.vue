@@ -7,7 +7,6 @@
     </NuxtLink>
   </div>
 </template>
-
 <script lang="ts" setup>
 const route = useRoute();
 
@@ -22,16 +21,16 @@ const menuList: Menu[] = [
     path: '/',
   },
   {
-    name: '关于',
-    path: '/about',
-  },
-  {
     name: '归档',
     path: '/archive/all',
   },
   {
     name: '留言',
     path: '',
+  },
+  {
+    name: '关于',
+    path: '/about',
   },
 ];
 </script>

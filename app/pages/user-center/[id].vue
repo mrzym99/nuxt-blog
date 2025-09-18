@@ -1,15 +1,13 @@
 <template>
   <div class="relative z-2">
-    <div class="py-8">
-      <div class="user-center">
-        <!-- User Center -->
-        <div class="header mb-4">
-          个人中心
-        </div>
-        <main class="flex-1 block relative">
-          <UserInfo :user-info="userInfo" />
-        </main>
+    <div class="user-center">
+      <!-- User Center -->
+      <div class="header mb-4">
+        个人中心
       </div>
+      <main class="flex-1 block relative">
+        <UserInfo :user-info="userInfo" />
+      </main>
     </div>
   </div>
 </template>

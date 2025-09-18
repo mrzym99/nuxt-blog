@@ -5,7 +5,7 @@
       <main class="flex-1 block relative">
         <div class="w-full">
           <Tab class="mb-4" v-model="currentTab" :options="tabOptions" @change="toggleTab" />
-          <div class="grid place-items-center">
+          <div class="min-h-60vh">
             <UpdateProfile :profile="userInfo?.profile" v-if="currentTab === 'info'" @success="updateProfileSuccess" />
             <UpdatePwd v-if="currentTab === 'pwd'" />
           </div>
