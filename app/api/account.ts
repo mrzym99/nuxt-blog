@@ -1,54 +1,18 @@
-import type { Captcha, IUser, Profile, thirdToken, token, UserDetail } from '~/types';
+import type {
+  CodeLoginForm,
+  PwdLoginForm,
+  RegisterForm,
+  ResetPwdForm,
+  ThirdRegisterForm,
+  ThirdTypeAndTokenForm,
+  UserResetPwdForm,
+} from '~/types/form';
+import type { IUser, Profile, Token } from '~/types';
 import { $http } from '~/utils/request';
-
-export type PwdLogin = {
-  username: string;
-  password: string;
-  code: string;
-  captchaId: string;
-};
-
-export type CodeLogin = {
-  email: string;
-  code: string;
-};
-
-export type Register = {
-  email: string;
-  code: string;
-  password: string;
-  confirmPassword: string;
-};
-
-export type ThirdRegister = {
-  type: string;
-  token_type: string;
-  access_token: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-  from: string;
-  uniqueId: string;
-  avatar: string;
-  address: string;
-  nickName: string;
-};
-
-export type ResetPwd = {
-  email: string;
-  code: string;
-  password: string;
-  confirmPassword: string;
-};
-
-export type UserResetPwd = {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-};
+import type { ThirdLoginTypeEnum } from '~/enum';
 
 // 账户密码登录
-export const postLogin = (data?: PwdLogin) =>
+export const postLogin = (data?: PwdLoginForm) =>
   $http({
     method: 'post',
     url: '/auth/login',
@@ -77,7 +41,7 @@ export const getEmailCaptcha = (email: string) =>
   });
 
 // 验证码登录
-export const postCodeLogin = (data?: CodeLogin) =>
+export const postCodeLoginForm = (data?: CodeLoginForm) =>
   $http({
     method: 'post',
     url: '/auth/codeLogin',
@@ -85,7 +49,7 @@ export const postCodeLogin = (data?: CodeLogin) =>
   });
 
 // 用户重置密码
-export const putUserResetPassword = (data?: UserResetPwd) =>
+export const putUserResetPassword = (data?: UserResetPwdForm) =>
   $http({
     method: 'put',
     url: '/auth/account',
@@ -101,7 +65,7 @@ export const putUpdateProfile = (data?: Profile) =>
   });
 
 // 验证码重置密码
-export const putResetPassword = (data?: ResetPwd) =>
+export const putResetPassword = (data?: ResetPwdForm) =>
   $http({
     method: 'put',
     url: '/auth/account/updatePasswordByCode',
@@ -109,7 +73,7 @@ export const putResetPassword = (data?: ResetPwd) =>
   });
 
 // 用户注册
-export const postRegister = (data?: Register) =>
+export const postRegister = (data?: RegisterForm) =>
   $http({
     method: 'post',
     url: '/auth/register',
@@ -117,8 +81,8 @@ export const postRegister = (data?: Register) =>
   });
 
 // 刷新 token
-export const postRefreshToken = (data?: any) =>
-  $http({
+export const postRefreshToken = (data?: { accessToken: string }) =>
+  $http<Token>({
     method: 'post',
     url: '/auth/refreshToken',
     data,
@@ -132,14 +96,14 @@ export const getLogout = () =>
   });
 
 // 三方登录 获取跳转的 url
-export const getThirdLoginUrl = (type?: any) =>
+export const getThirdLoginUrl = (type?: ThirdLoginTypeEnum) =>
   $http({
     method: 'get',
     url: '/auth/blog/third-login/url/' + type,
   });
 
 // 三方登录 根据 code 返回 token_type 和 token
-export const getThirdTypeAntToken = (params: any) =>
+export const getThirdTypeAndToken = (params: ThirdTypeAndTokenForm) =>
   $http({
     method: 'get',
     url: '/auth/blog/third-login/getTypeAndToken',
@@ -147,7 +111,7 @@ export const getThirdTypeAntToken = (params: any) =>
   });
 
 // 判断用户是否已经注册
-export const getIsRegister = (params: any) =>
+export const getIsRegister = (params: ThirdRegisterForm) =>
   $http({
     method: 'get',
     url: '/auth/blog/third-login/checkRegister',
@@ -155,7 +119,7 @@ export const getIsRegister = (params: any) =>
   });
 
 // 三方登录
-export const postThirdLogin = (data?: ThirdRegister) =>
+export const postThirdLogin = (data?: ThirdRegisterForm) =>
   $http({
     method: 'post',
     url: '/auth/blog/third-login/login',

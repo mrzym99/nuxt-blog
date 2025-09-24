@@ -1,6 +1,6 @@
 import { useFetch } from '#app';
 import { createError } from '#app';
-import type { IApiResponse, IHttpOptions } from '~/types';
+import type { IApiResponse, IHttpOptions, Recordable } from '~/types';
 import { $fetch } from 'ofetch';
 import { getToken, handleRefreshToken } from '~/utils/auth';
 import { useUserStore } from '~/store';
@@ -19,11 +19,7 @@ function getAuthorization() {
   }
 }
 
-async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
-  const { url, method, params, data, options: config = {} } = options;
-  const baseURL = import.meta.env.VITE_API_BASE;
-  const { $toast } = useNuxtApp();
-
+function mergeToken(config: Recordable) {
   const token = getAuthorization();
   config &&
     Object.assign(config, {
@@ -31,13 +27,21 @@ async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
         Authorization: token,
       },
     });
+}
+
+async function http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
+  const { url, method, params, data, options: config = {} } = options;
+  const baseURL = import.meta.env.VITE_API_BASE;
+  const { $toast } = useNuxtApp();
+
+  mergeToken(config);
 
   const { data: result }: any = await useFetch(baseURL + url, {
-    method: method,
+    method: method as any,
     onRequest: ({ options }) => {
       options.body = data;
       options.query = params;
-      options.timeout = 10000;
+      options.timeout = import.meta.env.VITE_API_TIMEOUT;
       Object.assign(options, config);
     },
     onResponse: async ({ response }) => {
@@ -94,11 +98,11 @@ async function $http<T = any>(options: IHttpOptions): Promise<IApiResponse<T>> {
     });
 
   const res = await $fetch(baseURL + url, {
-    method: method,
+    method: method as string,
     onRequest: ({ options }) => {
       options.body = data;
       options.query = params;
-      options.timeout = 10000;
+      options.timeout = import.meta.env.VITE_API_TIMEOUT;
       Object.assign(options, config);
     },
     onResponse: async ({ response }) => {

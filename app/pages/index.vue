@@ -14,7 +14,7 @@
               <span class="ml-1rem post-meta">{{ post.createdAt && formatDate(post.createdAt) }}</span>
             </div>
             <span v-if="post.description" class="post-description" :title="post.description">{{ post.description
-            }}</span>
+              }}</span>
             <div class="post-meta flex items-center justify-between">
               <span>
                 Posted by {{ post.author?.profile.nickName }}
@@ -165,15 +165,5 @@ onBeforeMount(() => {
 <style lang="scss" scoped>
 .loading {
   color: var(--text-light-color);
-}
-
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.6s ease-in-out;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
 }
 </style>

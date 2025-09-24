@@ -45,19 +45,20 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { putUserResetPassword, type UserResetPwd } from '~/api';
+import { putUserResetPassword } from '~/api';
 import Button from '~/components/Button.vue';
 import { useNuxtApp } from '#app';
 import { useUserStore } from '~/store';
 import Password from '~/components/Password.vue';
 import { storeToRefs } from 'pinia';
+import type { UserResetPwdForm } from '~/types/form';
 
 const { user } = storeToRefs(useUserStore());
 const { $toast } = useNuxtApp()
 const router = useRouter();
 const loading = ref(false);
 
-const loginForm = ref<UserResetPwd>({
+const loginForm = ref<UserResetPwdForm>({
   oldPassword: '',
   newPassword: '',
   confirmPassword: '',

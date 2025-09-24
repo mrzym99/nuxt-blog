@@ -6,9 +6,7 @@
       </NuxtLayout>
     </Loading>
     <ClientOnly>
-      <Toaster :toast-options="{
-        duration: TOAST_DURATION
-      }" position="top-right" :theme="theme" />
+      <Toaster :toast-options="toastOptions" position="top-right" :theme="theme" />
       <BackTop />
     </ClientOnly>
   </div>
@@ -21,19 +19,26 @@ import { storeToRefs } from 'pinia';
 import Loading from '~/components/Loading.vue';
 
 import { getTitle } from '~/utils/title';
-import type { Theme } from '~/types';
 import { useUserStore } from './store';
-import { TOAST_DURATION } from '~/constants';
+import { TOAST_DURATION, TOAST_TOP } from '~/constants';
+import type { ThemeEnum } from './enum';
 
 const { ready } = storeToRefs(useUserStore())
 
 const theme = computed(() => {
-  return useColorMode().preference as Theme;
+  return useColorMode().preference as ThemeEnum;
 });
 
 const keepalive = {
   include: ['Home', 'Archive'],
 };
+
+const toastOptions = {
+  style: {
+    top: TOAST_TOP + 'px'
+  },
+  duration: TOAST_DURATION
+}
 
 const route = useRoute();
 const routeTitle = computed(() => {
@@ -46,6 +51,8 @@ watch(
     useHead({
       title: routeTitle.value,
     });
-  }
+  }, {
+  immediate: true
+}
 );
 </script>

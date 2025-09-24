@@ -19,42 +19,41 @@
 
 <script setup lang="ts">
 import { ThemeEnum } from '~/enum';
-import type { Theme } from '~/types';
 const colorMode = useColorMode();
 
 const IconNames = {
-  [ThemeEnum.Light]: 'ph:sun',
-  [ThemeEnum.Dark]: 'ph:moon-stars',
-  [ThemeEnum.System]: 'ph:command',
+  [ThemeEnum.LIGHT]: 'ph:sun',
+  [ThemeEnum.DARK]: 'ph:moon-stars',
+  [ThemeEnum.SYSTEM]: 'ph:command',
 }
 
 const themeList = [
   {
     name: 'System',
-    icon: IconNames[ThemeEnum.System],
-    value: ThemeEnum.System,
+    icon: IconNames[ThemeEnum.SYSTEM],
+    value: ThemeEnum.SYSTEM,
   },
   {
     name: 'Light',
-    icon: IconNames[ThemeEnum.Light],
-    value: ThemeEnum.Light,
+    icon: IconNames[ThemeEnum.LIGHT],
+    value: ThemeEnum.LIGHT,
   },
   {
     name: 'Dark',
-    icon: IconNames[ThemeEnum.Dark],
-    value: ThemeEnum.Dark,
+    icon: IconNames[ThemeEnum.DARK],
+    value: ThemeEnum.DARK,
   },
 ];
 
 const ThemeIcon = computed(() => {
-  return IconNames[colorMode.value as Theme]
+  return IconNames[colorMode.value as ThemeEnum]
 })
 
-const toggleTheme = (theme: Theme) => {
+const toggleTheme = (theme: ThemeEnum) => {
   setTheme(theme);
 };
 
-const setTheme = (theme: Theme) => {
+const setTheme = (theme: ThemeEnum) => {
   colorMode.preference = theme;
 };
 </script>

@@ -1,5 +1,88 @@
 @use '_variables' as *;
 
+.header-container {
+  width: 100%;
+  height: $header-height;
+  transition: all $duration ease;
+
+  .header-section {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: $app-max-width;
+    height: $header-height;
+    background-color: var(--bg-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    z-index: $z-index-header;
+
+    @include responsive(lt-sm) {
+      padding: 0 1rem;
+
+      .pc-menu {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+    }
+
+    @include responsive(lt-md) {
+      padding: 0 1rem;
+
+      .pc-menu {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+    }
+
+    @include responsive(lt-lg) {
+      .pc-menu {
+        display: block;
+      }
+
+      .mobile-menu {
+        display: none;
+      }
+    }
+
+    @include responsive(gt-lg) {
+      .pc-menu {
+        display: block;
+      }
+
+      .mobile-menu {
+        display: none;
+      }
+    }
+
+    .pc-menu {
+      width: 100%;
+    }
+
+    .mobile-menu {
+      width: 100%;
+
+      .line-one {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+    }
+  }
+}
+
 // Layout
 .main-container {
   margin: 0 auto;
@@ -24,7 +107,7 @@
   }
 
   @include responsive(gt-lg) {
-    padding: 2rem 5rem;
+    padding: 2rem 3rem;
     gap: 5rem;
   }
 
@@ -43,37 +126,38 @@
   place-items: center;
 }
 
+.logo {
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1rem;
   a {
+    display: flex;
+    align-items: center;
     color: var(--text-color);
 
     @include hover-effect {
       color: var(--primary-color);
     }
+
+    span {
+      margin-right: 0.3rem;
+    }
   }
 
   .active {
     color: var(--primary-color);
-  }
-}
-
-.login-icon {
-  text-transform: uppercase;
-  cursor: pointer;
-  display: inline-block !important;
-  text-align: center;
-  height: 1.5rem;
-  line-height: 1.5rem;
-  padding: 0 0.75rem;
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
-  color: var(--nav-text-color) !important;
-  background-color: var(--primary-color);
-  &:hover {
-    background-color: var(--secondary-color);
   }
 }
 

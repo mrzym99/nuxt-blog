@@ -1,8 +1,10 @@
 import type { Comment, IPagination, IReply } from '~/types';
+import type { CommentForm, ReplyForm } from '~/types/form/comment';
+import type { ICommentQuery, IReplyQuery } from '~/types/query';
 import { $http } from '~/utils/request';
 
 // 获取父评论列表 以及其子评论
-export const getParentComments = (params?: any) =>
+export const getParentComments = (params?: ICommentQuery) =>
   $http<IPagination<Comment>>({
     method: 'get',
     url: '/blog/comment/list',
@@ -10,7 +12,7 @@ export const getParentComments = (params?: any) =>
   });
 
 // 获取回复列表
-export const getReplyList = (params?: any) =>
+export const getReplyList = (params?: IReplyQuery) =>
   $http<IPagination<IReply>>({
     method: 'get',
     url: '/blog/comment/reply/list',
@@ -18,7 +20,7 @@ export const getReplyList = (params?: any) =>
   });
 
 // 创建评论
-export const postComment = (data?: any) =>
+export const postComment = (data?: CommentForm) =>
   $http({
     method: 'post',
     url: '/blog/comment/create',
@@ -26,7 +28,7 @@ export const postComment = (data?: any) =>
   });
 
 // 创建回复
-export const postReply = (data?: any) =>
+export const postReply = (data?: ReplyForm) =>
   $http({
     method: 'post',
     url: '/blog/comment/reply',

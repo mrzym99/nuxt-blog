@@ -10,6 +10,8 @@ export const REG_CODE_FOUR = /^[A-Za-z0-9]{4}$/;
 
 export const TOAST_DURATION = 2000;
 
+export const TOAST_TOP = 36;
+
 export const ARTICLE_HEADER_ID = 'blogArticleHeader';
 
 export const ARTICLE_CONTENT_ID = 'blogArticleContent';

@@ -1,55 +1,82 @@
 <template>
-  <div class="header nav-links mb-1rem">
-    <Search />
-    <NuxtLink :class="{
-      active: route.path === item.path,
-    }" v-for="item in menuList" :to="item.path" :key="item.path">{{ item.name }}
-    </NuxtLink>
-    <ThemeSwitch />
-    <User />
+  <div class="header-section">
+    <div class="pc-menu">
+      <div class="w-full flex justify-between items-center">
+        <Logo />
+        <div class="nav-links">
+          <Search />
+          <Menus :menuList="menuList" />
+          <ThemeSwitch />
+          <User />
+        </div>
+      </div>
+    </div>
+    <div class="mobile-menu">
+      <div class="w-full flex justify-between items-center">
+        <Logo />
+        <div class="nav-links">
+          <Search />
+          <ThemeSwitch />
+          <Icon name="carbon:menu" size="1.5rem" @click="toggleDrawer" />
+        </div>
+      </div>
+    </div>
+    <Drawer v-model="showDrawer" title="菜单" position="right">
+      <UserMobile @click="toggleDrawer" />
+      <Menus :menuList="allMenus" :direction="MenuDirectionEnum.HORIZONTAL" @click="toggleDrawer" />
+    </Drawer>
   </div>
 </template>
 
 <script lang="ts" setup>
+import Logo from './Logo.vue';
 import ThemeSwitch from '~/components/ThemeSwitch.vue';
 import Search from '~/components/Search.vue';
 import User from '~/components/User.vue';
-const route = useRoute();
+import Menus from '~/components/Menus.vue';
+import UserMobile from '~/components/UserMobile.vue';
+import { menuList } from '~/router';
+import { MenuDirectionEnum, MenuTypeEnum } from '~/enum';
+import type { Menu } from '~/router';
+import { useUserStore } from '~/store';
+import { storeToRefs } from 'pinia';
 
-type Menu = {
-  name: string;
-  path: string;
+
+const { user } = storeToRefs(useUserStore());
+const showDrawer = ref(false);
+
+const toggleDrawer = () => {
+  showDrawer.value = !showDrawer.value;
 };
 
-const menuList: Menu[] = [
+const allMenus = computed(() => {
+  return menuList.concat(user.value?.id ? [...additionalMenuList] : [])
+});
+
+const additionalMenuList: Menu[] = [
   {
-    name: '首页',
-    path: '/',
+    name: '个人中心',
+    icon: 'ph:user-circle',
+    path: `/user-center/${user.value?.id}`,
+    type: MenuTypeEnum.MENU,
   },
   {
-    name: '归档',
-    path: '/archive/all',
+    name: '用户设置',
+    icon: 'ph:gear',
+    path: '/setting',
+    type: MenuTypeEnum.MENU,
   },
   {
-    name: '留言',
+    name: '退出',
+    icon: 'ion:md-log-out',
     path: '',
-  },
-  {
-    name: '关于',
-    path: '/about',
+    action: logout,
+    type: MenuTypeEnum.BUTTON,
   },
 ];
-</script>
 
-<style lang="scss" scoped>
-.header {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  height: 54px;
-  padding: 0 1rem;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 0;
+
+function logout() {
+  useUserStore().logout();
 }
-</style>
+</script>

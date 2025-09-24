@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core';
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import Drawer from '~/components/Drawer.vue';
 import { requestAnimationFrameThrottle } from '~/utils/frame-throttle';
@@ -87,7 +88,6 @@ const extractHeadings = () => {
     activeHeading.value = decodeHash
     scrollToHeading(decodeHash);
   }
-
 };
 
 // 滚动到指定标题
@@ -106,7 +106,7 @@ const handleScroll = () => {
 
   if (window.scrollY < 80) {
     activeHeading.value = ''
-    history.replaceState(history.state, '', window.location.pathname + window.location.search);
+    debounceRouterReplace(window.location.pathname + window.location.search)
     return
   }
 
@@ -118,13 +118,16 @@ const handleScroll = () => {
 
     if ((rect.top <= 100)) {
       const heading = headings.value.find(item => item.id === headingElement.id);
-      history.replaceState(history.state, '', `#${heading?.text}`);
+      debounceRouterReplace(heading?.text)
       activeHeading.value = heading?.text ?? ''
       break;
     }
   }
 };
 
+const debounceRouterReplace = useDebounceFn((text) => {
+  history.replaceState(history.state, '', `#${text}`);
+}, 50);
 const rafThrottleScroll = requestAnimationFrameThrottle(handleScroll);
 
 watch(() => props.articleId, () => {

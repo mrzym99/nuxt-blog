@@ -1,35 +1,11 @@
+import { nuxtHead } from './seo';
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   app: {
-    head: {
-      title: '小张的个人博客',
-      meta: [
-        { charset: 'utf-8' },
-        {
-          name: 'viewport',
-          content: 'width=device-width, initial-scale=1',
-        },
-        {
-          name: 'description',
-          content: 'Nuxt4 Blog，分享知识，记录生活。',
-        },
-        {
-          name: 'keywords',
-          content: 'Nuxt, Nest, Blog, Nuxt4, Vue3',
-        },
-        {
-          name: 'robots',
-          content: 'index, follow',
-        },
-        {
-          name: 'googlebot',
-          content: 'index, follow',
-        },
-      ],
-    },
-    // pageTransition: { name: 'page', mode: 'out-in' },
+    head: nuxtHead,
   },
   ssr: true,
   devServer: {

@@ -28,9 +28,13 @@ import { ref } from 'vue';
 import FormData from 'form-data';
 import { uploadImg } from '~/api';
 
-defineProps<{
+const props = withDefaults(defineProps<{
   modelValue?: string;
-}>();
+  maxSize?: number;
+}>(), {
+  modelValue: '',
+  maxSize: 5,
+})
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -55,8 +59,8 @@ const handleFileSelect = async (e: Event) => {
     return;
   }
 
-  if (file.size > 2 * 1024 * 1024) {
-    uploadError.value = '图片大小不能超过2MB';
+  if (file.size > props.maxSize * 1024 * 1024) {
+    uploadError.value = `图片大小不能超过${props.maxSize}MB`;
     return;
   }
 

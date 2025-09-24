@@ -114,13 +114,10 @@ import { TransitionGroup } from 'vue';
 
 import {
   type IReply,
-  type IUser,
-  type CreateReply,
-  type CreateComment,
   type Comment,
 } from '@/types/index';
 import {
-  CommentEnum,
+  CommentTypeEnum,
   LikeEnum,
   CommentOrderEnum
 } from '@/enum';
@@ -140,18 +137,13 @@ import CommentInput from './Input.vue';
 import CommentAvatar from './Avatar.vue';
 import CommentCard from './CommentCard.vue';
 import ReplyCard from './ReplyCard.vue';
+import type { CommentForm, ReplyForm, ReplyTo } from '~/types/form';
 
 
 const props = defineProps<{
-  type: CommentEnum;
+  type: CommentTypeEnum;
   targetId: number;
 }>();
-
-type ReplyTo = {
-  id?: number
-  parent: Comment;
-  user: IUser;
-};
 
 const { user } = storeToRefs(useUserStore());
 const { $toast } = useNuxtApp()
@@ -173,11 +165,11 @@ const currentPage = ref(1);
 const commentTotal = ref(0);
 const PAGE_SIZE = 5;
 const commentLoading = ref(false);
-const commentOrder = ref<string>(CommentOrderEnum.LATEST);
+const commentOrder = ref<CommentOrderEnum>(CommentOrderEnum.LATEST);
 const comments = ref<Array<Comment>>([]);
 
 // 处理评论提交
-const handleSubmit = (event: any) => {
+const handleSubmit = (event: Event) => {
   event.preventDefault();
   if (!user.value) {
     $toast.warning('请先登录');
@@ -191,7 +183,7 @@ const handleSubmit = (event: any) => {
   }
 
   if (replyTo.value) {
-    const newReply: CreateReply = {
+    const newReply: ReplyForm = {
       parentId: replyTo.value.parent.id,
       content: replyContent.value,
       replyId: user.value?.id,
@@ -206,7 +198,7 @@ const handleSubmit = (event: any) => {
       }
     });
   } else {
-    const newComment: CreateComment = {
+    const newComment: CommentForm = {
       type: props.type,
       targetId: props.targetId,
       content: commentContent.value,
@@ -353,7 +345,7 @@ async function getReplies(parent: Comment) {
 }
 
 const toggleTab = (tab: string) => {
-  commentOrder.value = tab;
+  commentOrder.value = tab as CommentOrderEnum;
   currentPage.value = 1;
   getCommentList();
 };
@@ -364,7 +356,7 @@ async function getCommentList(commentId?: number) {
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
     targetId: props.targetId,
-    type: CommentEnum.ARTICLE,
+    type: CommentTypeEnum.ARTICLE,
     commentOrder: commentOrder.value,
   });
   const { list, total } = res.data;

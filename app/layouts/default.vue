@@ -1,11 +1,11 @@
 <template>
   <div class="h-screen w-full">
     <!-- Main Content -->
+    <div class="header-container ">
+      <Header />
+    </div>
     <div class="main-container">
       <main class="page-main">
-        <div class="flex align-center justify-end md:hidden">
-          <Header />
-        </div>
         <div class="lt-sm:p-1rem lt-md:p-2rem">
           <slot />
         </div>

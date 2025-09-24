@@ -1,15 +1,8 @@
 <template>
   <aside class="sidebar hide-scrollbar w-52 lt-md:w-full">
-    <!-- Menu -->
-    <div class="blog-card !pt-1 !pb-2 lt-md:hidden">
-      <Menus />
-    </div>
-    <div class="blog-card !pt-1 !pb-2 lt-md:hidden">
-      <Tools />
-    </div>
     <div class="lt-md:hidden" v-show="!showCateLog">
       <!-- Profile Card -->
-      <div class="blog-card">
+      <div class="blog-card !pt-0">
         <div class="profile">
           <div class="flex items-center gap-2 mb-4">
             <div class="avatar">
@@ -92,15 +85,14 @@ import { getBloggerInfo, getParameter } from '~/api';
 import { useAsyncData } from '#app';
 import Catalog from '~/layouts/components/Catalog.vue';
 import { useArticleStore } from '~/store';
-import Menus from './Menus.vue';
-import Tools from './Tools.vue';
+import { ArticleContentEnum } from '~/enum';
 
 const route = useRoute();
 const showCateLog = computed(() => {
   return (
     route.path.includes('/posts') &&
     getCurrentArticle.value &&
-    getCurrentArticle.value.contentType === 'md'
+    getCurrentArticle.value.contentType === ArticleContentEnum.MD
   );
 });
 

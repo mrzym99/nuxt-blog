@@ -3,6 +3,7 @@ export const formatDate = (time?: Date | null) => {
   return time && new Date(time).toLocaleDateString();
 };
 
+// 格式统计信息数字
 export const formatNumber = (count?: number) => {
   if (!count) return null;
   if (count >= 10000) {
@@ -13,6 +14,7 @@ export const formatNumber = (count?: number) => {
   return count;
 };
 
+// 格式化阅读时长
 export const formatDuration = (timestamp: number): string => {
   const minute = 60 * 1000;
   const hour = 60 * minute;
@@ -28,6 +30,7 @@ export const formatDuration = (timestamp: number): string => {
   }
 };
 
+// 获取字符串的开始和结束位置
 export const strToStartEnd = (str: string, keyword: string) => {
   const length = str.length;
   const index = str.indexOf(keyword);
@@ -46,6 +49,7 @@ export const strToStartEnd = (str: string, keyword: string) => {
   };
 };
 
+// 计算时间差
 export const diffNowWord = (date?: Date | null | undefined) => {
   if (!date) return null;
   const now = new Date().getTime();

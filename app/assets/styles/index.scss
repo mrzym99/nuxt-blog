@@ -5,6 +5,7 @@
 @use 'blog-post' as *;
 @use 'form' as *;
 @use 'highlight' as *;
+@use 'transition' as *;
 
 html {
   font-family: $font-family;
@@ -13,7 +14,8 @@ html {
 
 body {
   color: var(--text-color);
-  margin: 0 !important;
+  margin: 0 auto !important;
+  max-width: $app-max-width;
   height: 100vh;
   overflow: auto;
 }

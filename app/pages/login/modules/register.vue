@@ -38,8 +38,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { getEmailCaptcha, postRegister, type Register } from '~/api';
+import { getEmailCaptcha, postRegister } from '~/api';
 import Button from '~/components/Button.vue';
+import type { RegisterForm } from '~/types/form';
 import useCountDown from '~/hooks/useCountDown';
 
 const { $toast } = useNuxtApp()
@@ -47,7 +48,7 @@ const router = useRouter();
 const loading = ref(false);
 const sendCodeLoading = ref(false);
 
-const loginForm = ref<Register>({
+const loginForm = ref<RegisterForm>({
   email: '',
   code: '',
   password: '',

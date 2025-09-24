@@ -1,13 +1,6 @@
 import { defineStore } from 'pinia';
-import {
-  getUserInfo,
-  postCodeLogin,
-  postLogin,
-  postThirdLogin,
-  type CodeLogin,
-  type PwdLogin,
-  type ThirdRegister,
-} from '~/api';
+import { getUserInfo, postCodeLoginForm, postLogin, postThirdLogin } from '~/api';
+import type { CodeLoginForm, PwdLoginForm, ThirdRegisterForm } from '~/types/form';
 import type { IArticle, UserDetail } from '~/types/index';
 import { setToken, removeToken } from '~/utils/auth';
 
@@ -62,7 +55,7 @@ export const useUserStore = defineStore('user', {
     removeUser() {
       this.user = null;
     },
-    async pwdLogin(dto: PwdLogin) {
+    async pwdLogin(dto: PwdLoginForm) {
       return new Promise((resolve, reject) => {
         postLogin(dto)
           .then(res => {
@@ -76,9 +69,9 @@ export const useUserStore = defineStore('user', {
           });
       });
     },
-    codeLogin(dto: CodeLogin) {
+    codeLogin(dto: CodeLoginForm) {
       return new Promise((resolve, reject) => {
-        postCodeLogin(dto)
+        postCodeLoginForm(dto)
           .then(res => {
             const { access_token } = res.data;
             setToken(access_token);
@@ -90,7 +83,7 @@ export const useUserStore = defineStore('user', {
           });
       });
     },
-    thirdLogin(dto: ThirdRegister) {
+    thirdLogin(dto: ThirdRegisterForm) {
       return new Promise((resolve, reject) => {
         postThirdLogin(dto)
           .then(res => {

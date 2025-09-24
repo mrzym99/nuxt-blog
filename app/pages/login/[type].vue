@@ -18,14 +18,15 @@
         <div class="link-container" v-if="showLoginType">
           <NuxtLink v-if="type !== 'pwd-login'" class="login-link" to="/login/pwd-login" replace>密码登录</NuxtLink>
           <NuxtLink v-if="type !== 'code-login'" class="login-link" to="/login/code-login" replace>验证码</NuxtLink>
-          <NuxtLink v-if="type !== 'github-login'" class="login-link" @click="thirdLogin('github')" replace>GitHub
+          <NuxtLink v-if="type !== 'github-login'" class="login-link" @click="thirdLogin(ThirdLoginTypeEnum.GITHUB)"
+            replace>GitHub
           </NuxtLink>
         </div>
         <div class="bottom-link">
           <div class="flex justify-between items-center" v-if="showBottomLink">
             <div>
-              <NuxtLink v-if="!['register', 'reset-pwd', 'code-login'].includes(type)"
-                class="text-gradient" to="/login/reset-pwd" replace> 忘记密码？
+              <NuxtLink v-if="!['register', 'reset-pwd', 'code-login'].includes(type)" class="text-gradient"
+                to="/login/reset-pwd" replace> 忘记密码？
               </NuxtLink>
             </div>
             <div v-if="type === 'register' || type === 'reset-pwd'">
@@ -56,8 +57,8 @@ import { getThirdLoginUrl } from '~/api';
 import ResetPwd from './modules/reset-pwd.vue';
 import Dots from '~/components/Dots.vue';
 import ThemeSwitch from '~/components/ThemeSwitch.vue';
-import { useUserStore } from '~/store';
 import { isLoggedIn } from '~/utils/auth';
+import { LoginTypeEnum, ThirdLoginTypeEnum } from '~/enum';
 
 definePageMeta({
   layout: 'blank',
@@ -66,25 +67,23 @@ definePageMeta({
 const route = useRoute();
 const router = useRouter();
 
-type loginType = 'pwd-login' | 'code-login' | 'github-login' | 'register' | 'reset-pwd';
-
-const loginMap: Record<loginType, Component> = {
-  'pwd-login': PwdLogin,
-  'code-login': CodeLogin,
-  'github-login': GithubLogin,
-  register: Register,
-  'reset-pwd': ResetPwd,
+const loginMap: Record<LoginTypeEnum, Component> = {
+  [LoginTypeEnum.PWD_LOGIN]: PwdLogin,
+  [LoginTypeEnum.CODE_LOGIN]: CodeLogin,
+  [LoginTypeEnum.GITHUB_LOGIN]: GithubLogin,
+  [LoginTypeEnum.REGISTER]: Register,
+  [LoginTypeEnum.RESET_PWD]: ResetPwd,
 };
 
-const titleMap: Record<loginType, string> = {
-  'pwd-login': '登录',
-  'code-login': '验证码登录',
-  'github-login': 'GitHub登录',
-  register: '注册',
-  'reset-pwd': '重置密码',
+const titleMap: Record<LoginTypeEnum, string> = {
+  [LoginTypeEnum.PWD_LOGIN]: '登录',
+  [LoginTypeEnum.CODE_LOGIN]: '验证码登录',
+  [LoginTypeEnum.GITHUB_LOGIN]: 'GitHub登录',
+  [LoginTypeEnum.REGISTER]: '注册',
+  [LoginTypeEnum.RESET_PWD]: '重置密码',
 };
 
-const type = computed(() => route.params.type as loginType);
+const type = computed(() => route.params.type as LoginTypeEnum);
 
 const showLoginType = computed(() => {
   return ['pwd-login', 'code-login', 'github-login'].includes(type.value);
@@ -98,7 +97,7 @@ const componentId = computed(() => {
   return loginMap[type.value];
 });
 
-const thirdLogin = async (type: string) => {
+const thirdLogin = async (type: ThirdLoginTypeEnum) => {
   const res = await getThirdLoginUrl(type);
   if (window) window.location.href = res.data;
 };

@@ -137,39 +137,5 @@ const handleClose = () => {
   }
 }
 
-// 遮罩层动画
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
-}
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-// 左侧抽屉动画
-.slide-left-enter-active,
-.slide-left-leave-active,
-.slide-right-enter-active,
-.slide-right-leave-active {
-  transition: transform 0.3s ease-in-out;
-}
-
-.slide-left-enter-from,
-.slide-left-leave-to {
-  transform: translateX(-100%);
-}
-
-.slide-right-enter-from,
-.slide-right-leave-to {
-  transform: translateX(100%);
-}
-
-.slide-left-enter-to,
-.slide-left-leave-from,
-.slide-right-enter-to,
-.slide-right-leave-from {
-  transform: translateX(0);
-}
 </style>

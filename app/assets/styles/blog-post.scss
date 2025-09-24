@@ -69,23 +69,3 @@
     background-color: var(--bg-color);
   }
 }
-
-.tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  .tag {
-    cursor: pointer;
-    display: inline-block;
-    padding: 0.2rem 0.5rem;
-    border: 1px solid var(--text-color);
-    color: var(--text-color);
-    @include hover-effect {
-      border-color: transparent;
-      background-color: var(--primary-color);
-      color: white;
-    }
-    border-radius: 9999px;
-    font-size: 0.8rem;
-  }
-}

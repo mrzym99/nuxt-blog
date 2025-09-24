@@ -22,16 +22,16 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { PwdLogin } from '~/api';
 import { useUserStore } from '~/store';
 import Button from '~/components/Button.vue';
+import type { PwdLoginForm } from '~/types/form';
 
 const userStore = useUserStore();
 const router = useRouter();
 const loading = ref(false);
 const { $toast } = useNuxtApp()
 
-const loginForm = ref<PwdLogin>({
+const loginForm = ref<PwdLoginForm>({
   username: '',
   password: '',
   code: '',

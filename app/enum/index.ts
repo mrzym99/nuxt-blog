@@ -1,7 +1,7 @@
 export enum ThemeEnum {
-  System = 'system',
-  Light = 'light',
-  Dark = 'dark',
+  SYSTEM = 'system',
+  LIGHT = 'light',
+  DARK = 'dark',
 }
 
 export enum LikeEnum {
@@ -10,7 +10,11 @@ export enum LikeEnum {
   REPLY = 'reply',
 }
 
-export enum CommentEnum {
+export enum ViewEnum {
+  ARTICLE = 'article',
+}
+
+export enum CommentTypeEnum {
   ARTICLE = 'article',
   ALBUM = 'album',
 }
@@ -29,4 +33,35 @@ export enum ArticleTypeEnum {
 export enum ArticleContentEnum {
   MD = 'md', // markdown
   RICHTEXT = 'richtext', // rich text
+}
+
+export enum MenuDirectionEnum {
+  HORIZONTAL = 'horizontal',
+  VERTICAL = 'vertical',
+}
+
+export enum MenuTypeEnum {
+  MENU = 'menu',
+  LINK = 'link',
+  BUTTON = 'button',
+}
+
+export enum ThirdLoginTypeEnum {
+  GITHUB = 'github',
+}
+
+export enum LoginTypeEnum {
+  PWD_LOGIN = 'pwd-login',
+  CODE_LOGIN = 'code-login',
+  GITHUB_LOGIN = 'github-login',
+  REGISTER = 'register',
+  RESET_PWD = 'reset-pwd',
+}
+
+export enum HttpMethodEnum {
+  GET = 'get',
+  POST = 'post',
+  PUT = 'put',
+  PATCH = 'patch',
+  DELETE = 'delete',
 }

@@ -172,27 +172,4 @@ watch(() => modelValue.value, () => {
     border-color: var(--border-color);
   }
 }
-
-// 遮罩层动画
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-// 弹窗动画
-.zoom-enter-active,
-.zoom-leave-active {
-  transition: all 0.3s ease-in-out;
-}
-
-.zoom-enter-from,
-.zoom-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
-}
 </style>

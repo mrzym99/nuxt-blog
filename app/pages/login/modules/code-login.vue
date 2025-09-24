@@ -25,10 +25,11 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { getEmailCaptcha, type CodeLogin } from '~/api';
+import { getEmailCaptcha } from '~/api';
 import { useUserStore } from '~/store';
 import Button from '~/components/Button.vue';
 import useCountDown from '~/hooks/useCountDown';
+import type { CodeLoginForm } from '~/types/form';
 
 const { $toast } = useNuxtApp()
 const userStore = useUserStore();
@@ -36,7 +37,7 @@ const router = useRouter();
 const loading = ref(false);
 const sendCodeLoading = ref(false);
 
-const loginForm = ref<CodeLogin>({
+const loginForm = ref<CodeLoginForm>({
   email: '',
   code: '',
 });

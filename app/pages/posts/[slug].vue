@@ -18,9 +18,7 @@
                   {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span>
               </div>
             </div>
-            <div v-if="articleDetail?.cover" class="article-cover">
-              <img :src="articleDetail?.cover" alt="" />
-            </div>
+            <ArticleCover v-if="articleDetail?.cover" :cover="articleDetail.cover" />
             <div class="flex items-center justify-between read-duration mb-2">
               <span><span class="tip" v-if="hasUpdated"> Updated On {{ hasUpdated }} </span> <span class="type-tag">{{
                 ArticleTypeName[articleDetail.type] }}</span></span>
@@ -50,11 +48,12 @@ import { useAsyncData } from '#app';
 import { useRoute } from 'vue-router';
 
 import ArticleContent from './components/ArticleContent.vue';
+import ArticleCover from './components/ArticleCover.vue';
 
 import { useArticleStore, useUserStore } from '~/store';
 import { getArticleDetail, getViewDuration } from '~/api';
 import { formatDate } from '~/utils/tool';
-import { LikeEnum } from '~/enum';
+import { ViewEnum } from '~/enum';
 import { ARTICLE_HEADER_ID, ArticleTypeName } from '~/constants';
 
 const { setCurrentArticle } = useArticleStore();
@@ -84,8 +83,8 @@ const hasUpdated = computed(() => {
 
 async function handleGetViewDuration() {
   const res = await getViewDuration({
-    type: LikeEnum.ARTICLE,
-    targetId: route.params.slug,
+    type: ViewEnum.ARTICLE,
+    targetId: route.params.slug as unknown as number,
     userId: userStore.user?.id
   })
   viewDuration.value = res.data as number
@@ -153,21 +152,6 @@ watch(
   font-weight: 400;
   color: var(--text-light-color);
   border-color: var(--border-color);
-}
-
-.article-cover {
-  height: 12rem;
-  overflow: hidden;
-  border-radius: 0.375rem;
-  margin-bottom: 1rem;
-
-  @include mask;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
 }
 
 .article-header {

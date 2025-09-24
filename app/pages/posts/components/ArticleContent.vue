@@ -18,7 +18,7 @@
       </div>
       <div class="w-full">
         <h3>评论</h3>
-        <Comments :type="CommentEnum.ARTICLE" :target-id="article.id" />
+        <Comments :type="CommentTypeEnum.ARTICLE" :target-id="article.id" />
       </div>
       <div class="w-full">
         <h3>推荐</h3>
@@ -44,7 +44,7 @@ import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import { formatDate } from '~/utils/tool';
 import { ARTICLE_CONTENT_ID } from '~/constants';
 import type { IArticle } from '~/types/index';
-import { CommentEnum, LikeEnum } from '~/enum';
+import { ArticleContentEnum, CommentTypeEnum, LikeEnum, ViewEnum } from '~/enum';
 import { getIsLike, postLike, postCancelLike, getLikeCount } from '~/api/like';
 import { postViewDuration } from '~/api/view';
 import { getRecommendArticle } from '~/api/article';
@@ -78,7 +78,7 @@ const likeCount = ref<number>(0);
 const recommends = ref<IArticle[]>([]);
 
 const isMd = computed(() => {
-  return props.article.contentType === 'md';
+  return props.article.contentType === ArticleContentEnum.MD;
 });
 
 const hasUpdated = computed(() => {
@@ -142,7 +142,7 @@ async function handleGetLikeCount() {
 async function handleAddViewDuration(duration: number) {
   await postViewDuration({
     targetId: props.article.id,
-    type: LikeEnum.ARTICLE,
+    type: ViewEnum.ARTICLE,
     duration,
     userId: userStore.user?.id,
   });

@@ -5,7 +5,7 @@
       <span class="time">{{ diffNowWord(comment?.createdAt) }}</span>
     </div>
     <div class="comment-text">
-      <CommentText :content="comment.content" :id="'c' + comment.id" />
+      <Content :content="comment.content" :id="'c' + comment.id" />
     </div>
     <div class="comment-actions">
       <button class="action-btn" @click="handleReply(comment)" style="color: var(--primary-color)">回复</button>
@@ -28,6 +28,7 @@ import {
   type UserDetail,
 } from '@/types/index';
 import { diffNowWord } from '~/utils/tool';
+import Content from './Content.vue';
 
 const props = defineProps<{
   comment: Comment;

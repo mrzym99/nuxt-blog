@@ -38,8 +38,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { getEmailCaptcha, putResetPassword, type ResetPwd } from '~/api';
+import { getEmailCaptcha, putResetPassword } from '~/api';
 import Button from '~/components/Button.vue';
+import type { ResetPwdForm } from '~/types/form';
 import useCountDown from '~/hooks/useCountDown';
 
 const { $toast } = useNuxtApp()
@@ -47,7 +48,7 @@ const router = useRouter();
 const loading = ref(false);
 const sendCodeLoading = ref(false);
 
-const loginForm = ref<ResetPwd>({
+const loginForm = ref<ResetPwdForm>({
   email: '',
   code: '',
   password: '',

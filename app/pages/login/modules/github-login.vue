@@ -32,22 +32,24 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { getIsRegister, getThirdTypeAntToken, type ThirdRegister } from '~/api';
+import { getIsRegister, getThirdTypeAndToken, } from '~/api';
 import Button from '~/components/Button.vue';
+import type { ThirdRegisterForm } from '~/types/form';
 import { useUserStore } from '~/store';
+import { ThirdLoginTypeEnum } from '~/enum';
 
 const { $toast } = useNuxtApp()
 const router = useRouter();
 const loading = ref(false);
 
-const loginForm = ref<ThirdRegister>({
-  type: 'github',
+const loginForm = ref<ThirdRegisterForm>({
+  type: ThirdLoginTypeEnum.GITHUB,
   token_type: '',
   access_token: '',
   username: '',
   password: '',
   confirmPassword: '',
-  from: 'github',
+  from: ThirdLoginTypeEnum.GITHUB,
   uniqueId: '',
   avatar: '',
   address: '',
@@ -67,8 +69,8 @@ function getCode() {
 }
 
 function thirdLogin() {
-  getThirdTypeAntToken({
-    type: 'github',
+  getThirdTypeAndToken({
+    type: ThirdLoginTypeEnum.GITHUB,
     code: code.value,
   })
     .then(res => {

@@ -58,6 +58,7 @@ type Tag = {
 
 const route = useRoute();
 const allPosts = ref<IArticle[]>([]);
+const cachedFilteredPosts = ref<Record<string, IArticle[]>>()
 
 const { data: allTags } = await useAsyncData('allTags', async () => {
   const res = await getAllTags();
@@ -91,11 +92,12 @@ function initPosts() {
 const filteredPosts = computed(() => {
   const tagName = route.params.tag as string;
 
-  if (!tagName) return groupedPosts.value;
+  if (!tagName) return cachedFilteredPosts.value || groupedPosts.value;
   if (tagName === 'all') return groupedPosts.value;
   const articles =
     (allTags.value && allTags.value.find(tag => tag.name === tagName)?.articles) || [];
-  return articleToGroups(articles);
+  cachedFilteredPosts.value = articleToGroups(articles);
+  return cachedFilteredPosts.value
 });
 
 // Group posts by year

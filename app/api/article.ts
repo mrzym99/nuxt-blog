@@ -1,8 +1,9 @@
 import type { IArticle, IPagination } from '~/types';
+import type { baseQuery } from '~/types/query';
 import { $http } from '~/utils/request';
 
 // 获取文章列表
-export const getArticleList = (params?: any) =>
+export const getArticleList = (params?: baseQuery) =>
   $http<IPagination<IArticle>>({
     method: 'get',
     url: '/blog/article/list/front',

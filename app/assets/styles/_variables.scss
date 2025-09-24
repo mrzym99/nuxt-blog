@@ -10,8 +10,12 @@ $font-family:
   Times,
   serif;
 
+$app-max-width: 1580px;
 $max-width: 1080px;
 $small-max-width: 880px;
+
+$header-height: 54px;
+$mobile-header-height: 88px;
 
 $content-image-max-height: 880px;
 $comment-image-max-width: 80px;

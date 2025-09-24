@@ -1,6 +1,7 @@
 // server/api/__sitemap__/urls.ts
 import type { SitemapUrlInput } from '#sitemap/types';
 import { defineSitemapEventHandler } from '#imports';
+import type { IArticle, ITag } from '~/types';
 
 async function getAllPosts() {
   try {
@@ -21,9 +22,9 @@ async function getAllPosts() {
     const res = await response.json();
     const posts = Array.isArray(res.data?.list) ? res.data.list : [];
 
-    return posts.map((post: any) => ({
+    return posts.map((post: IArticle) => ({
       loc: `/posts/${post.id}`,
-      lastmod: new Date(post.updatedAt || post.createTime || Date.now()),
+      lastmod: new Date(post.updatedAt || post.createdAt || Date.now()),
       changefreq: 'weekly',
       priority: 0.9,
     }));
@@ -49,7 +50,7 @@ async function getAllTags() {
     const res = await response.json();
     const tags = Array.isArray(res.data) ? res.data : [];
 
-    return tags.map((tag: any) => ({
+    return tags.map((tag: ITag) => ({
       loc: `/archive/${tag.name}`,
       lastmod: new Date(tag.updatedAt || Date.now()),
       changefreq: 'monthly',
@@ -73,6 +74,12 @@ export default defineSitemapEventHandler(async () => {
         lastmod: new Date(),
         changefreq: 'daily',
         priority: 1.0,
+      },
+      {
+        loc: '/message',
+        lastmod: new Date(),
+        changefreq: 'monthly',
+        priority: 0.7,
       },
       {
         loc: '/about',

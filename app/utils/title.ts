@@ -1,20 +1,28 @@
+import { menuList } from '~/router';
+
+const title = import.meta.env.VITE_APP_NAME;
+function getMenuName(path: string) {
+  const item = menuList.filter(v => v.path).find(menu => path === menu.path);
+  return item?.name;
+}
+
 const titleMap: Record<string, string> = {
-  '/': '小张的博客 | Home',
-  '/about': '小张的博客 | About Me',
-  '/login/pwd-login': '小张的博客 | Login',
-  '/login/reset-pwd': '小张的博客 | Reset Password',
-  '/login/register': '小张的博客 | Register',
-  '/login/code-login': '小张的博客 | Code Login',
-  '/login/github-login': '小张的博客 | Github Login',
+  '/login/pwd-login': '登录',
+  '/login/reset-pwd': '重置密码',
+  '/login/register': '注册',
+  '/login/code-login': '验证码登录',
+  '/login/github-login': 'Github 登录',
 };
 
 export function getTitle(path: string) {
-  if (path.includes('/archive')) {
-    return '小张的博客 | Archive';
-  } else if (path.includes('/posts')) {
+  const name = getMenuName(path);
+  if (name) {
+    return `${title} | ${name}`;
+  }
+  if (path.includes('/posts')) {
     return undefined;
   } else if (path.includes('/user-center')) {
-    return '小张的博客 | User Center';
+    return `${title} | 个人中心`;
   }
-  return titleMap[path] ?? '小张的博客';
+  return titleMap[path] ? `${title} | ${titleMap[path]}` : title;
 }
