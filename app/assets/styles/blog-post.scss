@@ -35,6 +35,7 @@
   }
 
   .post-description {
+    cursor: pointer;
     transition: all $duration ease;
     color: var(--text-color);
     overflow-wrap: break-word;

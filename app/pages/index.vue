@@ -11,9 +11,11 @@
                   {{ post.title }}
                 </h3>
               </NuxtLink>
-              <span class="ml-1rem post-meta">{{ post.createdAt && formatDate(post.createdAt) }}</span>
+              <span class="ml-1rem post-meta">{{ post.createdAt &&
+                formatDate(post.createdAt) }}</span>
             </div>
-            <span v-if="post.description" class="post-description" :title="post.description">{{ post.description
+            <span @click="toArticle(post.id)" v-if="post.description" class="post-description"
+              :title="post.description">{{ post.description
               }}</span>
             <div class="post-meta flex items-center justify-between">
               <span>
@@ -55,6 +57,7 @@ defineOptions({
   name: 'Home',
 });
 
+const router = useRouter();
 const target = useTemplateRef<HTMLDivElement>('target')
 const PAGE_SIZE = 10;
 const { getRefresh, getCurrentArticle } = storeToRefs(useArticleStore());
@@ -62,6 +65,12 @@ const refreshKey = ref(1)
 let timer: any = null;
 const currentPage = ref(1);
 const loading = ref(false);
+
+const toArticle = (id: number) => {
+  router.push({
+    path: '/posts/' + id,
+  });
+};
 
 // 使用 useAsyncData 安全获取数据
 const { data, pending } = await useAsyncData('home-posts', async () => {

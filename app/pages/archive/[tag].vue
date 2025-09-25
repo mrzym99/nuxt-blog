@@ -28,7 +28,7 @@
                     {{ post.title }}
                   </NuxtLink>
                 </h3>
-                <p class="post-description">{{ post.description }}</p>
+                <p @click="toArticle(post.id)" class="post-description">{{ post.description }}</p>
               </div>
               <time class="text-sm">{{ formatDate(post.createdAt) }}</time>
             </div>
@@ -57,8 +57,15 @@ type Tag = {
 };
 
 const route = useRoute();
+const router = useRouter();
 const allPosts = ref<IArticle[]>([]);
 const cachedFilteredPosts = ref<Record<string, IArticle[]>>()
+
+const toArticle = (id: number) => {
+  router.push({
+    path: '/posts/' + id,
+  });
+};
 
 const { data: allTags } = await useAsyncData('allTags', async () => {
   const res = await getAllTags();

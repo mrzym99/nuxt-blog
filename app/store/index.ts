@@ -28,7 +28,6 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     user: null as UserDetail | null,
     mentionList: [] as Array<IMentionUser>,
-    ready: false,
   }),
   getters: {
     getUser: state => state.user,
@@ -52,9 +51,6 @@ export const useUserStore = defineStore('user', {
     },
     async initUserInfo() {
       await this.setUser();
-    },
-    setReady() {
-      this.ready = true;
     },
     removeUser() {
       this.user = null;

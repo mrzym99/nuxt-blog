@@ -1,10 +1,8 @@
 <template>
   <div>
-    <Loading :loading="!ready">
-      <NuxtLayout>
-        <NuxtPage :keepalive="keepalive" />
-      </NuxtLayout>
-    </Loading>
+    <NuxtLayout>
+      <NuxtPage :keepalive="keepalive" />
+    </NuxtLayout>
     <ClientOnly>
       <Toaster :toast-options="toastOptions" position="top-right" :theme="theme" />
       <BackTop />
@@ -15,15 +13,10 @@
 <script lang="ts" setup>
 import { useHead } from '#app';
 import { storeToRefs } from 'pinia';
-
-import Loading from '~/components/Loading.vue';
-
 import { getTitle } from '~/utils/title';
 import { useUserStore } from './store';
 import { TOAST_DURATION, TOAST_TOP } from '~/constants';
 import type { ThemeEnum } from './enum';
-
-const { ready } = storeToRefs(useUserStore())
 
 const theme = computed(() => {
   return useColorMode().preference as ThemeEnum;

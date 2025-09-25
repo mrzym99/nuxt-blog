@@ -8,6 +8,5 @@ export default defineNuxtPlugin(({ hook }) => {
     if (isLoggedIn()) {
       await userStore.initUserInfo();
     }
-    userStore.setReady();
   });
 });
