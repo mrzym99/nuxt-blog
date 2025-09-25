@@ -1,5 +1,6 @@
 import { marked, Renderer } from 'marked';
 import hljs from 'highlight.js';
+import { uuid } from '~/utils/tool';
 
 export function useMdRender() {
   let baseRenderer: Renderer | null = null;
@@ -8,7 +9,7 @@ export function useMdRender() {
     baseRenderer = new marked.Renderer();
     (baseRenderer.heading as any) = (text: any) => {
       const { depth, text: textContent } = text;
-      const id = textContent;
+      const id = uuid();
       return `<h${depth} id="${id}">${textContent}</h${depth}>`;
     };
 

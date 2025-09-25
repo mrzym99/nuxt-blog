@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
-import { getUserInfo, postCodeLoginForm, postLogin, postThirdLogin } from '~/api';
+import { getMentionList, getUserInfo, postCodeLoginForm, postLogin, postThirdLogin } from '~/api';
 import type { CodeLoginForm, PwdLoginForm, ThirdRegisterForm } from '~/types/form';
-import type { IArticle, UserDetail } from '~/types/index';
+import type { IArticle, IMentionUser, UserDetail } from '~/types/index';
 import { setToken, removeToken } from '~/utils/auth';
 
 export const useArticleStore = defineStore('blogArticle', {
@@ -27,6 +27,7 @@ export const useArticleStore = defineStore('blogArticle', {
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: null as UserDetail | null,
+    mentionList: [] as Array<IMentionUser>,
     ready: false,
   }),
   getters: {
@@ -38,6 +39,9 @@ export const useUserStore = defineStore('user', {
         getUserInfo()
           .then(res => {
             this.user = res.data;
+            getMentionList().then(res => {
+              this.mentionList = res.data;
+            });
             resolve();
           })
           .catch(() => {

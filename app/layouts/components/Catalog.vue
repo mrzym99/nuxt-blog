@@ -8,7 +8,8 @@
       <nav class="catalog-nav hide-scrollbar">
         <ul>
           <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
-            <a :class="{ active: activeHeading === heading.text }" :href="'#' + heading.text"> {{ heading.text }} </a>
+            <a :class="{ active: activeHeading === heading.text }" href="#"
+              @click.prevent="scrollToHeading(heading.id)"> {{ heading.text }} </a>
           </li>
         </ul>
       </nav>
@@ -24,7 +25,7 @@
           <nav class="catalog-nav">
             <ul>
               <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
-                <a :class="{ active: activeHeading === heading.text }" :href="'#' + heading.text"
+                <a :class="{ active: activeHeading === heading.text }" href="#"
                   @click.prevent="scrollToHeading(heading.id)">
                   {{ heading.text }}
                 </a>
@@ -41,6 +42,7 @@
 import { useDebounceFn } from '@vueuse/core';
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import Drawer from '~/components/Drawer.vue';
+import { HEADER_HEIGHT } from '~/constants';
 import { requestAnimationFrameThrottle } from '~/utils/frame-throttle';
 
 const props = defineProps<{
@@ -57,8 +59,6 @@ const headings = ref<Heading[]>([]);
 const activeHeading = ref<string>();
 const showDrawer = ref(false);
 const route = useRoute();
-const headerSection = ref<HTMLElement>();
-
 // 获取标题样式
 const getHeadingStyle = (level: number): { paddingLeft: string } => {
   return {
@@ -94,7 +94,9 @@ const extractHeadings = () => {
 const scrollToHeading = (id: string) => {
   const element = document.getElementById(id);
   if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
+    const top = element.getBoundingClientRect().top + window.pageYOffset
+    const scrollTop = top - HEADER_HEIGHT
+    window.scrollTo({ top: scrollTop, behavior: 'smooth' });
   }
   showDrawer.value = false;
 };
@@ -104,7 +106,7 @@ const handleScroll = () => {
   const headingElements = getHeadingElements();
   if (!headingElements.length) return
 
-  if (window.scrollY < 80) {
+  if (window.scrollY < 80 + HEADER_HEIGHT) {
     activeHeading.value = ''
     debounceRouterReplace(window.location.pathname + window.location.search)
     return
@@ -116,7 +118,7 @@ const handleScroll = () => {
     if (!headingElement) return;
     const rect = headingElement.getBoundingClientRect();
 
-    if ((rect.top <= 100)) {
+    if ((rect.top <= 100 + HEADER_HEIGHT)) {
       const heading = headings.value.find(item => item.id === headingElement.id);
       debounceRouterReplace(heading?.text)
       activeHeading.value = heading?.text ?? ''

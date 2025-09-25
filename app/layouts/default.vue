@@ -1,9 +1,7 @@
 <template>
   <div class="h-screen w-full">
     <!-- Main Content -->
-    <div class="header-container ">
-      <Header />
-    </div>
+    <Header />
     <div class="main-container">
       <main class="page-main">
         <div class="lt-sm:p-1rem lt-md:p-2rem">

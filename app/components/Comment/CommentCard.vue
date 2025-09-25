@@ -89,7 +89,7 @@ function handleRevokeComment(comment: Comment) {
   .comment-actions {
     display: flex;
     gap: 0.5rem;
-    margin-top: 0.5rem;
+    margin: 0.5rem 0;
   }
 
   .action-btn {

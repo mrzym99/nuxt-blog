@@ -8,7 +8,7 @@ import 'quill-mention/dist/quill.mention.min.css';
 import undo from '@/assets/icons/undo.svg?raw';
 import redo from '@/assets/icons/redo.svg?raw';
 import attachment from '@/assets/icons/attachment.svg?raw';
-import type { IUser } from '~/types';
+import type { IMentionUser, IUser } from '~/types';
 import { uploadImg } from '~/api';
 import FormData from 'form-data';
 import * as Emoji from 'quill2-emoji';
@@ -23,6 +23,7 @@ const props = defineProps<{
   semantic?: boolean;
   readOnly?: boolean;
   placeholder?: string
+  mentions?: IMentionUser[];
 }>();
 
 const emit = defineEmits<{
@@ -95,12 +96,12 @@ const defaultOptions: QuillOptions = {
       mentionDenotationChars: ['@'], // 触发字符
       source(searchTerm: any, renderList: any, mentionChar: any) {
         // 这里可以换成后端接口
-        const users = userList.value.map(u => {
+        const users = (props.mentions ?? []).map(u => {
           return {
             id: u.id,
-            value: u.profile.nickName,
-            avatar: u.profile.avatar,
-            email: u.profile.email,
+            value: u.nickName || u.username,
+            avatar: u.avatar,
+            email: u.email,
           };
         });
         const matches = users.filter(u => u.value.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -409,14 +410,26 @@ defineExpose<{
     }
   }
 
+  :deep(.ql-mention-list-container) {
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+  }
+
   :deep(.ql-mention-list) {
     padding: 4px;
+    max-height: 300px;
+    overflow-y: auto;
   }
 
   :deep(.ql-mention-list-item) {
     padding: 0;
     line-height: normal;
     border-radius: 3px;
+
+    &.selected {
+      background-color: var(--mention-bg-color);
+    }
   }
 
   // mention style
@@ -424,7 +437,7 @@ defineExpose<{
     display: flex;
     padding: 4px 8px;
     border-radius: 3px;
-    align-items: center;
+
 
     .mention-avatar {
       width: 45px;
@@ -463,7 +476,6 @@ defineExpose<{
     }
 
     .mention-email {
-      color: var(--text-color);
       font-size: unset;
       width: 160px;
       overflow: hidden;

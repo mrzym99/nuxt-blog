@@ -1,4 +1,4 @@
-import type { Comment, IPagination, IReply } from '~/types';
+import type { Comment, IMentionUser, IPagination, IReply } from '~/types';
 import type { CommentForm, ReplyForm } from '~/types/form/comment';
 import type { ICommentQuery, IReplyQuery } from '~/types/query';
 import { $http } from '~/utils/request';
@@ -54,4 +54,11 @@ export const postDeleteReply = (id?: number) =>
   $http({
     method: 'delete',
     url: '/blog/comment/deleteReply/' + id,
+  });
+
+// 获取 mention 用户
+export const getMentionList = (nickName: string = '') =>
+  $http<Array<IMentionUser>>({
+    method: 'get',
+    url: '/blog/comment/mentionList/' + nickName,
   });

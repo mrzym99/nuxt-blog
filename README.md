@@ -20,9 +20,4 @@ pnpm preview
 # TODO
 code refactor
 
-接口 类型问题、文件里有类型的需要提出来
-
 -- 留言板
-mention
-
-移动端菜单

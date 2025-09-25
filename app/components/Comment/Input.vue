@@ -2,7 +2,7 @@
   <div class="comment-input-container">
     <ClientOnly>
       <Editor class="comment-input" v-model="content" :toolbar-container="options" :placeholder="placeholder ?? '请输入'"
-        :read-only="!user" @focus="focus" @blur="blur" :height="editorHeight" />
+        :read-only="!user" :mentions="mentionList" @focus="focus" @blur="blur" :height="editorHeight" />
     </ClientOnly>
     <div class="footer">
       <slot name="footer"></slot>
@@ -27,7 +27,7 @@ const options = [
 
 const content = defineModel<string>();
 
-const { user } = storeToRefs(useUserStore());
+const { user, mentionList } = storeToRefs(useUserStore());
 const hasFocus = ref(false);
 
 const editorHeight = computed(() => {

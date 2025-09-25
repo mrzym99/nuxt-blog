@@ -12,6 +12,8 @@ export const TOAST_DURATION = 2000;
 
 export const TOAST_TOP = 36;
 
+export const HEADER_HEIGHT = 54;
+
 export const ARTICLE_HEADER_ID = 'blogArticleHeader';
 
 export const ARTICLE_CONTENT_ID = 'blogArticleContent';
