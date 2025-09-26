@@ -35,6 +35,9 @@ importers:
       '@vueuse/core':
         specifier: ^13.7.0
         version: 13.7.0(vue@3.5.19(typescript@5.9.2))
+      dayjs:
+        specifier: ^1.11.18
+        version: 1.11.18
       form-data:
         specifier: ^4.0.4
         version: 4.0.4
@@ -2351,6 +2354,9 @@ packages:
   data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
+
+  dayjs@1.11.18:
+    resolution: {integrity: sha512-zFBQ7WFRvVRhKcWoUh+ZA1g2HVgUbsZm9sbddh8EC5iv93sui8DVVz1Npvz+r6meo9VKfa8NyLWBsQK1VvIKPA==}
 
   db0@0.3.2:
     resolution: {integrity: sha512-xzWNQ6jk/+NtdfLyXEipbX55dmDSeteLFt/ayF+wZUU5bzKgmrDOxmInUTbyVRp46YwnJdkDA1KhB7WIXFofJw==}
@@ -7620,6 +7626,8 @@ snapshots:
   dargs@8.1.0: {}
 
   data-uri-to-buffer@4.0.1: {}
+
+  dayjs@1.11.18: {}
 
   db0@0.3.2: {}
 

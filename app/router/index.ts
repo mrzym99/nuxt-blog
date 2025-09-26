@@ -22,12 +22,12 @@ export const menuList: Menu[] = [
     icon: 'ph:archive-light',
     type: MenuTypeEnum.MENU,
   },
-  {
-    name: '留言',
-    path: '',
-    icon: 'ph:chat-circle-text-light',
-    type: MenuTypeEnum.MENU,
-  },
+  // {
+  //   name: '留言',
+  //   path: '',
+  //   icon: 'ph:chat-circle-text-light',
+  //   type: MenuTypeEnum.MENU,
+  // },
   {
     name: '关于',
     path: '/about',

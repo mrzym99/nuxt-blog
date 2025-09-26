@@ -67,10 +67,11 @@ const getHeadingStyle = (level: number): { paddingLeft: string } => {
 };
 
 function getHeadingElements() {
+  if(!document) return [];
   const content = document.querySelector('.article-body');
   if (!content) return [];
 
-  return content.querySelectorAll('h1, h2, h3, h4, h5, h6')
+  return content.querySelectorAll('h1, h2, h3, h4, h5, h6') 
 }
 // 提取标题
 const extractHeadings = () => {
@@ -196,7 +197,7 @@ onUnmounted(() => {
         padding: 0.25rem 0;
         text-decoration: none;
         font-size: 0.875rem;
-        color: var(--text-light-color);
+        color: var(--text-color);
 
         @include hover-effect() {
           color: var(--primary-color);

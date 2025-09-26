@@ -26,8 +26,9 @@ const back = () => {
   transition: all 0.2s;
 
   &:hover {
-    background-color: var(--text-color);
-    color: var(--bg-color);
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-color: transparent;
   }
 }
 </style>

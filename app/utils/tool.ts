@@ -1,6 +1,8 @@
+import dayjs from 'dayjs';
+
 // 格式化日期
 export const formatDate = (time?: Date | null) => {
-  return time && new Date(time).toLocaleDateString();
+  return time && dayjs(time).format('M/D/YYYY');
 };
 
 // 格式统计信息数字
