@@ -27,7 +27,11 @@ export const nuxtHead: NuxtAppConfig['head'] = {
       content: 'index, follow',
     },
   ],
-  link: [{
-    rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'
-  },]
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: './favicon.ico',
+    },
+  ],
 };
