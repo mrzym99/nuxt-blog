@@ -10,7 +10,7 @@
             <slot name="header">
               <div class="modal-title">{{ title }}</div>
             </slot>
-            <button class="close-btn" @click="handleClose">
+            <button class="close-primary-button" @click="handleClose">
               <Icon name="ph:x" size="2rem" />
             </button>
           </div>
@@ -149,7 +149,7 @@ watch(() => modelValue.value, () => {
       color: var(--text-color);
     }
 
-    .close-btn {
+    .close-primary-button {
       cursor: pointer;
       transition: all $duration;
       color: var(--text-light-color);

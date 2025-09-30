@@ -113,7 +113,7 @@ const handleReset = () => {
       min-height: 20px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      transition: border-color 0.3s;
+      transition: border-color $duration;
       background-color: var(--bg-color);
     }
   }

@@ -10,17 +10,33 @@
       </span>
       <span class="time">{{ diffNowWord(reply?.createdAt) }}</span>
     </div>
-    <div class="reply-text">
-      <Content :content="reply.content" :id="'r' + reply.id" />
-    </div>
+    <Content v-if="!isEdit" :content="reply.content" :id="'r' + reply.id" />
+    <CommentInput v-else v-model="content" :auto-focus="true">
+      <template #footer>
+        <div class="form-actions w-full">
+          <button class="action-button cancel" @click="handleCancelEdit">取消</button>
+          <button class="submit-button" :disabled="!comment.content.trim()" @click="handleSubmitEdit">
+            保存
+          </button>
+        </div>
+      </template>
+    </CommentInput>
     <div class="reply-actions">
-      <button class="action-btn" style="color: var(--primary-color);" @click="handleReply(comment, reply)">回复</button>
-      <button v-if="user?.id === reply.reply?.id" class="action-btn cancel" @click="handleRevokeReply(comment, reply)">
+      <button class="action-button" style="color: var(--primary-color);"
+        @click="handleReply(comment, reply)">回复</button>
+      <button v-if="user?.id === reply.reply?.id" class="action-button" @click="handleEditReply(reply)">
+        编辑
+        <span v-if="reply.updatedAt !== reply.createdAt" class="text-[12px] cancel">（{{
+          diffNowWord(reply.updatedAt)
+        }}）</span>
+      </button>
+      <button v-if="user?.id === reply.reply?.id" class="action-button cancel"
+        @click="handleRevokeReply(comment, reply)">
         撤回
       </button>
       <button :class="{
         like: reply.isLike,
-      }" class="action-btn" @click="handleLikeReply(reply)">
+      }" class="action-button" @click="handleLikeReply(reply)">
         <Icon name="ph:thumbs-up-duotone" class="size-1rem mr-1" />
         {{ reply.likeCount ? reply.likeCount : '' }}
       </button>
@@ -37,19 +53,17 @@ const props = defineProps<{
   comment: Comment;
   reply: IReply;
   user: UserDetail | null
-}
-
->();
+}>();
 
 const emit = defineEmits<{
   (e: 'reply', comment: Comment, reply?: IReply): void;
   (e: 'like', reply: IReply): void;
   (e: 'revoke', comment: Comment, reply: IReply): void;
-}
+  (e: 'edit', content: string): void;
+}>();
 
->();
-
-
+const isEdit = ref(false);
+const content = ref('');
 
 function handleReply(comment: Comment, reply: IReply) {
   emit('reply', comment, reply);
@@ -61,6 +75,21 @@ function handleLikeReply(reply: IReply) {
 
 function handleRevokeReply(comment: Comment, reply: IReply) {
   emit('revoke', comment, reply);
+}
+
+function handleEditReply(reply: IReply) {
+  content.value = reply.content;
+  isEdit.value = true;
+}
+
+function handleCancelEdit() {
+  isEdit.value = false;
+}
+
+function handleSubmitEdit() {
+  emit('edit', content.value);
+  content.value = '';
+  isEdit.value = false;
 }
 </script>
 
@@ -75,6 +104,11 @@ function handleRevokeReply(comment: Comment, reply: IReply) {
     margin-bottom: 0.5rem;
   }
 
+  .username {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
 
   .reply-to {
     font-size: 0.8rem;
@@ -86,33 +120,10 @@ function handleRevokeReply(comment: Comment, reply: IReply) {
     }
   }
 
-  .reply-text {
-    color: var(--text-color);
-  }
-
   .reply-actions {
     display: flex;
     margin-top: 0.5rem;
     gap: 0.8rem;
-
-    .action-btn {
-      display: flex;
-      align-items: center;
-      padding: 0;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 0.8rem;
-      color: var(--text-light-color);
-
-      &:hover {
-        color: var(--primary-color);
-      }
-    }
   }
-}
-
-.cancel {
-  color: var(--disabled-color);
 }
 </style>

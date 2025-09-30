@@ -24,7 +24,7 @@ export const menuList: Menu[] = [
   },
   // {
   //   name: '留言',
-  //   path: '',
+  //   path: '/message/all',
   //   icon: 'ph:chat-circle-text-light',
   //   type: MenuTypeEnum.MENU,
   // },

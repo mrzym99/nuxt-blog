@@ -5,7 +5,7 @@
       <p class="text-xl mb-8">
         <slot> 页面未找到 </slot>
       </p>
-      <NuxtLink to="/" class="btn-primary"> 返回首页 </NuxtLink>
+      <NuxtLink to="/" class="button-primary"> 返回首页 </NuxtLink>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@
     @apply text-center;
   }
 
-  .btn-primary {
+  .button-primary {
     @apply px-6 py-2 rounded-lg transition-colors duration-200;
     background-color: var(--primary-color);
     color: var(--nav-text-color);

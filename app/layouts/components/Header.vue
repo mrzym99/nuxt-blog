@@ -120,11 +120,11 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .header-down {
-  animation: down 0.3s ease-in-out forwards;
+  animation: down $duration ease-in-out forwards;
 }
 
 .header-up {
-  animation: up 0.3s ease-in-out forwards;
+  animation: up $duration ease-in-out forwards;
 }
 
 @keyframes down {

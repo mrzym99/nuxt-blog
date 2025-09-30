@@ -1,5 +1,5 @@
 <template>
-  <button class="btn" type="submit" :disabled="loading || disabled">
+  <button type="submit" :disabled="loading || disabled">
     <slot></slot>
     <Icon class="ml-2" v-if="loading" name="svg-spinners:90-ring-with-bg" size="1.2rem"></Icon>
   </button>
@@ -21,6 +21,7 @@ button {
   align-items: center;
   background-color: var(--primary-color);
   color: var(--nav-text-color);
+  transition: all $duration ease-in-out;
 
   &:disabled {
     cursor: not-allowed;

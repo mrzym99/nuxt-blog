@@ -1,3 +1,5 @@
+@use '_variables' as *;
+
 // 渐显动画 fade-in
 .fade-in-enter-active {
   transition: opacity 0.2s ease;
@@ -10,7 +12,7 @@
 // 渐显渐隐动画 fade
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity $duration ease-in-out;
 }
 
 .fade-enter-from,
@@ -21,7 +23,7 @@
 // 缩放动画
 .zoom-enter-active,
 .zoom-leave-active {
-  transition: all 0.3s ease-in-out;
+  transition: all $duration ease-in-out;
 }
 
 .zoom-enter-from,
@@ -35,7 +37,7 @@
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: transform 0.3s ease-in-out;
+  transition: transform $duration ease-in-out;
 }
 
 .slide-left-enter-from,

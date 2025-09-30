@@ -14,8 +14,9 @@
 <script lang="ts" setup>
 import { useUserStore } from '~/store';
 
-defineProps<{
-  placeholder: string;
+const props = defineProps<{
+  placeholder?: string;
+  autoFocus?: boolean;
 }>();
 
 const options = [
@@ -28,10 +29,10 @@ const options = [
 const content = defineModel<string>();
 
 const { user, mentionList } = storeToRefs(useUserStore());
-const hasFocus = ref(false);
+const hasFocus = ref(props.autoFocus ?? false);
 
 const editorHeight = computed(() => {
-  return user.value && hasFocus.value ? '120px' : '60px';
+  return user.value && hasFocus.value ? '150px' : '60px';
 });
 
 function focus() {

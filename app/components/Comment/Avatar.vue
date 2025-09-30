@@ -53,7 +53,7 @@ function formate(size: string | number) {
   width: 100%;
   height: 100%;
   border-radius: 100%;
-  transition: all 0.3s ease;
+  transition: all $duration ease;
   color: var(--nav-text-color) !important;
   background-color: var(--primary-color);
 

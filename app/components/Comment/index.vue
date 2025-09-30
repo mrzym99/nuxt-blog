@@ -10,7 +10,7 @@
             <CommentInput v-model="commentContent" :placeholder="user?.id ? '请输入' : '先登录才能愉快的评论哦'">
               <template #footer>
                 <div class="form-actions">
-                  <button class="submit-btn" :disabled="!commentContent.trim()" @click="handleSubmit">
+                  <button class="submit-button" :disabled="!commentContent.trim()" @click="handleSubmit">
                     发表评论
                   </button>
                 </div>
@@ -32,7 +32,7 @@
             </div>
             <div class="comment-content">
               <CommentCard :comment="comment" :user="user" @reply="handleReply" @revoke="handleRevokeComment"
-                @like="handleLikeComment" />
+                @like="handleLikeComment" @edit="(val) => handleEditComment(comment, val)" />
               <!-- comment 回复框 -->
               <transition name="fade-in">
                 <div v-if="replyTo && !replyTo.id && replyTo.parent.id === comment.id" class="comment-form">
@@ -40,8 +40,8 @@
                     :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'">
                     <template #footer>
                       <div class="form-actions w-full">
-                        <button class="cancel-btn" @click="cancelReply">取消</button>
-                        <button class="submit-btn" :disabled="!replyContent.trim()" @click="handleSubmit">
+                        <button class="action-button cancel" @click="cancelReply">取消</button>
+                        <button class="submit-button" :disabled="!replyContent.trim()" @click="handleSubmit">
                           回复
                         </button>
                       </div>
@@ -61,7 +61,8 @@
                         :avatar="reply.reply?.profile.avatar" :size="32" />
                       <div class="reply-content">
                         <ReplyCard :comment="comment" :reply="reply" :user="user" @reply="handleReply"
-                          @revoke="handleRevokeReply" @like="handleLikeReply" />
+                          @revoke="handleRevokeReply" @like="handleLikeReply"
+                          @edit="(val) => handleEditReply(reply, val)" />
                         <!-- reply 回复框 -->
                         <transition name="fade-in">
                           <div v-if="replyTo && replyTo.id === reply.id" class="comment-form">
@@ -69,8 +70,8 @@
                               :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'">
                               <template #footer>
                                 <div class="form-actions w-full">
-                                  <button class="cancel-btn" @click="cancelReply">取消</button>
-                                  <button class="submit-btn" :disabled="!replyContent.trim()" @click="handleSubmit">
+                                  <button class="action-button cancel" @click="cancelReply">取消</button>
+                                  <button class="submit-button" :disabled="!replyContent.trim()" @click="handleSubmit">
                                     回复
                                   </button>
                                 </div>
@@ -130,6 +131,8 @@ import {
   postDeleteComment,
   postDeleteReply,
   getCommentIdByReplyId,
+  putUpdateComment,
+  putUpdateReply
 } from '~/api/comment';
 import { postCancelLike, postLike } from '~/api';
 
@@ -167,6 +170,8 @@ const PAGE_SIZE = 5;
 const commentLoading = ref(false);
 const commentOrder = ref<CommentOrderEnum>(CommentOrderEnum.LATEST);
 const comments = ref<Array<Comment>>([]);
+const tries = ref(0);
+const MAX_TRIES = 10;
 
 // 处理评论提交
 const handleSubmit = (event: Event) => {
@@ -271,6 +276,22 @@ const handleLikeComment = (comment: Comment) => {
   }
 };
 
+const handleEditComment = (comment: Comment, content: string) => {
+  putUpdateComment(comment.id, content).then(() => {
+    comment.content = content;
+    comment.updatedAt = new Date();
+    $toast.success('保存成功');
+  });
+};
+
+const handleEditReply = (reply: IReply, content: string) => {
+  putUpdateComment(reply.id, content).then(() => {
+    reply.content = content;
+    reply.updatedAt = new Date();
+    $toast.success('保存成功');
+  });
+};
+
 // 处理点赞
 const handleLikeReply = (comment: IReply) => {
   if (comment.isLike) {
@@ -309,17 +330,18 @@ async function loadMoreReplies(parent: Comment, targetId?: number) {
     pageSize: PAGE_SIZE,
   });
 
-  const { list, total } = res.data;
+  const { list } = res.data;
   parent.fold = false;
   parent.loading = false;
   parent.replies = parent.replies && parent.replies.length ? parent.replies.concat([...list]) : list;
 
-  if (targetId) {
+  if (targetId && tries.value < MAX_TRIES) {
+    tries.value += 1
     const targetReply = list.find(l => l.id === targetId)
     if (targetReply) {
       setTimeout(() => {
         navigateToTarget('reply' + routerReplyId.value);
-      }, 1000)
+      }, 500)
     } else {
       await loadMoreReplies(parent, targetId)
     }
@@ -372,7 +394,8 @@ async function getCommentList(commentId?: number) {
   commentTotal.value = total - 0;
   commentLoading.value = false;
 
-  if (commentId) {
+  if (commentId && tries.value < MAX_TRIES) {
+    tries.value += 1
     const targetComment = comments.value.find(item => item.id === commentId)
     if (!targetComment) {
       if (comments.value.length < commentTotal.value) {
@@ -391,7 +414,7 @@ async function getCommentList(commentId?: number) {
       } else {
         setTimeout(() => {
           navigateToTarget('comment' + commentId);
-        }, 1000);
+        }, 500);
       }
     }
   }
@@ -482,7 +505,7 @@ onMounted(async () => {
 
   .fold {
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color $duration ease;
     font-size: 14px;
     font-size: 0.8rem;
     color: var(--primary-color);
@@ -498,8 +521,6 @@ onMounted(async () => {
   display: flex;
   justify-content: center;
 }
-
-
 
 .comment-content {
   flex: 1;
@@ -526,16 +547,6 @@ onMounted(async () => {
   flex: 1;
 }
 
-.cancel-btn {
-  display: flex;
-  align-items: center;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 0.8rem;
-  color: var(--disabled-color);
-}
-
 .comment-form {
   margin-bottom: 0.5rem;
   border-radius: 0.5rem;
@@ -547,38 +558,10 @@ onMounted(async () => {
 
 }
 
-.form-actions {
-  display: flex;
-  height: 30px;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.8rem;
-}
-
-.submit-btn {
-  font-size: 0.8rem;
-  padding: 1px 8px;
-  border-radius: 0.2rem;
-  border: none;
-  cursor: pointer;
-
-  background-color: var(--primary-color);
-  color: white;
-
-  &:disabled {
-    background-color: var(--border-color);
-    cursor: not-allowed;
-  }
-
-  &:hover:not(:disabled) {
-    opacity: 0.9;
-  }
-}
-
 .more {
   text-align: center;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color $duration ease;
   margin: 0.3em 0;
   font-size: 16px;
   height: 20px;

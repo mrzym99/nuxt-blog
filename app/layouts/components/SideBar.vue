@@ -115,7 +115,7 @@ const { data: bloggerInfo } = await useAsyncData('bloggerInfo', async () => {
   padding: 0.2rem;
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  transition: all 0.3s ease-in-out;
+  transition: all $duration ease-in-out;
 
   &:hover {
     background-color: var(--primary-color);

@@ -85,7 +85,7 @@ const setTheme = (theme: ThemeEnum) => {
     gap: 0.5rem;
     border-radius: 0.3rem;
     padding: 0.3rem;
-    transition: all 0.3s;
+    transition: all $duration;
 
     &:hover {
       color: var(--white-color);

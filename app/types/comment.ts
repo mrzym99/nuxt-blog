@@ -10,17 +10,6 @@ export interface IMentionUser {
   email?: string;
 }
 
-// 类型定义
-export interface IComment extends baseModel {
-  type: CommentTypeEnum;
-  targetId: Number;
-  content: string;
-  likeCount: number;
-  commenter: IUser;
-  replies: IReply[];
-  isLike: boolean;
-}
-
 export interface IReply extends baseModel {
   parentId: number;
   content: string;

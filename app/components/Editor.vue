@@ -49,7 +49,7 @@ const userList = ref<IUser[]>([]);
 
 const editorStyle = computed(() => {
   return {
-    transition: 'height 0.3s ease',
+    transition: 'height 300ms ease',
     height: typeof props.height === 'number' ? `${props.height}px` : props.height,
   };
 });

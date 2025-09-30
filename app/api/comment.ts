@@ -62,3 +62,21 @@ export const getMentionList = (nickName: string = '') =>
     method: 'get',
     url: '/blog/comment/mentionList/' + nickName,
   });
+
+export const putUpdateComment = (id: number, content: string = '') =>
+  $http<Array<IMentionUser>>({
+    method: 'put',
+    url: '/blog/comment/update/comment/' + id,
+    data: {
+      content,
+    },
+  });
+
+export const putUpdateReply = (id: number, content: string = '') =>
+  $http<Array<IMentionUser>>({
+    method: 'put',
+    url: '/blog/comment/update/reply/' + id,
+    data: {
+      content,
+    },
+  });

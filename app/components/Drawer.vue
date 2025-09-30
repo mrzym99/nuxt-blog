@@ -9,7 +9,7 @@
           <slot name="header">
             <div class="drawer-title">{{ title }}</div>
           </slot>
-          <button class="close-btn flex items-center justify-center" @click="handleClose">
+          <button class="close-primary-button flex items-center justify-center" @click="handleClose">
             <Icon name="ph:x" size="1.5rem" />
           </button>
         </div>
@@ -84,7 +84,7 @@ const handleClose = () => {
   top: 0;
   bottom: 0;
   z-index: $z-index-modal;
-  transition: transform 0.3s ease-in-out;
+  transition: transform $duration ease-in-out;
   background-color: var(--bg-color);
   border: 1px solid var(--border-color);
 
@@ -110,7 +110,7 @@ const handleClose = () => {
       color: var(--text-color);
     }
 
-    .close-btn {
+    .close-primary-button {
       padding: 0.25rem;
       border: none;
       background: none;
@@ -136,6 +136,4 @@ const handleClose = () => {
     overflow-y: auto;
   }
 }
-
-
 </style>
