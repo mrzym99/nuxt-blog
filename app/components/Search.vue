@@ -31,7 +31,7 @@
               </div>
             </div>
             <div v-else class="empty">
-              试试搜索其他内容吧。。。
+              试试搜索其他内容吧...
             </div>
           </template>
         </div>
