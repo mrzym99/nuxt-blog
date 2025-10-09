@@ -92,7 +92,7 @@ const handleFileSelect = async (e: Event) => {
   @apply flex flex-col items-center;
 
   .avatar-preview {
-    @apply w-[5rem] h-[5rem] rounded-full bg-gray-100 bg-cover bg-center cursor-pointer border-2 border-solid border-gray-300 relative overflow-hidden;
+    @apply w-[4.5rem] h-[4.5rem] rounded-full bg-gray-100 bg-cover bg-center cursor-pointer border-2 border-solid border-gray-300 relative overflow-hidden;
 
     .edit-overlay {
       @apply absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 transition-opacity;

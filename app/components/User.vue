@@ -9,7 +9,7 @@
         </template>
         <div class="panel">
           <button v-for="item in menuList" :key="item.label" class="item" @click="item.click">
-            <Icon :name="item.icon" size="1.5rem" />
+            <ClientIcon :icon="item.icon" size="1.5rem" />
             <span class="name">{{ item.label }}</span>
           </button>
         </div>
@@ -60,6 +60,9 @@ function logout() {
 <style lang="scss" scoped>
 .avatar {
   border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .panel {

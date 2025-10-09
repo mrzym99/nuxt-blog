@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="headings.length">
     <!-- PC 端目录 -->
     <div class="catalog-pc ">
       <div class="catalog-header">
@@ -44,6 +44,7 @@ import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import Drawer from '~/components/Drawer.vue';
 import { HEADER_HEIGHT } from '~/constants';
 import { requestAnimationFrameThrottle } from '~/utils/frame-throttle';
+import { useArticleStore } from '~/store';
 
 const props = defineProps<{
   articleId: number;
@@ -59,6 +60,7 @@ const headings = ref<Heading[]>([]);
 const activeHeading = ref<string>();
 const showDrawer = ref(false);
 const route = useRoute();
+const articleStore = useArticleStore();
 // 获取标题样式
 const getHeadingStyle = (level: number): { paddingLeft: string } => {
   return {
@@ -67,11 +69,11 @@ const getHeadingStyle = (level: number): { paddingLeft: string } => {
 };
 
 function getHeadingElements() {
-  if(!document) return [];
+  if (!document) return [];
   const content = document.querySelector('.article-body');
   if (!content) return [];
 
-  return content.querySelectorAll('h1, h2, h3, h4, h5, h6') 
+  return content.querySelectorAll('h1, h2, h3, h4, h5, h6')
 }
 // 提取标题
 const extractHeadings = () => {
@@ -82,6 +84,8 @@ const extractHeadings = () => {
     text: heading.textContent || '',
     level: parseInt(heading.tagName[1] || '1'),
   }))
+
+  articleStore.setHasCatalog(headings.value.length > 0);
 
   const hash = route.hash.slice(1);
   if (hash) {

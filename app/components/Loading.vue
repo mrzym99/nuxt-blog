@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="loading" class="loading-container min-h-50rem">
+    <div v-if="loading" class="loading-container min-h-20rem">
       <slot name="loading">
         <div class="loading-spinner">
           <div class="spinner"></div>

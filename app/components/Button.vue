@@ -14,6 +14,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 button {
+  width: 100%;
   min-height: 46px;
   padding: 10px;
   display: flex;

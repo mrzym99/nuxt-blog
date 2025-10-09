@@ -8,11 +8,13 @@ export const useArticleStore = defineStore('blogArticle', {
   state: () => ({
     currentArticle: null as IArticle | null,
     refresh: false as boolean,
+    hasCatalogue: false as boolean,
   }),
   getters: {
     getCurrentArticle: state => state.currentArticle,
     getArticleHasCover: state => state.currentArticle?.cover,
     getRefresh: state => state.refresh,
+    getHasCatalog: state => state.hasCatalogue,
   },
   actions: {
     setCurrentArticle(article: IArticle) {
@@ -20,6 +22,9 @@ export const useArticleStore = defineStore('blogArticle', {
     },
     setRefresh(refresh: boolean) {
       this.refresh = refresh;
+    },
+    setHasCatalog(hasCatalogue: boolean) {
+      this.hasCatalogue = hasCatalogue;
     },
   },
 });

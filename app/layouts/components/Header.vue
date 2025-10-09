@@ -53,10 +53,10 @@ const toggleDrawer = () => {
 };
 
 const allMenus = computed(() => {
-  return menuList.concat(user.value?.id ? [...additionalMenuList] : [])
+  return menuList.concat(user.value?.id ? [...additionalMenuList.value] : [])
 });
 
-const additionalMenuList: Menu[] = [
+const additionalMenuList = computed(() => [
   {
     name: '个人中心',
     icon: 'ph:user-circle',
@@ -76,8 +76,7 @@ const additionalMenuList: Menu[] = [
     action: logout,
     type: MenuTypeEnum.BUTTON,
   },
-];
-
+])
 
 function logout() {
   useUserStore().logout();

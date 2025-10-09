@@ -1,13 +1,13 @@
 <template>
   <aside class="sidebar hide-scrollbar w-52 lt-md:w-full">
-    <div class="lt-md:hidden" v-show="!showCateLog">
+    <div class="lt-md:hidden" v-show="!showCateLog || !getHasCatalog">
       <!-- Profile Card -->
       <div class="blog-card !pt-0">
         <div class="profile">
           <div class="flex items-center gap-2 mb-4">
             <div class="avatar">
               <NuxtLink :to="`/user-center/${bloggerInfo?.id}`">
-                <img :src="bloggerInfo?.profile.avatar" alt="blogger" />
+                <img :src="bloggerInfo?.profile.avatar" />
               </NuxtLink>
             </div>
             <span class="text-xl">{{ bloggerInfo?.profile.nickName }}</span>
@@ -87,7 +87,9 @@ import Catalog from '~/layouts/components/Catalog.vue';
 import { useArticleStore } from '~/store';
 import { ArticleContentEnum } from '~/enum';
 
+const { getCurrentArticle, getHasCatalog } = storeToRefs(useArticleStore());
 const route = useRoute();
+
 const showCateLog = computed(() => {
   return (
     route.path.includes('/posts') &&
@@ -96,7 +98,6 @@ const showCateLog = computed(() => {
   );
 });
 
-const { getCurrentArticle } = storeToRefs(useArticleStore());
 
 const { data: username } = await useAsyncData('username', async () => {
   const res = await getParameter('blogger');

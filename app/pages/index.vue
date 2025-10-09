@@ -1,45 +1,43 @@
 <template>
   <!-- Blog Posts -->
-  <Loading :loading="pending">
-    <main class="post-container relative w-full" :key="refreshKey">
-      <transition-group name="list">
-        <article v-for="post in posts" :key="post.id" class="blog-post">
-          <div class="flex flex-col gap-1">
-            <div class="flex">
-              <NuxtLink class="blog-info" :to="post.slug">
-                <h3 class="post-title">
-                  {{ post.title }}
-                </h3>
-              </NuxtLink>
-              <span class="ml-1rem post-meta">{{ post.createdAt &&
-                formatDate(post.createdAt) }}</span>
-            </div>
-            <span @click="toArticle(post.id)" v-if="post.description" class="post-description"
-              :title="post.description">{{ post.description
-              }}</span>
-            <div class="post-meta flex items-center justify-between">
-              <span>
-                Posted by {{ post.author?.profile.nickName }}
-              </span>
-              <div class="flex items-center">
-                <Icon v-if="post.likeCount" name="ph:thumbs-up-duotone" class="mr-1" />
-                {{ formatNumber(post.likeCount) }}
-                <span v-if="post.likeCount && post.viewCount" class="mx-2">·</span>
-                <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
-                {{ formatNumber(post.viewCount) }}
-              </div>
-
-            </div>
+  <main class="post-container relative w-full" :key="refreshKey">
+    <transition-group name="list">
+      <article v-for="post in posts" :key="post.id" class="blog-post">
+        <div class="flex flex-col gap-1">
+          <div class="flex">
+            <NuxtLink class="blog-info" :to="post.slug">
+              <h3 class="post-title">
+                {{ post.title }}
+              </h3>
+            </NuxtLink>
+            <span class="ml-1rem post-meta">{{ post.createdAt &&
+              formatDate(post.createdAt) }}</span>
           </div>
-        </article>
-      </transition-group>
-      <div ref="target" class="h-1rem mt-4">
-        <div v-show="loading" class="text-center loading">
-          <Icon name="eos-icons:bubble-loading" size="1.6rem" />
+          <span @click="toArticle(post.id)" v-if="post.description" class="post-description"
+            :title="post.description">{{ post.description
+            }}</span>
+          <div class="post-meta flex items-center justify-between">
+            <span>
+              Posted by {{ post.author?.profile.nickName }}
+            </span>
+            <div class="flex items-center">
+              <Icon v-if="post.likeCount" name="ph:thumbs-up-duotone" class="mr-1" />
+              {{ formatNumber(post.likeCount) }}
+              <span v-if="post.likeCount && post.viewCount" class="mx-2">·</span>
+              <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
+              {{ formatNumber(post.viewCount) }}
+            </div>
+
+          </div>
         </div>
+      </article>
+    </transition-group>
+    <div ref="target" class="h-1rem mt-4">
+      <div v-show="loading" class="text-center loading">
+        <Icon name="eos-icons:bubble-loading" size="1.6rem" />
       </div>
-    </main>
-  </Loading>
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -73,7 +71,7 @@ const toArticle = (id: number) => {
 };
 
 // 使用 useAsyncData 安全获取数据
-const { data, pending } = await useAsyncData('home-posts', async () => {
+const { data } = await useAsyncData('home-posts', async () => {
   const res = await getArticleList({
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
@@ -140,7 +138,7 @@ function infiniteScroll() {
     target,
     ([entry]) => {
       if (entry && entry.isIntersecting) {
-        if (posts.value.length < data.value!.total) {
+        if (posts.value.length < (data.value?.total ?? 0)) {
           loadMore();
         } else {
           stop();

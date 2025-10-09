@@ -5,10 +5,15 @@
       <main class="flex-1 block relative">
         <div class="w-full">
           <Tab class="mb-4" v-model="currentTab" :options="tabOptions" @change="toggleTab" />
-          <div class="min-h-60vh">
-            <UpdateProfile :profile="userInfo?.profile" v-if="currentTab === 'info'" @success="updateProfileSuccess" />
-            <UpdatePwd v-if="currentTab === 'pwd'" />
-          </div>
+          <Loading :loading="loading">
+            <div class="min-h-60vh">
+              <transition-group name="fade-in">
+                <UpdateProfile key="info" :profile="userInfo?.profile" v-if="currentTab === 'info'"
+                  @success="updateProfileSuccess" />
+                <UpdatePwd key="pwd" v-if="currentTab === 'pwd'" />
+              </transition-group>
+            </div>
+          </Loading>
         </div>
       </main>
     </div>
@@ -16,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
 import { getBlogUserInfo } from '~/api/config';
 import type { IUser } from '~/types';
 import UpdatePwd from './modules/update-pwd.vue';
@@ -31,8 +35,8 @@ defineOptions({
 
 const userInfo = ref<IUser>();
 const { user } = storeToRefs(useUserStore());
+const loading = ref(true);
 
-const route = useRoute();
 const router = useRouter();
 const currentTab = ref('info');
 const isEdit = ref(false);
@@ -46,8 +50,12 @@ const toggleTab = (tab: string) => {
 };
 
 function initUserInfo() {
+  if (!user.value?.id) return
   getBlogUserInfo(user.value?.id).then(res => {
     userInfo.value = res.data;
+    loading.value = false;
+  }).catch(() => {
+    loading.value = false;
   });
 }
 
@@ -59,9 +67,7 @@ function updateProfileSuccess() {
 watch(
   () => user.value,
   () => {
-    if (!user.value) {
-      router.push('/');
-    }
+    initUserInfo();
   },
   {
     immediate: true,
@@ -70,7 +76,9 @@ watch(
 );
 
 onMounted(() => {
-  initUserInfo();
+  if (!isLoggedIn()) {
+    router.push('/');
+  }
 });
 </script>
 

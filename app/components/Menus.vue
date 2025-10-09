@@ -4,15 +4,15 @@
       <NuxtLink v-if="!item.type || item.type === MenuTypeEnum.MENU" :class="{
         active: route.path === item.path,
       }" :to="item.path" :key="item.path" @click="menuClick(item)">
-        <Icon :name="item.icon" size="1.2rem" />
+        <ClientIcon :icon="item.icon" size="1.2rem" />
         {{ item.name }}
       </NuxtLink>
       <a v-else-if="item.type === MenuTypeEnum.LINK" :href="item.path" target="_blank" rel="noopener noreferrer">
-        <Icon :name="item.icon" size="1.2rem" />
+        <ClientIcon :icon="item.icon" size="1.2rem" />
         {{ item.name }}
       </a>
       <a href="" v-else-if="item.type === MenuTypeEnum.BUTTON" @click="item.action?.(item)">
-        <Icon :name="item.icon" size="1.2rem" />
+        <ClientIcon :icon="item.icon" size="1.2rem" />
         {{ item.name }}
       </a>
     </div>

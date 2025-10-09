@@ -6,7 +6,9 @@
         个人中心
       </div>
       <main class="flex-1 block relative">
-        <UserInfo :user-info="userInfo" />
+        <Loading :loading="loading">
+          <UserInfo :user-info="userInfo" />
+        </Loading>
       </main>
     </div>
   </div>
@@ -16,8 +18,6 @@
 import { useRoute } from 'vue-router';
 import { getBlogUserInfo } from '~/api/config';
 import type { IUser } from '~/types';
-import { useUserStore } from '~/store';
-import { storeToRefs } from 'pinia';
 import { isLoggedIn } from '~/utils/auth';
 import UserInfo from './modules/user-info.vue';
 
@@ -27,15 +27,17 @@ defineOptions({
 });
 
 const userInfo = ref<IUser>();
-const { user } = storeToRefs(useUserStore());
-
 const route = useRoute();
 const router = useRouter();
 const id = route.params.id as unknown as number;
+const loading = ref(true);
 
 function initUserInfo() {
   getBlogUserInfo(id).then(res => {
     userInfo.value = res.data;
+    loading.value = false;
+  }).catch(() => {
+    loading.value = false;
   });
 }
 

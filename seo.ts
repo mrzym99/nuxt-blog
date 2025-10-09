@@ -2,6 +2,7 @@ import type { NuxtAppConfig } from 'nuxt/schema';
 
 export const nuxtHead: NuxtAppConfig['head'] = {
   title: import.meta.env.VITE_APP_NAME,
+  link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   meta: [
     { charset: 'utf-8' },
     {
@@ -25,13 +26,6 @@ export const nuxtHead: NuxtAppConfig['head'] = {
     {
       name: 'googlebot',
       content: 'index, follow',
-    },
-  ],
-  link: [
-    {
-      rel: 'icon',
-      type: 'image/x-icon',
-      href: './favicon.ico',
     },
   ],
 };

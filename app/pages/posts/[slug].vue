@@ -2,42 +2,39 @@
   <div>
     <NotFound v-if="error"> 文章未找到或已删除 </NotFound>
     <template v-else>
-      <Loading :loading="pending">
-        <div v-if="articleDetail">
-          <div :id="ARTICLE_HEADER_ID" class="article-header">
-            <div class="info-wrapper">
-              <div class="tag-cloud">
-                <Back class="back" />
-                <NuxtLink class="tag" v-for="tag in articleDetail?.tags" :to="'/archive/' + tag.name" :key="tag.id">
-                  {{ tag.name }}
-                </NuxtLink>
-              </div>
-              <h1>{{ articleDetail?.title }}</h1>
-              <div class="article-meta">
-                <span class="date">Posted By {{ articleDetail?.author?.profile.nickName }} on
-                  {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span>
-              </div>
+      <div v-if="articleDetail">
+        <div :id="ARTICLE_HEADER_ID" class="article-header">
+          <div class="info-wrapper">
+            <div class="tag-cloud">
+              <Back class="back" />
+              <NuxtLink class="tag" v-for="tag in articleDetail?.tags" :to="'/archive/' + tag.name" :key="tag.id">
+                {{ tag.name }}
+              </NuxtLink>
             </div>
-            <ArticleCover v-if="articleDetail?.cover" :cover="articleDetail.cover" />
-            <div class="flex items-center justify-between read-duration mb-2">
-              <span><span class="tip" v-if="hasUpdated"> Updated On {{ hasUpdated }} </span> <span class="type-tag">{{
-                ArticleTypeName[articleDetail.type] }}</span></span>
-              <span>阅读时长:<span class="ml-2">{{ formatDuration(viewDuration || 0) }}</span></span>
-            </div>
-            <div class="text-sm">
-              <p v-if="articleDetail.originalUrl">
-                <span class="mr-2">原文地址: </span><a class="underline" :href="articleDetail.originalUrl"
-                  target="_blank">{{
-                    articleDetail.originalUrl
-                  }}</a>
-              </p>
+            <h1>{{ articleDetail?.title }}</h1>
+            <div class="article-meta">
+              <span class="date">Posted By {{ articleDetail?.author?.profile.nickName }} on
+                {{ articleDetail?.createdAt && formatDate(articleDetail?.createdAt) }}</span>
             </div>
           </div>
-          <div class="post-detail">
-            <ArticleContent :article="articleDetail" />
+          <ArticleCover v-if="articleDetail?.cover" :cover="articleDetail.cover" />
+          <div class="flex items-center justify-between read-duration mb-2">
+            <span><span class="tip" v-if="hasUpdated"> Updated On {{ hasUpdated }} </span> <span class="type-tag">{{
+              ArticleTypeName[articleDetail.type] }}</span></span>
+            <span>阅读时长:<span class="ml-2">{{ formatDuration(viewDuration || 0) }}</span></span>
+          </div>
+          <div class="text-sm">
+            <p v-if="articleDetail.originalUrl">
+              <span class="mr-2">原文地址: </span><a class="underline" :href="articleDetail.originalUrl" target="_blank">{{
+                articleDetail.originalUrl
+                }}</a>
+            </p>
           </div>
         </div>
-      </Loading>
+        <div class="post-detail">
+          <ArticleContent :article="articleDetail" />
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -61,7 +58,7 @@ const userStore = useUserStore();
 const route = useRoute();
 const viewDuration = ref<number>(0)
 
-const { data: articleDetail, refresh, error, pending } = await useAsyncData('article', async () => {
+const { data: articleDetail, refresh, error } = await useAsyncData('article', async () => {
   const slug = route.params.slug as string;
   if (!slug) return null;
   try {

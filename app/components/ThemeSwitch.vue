@@ -8,7 +8,7 @@
         <div class="theme-panel">
           <div :class="{ 'theme-item': true, active: colorMode.preference === item.value }" v-for="item in themeList"
             :key="item.value" @click="toggleTheme(item.value)">
-            <Icon :name="item.icon" size="1.5rem"></Icon>
+            <ClientIcon :icon="item.icon" size="1.5rem" />
             {{ item.name }}
           </div>
         </div>

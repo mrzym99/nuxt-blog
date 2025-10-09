@@ -2,7 +2,7 @@
   <div class="user-info w-full block md:flex gap-[2rem]">
     <div class="flex flex-col items-start" style="flex-shrink: 0">
       <DescriptionItem label-width="0" class="flex justify-center">
-        <img class="avatar w-8rem h-8rem  object-fit rounded-full" :src="userInfo?.profile.avatar" alt="avatar" />
+        <img class="avatar w-8rem h-8rem  object-fit rounded-full" :src="userInfo?.profile.avatar" />
       </DescriptionItem>
       <DescriptionItem label-width="0">
         <p class="text-2xl font-bold">{{ userInfo?.profile.nickName }}</p>

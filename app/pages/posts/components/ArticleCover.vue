@@ -1,7 +1,7 @@
 <template>
   <div id="ArticleCover">
     <a :href="cover" class="article-cover" id="ArticleCover" target="_blank">
-      <img :src="cover" alt="" />
+      <img :src="cover" />
     </a>
   </div>
 </template>
