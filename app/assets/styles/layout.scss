@@ -11,14 +11,18 @@
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: $app-max-width;
     height: $header-height;
     background-color: var(--bg-color);
-    border-bottom: 1px solid var(--border-color);
+    // border-bottom: 1px solid var(--border-color);
     padding: 0 2rem;
     display: flex;
     align-items: center;
     z-index: $z-index-header;
+
+    .pc-menu {
+      margin: 0 auto;
+      max-width: $app-max-width;
+    }
 
     @include responsive(lt-sm) {
       padding: 0 1rem;
@@ -88,33 +92,25 @@
   margin: 0 auto;
   display: flex;
   flex-direction: row;
+  gap: 1rem;
   max-width: $max-width;
   width: 100%;
+  padding: 1rem;
 
   @include responsive(lt-sm) {
-    gap: 1rem;
     flex-direction: column;
+    padding: 1rem 0.5rem;
   }
 
   @include responsive(lt-md) {
-    gap: 2rem;
     flex-direction: column;
-  }
-
-  @include responsive(lt-lg) {
-    padding: 2rem;
-    gap: 2rem;
-  }
-
-  @include responsive(gt-lg) {
-    padding: 2rem 3rem;
-    gap: 5rem;
+    padding: 1rem 0.5rem;
   }
 
   .page-main {
     flex: 1;
     min-width: 0;
-    min-height: calc(100vh - 4rem);
+    min-height: calc(100vh - 2rem);
   }
 }
 
@@ -167,9 +163,22 @@
   height: calc(100vh - 5rem);
   overflow: auto;
 
+  .title {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .body {
+    display: block;
+    font-size: 0.875rem;
+  }
+
   .blog-card {
-    padding: 1rem 0.3rem;
-    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background: var(--bg-color);
+    margin-bottom: 1rem;
 
     @include responsive(lt-md) {
       padding: 1rem;

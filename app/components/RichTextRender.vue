@@ -1,18 +1,21 @@
 <script lang="ts" setup>
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import type { ContentTypeEnum } from '~/enum';
 defineOptions({
-  name: 'CommentText',
+  name: 'RichTextRender',
 });
 
 const props = defineProps<{
+  id: number;
+  type: ContentTypeEnum;
   content: string;
-  id: string;
 }>();
 
 let lightbox: PhotoSwipeLightbox | null = null
+const galleryId = computed(() => 'richTextGallery' + props.type + props.id)
 
 function addimageView() {
-  const container = document.getElementById('commentGallery' + props.id)
+  const container = document.getElementById(galleryId.value)
 
   const images = container!.querySelectorAll('img');
   if (!images.length) return
@@ -40,7 +43,7 @@ function addimageView() {
   });
 
   lightbox = new PhotoSwipeLightbox({
-    gallery: '#commentGallery' + props.id,
+    gallery: '#' + galleryId.value,
     children: 'a',
     pswpModule: () => import('photoswipe'),
   });
@@ -57,7 +60,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div :id="'commentGallery' + id">
+  <div :id="galleryId">
     <div v-html="content"></div>
   </div>
 </template>
@@ -65,13 +68,41 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 :deep(img) {
   max-width: $comment-image-max-width !important;
+  max-height: $comment-image-max-height !important;
   object-fit: cover;
 }
 
-:deep(.ql-code-block) {
+:deep(table),
+:deep(td),
+:deep(tr) {
+  border: 1px solid var(--border-color) !important;
+}
+
+:deep(code) {
   @apply font-mono text-sm inline-block rounded-md p-4 w-full my-2;
   text-shadow: none !important;
   color: var(--text-color) !important;
   background: var(--code-color) !important;
+}
+
+:deep(ol) {
+  list-style-type: decimal;
+}
+
+:deep(ul) {
+  list-style-type: disc;
+}
+
+:deep(ul),
+:deep(ol) {
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  padding-inline-start: 40px;
+}
+
+:deep(li) {
+  display: list-item;
+  text-align: -webkit-match-parent;
+  unicode-bidi: isolate;
 }
 </style>

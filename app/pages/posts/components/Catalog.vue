@@ -1,18 +1,20 @@
 <template>
   <div v-if="headings.length">
     <!-- PC 端目录 -->
-    <div class="catalog-pc ">
-      <div class="catalog-header">
-        <h3>目录</h3>
-      </div>
-      <nav class="catalog-nav hide-scrollbar">
-        <ul>
-          <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
-            <a :class="{ active: activeHeading === heading.text }" href="#"
-              @click.prevent="scrollToHeading(heading.id)"> {{ heading.text }} </a>
-          </li>
-        </ul>
-      </nav>
+    <div class="catalog-pc">
+      <Card>
+        <div class="catalog-header">
+          <h3 class="!mt-0">目录</h3>
+        </div>
+        <nav class="catalog-nav hide-scrollbar">
+          <ul>
+            <li v-for="heading in headings" :key="heading.id" :style="getHeadingStyle(heading.level)">
+              <a :class="{ active: activeHeading === heading.text }" href="#"
+                @click.prevent="scrollToHeading(heading.id)"> {{ heading.text }} </a>
+            </li>
+          </ul>
+        </nav>
+      </Card>
     </div>
 
     <!-- 移动端目录按钮和 Drawer -->
@@ -157,8 +159,6 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .catalog-pc {
   display: block;
-  width: 200px;
-  padding: 1rem 0;
   border-radius: 0.5rem;
   transition: all $duration ease;
   display: flex;

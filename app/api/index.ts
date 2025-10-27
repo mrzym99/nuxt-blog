@@ -7,3 +7,4 @@ export * from './account';
 export * from './utils';
 export * from './config';
 export * from './search';
+export * from './message';

@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<{
   avatar?: string;
   nickName?: string;
 }>(), {
-  size: 40
+  size: '40px'
 })
 
 const size = computed(() => {

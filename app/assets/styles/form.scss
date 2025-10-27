@@ -1,14 +1,14 @@
 @use '_variables' as *;
 
-.form-group {
+.form-inline {
   min-height: 60px;
 }
 
 label {
   display: inline-block;
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 5px;
+  text-align: right;
+  margin-right: 1rem;
+  flex-shrink: 0;
 }
 
 input {
@@ -49,4 +49,61 @@ textarea:focus {
 .code-button {
   border-top-left-radius: 0 !important;
   border-bottom-left-radius: 0 !important;
+}
+
+.radio {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+
+.login-form {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.normal-form {
+  width: 100%;
+  margin-bottom: 20px;
+
+  .form-inline {
+    display: flex;
+    min-height: 30px;
+
+    .form-item {
+      flex: 1;
+    }
+
+    label {
+      position: relative;
+      width: 70px;
+
+      &::after {
+        content: ':';
+        position: absolute;
+        right: -8px;
+        top: 0;
+      }
+    }
+
+    input {
+      padding: 3px;
+      min-height: 20px;
+    }
+  }
+
+  .form-block {
+    min-height: 30px;
+
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      padding: 3px;
+      min-height: 20px;
+    }
+  }
 }

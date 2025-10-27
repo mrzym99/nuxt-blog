@@ -20,7 +20,7 @@
           <ArticleCover v-if="articleDetail?.cover" :cover="articleDetail.cover" />
           <div class="flex items-center justify-between read-duration mb-2">
             <span><span class="tip" v-if="hasUpdated"> Updated On {{ hasUpdated }} </span> <span class="type-tag">{{
-              ArticleTypeName[articleDetail.type] }}</span></span>
+              ARTICLE_TYPE_NAME[articleDetail.type] }}</span></span>
             <span>阅读时长:<span class="ml-2">{{ formatDuration(viewDuration || 0) }}</span></span>
           </div>
           <div class="text-sm">
@@ -51,7 +51,7 @@ import { useArticleStore, useUserStore } from '~/store';
 import { getArticleDetail, getViewDuration } from '~/api';
 import { formatDate } from '~/utils/tool';
 import { ViewEnum } from '~/enum';
-import { ARTICLE_HEADER_ID, ArticleTypeName } from '~/constants';
+import { ARTICLE_HEADER_ID, ARTICLE_TYPE_NAME } from '~/constants';
 
 const { setCurrentArticle } = useArticleStore();
 const userStore = useUserStore();

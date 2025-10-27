@@ -14,7 +14,6 @@
 .blog-post {
   padding: 0.3rem;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-color);
 
   .blog-info {
     @include hover-effect {
@@ -60,13 +59,5 @@
     letter-spacing: 1px;
     font-size: 0.9rem;
     font-weight: 300;
-  }
-}
-
-.post-item {
-  .blog-card {
-    padding: 0 1rem 1.2rem 1rem;
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--bg-color);
   }
 }

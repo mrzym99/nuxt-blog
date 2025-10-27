@@ -3,25 +3,40 @@
     <!-- Main Content -->
     <Header />
     <div class="main-container">
+      <LeftSideBar v-show="showLeftSideBar" />
       <main class="page-main">
-        <div class="lt-sm:p-1rem lt-md:p-2rem">
-          <slot />
+        <div class="min-h-80vh">
+          <Card>
+            <slot />
+          </Card>
         </div>
-        <div class="md:hidden">
-          <CopyRight />
+        <div class="md:hidden mt-1rem">
+          <Card>
+            <CopyRight />
+          </Card>
         </div>
       </main>
-      <div class="relative w-52 lt-md:w-full flex-shrink-0">
-        <SideBar />
-      </div>
+      <RightSideBar v-show="showRightSideBar" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import SideBar from './components/SideBar.vue';
+import LeftSideBar from './components/LeftSideBar.vue';
+import RightSideBar from './components/RightSideBar.vue'
 import Header from './components/Header.vue';
 import CopyRight from './components/CopyRight.vue';
+import ArticleLeftSideBar from '~/pages/posts/components/ArticleLeftSideBar.vue';
+
+const route = useRoute();
+
+const showLeftSideBar = computed(() => {
+  return !route.meta.hideLeftSidebar
+});
+
+const showRightSideBar = computed(() => {
+  return !route.meta.hideRightSidebar
+});
 </script>
 
 <style lang="scss" scoped></style>

@@ -2,7 +2,7 @@
   <div class="comment-input-container">
     <ClientOnly>
       <Editor class="comment-input" v-model="content" :toolbar-container="options" :placeholder="placeholder ?? '请输入'"
-        :read-only="!user" :mentions="mentionList" @focus="focus" @blur="blur" :height="editorHeight" />
+        :read-only="!user" :mentions="mentionList" @focus="focus" :height="editorHeight" />
     </ClientOnly>
     <div class="footer">
       <slot name="footer"></slot>
@@ -32,7 +32,7 @@ const { user, mentionList } = storeToRefs(useUserStore());
 const hasFocus = ref(props.autoFocus ?? false);
 
 const editorHeight = computed(() => {
-  return user.value && hasFocus.value ? '150px' : '60px';
+  return user.value && hasFocus.value ? '120px' : '80px';
 });
 
 function focus() {
@@ -42,6 +42,11 @@ function focus() {
 function blur() {
   hasFocus.value = false;
 }
+
+defineExpose({
+  focus,
+  blur,
+});
 </script>
 
 <style lang="scss" scoped>

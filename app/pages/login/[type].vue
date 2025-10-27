@@ -206,7 +206,7 @@ onBeforeMount(() => {
   @include hover-effect {
     border-color: transparent;
     background-color: var(--primary-color);
-    color: white;
+    color: var(--white-color);
   }
 }
 

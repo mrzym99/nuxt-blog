@@ -34,7 +34,7 @@
   border: none;
   cursor: pointer;
   background-color: var(--primary-color);
-  color: white;
+  color: var(--white-color);
   transition: all $duration ease-in-out;
 
   &:disabled {
@@ -44,5 +44,15 @@
 
   &:hover:not(:disabled) {
     opacity: 0.9;
+  }
+}
+
+.link {
+  text-decoration: underline;
+  transition: all 0.3s ease;
+  font-weight: 300;
+
+  &:hover {
+    color: var(--primary-color);
   }
 }

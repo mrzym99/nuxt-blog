@@ -1,24 +1,28 @@
 // Theme variables
 :root {
   --primary-color: #a78bfa;
-  --primary-light-color: #daceff;
+  --primary-light-color: #c4b1ff;
   --secondary-color: #8b5cf6;
   --text-color: #4a4747;
   --text-light-color: #a8a1a1;
   --disabled-color: #a3a3a3;
+  --container-color: #f2f3f5;
   --bg-color: #fff;
-  --border-color: #aaaaaa;
+  --card-color: #fff;
+  --light-bg-color: #f7f8fa;
+  --border-color: #bdbdbda1;
   --hover-color: #8b5cf6;
   --nav-text-color: #fff;
   --text-secondary-color: #6a737d;
   --error-color: #f44336;
   --white-color: #fff;
   --mask-color: rgba(255, 255, 255, 0.1);
-  --tag-active-color: #2f93b4;
-  --tag-all-color: #679bb0;
+  --tag-active-color: #8b5cf6;
+  --tag-all-color: #2f93b4; //679bb0 ;
   --tag-grey-color: #b9b9b9;
   --tag-light-color: #a3a4cf;
   --tag-normal-color: #8ec79c;
+  --warn-color: #ffc107;
   --code-color: #fafafa;
   --mention-bg-color: #d3e1eb;
   --tip-color: rgba(255, 255, 255, 0.5);
@@ -30,16 +34,19 @@
 .dark-mode {
   --text-color: #b7b3b4;
   --text-light-color: #d6d0d2;
+  --container-color: #171717;
   --bg-color: #1f1f1f;
-  --border-color: #666666;
+  --light-bg-color: #2b2a2a;
+  --card-color: #1f1f1f;
+  --border-color: #353535;
   --nav-text-color: #fff;
   --text-secondary-color: #a0a0a0;
-  --white-color: #fff;
   --mask-color: rgba(0, 0, 0, 0.3);
   --tag-all-color: #4f7685;
   --tag-grey-color: #a3a3a3;
   --tag-light-color: #83849f;
   --tag-normal-color: #7eaa88;
+  --warn-color: #c29202;
   --code-color: #1a1a1a;
   --mention-bg-color: #454545;
   --tip-color: rgba(255, 255, 255, 0.5);

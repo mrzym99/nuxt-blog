@@ -1,7 +1,7 @@
 <template>
   <div class="header-container">
     <div :class="menuClassList">
-      <div class=" pc-menu">
+      <div class="pc-menu">
         <div class="w-full flex justify-between items-center">
           <Logo />
           <div class="nav-links">

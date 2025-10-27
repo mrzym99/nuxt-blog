@@ -27,15 +27,12 @@
               <Icon v-if="post.viewCount" name="ph:eye" class="mr-1" />
               {{ formatNumber(post.viewCount) }}
             </div>
-
           </div>
         </div>
       </article>
     </transition-group>
-    <div ref="target" class="h-1rem mt-4">
-      <div v-show="loading" class="text-center loading">
-        <Icon name="eos-icons:bubble-loading" size="1.6rem" />
-      </div>
+    <div ref="target" class="h-2rem mt-4">
+      <ScrollLoading :loading="loading" :empty="!data?.list.length" empty-text="暂无文章" :full-loaded="fullLoaded" />
     </div>
   </main>
 </template>
@@ -50,6 +47,7 @@ import { useAsyncData } from '#app';
 import { useArticleStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import { useIntersectionObserver } from '@vueuse/core';
+import { PAGE_SIZE } from '~/constants';
 
 defineOptions({
   name: 'Home',
@@ -57,7 +55,6 @@ defineOptions({
 
 const router = useRouter();
 const target = useTemplateRef<HTMLDivElement>('target')
-const PAGE_SIZE = 10;
 const { getRefresh, getCurrentArticle } = storeToRefs(useArticleStore());
 const refreshKey = ref(1)
 let timer: any = null;
@@ -150,6 +147,10 @@ function infiniteScroll() {
     }
   )
 }
+
+const fullLoaded = computed(() => {
+  return data.value?.list.length === (data.value?.total ?? 0)
+});
 
 onActivated(() => {
   if (getRefresh.value) {

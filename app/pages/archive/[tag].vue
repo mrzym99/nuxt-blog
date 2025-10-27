@@ -3,7 +3,7 @@
     <!-- Blog Posts -->
     <main>
       <div class="tag-cloud">
-        <NuxtLink class="tag tag-all" :class="{ active: route.params.tag === 'all' }" to="/archive/all" :replace="true">
+        <NuxtLink class="tag tag-all" :class="{ active: route.params.tag === ALL }" to="/archive/all" :replace="true">
           <strong>
             All <sup>{{ allPosts.length }}</sup></strong>
         </NuxtLink>
@@ -44,6 +44,7 @@ import { useRoute } from 'vue-router';
 import { getAllTags } from '~/api';
 import type { IArticle } from '~/types/index';
 import { useAsyncData } from '#app';
+import { ALL } from '~/constants';
 
 defineOptions({
   name: 'Archive',
@@ -100,7 +101,7 @@ const filteredPosts = computed(() => {
   const tagName = route.params.tag as string;
 
   if (!tagName) return cachedFilteredPosts.value || groupedPosts.value;
-  if (tagName === 'all') return groupedPosts.value;
+  if (tagName === ALL) return groupedPosts.value;
   const articles =
     (allTags.value && allTags.value.find(tag => tag.name === tagName)?.articles) || [];
   cachedFilteredPosts.value = articleToGroups(articles);

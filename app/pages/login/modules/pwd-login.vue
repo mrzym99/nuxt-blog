@@ -1,14 +1,14 @@
 <template>
   <div class="login-form">
     <VeeForm @submit="handleLogin">
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <label class="mb-1" for="用户名">用户名</label>
         <VeeField v-model="loginForm.username" name="用户名" type="email" placeholder="请输入用户名" rules="required|username" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="用户名" key="username" />
         </Transition>
       </div>
-      <div class="form-group mb-5">
+      <div class="form-inline mb-5">
         <label class="mb-1" for="密码">密码</label>
         <Password class="w-full" v-model="loginForm.password" name="密码" placeholder="请输入密码" rules="required|password" />
         <Transition name="fade">
@@ -59,9 +59,4 @@ const handleLogin = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.login-form {
-  width: 100%;
-  margin-bottom: 20px;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -42,9 +42,6 @@ function initUserInfo() {
 }
 
 onMounted(() => {
-  if (!isLoggedIn()) {
-    router.push('/');
-  }
   initUserInfo();
 });
 </script>

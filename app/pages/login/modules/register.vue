@@ -1,13 +1,13 @@
 <template>
-  <div class="register-form">
+  <div class="login-form">
     <VeeForm @submit="handleLogin">
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <VeeField v-model="loginForm.email" name="邮箱" type="email" placeholder="请输入QQ邮箱" rules="required|email" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="邮箱" key="email" />
         </Transition>
       </div>
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <div class="flex items-center">
           <VeeField class="!w-75% code-input" v-model="loginForm.code" name="验证码" placeholder="请输入验证码"
             rules="required|code" />
@@ -18,13 +18,13 @@
           <VeeErrorMessage class="error-message" name="验证码" key="code" />
         </Transition>
       </div>
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <Password class="w-full" v-model="loginForm.password" name="密码" placeholder="请输入密码" rules="required|password" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="密码" key="password" />
         </Transition>
       </div>
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <Password class="w-full" v-model="loginForm.confirmPassword" name="确认密码" placeholder="请输入确认密码"
           rules="required|confirmPassword:@密码" />
         <Transition name="fade">
@@ -87,9 +87,4 @@ const handleLogin = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.register-form {
-  width: 100%;
-  margin-bottom: 20px;
-}
-</style>
+<style lang="scss" scoped></style>

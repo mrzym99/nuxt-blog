@@ -62,7 +62,7 @@ h6 {
     @include hover-effect {
       border-color: transparent;
       background-color: var(--primary-color);
-      color: white;
+      color: var(--white-color);
     }
     border-radius: 9999px;
     font-size: 0.8rem;

@@ -15,6 +15,11 @@ export interface IReplyQuery extends baseQuery {
   parentId: number;
 }
 
+export interface IMessageQuery extends baseQuery {
+  type?: string;
+  content?: string;
+}
+
 export type LikeQuery = {
   targetId: number;
   type: LikeEnum;

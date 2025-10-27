@@ -11,7 +11,7 @@
               <div class="modal-title">{{ title }}</div>
             </slot>
             <button class="close-primary-button" @click="handleClose">
-              <Icon name="ph:x" size="2rem" />
+              <Icon name="ph:x" size="1.6rem" />
             </button>
           </div>
           <div class="modal-content">
@@ -141,12 +141,12 @@ watch(() => modelValue.value, () => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.8rem 1rem;
+    padding: 0.5rem 1rem 0 1rem;
 
     .modal-title {
-      font-size: 1.25rem;
-      font-weight: 500;
+      font-size: 18px;
       color: var(--text-color);
+      font-weight: 500;
     }
 
     .close-primary-button {

@@ -44,7 +44,7 @@ const handleChange = (value: string) => {
     border: none;
     background: none;
     cursor: pointer;
-
+    font-size: 14px;
     color: var(--text-light-color);
     padding: 0 0.5rem;
 

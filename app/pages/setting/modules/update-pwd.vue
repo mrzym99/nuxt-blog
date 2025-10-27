@@ -1,9 +1,9 @@
 <template>
-  <div class="login-form">
+  <div class="login-form md:w-60%">
     <VeeForm @submit="handleReset">
       <div class="block gap-[2rem] md:flex">
         <div class="flex-1 max-w-480px mt-2rem md:mt-0">
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="oldPassword">旧密码</label>
             <div class="form-item">
               <Password class="w-full" v-model="loginForm.oldPassword" name="旧密码" placeholder="请输入旧密码"
@@ -13,7 +13,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="newPassword">新密码</label>
             <div class="form-item">
               <Password class="w-full" v-model="loginForm.newPassword" name="新密码" placeholder="请输入新密码"
@@ -23,7 +23,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="confirmPassword">确认密码</label>
             <div class="form-item">
               <Password class="w-full" v-model="loginForm.confirmPassword" name="确认密码" placeholder="请输入确认密码"
@@ -34,7 +34,6 @@
             </div>
           </div>
           <div class="w-full flex">
-            <div class="w-[86px]" style="flex-shrink: 0"></div>
             <Button :loading="loading" type="submit"> 确认 </Button>
           </div>
         </div>
@@ -50,10 +49,8 @@ import Button from '~/components/Button.vue';
 import { useNuxtApp } from '#app';
 import { useUserStore } from '~/store';
 import Password from '~/components/Password.vue';
-import { storeToRefs } from 'pinia';
 import type { UserResetPwdForm } from '~/types/form';
 
-const { user } = storeToRefs(useUserStore());
 const { $toast } = useNuxtApp()
 const router = useRouter();
 const loading = ref(false);
@@ -79,43 +76,4 @@ const handleReset = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-.login-form {
-  width: 100%;
-  margin-bottom: 20px;
-
-  .form-group {
-    display: flex;
-    min-height: 30px;
-
-    .form-item {
-      flex: 1;
-    }
-
-    label {
-      position: relative;
-      display: inline-block;
-      width: 70px;
-      text-align: right;
-      margin-right: 16px;
-      flex-shrink: 0;
-
-      &::after {
-        content: ':';
-        position: absolute;
-        right: -8px;
-        top: 0;
-      }
-    }
-
-    input {
-      padding: 3px;
-      min-height: 20px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      transition: border-color $duration;
-      background-color: var(--bg-color);
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>

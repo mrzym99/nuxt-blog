@@ -1,5 +1,5 @@
 <template>
-  <div ref="commentRef" class="comments-section">
+  <div ref="commentRef" class="comments-section" v-click-outside="clickOutside">
     <!-- 评论列表 -->
     <div class="comments-list">
       <!-- 主评论输入框 -->
@@ -7,7 +7,7 @@
         <ClientOnly>
           <div class="form-content gap-1rem">
             <CommentAvatar :id="user?.id" :nick-name="user?.nickName" :avatar="user?.avatar" :size="42" />
-            <CommentInput v-model="commentContent" :placeholder="user?.id ? '请输入' : '先登录才能愉快的评论哦'">
+            <CommentInput ref="inputRefOne" v-model="commentContent" :placeholder="user?.id ? '请输入' : '先登录才能愉快的评论哦'">
               <template #footer>
                 <div class="form-actions">
                   <button class="submit-button" :disabled="!commentContent.trim()" @click="handleSubmit">
@@ -36,7 +36,7 @@
               <!-- comment 回复框 -->
               <transition name="fade-in">
                 <div v-if="replyTo && !replyTo.id && replyTo.parent.id === comment.id" class="comment-form">
-                  <CommentInput v-model="replyContent"
+                  <CommentInput ref="inputRefTwo" v-model="replyContent"
                     :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'">
                     <template #footer>
                       <div class="form-actions w-full">
@@ -66,7 +66,7 @@
                         <!-- reply 回复框 -->
                         <transition name="fade-in">
                           <div v-if="replyTo && replyTo.id === reply.id" class="comment-form">
-                            <CommentInput v-model="replyContent"
+                            <CommentInput ref="inputRefThree" v-model="replyContent"
                               :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'">
                               <template #footer>
                                 <div class="form-actions w-full">
@@ -112,6 +112,7 @@ import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import { useIntersectionObserver } from '@vueuse/core';
 import { TransitionGroup } from 'vue';
+import ConfirmContent from '../ConfirmContent.vue';
 
 import {
   type IReply,
@@ -142,10 +143,10 @@ import CommentCard from './CommentCard.vue';
 import ReplyCard from './ReplyCard.vue';
 import type { CommentForm, ReplyForm, ReplyTo } from '~/types/form';
 
-
 const props = defineProps<{
   type: CommentTypeEnum;
   targetId: number;
+  notify?: boolean;
 }>();
 
 const { user } = storeToRefs(useUserStore());
@@ -155,6 +156,10 @@ const tabOptions = [
   { label: '最新', value: CommentOrderEnum.LATEST },
   { label: '最热', value: CommentOrderEnum.HOT },
 ];
+
+const inputRefOne = ref();
+const inputRefTwo = ref();
+const inputRefThree = ref();
 
 // 评论内容
 const commentContent = ref('');
@@ -193,6 +198,7 @@ const handleSubmit = (event: Event) => {
       content: replyContent.value,
       replyId: user.value?.id,
       replyToId: replyTo.value.user.id,
+      notify: props.notify,
     };
     postReply(newReply).then(res => {
       if (res.code === 200) {
@@ -208,6 +214,7 @@ const handleSubmit = (event: Event) => {
       targetId: props.targetId,
       content: commentContent.value,
       commenterId: user.value?.id,
+      notify: props.notify
     };
 
     postComment(newComment).then(res => {
@@ -239,18 +246,42 @@ const cancelReply = () => {
 };
 
 const handleRevokeComment = (comment: Comment) => {
-  postDeleteComment(comment.id).then(() => {
-    currentPage.value - 1
-    getCommentList();
-    $toast.success('撤回成功');
-  });
+  $toast.custom(
+    h(markRaw(ConfirmContent), {
+      title: '确定要撤回吗？不能再恢复哦！',
+      submit: async () => {
+        postDeleteComment(comment.id).then(() => {
+          currentPage.value - 1
+          getCommentList();
+          $toast.success('撤回成功');
+        });
+      },
+    }),
+    {
+      duration: Infinity,
+      position: 'top-center',
+    },
+  )
+
 };
 
 const handleRevokeReply = (parent: Comment, reply: IReply) => {
-  postDeleteReply(reply.id).then(() => {
-    getReplies(parent);
-    $toast.success('撤回成功');
-  });
+  $toast.custom(
+    h(markRaw(ConfirmContent), {
+      title: '确定要撤回吗？不能再恢复哦！',
+      submit: async () => {
+        postDeleteReply(reply.id).then(() => {
+          getReplies(parent);
+          $toast.success('撤回成功');
+        });
+      },
+    }),
+    {
+      duration: Infinity,
+      position: 'top-center',
+    },
+  )
+
 };
 
 // 处理点赞
@@ -285,7 +316,7 @@ const handleEditComment = (comment: Comment, content: string) => {
 };
 
 const handleEditReply = (reply: IReply, content: string) => {
-  putUpdateComment(reply.id, content).then(() => {
+  putUpdateReply(reply.id, content).then(() => {
     reply.content = content;
     reply.updatedAt = new Date();
     $toast.success('保存成功');
@@ -378,7 +409,7 @@ async function getCommentList(commentId?: number) {
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
     targetId: props.targetId,
-    type: CommentTypeEnum.ARTICLE,
+    type: props.type,
     commentOrder: commentOrder.value,
   });
   const { list, total } = res.data;
@@ -457,6 +488,12 @@ function navigateToTarget(target: string) {
       showCommentFocus.value = false
     }, 3000)
   });
+}
+
+function clickOutside(e: any) {
+  inputRefOne.value && inputRefOne.value.blur();
+  inputRefTwo.value && inputRefTwo.value.blur();
+  inputRefThree.value && inputRefThree.value.blur();
 }
 
 onMounted(async () => {
@@ -563,7 +600,7 @@ onMounted(async () => {
   cursor: pointer;
   transition: color $duration ease;
   margin: 0.3em 0;
-  font-size: 16px;
+  font-size: 1rem;
   height: 20px;
 
   color: var(--primary-color);

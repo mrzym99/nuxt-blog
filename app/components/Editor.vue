@@ -357,7 +357,6 @@ defineExpose<{
 <style lang="scss" scoped>
 .quill-container {
   width: 100%;
-  height: 100%;
   line-height: normal;
 
   :deep(.ql-toolbar) {

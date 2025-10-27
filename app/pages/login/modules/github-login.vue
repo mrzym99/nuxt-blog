@@ -1,20 +1,20 @@
 <template>
-  <div class="register-form">
+  <div class="login-form">
     <VeeForm v-if="needRegister" @submit="handleLogin">
       <div class="tip mb-2">请完善以下信息</div>
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <VeeField v-model="loginForm.username" name="用户名" type="email" placeholder="请输入用户名" rules="required|username" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="用户名" key="username" />
         </Transition>
       </div>
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <VeeField v-model="loginForm.password" name="密码" placeholder="请输入密码" rules="required|password" />
         <Transition name="fade">
           <VeeErrorMessage class="error-message" name="密码" key="password" />
         </Transition>
       </div>
-      <div class="form-group mb-2">
+      <div class="form-inline mb-2">
         <VeeField v-model="loginForm.confirmPassword" name="确认密码" placeholder="请输入密码"
           rules="required|confirmPassword:@密码" />
         <Transition name="fade">
@@ -125,9 +125,4 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.register-form {
-  width: 100%;
-  margin-bottom: 20px;
-}
-</style>
+<style lang="scss" scoped></style>

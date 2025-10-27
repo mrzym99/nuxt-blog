@@ -4,7 +4,7 @@
       <span class="username">{{ comment.commenter?.profile.nickName }}</span>
       <span class="time">{{ diffNowWord(comment?.createdAt) }}</span>
     </div>
-    <Content v-if="!isEdit" :content="comment.content" :id="'c' + comment.id" />
+    <RichTextRender v-if="!isEdit" :content="comment.content" :id="comment.id" :type="ContentTypeEnum.COMMENT" />
     <CommentInput v-else v-model="content" :auto-focus="true">
       <template #footer>
         <div class="form-actions w-full">
@@ -21,7 +21,7 @@
         编辑
         <span v-if="comment.updatedAt !== comment.createdAt" class="text-[12px] cancel">（{{
           diffNowWord(comment.updatedAt)
-          }}）</span>
+        }}）</span>
       </button>
       <button v-if="user?.id === comment.commenter?.id" class="action-button cancel"
         @click="handleRevokeComment(comment)">
@@ -43,8 +43,9 @@ import {
   type UserDetail,
 } from '@/types/index';
 import { diffNowWord } from '~/utils/tool';
-import Content from './Content.vue';
 import CommentInput from './Input.vue'
+import RichTextRender from '../RichTextRender.vue';
+import { ContentTypeEnum } from '~/enum';
 
 const props = defineProps<{
   comment: Comment;
@@ -107,7 +108,6 @@ function handleSubmitEdit() {
 
   .time {
     font-size: 0.8rem;
-
     color: var(--text-light-color);
   }
 

@@ -10,6 +10,13 @@ export enum LikeEnum {
   REPLY = 'reply',
 }
 
+export enum ContentTypeEnum {
+  ARTICLE = 'article',
+  COMMENT = 'comment',
+  REPLY = 'reply',
+  MESSAGE = 'message',
+}
+
 export enum ViewEnum {
   ARTICLE = 'article',
 }
@@ -17,6 +24,7 @@ export enum ViewEnum {
 export enum CommentTypeEnum {
   ARTICLE = 'article',
   ALBUM = 'album',
+  MESSAGE = 'message',
 }
 
 export enum CommentOrderEnum {
@@ -64,4 +72,11 @@ export enum HttpMethodEnum {
   PUT = 'put',
   PATCH = 'patch',
   DELETE = 'delete',
+}
+
+export enum MessageTypeEnum {
+  ALL = 'all',
+  GENERAL = 'general', // 普通留言
+  NEED_REPLY = 'needReply', // 需回复
+  OPINION = 'opinion', // 意见反馈
 }

@@ -6,6 +6,7 @@ export type CommentForm = {
   targetId: Number;
   content: string;
   commenterId?: number; // 评论人
+  notify?: boolean;
 };
 
 export type ReplyForm = {
@@ -13,6 +14,7 @@ export type ReplyForm = {
   content: string;
   replyId?: number; // 回复人id
   replyToId?: number; // 被回复人 id
+  notify?: boolean;
 };
 
 export type ReplyTo = {

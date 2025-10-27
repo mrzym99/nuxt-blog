@@ -1,8 +1,8 @@
 <template>
-  <div class="login-form">
+  <div class="normal-form">
     <VeeForm @submit="handleReset">
       <div class="block gap-[2rem] max-w-480px ">
-        <div class="form-group mb-6">
+        <div class="form-inline mb-6">
           <label for="nickName">头像</label>
           <div class="form-item">
             <VeeField v-model="loginForm.avatar" name="头像">
@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="flex-1 mt-2rem md:mt-0">
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="nickName">昵称</label>
             <div class="form-item">
               <VeeField v-model="loginForm.nickName" name="昵称" placeholder="请输入昵称" rules="required|min:2" />
@@ -23,7 +23,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="gender">性别</label>
             <div class="form-item flex items-center">
               <span class="mr-1rem flex items-center">
@@ -39,7 +39,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="email">邮箱</label>
             <div class="form-item">
               <VeeField v-model="loginForm.email" name="邮箱" type="email" placeholder="请输入QQ邮箱" rules="required|email" />
@@ -48,7 +48,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="birthDate">生日</label>
             <div class="form-item">
               <VeeField v-model="loginForm.birthDate" type="date" name="生日" placeholder="请输入生日" />
@@ -57,7 +57,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="address">地址</label>
             <div class="form-item">
               <VeeField v-model="loginForm.address" name="地址" placeholder="请输入地址" as="textarea" rows="2" />
@@ -66,7 +66,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="introduction">个人介绍</label>
             <div class="form-item">
               <VeeField v-model="loginForm.introduction" name="个人介绍" as="textarea" rows="2" placeholder="请输入个人介绍" />
@@ -75,7 +75,7 @@
               </Transition>
             </div>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-inline mb-2">
             <label for="signature">个性签名</label>
             <div class="form-item">
               <VeeField v-model="loginForm.signature" name="个性签名" as="textarea" rows="2" placeholder="请输入个性签名" />
@@ -156,50 +156,4 @@ watch(
 );
 </script>
 
-<style lang="scss" scoped>
-.login-form {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-.form-group {
-  display: flex;
-  min-height: 30px;
-
-  .form-item {
-    flex: 1;
-  }
-}
-
-label {
-  position: relative;
-  display: inline-block;
-  width: 70px;
-  text-align: right;
-  margin-right: 16px;
-  flex-shrink: 0;
-
-  &::after {
-    content: ':';
-    position: absolute;
-    right: -8px;
-    top: 0;
-  }
-}
-
-input {
-  padding: 3px;
-  min-height: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color $duration;
-  background-color: var(--bg-color);
-}
-
-.radio {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  margin-right: 0.5rem;
-}
-</style>
+<style lang="scss" scoped></style>

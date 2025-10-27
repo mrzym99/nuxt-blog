@@ -10,7 +10,7 @@
       </span>
       <span class="time">{{ diffNowWord(reply?.createdAt) }}</span>
     </div>
-    <Content v-if="!isEdit" :content="reply.content" :id="'r' + reply.id" />
+    <RichTextRender v-if="!isEdit" :content="reply.content" :id="reply.id" :type="ContentTypeEnum.REPLY" />
     <CommentInput v-else v-model="content" :auto-focus="true">
       <template #footer>
         <div class="form-actions w-full">
@@ -47,7 +47,9 @@
 <script lang="ts" setup>
 import type { Comment, IReply, UserDetail } from '~/types';
 import { diffNowWord } from '~/utils/tool';
-import Content from './Content.vue';
+import CommentInput from './Input.vue'
+import RichTextRender from '../RichTextRender.vue';
+import { ContentTypeEnum } from '~/enum';
 
 const props = defineProps<{
   comment: Comment;
@@ -102,6 +104,11 @@ function handleSubmitEdit() {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.5rem;
+  }
+
+  .time {
+    font-size: 0.8rem;
+    color: var(--text-light-color);
   }
 
   .username {

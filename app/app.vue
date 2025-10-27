@@ -1,5 +1,6 @@
 <template>
   <div>
+    <NuxtLoadingIndicator />
     <NuxtLayout>
       <NuxtPage :keepalive="keepalive" />
     </NuxtLayout>
@@ -12,9 +13,7 @@
 
 <script lang="ts" setup>
 import { useHead } from '#app';
-import { storeToRefs } from 'pinia';
 import { getTitle } from '~/utils/title';
-import { useUserStore } from './store';
 import { TOAST_DURATION, TOAST_TOP } from '~/constants';
 import type { ThemeEnum } from './enum';
 
