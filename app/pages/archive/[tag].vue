@@ -181,6 +181,10 @@ const fullLoaded = computed(() => {
   return data.value?.list.length === (data.value?.total ?? 0)
 });
 
+watch(() => route.params.tag, () => {
+  currentPage.value = 1;
+})
+
 onMounted(() => {
   infiniteScroll();
 });
