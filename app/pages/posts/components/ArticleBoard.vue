@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Catalog v-if="getCurrentArticle" :articleId="getCurrentArticle!.id" />
-    <div v-show="!showCatalog">
+    <Catalog v-if="showCatalog" :articleId="getCurrentArticle!.id" />
+    <div v-show="showBlogInfo">
       <BlogInfo />
     </div>
   </div>
@@ -19,7 +19,10 @@ const showCatalog = computed(() => {
   return (
     getCurrentArticle.value &&
     getCurrentArticle.value.contentType === ArticleContentEnum.MD
-    && getHasCatalog.value
   );
+});
+
+const showBlogInfo = computed(() => {
+  return !getHasCatalog.value || !showCatalog.value;
 });
 </script>
