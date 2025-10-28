@@ -10,7 +10,8 @@
       </span>
       <span class="time">{{ diffNowWord(reply?.createdAt) }}</span>
     </div>
-    <RichTextRender v-if="!isEdit" :content="reply.content" :id="reply.id" :type="ContentTypeEnum.REPLY" />
+    <RichTextRender class="text-sm" v-if="!isEdit" :content="reply.content" :id="reply.id"
+      :type="ContentTypeEnum.REPLY" />
     <CommentInput v-else v-model="content" :auto-focus="true">
       <template #footer>
         <div class="form-actions w-full">
@@ -28,7 +29,7 @@
         编辑
         <span v-if="reply.updatedAt !== reply.createdAt" class="text-[12px] cancel">（{{
           diffNowWord(reply.updatedAt)
-        }}）</span>
+          }}）</span>
       </button>
       <button v-if="user?.id === reply.reply?.id" class="action-button cancel"
         @click="handleRevokeReply(comment, reply)">

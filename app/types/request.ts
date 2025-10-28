@@ -22,4 +22,5 @@ export interface IPagination<T extends any> {
   pageSize: number;
   total: number;
   list: Array<T>;
+  allTotal?: number;
 }

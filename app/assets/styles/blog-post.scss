@@ -12,14 +12,33 @@
 
 // Blog post styles
 .blog-post {
-  padding: 0.3rem;
+  padding: 0.5rem 0.3rem;
   border-bottom: 1px solid var(--border-color);
 
-  .blog-info {
+  &:hover {
+    background: var(--light-bg-color);
+  }
+
+  .post-title {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      height: 2px;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      transition: all $duration ease-in-out;
+    }
+
+    &:hover::after {
+      background: var(--primary-color);
+      width: 100%;
+    }
+
     @include hover-effect {
-      .post-title {
-        color: var(--primary-color);
-      }
+      color: var(--primary-color);
     }
   }
 
@@ -30,7 +49,7 @@
     letter-spacing: 2px;
     color: var(--text-color);
     font-weight: normal;
-    margin: 0 0 0.3rem 0;
+    margin: 0;
   }
 
   .post-description {
@@ -53,7 +72,7 @@
 
   .post-meta {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     font-family: Lora, 'Times New Roman', serif;
     color: var(--text-color);
     letter-spacing: 1px;

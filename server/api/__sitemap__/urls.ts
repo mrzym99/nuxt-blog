@@ -34,38 +34,9 @@ async function getAllPosts() {
   }
 }
 
-async function getAllTags() {
-  try {
-    const response = await fetch(`https://nest-server.mrzym.top:3366/blog/tag/all`, {
-      headers: {
-        'User-Agent': 'Sitemap Generator',
-      },
-    });
-
-    if (!response.ok) {
-      console.error('Failed to fetch tags:', response.status);
-      return [];
-    }
-
-    const res = await response.json();
-    const tags = Array.isArray(res.data) ? res.data : [];
-
-    return tags.map((tag: ITag) => ({
-      loc: `/archive/${tag.name}`,
-      lastmod: new Date(tag.updatedAt || Date.now()),
-      changefreq: 'monthly',
-      priority: 0.5,
-    }));
-  } catch (error) {
-    console.error('Error fetching tags:', error);
-    return [];
-  }
-}
-
 export default defineSitemapEventHandler(async () => {
   try {
     const posts = await getAllPosts();
-    const tags = await getAllTags();
 
     // 添加静态页面
     const staticPages = [
@@ -87,15 +58,9 @@ export default defineSitemapEventHandler(async () => {
         changefreq: 'monthly',
         priority: 0.7,
       },
-      {
-        loc: '/archive',
-        lastmod: new Date(),
-        changefreq: 'weekly',
-        priority: 0.8,
-      },
     ];
 
-    return [...staticPages, ...posts, ...tags] as SitemapUrlInput[];
+    return [...staticPages, ...posts] as SitemapUrlInput[];
   } catch (error) {
     console.error('Error generating sitemap:', error);
     return [];

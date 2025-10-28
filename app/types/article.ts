@@ -6,6 +6,7 @@ export interface ITag extends baseModel {
   name: string;
   count: number;
   articles: IArticle[];
+  articleCount: number;
 }
 
 export interface IArticle extends baseModel {

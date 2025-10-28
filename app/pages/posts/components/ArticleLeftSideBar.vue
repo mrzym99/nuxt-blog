@@ -4,7 +4,7 @@
       <span class="title">推荐文章</span>
       <p class="recommend-item" v-for="item in recommends">
         <NuxtLink :to="'/posts/' + item.id">
-          <span>{{ item.title }}</span>
+          <span :title="item.title">{{ item.title }}</span>
         </NuxtLink>
       </p>
     </div>

@@ -27,7 +27,7 @@
             <p v-if="articleDetail.originalUrl">
               <span class="mr-2">原文地址: </span><a class="underline" :href="articleDetail.originalUrl" target="_blank">{{
                 articleDetail.originalUrl
-                }}</a>
+              }}</a>
             </p>
           </div>
         </div>
@@ -91,7 +91,9 @@ async function handleGetViewDuration() {
 watch(
   () => route.params.slug,
   () => {
-    refresh();
+    if (route.path.includes('posts')) {
+      refresh();
+    }
   }
 );
 

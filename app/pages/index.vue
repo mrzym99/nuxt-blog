@@ -5,7 +5,7 @@
       <article v-for="post in posts" :key="post.id" class="blog-post">
         <div class="flex flex-col gap-1">
           <div class="flex">
-            <NuxtLink class="blog-info" :to="post.slug">
+            <NuxtLink :to="post.slug">
               <h3 class="post-title">
                 {{ post.title }}
               </h3>
@@ -69,6 +69,7 @@ const toArticle = (id: number) => {
 
 // 使用 useAsyncData 安全获取数据
 const { data } = await useAsyncData('home-posts', async () => {
+  currentPage.value = 1;
   const res = await getArticleList({
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,

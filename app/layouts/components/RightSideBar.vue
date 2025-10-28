@@ -1,8 +1,8 @@
 <template>
   <div class="relative w-60 lt-md:hidden flex-shrink-0">
     <aside class="sidebar hide-scrollbar w-60">
-      <div v-if="showCateLogCard">
-        <Catalog :articleId="getCurrentArticle!.id" />
+      <div v-if="showArticleCard">
+        <ArticleBoard />
       </div>
       <div v-show="showMessageCard">
         <MessageBoard />
@@ -15,24 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import Catalog from '~/pages/posts/components/Catalog.vue';
+import ArticleBoard from '~/pages/posts/components/ArticleBoard.vue';
 import BlogInfo from '~/layouts/components/BlogInfo.vue';
 import MessageBoard from '~/pages/messages/components/Board.vue';
 
-import { useArticleStore } from '~/store';
-import { ArticleContentEnum } from '~/enum';
-
-const { getCurrentArticle, getHasCatalog } = storeToRefs(useArticleStore());
 const route = useRoute();
 
-
-
-const showCateLogCard = computed(() => {
-  return (
-    getCurrentArticle.value &&
-    getCurrentArticle.value.contentType === ArticleContentEnum.MD
-    && getHasCatalog.value
-  );
+const showArticleCard = computed(() => {
+  return route.path.includes('/posts');
 });
 
 const showMessageCard = computed(() => {
@@ -40,6 +30,6 @@ const showMessageCard = computed(() => {
 });
 
 const showBlogInfoCard = computed(() => {
-  return !showCateLogCard.value && !showMessageCard.value;
+  return !showArticleCard.value && !showMessageCard.value;
 });
 </script>

@@ -5,11 +5,11 @@
     <div class="main-container">
       <LeftSideBar v-show="showLeftSideBar" />
       <main class="page-main">
-        <div class="min-h-80vh">
-          <Card>
-            <slot />
-          </Card>
-        </div>
+        <Card class="min-h-80vh">
+          <slot>
+            Loading...
+          </slot>
+        </Card>
         <div class="md:hidden mt-1rem">
           <Card>
             <CopyRight />

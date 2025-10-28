@@ -5,7 +5,8 @@
       <div class="tag-cloud">
         <NuxtLink class="tag tag-all" :class="{ active: route.params.tag === ALL }" to="/archive/all" :replace="true">
           <strong>
-            All <sup>{{ allPosts.length }}</sup></strong>
+            All <sup class="ml-1">{{ data?.allTotal }}</sup>
+          </strong>
         </NuxtLink>
         <NuxtLink :to="`/archive/${tag.name}`" :replace="true" v-for="tag in allTags" :key="tag.name" class="tag"
           :class="{
@@ -17,23 +18,26 @@
           <strong>{{ tag.name }} <sup class="ml-1">{{ tag.count ? tag.count : null }}</sup></strong>
         </NuxtLink>
       </div>
-      <div v-for="(yearPosts, year) in filteredPosts" :key="year" class="mb-6">
+      <div v-for="(yearPosts, year) in groupedPosts" :key="year">
         <h2 class="title font-bold">{{ year }}</h2>
         <div class="post-item">
           <article v-for="post in yearPosts" :key="post.id" class="blog-post">
-            <div class="flex justify-between items-start">
-              <div class="flex flex-col gap-2">
-                <h3 class="post-title">
-                  <NuxtLink :to="`/posts/${post.id}`" class="hover:text-primary-color">
+            <div class="flex flex-col gap-1">
+              <div class="flex justify-between">
+                <NuxtLink :to="post.slug">
+                  <h3 class="post-title">
                     {{ post.title }}
-                  </NuxtLink>
-                </h3>
-                <p @click="toArticle(post.id)" class="post-description">{{ post.description }}</p>
+                  </h3>
+                </NuxtLink>
+                <span class="ml-1rem post-meta">{{ formatDate(post.createdAt) }}</span>
               </div>
-              <time class="text-sm">{{ formatDate(post.createdAt) }}</time>
+              <p @click=" toArticle(post.id)" class="post-description">{{ post.description }}</p>
             </div>
           </article>
         </div>
+      </div>
+      <div ref="target" class="h-2rem mt-4">
+        <ScrollLoading :loading="loading" :empty="!data?.list.length" empty-text="暂无文章" :full-loaded="fullLoaded" />
       </div>
     </main>
   </div>
@@ -41,76 +45,95 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
-import { getAllTags } from '~/api';
-import type { IArticle } from '~/types/index';
+import { getAllTags, getArticleList } from '~/api';
+import type { IArticle, ITag } from '~/types/index';
 import { useAsyncData } from '#app';
-import { ALL } from '~/constants';
+import { ALL, PAGE_SIZE } from '~/constants';
+import { useIntersectionObserver } from '@vueuse/core';
 
 defineOptions({
   name: 'Archive',
 });
 
-type Tag = {
-  id: number;
-  name: string;
-  count: number;
-  articles: IArticle[];
-};
-
 const route = useRoute();
 const router = useRouter();
-const allPosts = ref<IArticle[]>([]);
-const cachedFilteredPosts = ref<Record<string, IArticle[]>>()
-
+const loading = ref(false);
+const target = useTemplateRef<HTMLDivElement>('target')
+const currentPage = ref(1);
 const toArticle = (id: number) => {
   router.push({
     path: '/posts/' + id,
   });
 };
 
-const { data: allTags } = await useAsyncData('allTags', async () => {
+const { data: allTags } = await useAsyncData('all-tags', async () => {
   const res = await getAllTags();
 
   return res.data
-    .map((tag: Tag) => {
+    .map((tag: ITag) => {
       return {
         ...tag,
-        count: tag.articles.length,
+        count: tag.articleCount,
       };
     })
-    .sort((a: Tag, b: Tag) => {
+    .sort((a: ITag, b: ITag) => {
       return b.count - a.count;
     });
 });
 
-initPosts();
-
-function initPosts() {
-  allTags.value &&
-    allTags.value.forEach(tag => {
-      tag.articles.forEach(article => {
-        if (!allPosts.value.find(item => item.id === article.id)) {
-          allPosts.value.push(article);
-        }
-      });
-    });
-}
-
-// 根据标签筛选文章
-const filteredPosts = computed(() => {
-  const tagName = route.params.tag as string;
-
-  if (!tagName) return cachedFilteredPosts.value || groupedPosts.value;
-  if (tagName === ALL) return groupedPosts.value;
-  const articles =
-    (allTags.value && allTags.value.find(tag => tag.name === tagName)?.articles) || [];
-  cachedFilteredPosts.value = articleToGroups(articles);
-  return cachedFilteredPosts.value
+const { data } = await useAsyncData('archives-posts', async () => {
+  const t = route.params.tag === ALL ? '' : route.params.tag as string;
+  const res = await getArticleList({
+    currentPage: currentPage.value,
+    pageSize: PAGE_SIZE,
+    tagName: t
+  });
+  const {
+    list, total, allTotal
+  } = res.data;
+  return {
+    list: list.map((item: IArticle) => ({
+      ...item,
+      slug: '/posts/' + item.id,
+    })),
+    total: total,
+    allTotal: allTotal ?? 0,
+  }
+}, {
+  watch: [() => route.params.tag],
+  dedupe: 'defer',
 });
+
+const posts = computed(() => data.value?.list || []);
+
+async function loadMore() {
+  currentPage.value += 1
+  loading.value = true
+  const t = route.params.tag === ALL ? '' : route.params.tag as string;
+  const res = await getArticleList({
+    currentPage: currentPage.value,
+    pageSize: PAGE_SIZE,
+    tagName: t
+  });
+
+  const {
+    list, total, allTotal
+  } = res.data;
+
+  data.value = {
+    list: [...posts.value, ...list.map((item) => ({
+      ...item,
+      slug: '/posts/' + item.id,
+    }))],
+    total: total,
+    allTotal: allTotal ?? 0,
+  };
+  loading.value = false
+}
 
 // Group posts by year
 const groupedPosts = computed(() => {
-  return articleToGroups(allPosts.value);
+  return articleToGroups(posts.value ?? []);
 });
 
 function articleToGroups(articles: IArticle[]) {
@@ -135,6 +158,32 @@ function articleToGroups(articles: IArticle[]) {
 
   return groups;
 }
+
+function infiniteScroll() {
+  const { stop } = useIntersectionObserver(
+    target,
+    ([entry]) => {
+      if (entry && entry.isIntersecting) {
+        if (posts.value.length < (data.value?.total ?? 0)) {
+          loadMore();
+        } else {
+          stop();
+        }
+      }
+    },
+    {
+      rootMargin: '0% 0% 40% 0%',
+    }
+  )
+}
+
+const fullLoaded = computed(() => {
+  return data.value?.list.length === (data.value?.total ?? 0)
+});
+
+onMounted(() => {
+  infiniteScroll();
+});
 </script>
 
 <style lang="scss" scoped>

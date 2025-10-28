@@ -5,6 +5,10 @@ export type baseQuery = {
   pageSize: number;
 };
 
+export interface IArticleQuery extends baseQuery {
+  tagName?: string;
+}
+
 export interface ICommentQuery extends baseQuery {
   targetId: number;
   type: CommentTypeEnum;
