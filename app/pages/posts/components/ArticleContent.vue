@@ -69,7 +69,8 @@ async function handleAddViewDuration(duration: number) {
 
 function addimageView() {
   const container = document.getElementById('blogGallery')
-  const images = container!.querySelectorAll('img');
+  if (!container) return
+  const images = container.querySelectorAll('img');
   if (!images.length) return
   images.forEach((img) => {
     // 动态加载图片以获取宽高

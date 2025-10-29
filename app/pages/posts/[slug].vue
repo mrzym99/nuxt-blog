@@ -27,7 +27,7 @@
             <p v-if="articleDetail.originalUrl">
               <span class="mr-2">原文地址: </span><a class="underline" :href="articleDetail.originalUrl" target="_blank">{{
                 articleDetail.originalUrl
-              }}</a>
+                }}</a>
             </p>
           </div>
         </div>
@@ -53,6 +53,10 @@ import { formatDate } from '~/utils/tool';
 import { ViewEnum } from '~/enum';
 import { ARTICLE_HEADER_ID, ARTICLE_TYPE_NAME } from '~/constants';
 
+definePageMeta({
+  middleware: ['refresh-same-route']
+});
+
 const { setCurrentArticle } = useArticleStore();
 const userStore = useUserStore();
 const route = useRoute();
@@ -60,7 +64,6 @@ const viewDuration = ref<number>(0)
 
 const { data: articleDetail, refresh, error } = await useAsyncData('article', async () => {
   const slug = route.params.slug as string;
-  if (!slug) return null;
   try {
     const res = await getArticleDetail(slug);
     const result = res.data;
@@ -87,15 +90,11 @@ async function handleGetViewDuration() {
   viewDuration.value = res.data as number
 }
 
-// 监听路由变化刷新数据
-watch(
-  () => route.params.slug,
-  () => {
-    if (route.path.includes('posts')) {
-      refresh();
-    }
+watch(route, async () => {
+  if (route.meta.refresh) {
+    refresh()
   }
-);
+})
 
 watch(
   () => articleDetail.value,

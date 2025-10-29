@@ -1,6 +1,6 @@
 <template>
   <NuxtLink v-if="type" :to="`/messages/${type.value}`" :replace="true" :key="type.value"
-    :class="['type', typeMap[type.value], showActive && type.value === route.params.type ? 'active' : '']">
+    :class="['type', typeMap[type.value], showActive && type.value === route.params.slug ? 'active' : '']">
     <Icon name="ph:bookmarks-light" size="1rem" />
     <strong>{{ type.label }}</strong>
   </NuxtLink>

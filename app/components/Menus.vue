@@ -2,7 +2,7 @@
   <div :class="['nav-links', menuClass]">
     <div v-for="item in menuList" :key="item.name">
       <NuxtLink v-if="!item.type || item.type === MenuTypeEnum.MENU" :class="{
-        active: route.path === item.path,
+        active: isActive(item)
       }" :to="item.path" :key="item.path" @click="menuClick(item)">
         <ClientIcon :icon="item.icon" size="1.2rem" />
         {{ item.name }}
@@ -31,6 +31,11 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits(['click']);
+
+const isActive = (menu: Menu) => {
+  if (menu.path === route.path) return true;
+  if (menu.path !== '/' && route.path.includes(menu.activePath ?? '')) return true;
+}
 
 const menuClass = computed(() => {
   switch (props.direction) {

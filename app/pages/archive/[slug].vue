@@ -3,14 +3,14 @@
     <!-- Blog Posts -->
     <main>
       <div class="tag-cloud">
-        <NuxtLink class="tag tag-all" :class="{ active: route.params.tag === ALL }" to="/archive/all" :replace="true">
+        <NuxtLink class="tag tag-all" :class="{ active: route.params.slug === ALL }" to="/archive/all" :replace="true">
           <strong>
             All <sup class="ml-1">{{ data?.allTotal }}</sup>
           </strong>
         </NuxtLink>
         <NuxtLink :to="`/archive/${tag.name}`" :replace="true" v-for="tag in allTags" :key="tag.name" class="tag"
           :class="{
-            active: route.params.tag === tag.name,
+            active: route.params.slug === tag.name,
             'tag-grey': tag.count <= 2,
             'tag-light': tag.count <= 5 && tag.count > 2,
             'tag-normal': tag.count > 5,
@@ -50,9 +50,15 @@ import type { IArticle, ITag } from '~/types/index';
 import { useAsyncData } from '#app';
 import { ALL, PAGE_SIZE } from '~/constants';
 import { useIntersectionObserver } from '@vueuse/core';
+import { useRefresh } from '~/hooks/useRefresh';
 
 defineOptions({
   name: 'Archive',
+});
+
+definePageMeta({
+  key: 'Archive',
+  middleware: ['refresh-same-route']
 });
 
 const route = useRoute();
@@ -60,6 +66,7 @@ const router = useRouter();
 const loading = ref(false);
 const target = useTemplateRef<HTMLDivElement>('target')
 const currentPage = ref(1);
+let oldSlug = ref();
 const toArticle = (id: number) => {
   router.push({
     path: '/posts/' + id,
@@ -81,8 +88,9 @@ const { data: allTags } = await useAsyncData('all-tags', async () => {
     });
 });
 
-const { data } = await useAsyncData('archives-posts', async () => {
-  const t = route.params.tag === ALL ? '' : route.params.tag as string;
+const { data, refresh } = await useAsyncData('archives-posts', async () => {
+  const t = route.params.slug === ALL ? '' : route.params.slug as string;
+  oldSlug.value = route.params.slug;
   const res = await getArticleList({
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
@@ -99,9 +107,6 @@ const { data } = await useAsyncData('archives-posts', async () => {
     total: total,
     allTotal: allTotal ?? 0,
   }
-}, {
-  watch: [() => route.params.tag],
-  dedupe: 'defer',
 });
 
 const posts = computed(() => data.value?.list || []);
@@ -109,7 +114,7 @@ const posts = computed(() => data.value?.list || []);
 async function loadMore() {
   currentPage.value += 1
   loading.value = true
-  const t = route.params.tag === ALL ? '' : route.params.tag as string;
+  const t = route.params.slug === ALL ? '' : route.params.slug as string;
   const res = await getArticleList({
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
@@ -181,13 +186,17 @@ const fullLoaded = computed(() => {
   return data.value?.list.length === (data.value?.total ?? 0)
 });
 
-watch(() => route.params.tag, () => {
+async function fullRefresh() {
   currentPage.value = 1;
-})
+  await refresh();
+  infiniteScroll();
+}
 
 onMounted(() => {
   infiniteScroll();
 });
+
+useRefresh(route.name as string, route.params.slug as string, fullRefresh)
 </script>
 
 <style lang="scss" scoped>

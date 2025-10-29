@@ -23,6 +23,8 @@ export function getTitle(path: string) {
     return undefined;
   } else if (path.includes('/user-center')) {
     return `${title} | 个人中心`;
+  } else if (path.includes('/message')) {
+    return `${title} | 留言`;
   }
   return titleMap[path] ? `${title} | ${titleMap[path]}` : title;
 }

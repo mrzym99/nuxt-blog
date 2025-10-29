@@ -50,15 +50,21 @@ import { ContentTypeEnum, MessageTypeEnum } from '~/enum';
 import MessageForm from './components/form.vue';
 import { useIntersectionObserver } from '@vueuse/core';
 import MessageTypeLabel from './components/type.vue'
+import { useRefresh } from '~/hooks/useRefresh';
 
 defineOptions({
   name: 'Message',
 });
 
+definePageMeta({
+  key: 'Message',
+  middleware: ['refresh-same-route']
+});
+
 const route = useRoute();
 const target = useTemplateRef<HTMLDivElement>('target')
 const type = computed(() => {
-  const t = route.params.type as string
+  const t = route.params.slug as string
   return t === ALL ? '' : t
 });
 const currentPage = ref(1);
@@ -69,8 +75,8 @@ const { data: types } = await useAsyncData('message-types', async () => {
   return data;
 });
 
-const { data } = await useAsyncData('messages', async () => {
-  const t = route.params.type as string
+const { data, refresh } = await useAsyncData('messages', async () => {
+  const t = route.params.slug as string
   const res = await getMessages({
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
@@ -81,11 +87,6 @@ const { data } = await useAsyncData('messages', async () => {
     list: res.data.list,
     total: res.data.total,
   }
-}, {
-  watch: [
-    () => route.params.type, // 监听路由参数
-  ],
-  dedupe: 'defer' // 防止请求重复
 });
 
 const allMessageTypes = computed(() => {
@@ -151,9 +152,18 @@ function leaveMessage() {
   showLeaveMessageModal.value = true;
 }
 
+async function fullRefresh() {
+  currentPage.value = 1;
+  await refresh();
+  infiniteScroll();
+}
+
+
 onMounted(() => {
   infiniteScroll();
 });
+
+useRefresh(route.name as string, route.params.slug as string, fullRefresh)
 </script>
 
 <style lang="scss" scoped>

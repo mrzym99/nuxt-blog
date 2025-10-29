@@ -22,7 +22,7 @@ const theme = computed(() => {
 });
 
 const keepalive = {
-  include: ['Home'],
+  include: ['Home', 'Archive', 'Message'],
 };
 
 const toastOptions = {

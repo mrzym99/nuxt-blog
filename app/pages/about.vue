@@ -57,7 +57,7 @@
             <p class="pt-4 text-1rem">
               如果您有时间也可以给我留下评论，我会尽快回复您~
               <br>
-              <NuxtLink class="text-1rem" to="/posts/49?commentId=29">留言</NuxtLink>
+              <NuxtLink class="text-1rem" to="/messages/all" target="_blank">留言</NuxtLink>
             </p>
             <h3>📧 Contact me</h3>
             <p class="text-1rem"><a href="mailto:2715158815@qq.com">email: 2715158815@qq.com</a></p>

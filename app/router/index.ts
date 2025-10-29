@@ -5,6 +5,7 @@ export type Menu = {
   path?: string;
   icon: string;
   type?: MenuTypeEnum;
+  activePath?: string;
   action?: (menu: Menu) => void;
   children?: Menu[];
 };
@@ -15,23 +16,27 @@ export const menuList: Menu[] = [
     path: '/',
     icon: 'ph:house',
     type: MenuTypeEnum.MENU,
+    activePath: '/',
   },
   {
     name: '归档',
     path: '/archive/all',
     icon: 'ph:archive-light',
     type: MenuTypeEnum.MENU,
+    activePath: '/archive',
   },
   {
     name: '留言',
     path: '/messages/all',
     icon: 'ph:chat-circle-text-light',
     type: MenuTypeEnum.MENU,
+    activePath: '/messages',
   },
   {
     name: '关于',
     path: '/about',
     icon: 'ph:user-light',
     type: MenuTypeEnum.MENU,
+    activePath: '/about',
   },
 ];
