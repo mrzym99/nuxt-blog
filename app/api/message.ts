@@ -34,6 +34,12 @@ export const putUpdateMessage = (id: number, data?: MessageForm) =>
     data,
   });
 
+export const deleteMessage = (id: number) =>
+  $http({
+    method: 'delete',
+    url: '/blog/message/' + id,
+  });
+
 export const getMessageTypes = () =>
   $http<Array<MessageType>>({
     method: 'get',

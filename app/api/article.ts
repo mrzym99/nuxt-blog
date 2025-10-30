@@ -23,3 +23,10 @@ export const getRecommendArticle = (id?: number) =>
     method: 'get',
     url: '/blog/article/recommend/front/' + id,
   });
+
+// 获取热门文章
+export const getHotArticle = () =>
+  $http<Array<IArticle>>({
+    method: 'get',
+    url: '/blog/article/hot/front',
+  });

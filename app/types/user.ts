@@ -4,6 +4,7 @@ export interface IUser extends baseModel {
   username: string;
   status?: number;
   profile: Profile;
+  roles: string[];
 }
 
 export type Profile = {
@@ -30,4 +31,5 @@ export type UserDetail = {
   address?: string;
   birthDate?: Date;
   introduction?: string;
+  roles: Array<string>;
 };

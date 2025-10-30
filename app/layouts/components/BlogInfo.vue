@@ -44,7 +44,7 @@
           <div class="text-[1rem] font-normal p-3 leading-loose">
             <h3 class="!my-1">添加友链步骤</h3>
             1.到博客源码地址，fork 项目<br />
-            2.找到 RightSideBar 组件<br />
+            2.找到 BlogInfo 组件<br />
             3.仿照小张的 link 编写代码<br />
             4.可在本地运行检查代码<br />
             5.最后，向我提交 Pr<br />

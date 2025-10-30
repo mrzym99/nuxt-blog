@@ -1,23 +1,26 @@
 <template>
-  <div class="archive py-2">
+  <div class="archive">
     <!-- Blog Posts -->
     <main>
-      <div class="tag-cloud">
-        <NuxtLink class="tag tag-all" :class="{ active: route.params.slug === ALL }" to="/archive/all" :replace="true">
-          <strong>
-            All <sup class="ml-1">{{ data?.allTotal }}</sup>
-          </strong>
-        </NuxtLink>
-        <NuxtLink :to="`/archive/${tag.name}`" :replace="true" v-for="tag in allTags" :key="tag.name" class="tag"
-          :class="{
-            active: route.params.slug === tag.name,
-            'tag-grey': tag.count <= 2,
-            'tag-light': tag.count <= 5 && tag.count > 2,
-            'tag-normal': tag.count > 5,
-          }">
-          <strong>{{ tag.name }} <sup class="ml-1">{{ tag.count ? tag.count : null }}</sup></strong>
-        </NuxtLink>
-      </div>
+      <Card>
+        <div class="tag-cloud">
+          <NuxtLink class="tag tag-all" :class="{ active: route.params.slug === ALL }" to="/archive/all"
+            :replace="true">
+            <strong>
+              All <sup class="ml-1">{{ data?.allTotal }}</sup>
+            </strong>
+          </NuxtLink>
+          <NuxtLink :to="`/archive/${tag.name}`" :replace="true" v-for="tag in allTags" :key="tag.name" class="tag"
+            :class="{
+              active: route.params.slug === tag.name,
+              'tag-grey': tag.count <= 2,
+              'tag-light': tag.count <= 5 && tag.count > 2,
+              'tag-normal': tag.count > 5,
+            }">
+            <strong>{{ tag.name }} <sup class="ml-1">{{ tag.count ? tag.count : null }}</sup></strong>
+          </NuxtLink>
+        </div>
+      </Card>
       <div v-for="(yearPosts, year) in groupedPosts" :key="year">
         <h2 class="title font-bold">{{ year }}</h2>
         <div class="post-item">
@@ -36,9 +39,8 @@
           </article>
         </div>
       </div>
-      <div ref="target" class="h-2rem mt-4">
-        <ScrollLoading :loading="loading" :empty="!data?.list.length" empty-text="暂无文章" :full-loaded="fullLoaded" />
-      </div>
+      <ScrollLoading ref="target" :loading="loading" :empty="!data?.list.length" empty-text="暂无文章"
+        :full-loaded="fullLoaded" />
     </main>
   </div>
 </template>
@@ -207,7 +209,7 @@ useRefresh(route.name as string, route.params.slug as string, fullRefresh)
 }
 
 .title {
-  margin: 0.5rem 0;
+  margin: 0.5rem 1rem;
   color: var(--primary-color);
 }
 

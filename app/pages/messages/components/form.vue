@@ -75,7 +75,7 @@ const emit = defineEmits<{
 const { $toast } = useNuxtApp()
 const { user, mentionList } = storeToRefs(useUserStore());
 const router = useRouter()
-const toolbarOptions = [
+const toolbarOptions = computed(() => [
   [
     'undo',
     'redo',
@@ -88,9 +88,9 @@ const toolbarOptions = [
     { align: [] },
     { list: 'ordered' },
     { list: 'bullet' },
-    ...[user.value ? 'image' : '']
+    ...(user.value ? ['image'] : [])
   ],
-]
+])
 
 const modelValue = defineModel<boolean>()
 const loading = ref(false)
@@ -126,6 +126,7 @@ const handleSubmit = () => {
       .then(() => {
         $toast.success('修改成功')
         modelValue.value = false;
+        loading.value = false;
         emit('success');
       })
       .catch(() => {
@@ -136,6 +137,8 @@ const handleSubmit = () => {
       .then((res) => {
         $toast.success('留言成功')
         modelValue.value = false;
+        loading.value = false;
+        emit('success');
         router.push('/messages/detail/' + res.data.id)
       })
       .catch(() => {

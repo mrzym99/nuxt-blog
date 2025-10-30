@@ -76,13 +76,8 @@ const handleReset = () => {
   loading.value = true;
   putResetPassword(loginForm.value)
     .then(() => {
-      $toast.promise(() => new Promise((resolve) => setTimeout(resolve, 1000)), {
-        loading: '重置成功',
-        success: () => {
-          router.push('/login/pwd-login');
-          return '请重新登录'
-        },
-      })
+      $toast.success('重置成功，请重新登录');
+      router.push('/login/pwd-login');
     })
     .catch(() => {
       loading.value = false;

@@ -39,7 +39,6 @@ import Menus from '~/components/Menus.vue';
 import UserMobile from '~/components/UserMobile.vue';
 import { menuList } from '~/router';
 import { MenuDirectionEnum, MenuTypeEnum } from '~/enum';
-import type { Menu } from '~/router';
 import { useUserStore } from '~/store';
 import { storeToRefs } from 'pinia';
 import { useDebounceFn } from '@vueuse/core';
@@ -62,12 +61,14 @@ const additionalMenuList = computed(() => [
     icon: 'ph:user-circle',
     path: `/user-center/${user.value?.id}`,
     type: MenuTypeEnum.MENU,
+    activePath: '/user-center',
   },
   {
     name: '用户设置',
     icon: 'ph:gear',
     path: '/setting',
     type: MenuTypeEnum.MENU,
+    activePath: '/setting',
   },
   {
     name: '退出',

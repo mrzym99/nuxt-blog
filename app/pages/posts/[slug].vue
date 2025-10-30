@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <Card>
     <NotFound v-if="error"> 文章未找到或已删除 </NotFound>
     <template v-else>
       <div v-if="articleDetail">
@@ -36,7 +36,7 @@
         </div>
       </div>
     </template>
-  </div>
+  </Card>
 </template>
 
 <script setup lang="ts">

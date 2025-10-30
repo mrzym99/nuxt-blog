@@ -111,3 +111,17 @@ export const useUserStore = defineStore('user', {
     },
   },
 });
+
+export const useAppStore = defineStore('app', {
+  state: () => ({
+    refresh: false,
+  }),
+  getters: {
+    getRefresh: state => state.refresh,
+  },
+  actions: {
+    setRefresh(value: boolean) {
+      this.refresh = value;
+    },
+  },
+});

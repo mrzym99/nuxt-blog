@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto">
+  <Card>
     <div class="lt-sm:py-4 relative z-1">
       <div class="flex flex-col md:flex-row gap-8">
         <main class="flex-1">
@@ -65,7 +65,7 @@
         </main>
       </div>
     </div>
-  </div>
+  </Card>
 </template>
 
 <style lang="scss" scoped>

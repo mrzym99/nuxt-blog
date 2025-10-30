@@ -9,7 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <div  v-html="content"></div>
+  <div v-html="content"></div>
 </template>
 
 <style lang="scss" scoped>

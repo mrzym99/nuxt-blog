@@ -85,3 +85,50 @@ h6 {
     transform: scale(1);
   }
 }
+
+.recommend-item {
+  padding: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+
+  &:last-child {
+    padding: 0;
+  }
+}
+
+.home-message-item {
+  overflow: hidden;
+  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+  line-height: normal;
+  word-break: break-all;
+
+  .nickname {
+    text-decoration: underline;
+    white-space: nowrap;
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+
+  .content {
+    display: inline-block;
+    overflow: auto;
+    max-height: 2rem;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

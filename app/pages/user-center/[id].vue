@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-2">
+  <Card class="relative z-2">
     <div class="user-center">
       <!-- User Center -->
       <div class="header mb-4">
@@ -11,7 +11,7 @@
         </Loading>
       </main>
     </div>
-  </div>
+  </Card>
 </template>
 
 <script setup lang="ts">

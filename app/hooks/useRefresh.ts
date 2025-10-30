@@ -1,3 +1,9 @@
+/**
+ * 用于使用了 slug + keepAlive 的页面判断是否需要刷新页面
+ * @param routeName
+ * @param slug
+ * @param cb
+ */
 export function useRefresh(routeName: string, slug: string, cb: () => void) {
   const route = useRoute();
   const oldSlug = ref(slug);

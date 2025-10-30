@@ -46,6 +46,7 @@ let quillInstance: Quill | null = null;
 const quillEditor = ref<HTMLElement>();
 const model = ref<string | null>();
 const userList = ref<IUser[]>([]);
+const isComposing = ref(false);
 
 const editorStyle = computed(() => {
   return {
@@ -166,12 +167,31 @@ watch(
   }
 );
 
+function preserveWhiteSpace(value: string): string {
+  const domParser = new DOMParser();
+  const doc = domParser.parseFromString(value, 'text/html');
+
+  doc.body.querySelectorAll('*').forEach((el) => {
+    el.childNodes.forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        let text = child.textContent ?? '';
+        text = text.replace(/ {2,}/g, (spaces) =>
+          '&nbsp;'.repeat(spaces.length - 1) + ' ');
+        const span = document.createElement('span');
+        span.innerHTML = text;
+        el.replaceChild(span.firstChild!, child);
+      }
+    });
+  });
+
+  return doc.body.innerHTML;
+}
 // Convert modelValue HTML to Delta and replace editor content
 const pasteHTML = (quill: Quill) => {
   model.value = props.modelValue;
   const oldContent = quill.getContents();
-  const delta = quill.clipboard.convert({ html: props.modelValue ?? '' });
-  quill.setContents(delta);
+  const delta = quill.clipboard.convert({ html: preserveWhiteSpace(props.modelValue ?? '') });
+  quill.setContents(delta, 'silent');
   emit('textChange', { delta, oldContent, source: 'api' });
 };
 
@@ -241,6 +261,14 @@ const initialize = async () => {
     emit('editorChange', eventName);
   });
 
+  quill.root.addEventListener('compositionstart', (e: any) => {
+    isComposing.value = true;
+  });
+
+  quill.root.addEventListener('compositionend', (e: any) => {
+    isComposing.value = false;
+  });
+
   emit('ready', quill);
 
   quillInstance = quill;
@@ -269,6 +297,7 @@ watch(
     if (!quillInstance) {
       return;
     }
+
     if (newValue && newValue !== model.value) {
       pasteHTML(quillInstance);
       // Update HTML model depending on type
@@ -279,13 +308,19 @@ watch(
   }
 );
 
+function updateModelValue(content: string) {
+  const empty = '<p><br></p>'
+  const res = content === empty ? '' : content
+  emit('update:modelValue', res);
+}
+
 // Watch model and update modelValue if has changes
 watch(model, (newValue, oldValue) => {
   if (!quillInstance) {
     return;
   }
   if (newValue && newValue !== oldValue) {
-    emit('update:modelValue', newValue);
+    updateModelValue(newValue);
   } else if (!newValue) {
     quillInstance.setContents([]);
   }
@@ -349,7 +384,9 @@ defineExpose<{
 </script>
 
 <template>
-  <div class="quill-container">
+  <div class="quill-container" :class="{
+    'composing': isComposing
+  }">
     <div ref="quillEditor" :style="editorStyle" />
   </div>
 </template>
@@ -480,6 +517,12 @@ defineExpose<{
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+}
+
+.composing {
+  :deep(.ql-blank::before) {
+    display: none;
   }
 }
 </style>

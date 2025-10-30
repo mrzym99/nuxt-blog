@@ -4,9 +4,6 @@
       <div v-if="showArticleCard">
         <ArticleBoard />
       </div>
-      <div v-show="showMessageCard">
-        <MessageBoard />
-      </div>
       <div v-show="showBlogInfoCard">
         <BlogInfo />
       </div>
@@ -17,7 +14,6 @@
 <script setup lang="ts">
 import ArticleBoard from '~/pages/posts/components/ArticleBoard.vue';
 import BlogInfo from '~/layouts/components/BlogInfo.vue';
-import MessageBoard from '~/pages/messages/components/Board.vue';
 
 const route = useRoute();
 
@@ -25,11 +21,7 @@ const showArticleCard = computed(() => {
   return route.path.includes('/posts');
 });
 
-const showMessageCard = computed(() => {
-  return route.path.includes('/messages');
-});
-
 const showBlogInfoCard = computed(() => {
-  return !showArticleCard.value && !showMessageCard.value;
+  return !showArticleCard.value
 });
 </script>

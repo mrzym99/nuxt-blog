@@ -111,6 +111,8 @@
     flex: 1;
     min-width: 0;
     min-height: calc(100vh - 2rem);
+    background: var(--bg-color);
+    border-radius: 0.25rem;
   }
 }
 

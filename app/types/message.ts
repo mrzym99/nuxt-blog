@@ -8,6 +8,7 @@ export interface IMessage extends baseModel {
   nickName?: string;
   user?: IUser;
   ipAddress?: string;
+  own?: boolean;
 }
 
 export type MessageType = {

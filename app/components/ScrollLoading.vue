@@ -1,15 +1,13 @@
 <template>
-  <div class="text-[var(--text-light-color)]">
+  <div class="h-2.8rem flex justify-center items-center text-[var(--text-light-color)]">
     <Empty v-if="empty">
       <div>{{ emptyText }}</div>
     </Empty>
     <template v-else>
-      <div v-show="loading" class="text-center loading">
-        <Icon name="eos-icons:bubble-loading" size="1.6rem" />
-      </div>
-      <div v-if="fullLoaded" class="text-center text-sm">
+      <Icon v-show="loading" name="eos-icons:bubble-loading" size="1.6rem" />
+      <span v-if="fullLoaded" class="text-sm">
         没有更多了
-      </div>
+      </span>
     </template>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative z-2">
+  <Card class="relative z-2">
     <div class="user-center">
       <!-- User Center -->
       <main class="flex-1 block relative">
@@ -17,7 +17,7 @@
         </div>
       </main>
     </div>
-  </div>
+  </Card>
 </template>
 
 <script setup lang="ts">

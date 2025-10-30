@@ -31,9 +31,8 @@
         </div>
       </article>
     </transition-group>
-    <div ref="target" class="h-2rem mt-4">
-      <ScrollLoading :loading="loading" :empty="!data?.list.length" empty-text="暂无文章" :full-loaded="fullLoaded" />
-    </div>
+    <ScrollLoading ref="target" :loading="loading" :empty="!data?.list.length" empty-text="暂无文章"
+      :full-loaded="fullLoaded" />
   </main>
 </template>
 
@@ -124,6 +123,7 @@ async function refreshArticle() {
     data.value.list[index]!.viewCount = viewCount + 1
     data.value.list[index]!.likeCount = likeCount
     forceUpdate()
+    useArticleStore().setRefresh(false);
   }
 }
 

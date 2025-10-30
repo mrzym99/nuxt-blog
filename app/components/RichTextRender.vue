@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 import type { ContentTypeEnum } from '~/enum';
+import 'quill/dist/quill.snow.css';
+
 defineOptions({
   name: 'RichTextRender',
 });
@@ -61,11 +63,16 @@ onBeforeUnmount(() => {
 
 <template>
   <div :id="galleryId">
-    <div v-html="content"></div>
+    <div class="ql-editor ql-snow" v-html="content"></div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+:deep(.ql-code-block-container) {
+  color: var(--text-color) !important;
+  background: var(--code-color) !important;
+}
+
 :deep(img) {
   max-width: $comment-image-max-width !important;
   max-height: $comment-image-max-height !important;

@@ -1,6 +1,6 @@
 <template>
-  <div class="relative lt-lg:hidden flex-shrink-0" :class="[isArticle ? 'w-40' : 'w-48']">
-    <aside v-show="!isArticle" class="sidebar hide-scrollbar w-48">
+  <div class="relative lt-lg:hidden flex-shrink-0 w-48">
+    <aside class="sidebar hide-scrollbar w-48">
       <!-- Profile Card -->
       <div class="blog-card">
         <span class="title">Welcome to my blog!</span>
@@ -16,19 +16,32 @@
           {{ saying?.hitokoto }}
         </p>
       </div>
+      <HomeSideBarItem v-if="isHome" />
+      <ArticleSideBarItem v-if="isArticle" />
+      <MessageSideBarItem v-if="isMessage" />
     </aside>
-    <ArticleLeftSideBar v-if="isArticle" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from '~/store';
-import ArticleLeftSideBar from '~/pages/posts/components/ArticleLeftSideBar.vue';
+import ArticleSideBarItem from '~/pages/posts/components/ArticleSideBarItem.vue';
+import MessageSideBarItem from '~/pages/messages/components/MessageSideBarItem.vue';
+
 const route = useRoute();
 
 const { user } = useUserStore();
+
+const isHome = computed(() => {
+  return route.path === '/'
+});
+
 const isArticle = computed(() => {
   return route.path.includes('/posts')
+});
+
+const isMessage = computed(() => {
+  return route.path.includes('/messages');
 });
 
 const { data: saying } = await useAsyncData('everyDaySaying', async () => {

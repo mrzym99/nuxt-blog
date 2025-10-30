@@ -262,7 +262,6 @@ const handleRevokeComment = (comment: Comment) => {
       position: 'top-center',
     },
   )
-
 };
 
 const handleRevokeReply = (parent: Comment, reply: IReply) => {

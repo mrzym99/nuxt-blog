@@ -65,10 +65,10 @@ const handleLogin = () => {
     .codeLogin(loginForm.value)
     .then(() => {
       loading.value = false;
-      $toast.promise(() => new Promise((resolve) => setTimeout(resolve, 1000)), {
-        loading: '登录成功，即将返回',
+      $toast.success('登录成功，即将返回');
+      router.back();
+      $toast.promise(() => new Promise((resolve) => setTimeout(resolve, 2000)), {
         success: () => {
-          router.back();
           return '欢迎回来，' + userStore.user?.nickName
         },
       })
