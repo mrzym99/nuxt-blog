@@ -4,7 +4,7 @@
       <VeeForm class="normal-form mx-auto mb-0 w-700px lt-md:w-full" @submit="handleSubmit">
         <div class="block gap-[2rem] md:flex">
           <div class="flex-1">
-            <div class="form-block mb-3 flex" v-if="!user">
+            <div class="form-block mb-3 flex" v-if="!user && !messageForm?.id">
               <label for="nickName">昵称</label>
               <div class="form-item">
                 <div class="w-full">
