@@ -13,7 +13,7 @@
       <div class="blog-card">
         <span class="title">每日一言</span>
         <p class="body min-h-1rem">
-          {{ saying?.hitokoto }}
+          {{ saying?.data.content || '今天很棒！' }}
         </p>
       </div>
       <HomeSideBarItem v-if="isHome" />
@@ -45,7 +45,7 @@ const isMessage = computed(() => {
 });
 
 const { data: saying } = await useAsyncData('everyDaySaying', async () => {
-  const res = await fetch('https://v1.hitokoto.cn/?c=d&encode=json');
+  const res = await fetch('https://wisdom.mrzym.top/api/random');
   return res.json();
 });
 </script>

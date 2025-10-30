@@ -22,7 +22,6 @@ import LeftSideBar from './components/LeftSideBar.vue';
 import RightSideBar from './components/RightSideBar.vue'
 import Header from './components/Header.vue';
 import CopyRight from './components/CopyRight.vue';
-import ArticleSideBarItem from '~/pages/posts/components/ArticleSideBarItem.vue';
 
 const route = useRoute();
 
