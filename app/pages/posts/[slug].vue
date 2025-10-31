@@ -126,7 +126,6 @@ watch(
 
 <style lang="scss" scoped>
 .post-detail {
-  min-height: 100vh;
   background-color: var(--bg-color);
   border-top: 1px solid var(--border-color);
 }
