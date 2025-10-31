@@ -62,54 +62,28 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div :id="galleryId">
-    <div class="ql-editor ql-snow" v-html="content"></div>
+  <div class="richtext-container" :id="galleryId">
+    <div v-html="content"></div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.richtext-container {
+  width: 100%;
+  white-space: pre;
+}
+
 :deep(.ql-code-block-container) {
   color: var(--text-color) !important;
   background: var(--code-color) !important;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 5px 10px;
 }
 
 :deep(img) {
   max-width: $comment-image-max-width !important;
   max-height: $comment-image-max-height !important;
   object-fit: cover;
-}
-
-:deep(table),
-:deep(td),
-:deep(tr) {
-  border: 1px solid var(--border-color) !important;
-}
-
-:deep(code) {
-  @apply font-mono text-sm inline-block rounded-md p-4 w-full my-2;
-  text-shadow: none !important;
-  color: var(--text-color) !important;
-  background: var(--code-color) !important;
-}
-
-:deep(ol) {
-  list-style-type: decimal;
-}
-
-:deep(ul) {
-  list-style-type: disc;
-}
-
-:deep(ul),
-:deep(ol) {
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  padding-inline-start: 40px;
-}
-
-:deep(li) {
-  display: list-item;
-  text-align: -webkit-match-parent;
-  unicode-bidi: isolate;
 }
 </style>

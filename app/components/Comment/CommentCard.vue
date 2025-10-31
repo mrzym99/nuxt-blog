@@ -22,7 +22,7 @@
         编辑
         <span v-if="comment.updatedAt !== comment.createdAt" class="text-[12px] cancel">（{{
           diffNowWord(comment.updatedAt)
-          }}）</span>
+        }}）</span>
       </button>
       <button v-if="user?.id === comment.commenter?.id" class="action-button cancel"
         @click="handleRevokeComment(comment)">

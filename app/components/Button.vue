@@ -23,6 +23,7 @@ button {
   background-color: var(--primary-color);
   color: var(--nav-text-color);
   transition: all $duration ease-in-out;
+  border-radius: 3px;
 
   &:disabled {
     cursor: not-allowed;

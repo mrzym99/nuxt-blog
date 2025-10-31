@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Quill from 'quill';
-import type { Delta, EmitterSource, QuillOptions, Range } from 'quill';
+import { Delta, type EmitterSource, type QuillOptions, type Range } from 'quill';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { Mention, MentionBlot } from 'quill-mention'; // 插件
 import 'quill/dist/quill.snow.css';
@@ -14,7 +14,7 @@ import FormData from 'form-data';
 import * as Emoji from 'quill2-emoji';
 import 'quill2-emoji/dist/style.css';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   // HTML model value, supports v-model
   modelValue?: string | null;
   // Quill initialization options
@@ -24,7 +24,10 @@ const props = defineProps<{
   readOnly?: boolean;
   placeholder?: string
   mentions?: IMentionUser[];
-}>();
+  maxLength?: number;
+}>(), {
+  maxLength: 2000,
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
@@ -47,6 +50,7 @@ const quillEditor = ref<HTMLElement>();
 const model = ref<string | null>();
 const userList = ref<IUser[]>([]);
 const isComposing = ref(false);
+const currentTextLength = ref(0);
 
 const editorStyle = computed(() => {
   return {
@@ -148,6 +152,16 @@ const defaultOptions: QuillOptions = {
         insertItem({ ...item, value: `${item.value} ` });
       },
     },
+    clipboard: {
+      matchVisual: false,
+      matchers: [
+        // 解决使用 quill.clipboard.convert 转换 HTML 时，文本节点内容里的空格、Tab 被忽略的问题
+        [Node.TEXT_NODE, (node: any, delta: Delta) => {
+          if (!node.data) { return delta }
+          return new Delta().insert(node.data)
+        }],
+      ],
+    },
   },
 };
 
@@ -167,30 +181,11 @@ watch(
   }
 );
 
-function preserveWhiteSpace(value: string): string {
-  const domParser = new DOMParser();
-  const doc = domParser.parseFromString(value, 'text/html');
-
-  doc.body.querySelectorAll('*').forEach((el) => {
-    el.childNodes.forEach((child) => {
-      if (child.nodeType === Node.TEXT_NODE) {
-        let text = child.textContent ?? '';
-        text = text.replace(/ {2,}/g, (spaces) =>
-          '&nbsp;'.repeat(spaces.length - 1) + ' ');
-        const span = document.createElement('span');
-        span.innerHTML = text;
-        el.replaceChild(span.firstChild!, child);
-      }
-    });
-  });
-
-  return doc.body.innerHTML;
-}
 // Convert modelValue HTML to Delta and replace editor content
 const pasteHTML = (quill: Quill) => {
   model.value = props.modelValue;
   const oldContent = quill.getContents();
-  const delta = quill.clipboard.convert({ html: preserveWhiteSpace(props.modelValue ?? '') });
+  const delta = quill.clipboard.convert({ html: props.modelValue ?? '' });
   quill.setContents(delta, 'silent');
   emit('textChange', { delta, oldContent, source: 'api' });
 };
@@ -251,6 +246,14 @@ const initialize = async () => {
 
   // Handle editor text change
   quill.on('text-change', (delta: any, oldContent: any, source: any) => {
+    function getTextLength() {
+      return quill.getText().length - 1
+    }
+    const len = getTextLength();
+    if (props.maxLength && len > props.maxLength) {
+      quill?.deleteText(props.maxLength, len)
+    }
+    currentTextLength.value = getTextLength();
     model.value = props.semantic ? quill.getSemanticHTML() : quill.root.innerHTML;
     updateHistoryStatus();
     emit('textChange', { delta, oldContent, source });
@@ -388,6 +391,11 @@ defineExpose<{
     'composing': isComposing
   }">
     <div ref="quillEditor" :style="editorStyle" />
+    <span class="max-limit">
+      <template v-if="props.maxLength">
+        {{ currentTextLength }}/{{ props.maxLength }}
+      </template>
+    </span>
   </div>
 </template>
 
@@ -395,17 +403,8 @@ defineExpose<{
 .quill-container {
   width: 100%;
   line-height: normal;
-
-  :deep(.ql-toolbar) {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    padding: 3px;
-    border: 1px solid var(--border-color);
-
-    .ql-stroke {
-      stroke: var(--text-color) !important;
-    }
-  }
+  position: relative;
+  box-sizing: border-box;
 
   :deep(.ql-container) {
     border-bottom-left-radius: 4px;
@@ -422,6 +421,23 @@ defineExpose<{
       object-fit: cover;
     }
   }
+
+  :deep(.ql-toolbar) {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 3px;
+    border: 1px solid var(--border-color);
+
+    .ql-stroke {
+      stroke: var(--text-color) !important;
+    }
+  }
+
+  :deep(.ql-editor) {
+    padding: 10px !important;
+  }
+
+
 
   :deep(.ql-editor.ql-blank::before) {
     color: var(--placeholder-color);
@@ -517,6 +533,15 @@ defineExpose<{
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+
+  .max-limit {
+    position: absolute;
+    bottom: 4px;
+    right: 10px;
+    font-size: 0.8rem;
+    color: var(--border-color);
+    background-color: var(--bg-color);
   }
 }
 

@@ -5,7 +5,7 @@
     </Empty>
     <template v-else>
       <Icon v-show="loading" name="eos-icons:bubble-loading" size="1.6rem" />
-      <span v-if="fullLoaded" class="text-sm">
+      <span v-if="fullLoaded && (currentPage ?? 1) > 1" class="text-sm">
         没有更多了
       </span>
     </template>
@@ -16,6 +16,7 @@
 defineProps<{
   loading?: boolean;
   fullLoaded?: boolean;
+  currentPage?: number;
   empty?: boolean;
   emptyText?: string;
 }>();

@@ -3,7 +3,7 @@
   <main class="post-container relative w-full" :key="refreshKey">
     <transition-group name="list">
       <article v-for="post in posts" :key="post.id" class="blog-post">
-        <div class="flex flex-col gap-1">
+        <div class="post-body flex flex-col gap-1">
           <div class="flex">
             <NuxtLink :to="post.slug">
               <h3 class="post-title">
@@ -32,7 +32,7 @@
       </article>
     </transition-group>
     <ScrollLoading ref="target" :loading="loading" :empty="!data?.list.length" empty-text="暂无文章"
-      :full-loaded="fullLoaded" />
+      :full-loaded="fullLoaded" :current-page="currentPage" />
   </main>
 </template>
 

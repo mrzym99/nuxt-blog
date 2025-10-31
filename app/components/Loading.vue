@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div v-if="loading" class="loading-container min-h-20rem">
+    <div v-if="showLoading" :style="{
+      height: height ?? '20rem'
+    }" class="loading-container">
       <slot name="loading">
         <div class="loading-spinner">
           <div class="spinner"></div>
@@ -15,9 +17,33 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   loading: boolean;
+  delay?: number;
+  height?: string;
 }>();
+
+const showLoading = ref(false)
+let timer: any = null
+
+watch(
+  () => props.loading,
+  (val) => {
+    if (timer) clearTimeout(timer)      // 清掉上一次的延迟
+    if (val) {
+      // 延迟 ≥ delay 才显示
+      timer = window.setTimeout(() => (showLoading.value = true), props.delay ?? 300)
+    } else {
+      // 立即消失，不等待
+      showLoading.value = false
+    }
+  },
+  { immediate: true }
+)
+
+onBeforeUnmount(() => {
+  if (timer) clearTimeout(timer)
+})
 </script>
 
 <style lang="scss" scoped>

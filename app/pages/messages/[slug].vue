@@ -8,14 +8,14 @@
       <div class="leave flex justify-end items-center mb-2rem">
         <button class="link text-1.2rem" @click="leaveMessage">留言 </button>
       </div>
-      <Loading :loading="initLoading">
+      <Loading :loading="pending">
         <div>
           <article v-for="message in data?.list" :key="message.id" class="message-item">
             <div class="flex flex-col gap-2">
               <div class="flex justify-between">
                 <div class="flex items-center gap-4 mb-2">
-                  <UserAvatar v-if="message.user" :id="message.user.id" :nick-name="message.user.profile.nickName"
-                    :avatar="message.user.profile.avatar" />
+                  <UserAvatar v-if="message.user" class="mr-2" :id="message.user.id"
+                    :nick-name="message.user.profile.nickName" :avatar="message.user.profile.avatar" />
                   <span v-else>
                     {{ message.nickName }}
                   </span>
@@ -37,7 +37,7 @@
           </article>
         </div>
         <ScrollLoading ref="target" :loading="loading" :empty="!data?.list.length" empty-text="暂无留言"
-          :full-loaded="fullLoaded" />
+          :full-loaded="fullLoaded" :current-page="currentPage" />
       </Loading>
     </main>
     <MessageForm v-model="showLeaveMessageModal" :type="type" :type-options="types" @success="fullRefresh" />
@@ -74,22 +74,19 @@ const type = computed(() => {
 });
 const currentPage = ref(1);
 const loading = ref(false);
-const initLoading = ref(false);
 
 const { data: types } = await useAsyncData('message-types', async () => {
   const { data } = await getMessageTypes();
   return data;
 });
 
-const { data, refresh } = await useAsyncData('messages', async () => {
-  initLoading.value = true;
+const { data, refresh, pending } = await useAsyncData('messages', async () => {
   const t = route.params.slug as string
   const res = await getMessages({
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,
     type: t === ALL ? '' : t,
   });
-  initLoading.value = false;
   return {
     list: res.data.list,
     total: res.data.total,

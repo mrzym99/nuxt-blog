@@ -4,7 +4,7 @@
     <div class="message flex flex-col gap-2" v-if="data">
       <div class="flex justify-between mb-2">
         <div class="flex items-center gap-4">
-          <UserAvatar v-if="data.user" :id="data.user.id" :nick-name="data.user.profile.nickName"
+          <UserAvatar v-if="data.user" class="mr-2" :id="data.user.id" :nick-name="data.user.profile.nickName"
             :avatar="data.user.profile.avatar" />
           <span v-else>
             {{ data.nickName }}
@@ -26,8 +26,7 @@
         <MessageTypeLabel class="!px-3px !py-2px" :type="messageTypeMap[data.type]" :show-active="true" />
       </div>
     </div>
-    <Comments v-if="data" :type="CommentTypeEnum.MESSAGE" :target-id="data.id"
-      :notify="data.type === MessageTypeEnum.NEED_REPLY" />
+    <Comments v-if="data" :type="CommentTypeEnum.MESSAGE" :target-id="data.id" notify />
     <MessageForm v-model="showEditMessageModal" :type-options="types" :message="data" @success="editSuccess" />
   </Card>
 </template>

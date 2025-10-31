@@ -16,7 +16,7 @@
           {{ saying?.data.content || '今天很棒！' }}
         </p>
       </div>
-      <HomeSideBarItem v-if="isHome" />
+      <HomeSideBarItem v-show="isHome" />
       <ArticleSideBarItem v-if="isArticle" />
       <MessageSideBarItem v-if="isMessage" />
     </aside>

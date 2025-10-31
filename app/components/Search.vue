@@ -6,34 +6,37 @@
         <input :value="keyword" ref="inputRef" class="search-input" type="text" placeholder="Search..."
           @input="handleInput" />
         <div class="search-result">
-          <template v-if="searchResult">
-            <div v-if="!isEmpty">
-              <div v-for="([rKey, values]) in Object.entries(searchResult)" :key="rKey">
-                <div class="search-item" v-for="item in values" :key="item.id">
-                  <div class="search-item-title" @click="modelValue = false">
-                    <NuxtLink :to="item.slug">
-                      <span v-if="item.title?.start">{{ item.title.start }}</span>
-                      <span class="keyword" v-if="item.title?.keyword">{{ item.title?.keyword }}</span>
-                      <span v-if="item.title?.end">{{ item.title?.end }}</span>
-                    </NuxtLink>
-                  </div>
-                  <div class="search-item-description">
-                    <span v-if="item.description?.start">{{ item.description.start }}</span>
-                    <span class="keyword" v-if="item.description?.keyword">{{ item.description?.keyword }}</span>
-                    <span v-if="item.description?.end">{{ item.description?.end }}</span>
-                  </div>
-                  <div class="search-item-content">
-                    <span v-if="item.content?.start" v-html="item.content.start"></span>
-                    <span class="keyword" v-if="item.content?.keyword" v-html="item.content.keyword"></span>
-                    <span v-if="item.content?.end" v-html="item.content.end"></span>
+          <Loading :loading="searchIng">
+            <template #loading>SearchIng...</template>
+            <template v-if="searchResult">
+              <div v-if="!isEmpty">
+                <div v-for="([rKey, values]) in Object.entries(searchResult)" :key="rKey">
+                  <div class="search-item" v-for="item in values" :key="item.id">
+                    <div class="search-item-title" @click="modelValue = false">
+                      <NuxtLink :to="item.slug">
+                        <span v-if="item.title?.start">{{ item.title.start }}</span>
+                        <span class="keyword" v-if="item.title?.keyword">{{ item.title?.keyword }}</span>
+                        <span v-if="item.title?.end">{{ item.title?.end }}</span>
+                      </NuxtLink>
+                    </div>
+                    <div class="search-item-description">
+                      <span v-if="item.description?.start">{{ item.description.start }}</span>
+                      <span class="keyword" v-if="item.description?.keyword">{{ item.description?.keyword }}</span>
+                      <span v-if="item.description?.end">{{ item.description?.end }}</span>
+                    </div>
+                    <div class="search-item-content">
+                      <span v-if="item.content?.start" v-html="item.content.start"></span>
+                      <span class="keyword" v-if="item.content?.keyword" v-html="item.content.keyword"></span>
+                      <span v-if="item.content?.end" v-html="item.content.end"></span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div v-else class="empty">
-              试试搜索其他内容吧...
-            </div>
-          </template>
+              <div v-else class="empty">
+                试试搜索其他内容吧...
+              </div>
+            </template>
+          </Loading>
         </div>
       </div>
     </Modal>
@@ -51,6 +54,7 @@ const modelValue = defineModel<boolean>()
 
 const inputRef = ref<HTMLInputElement | null>(null)
 const keyword = ref<string>('')
+const searchIng = ref<boolean>(false)
 
 function handleInput(e: Event) {
   keyword.value = (e.target as HTMLInputElement).value
@@ -77,7 +81,9 @@ const handleSearch = useDebounceFn(async () => {
     handleClear()
     return
   }
+  searchIng.value = true
   getSearchList(keyword.value).then(res => {
+    searchIng.value = false
     const result: Record<string, Array<IArticleSearch>> = {}
     Object.keys(res.data).forEach(key => {
       if (key === 'articles' && res.data[key]) {

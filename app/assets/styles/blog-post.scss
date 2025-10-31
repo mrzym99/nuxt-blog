@@ -12,8 +12,16 @@
 
 // Blog post styles
 .blog-post {
-  padding: 0.5rem 1rem;
-  border-bottom: 1px solid var(--border-color);
+  padding: 0.5rem 1rem 0 1rem;
+
+  &:first-child {
+    padding-top: 1rem;
+  }
+
+  .post-body {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
 
   &:hover {
     background: var(--light-bg-color);

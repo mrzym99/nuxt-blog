@@ -124,8 +124,8 @@ h6 {
 
   .content {
     display: inline-block;
-    overflow: auto;
-    max-height: 2rem;
+    overflow: hidden;
+    height: 1rem;
   }
 
   &:last-child {

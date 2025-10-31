@@ -21,26 +21,30 @@
           </NuxtLink>
         </div>
       </Card>
-      <div v-for="(yearPosts, year) in groupedPosts" :key="year">
-        <h2 class="title font-bold">{{ year }}</h2>
-        <div class="post-item">
-          <article v-for="post in yearPosts" :key="post.id" class="blog-post">
-            <div class="flex flex-col gap-1">
-              <div class="flex justify-between">
-                <NuxtLink :to="post.slug">
-                  <h3 class="post-title">
-                    {{ post.title }}
-                  </h3>
-                </NuxtLink>
-                <span class="ml-1rem post-meta">{{ formatDate(post.createdAt) }}</span>
-              </div>
-              <p @click=" toArticle(post.id)" class="post-description">{{ post.description }}</p>
+      <Loading :loading="pending">
+        <div>
+          <div v-for="(yearPosts, year) in groupedPosts" :key="year">
+            <h2 class="title font-bold">{{ year }}</h2>
+            <div class="post-item">
+              <article v-for="post in yearPosts" :key="post.id" class="blog-post">
+                <div class="post-body flex flex-col gap-1">
+                  <div class="flex justify-between">
+                    <NuxtLink :to="post.slug">
+                      <h3 class="post-title">
+                        {{ post.title }}
+                      </h3>
+                    </NuxtLink>
+                    <span class="ml-1rem post-meta">{{ formatDate(post.createdAt) }}</span>
+                  </div>
+                  <p @click=" toArticle(post.id)" class="post-description">{{ post.description }}</p>
+                </div>
+              </article>
             </div>
-          </article>
+          </div>
         </div>
-      </div>
-      <ScrollLoading ref="target" :loading="loading" :empty="!data?.list.length" empty-text="暂无文章"
-        :full-loaded="fullLoaded" />
+        <ScrollLoading ref="target" :loading="loading" :empty="!data?.list.length" empty-text="暂无文章"
+          :full-loaded="fullLoaded" :current-page="currentPage" />
+      </Loading>
     </main>
   </div>
 </template>
@@ -68,7 +72,6 @@ const router = useRouter();
 const loading = ref(false);
 const target = useTemplateRef<HTMLDivElement>('target')
 const currentPage = ref(1);
-let oldSlug = ref();
 const toArticle = (id: number) => {
   router.push({
     path: '/posts/' + id,
@@ -90,9 +93,8 @@ const { data: allTags } = await useAsyncData('all-tags', async () => {
     });
 });
 
-const { data, refresh } = await useAsyncData('archives-posts', async () => {
+const { data, refresh, pending } = await useAsyncData('archives-posts', async () => {
   const t = route.params.slug === ALL ? '' : route.params.slug as string;
-  oldSlug.value = route.params.slug;
   const res = await getArticleList({
     currentPage: currentPage.value,
     pageSize: PAGE_SIZE,

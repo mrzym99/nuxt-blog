@@ -1,13 +1,13 @@
 <template>
-  <div ref="commentRef" class="comments-section" v-click-outside="clickOutside">
+  <div ref="commentRef" class="comments-section">
     <!-- 评论列表 -->
     <div class="comments-list">
       <!-- 主评论输入框 -->
       <div class="comment-form">
         <ClientOnly>
-          <div class="form-content gap-1rem">
-            <CommentAvatar :id="user?.id" :nick-name="user?.nickName" :avatar="user?.avatar" :size="42" />
-            <CommentInput ref="inputRefOne" v-model="commentContent" :placeholder="user?.id ? '请输入' : '先登录才能愉快的评论哦'">
+          <div class="form-content gap-0.5rem">
+            <CommentAvatar :id="user?.id" :nick-name="user?.nickName" :avatar="user?.avatar" :size="38" />
+            <CommentInput :height="90" v-model="commentContent" :placeholder="user?.id ? '请输入' : '先登录才能愉快的评论哦'">
               <template #footer>
                 <div class="form-actions">
                   <button class="submit-button" :disabled="!commentContent.trim()" @click="handleSubmit">
@@ -28,7 +28,7 @@
           }">
             <div class="comment-avatar-box">
               <CommentAvatar :id="comment.commenter?.id" :nick-name="comment.commenter?.profile?.nickName"
-                :avatar="comment.commenter?.profile.avatar" :size="36" />
+                :avatar="comment.commenter?.profile.avatar" :size="34" />
             </div>
             <div class="comment-content">
               <CommentCard :comment="comment" :user="user" @reply="handleReply" @revoke="handleRevokeComment"
@@ -36,7 +36,7 @@
               <!-- comment 回复框 -->
               <transition name="fade-in">
                 <div v-if="replyTo && !replyTo.id && replyTo.parent.id === comment.id" class="comment-form">
-                  <CommentInput ref="inputRefTwo" v-model="replyContent"
+                  <CommentInput v-model="replyContent"
                     :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'">
                     <template #footer>
                       <div class="form-actions w-full">
@@ -58,7 +58,7 @@
                     }">
                     <div class="reply-item-box">
                       <CommentAvatar :id="reply.reply?.id" :nick-name="reply.reply?.profile?.nickName"
-                        :avatar="reply.reply?.profile.avatar" :size="32" />
+                        :avatar="reply.reply?.profile.avatar" :size="34" />
                       <div class="reply-content">
                         <ReplyCard :comment="comment" :reply="reply" :user="user" @reply="handleReply"
                           @revoke="handleRevokeReply" @like="handleLikeReply"
@@ -66,7 +66,7 @@
                         <!-- reply 回复框 -->
                         <transition name="fade-in">
                           <div v-if="replyTo && replyTo.id === reply.id" class="comment-form">
-                            <CommentInput ref="inputRefThree" v-model="replyContent"
+                            <CommentInput v-model="replyContent"
                               :placeholder="user?.id ? `回复 @${replyTo.user.profile.nickName}` : '先登录才能愉快的评论哦'">
                               <template #footer>
                                 <div class="form-actions w-full">
@@ -156,10 +156,6 @@ const tabOptions = [
   { label: '最新', value: CommentOrderEnum.LATEST },
   { label: '最热', value: CommentOrderEnum.HOT },
 ];
-
-const inputRefOne = ref();
-const inputRefTwo = ref();
-const inputRefThree = ref();
 
 // 评论内容
 const commentContent = ref('');
@@ -489,12 +485,6 @@ function navigateToTarget(target: string) {
   });
 }
 
-function clickOutside(e: any) {
-  inputRefOne.value && inputRefOne.value.blur();
-  inputRefTwo.value && inputRefTwo.value.blur();
-  inputRefThree.value && inputRefThree.value.blur();
-}
-
 onMounted(async () => {
   if (window) {
     if (routerReplyId.value) {
@@ -532,7 +522,7 @@ onMounted(async () => {
 
 .comment-item {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   padding: 0.5rem 0;
 
   &:last-child {
@@ -560,6 +550,7 @@ onMounted(async () => {
 
 .comment-content {
   flex: 1;
+  min-width: 0;
 }
 
 .replies-list {
@@ -567,7 +558,7 @@ onMounted(async () => {
 }
 
 .reply-item {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
 
   &:last-child {
     margin-bottom: 0;
@@ -575,7 +566,7 @@ onMounted(async () => {
 
   &-box {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 }
 
@@ -584,7 +575,7 @@ onMounted(async () => {
 }
 
 .comment-form {
-  margin-bottom: 0.5rem;
+  margin: 0.5rem 0;
   border-radius: 0.5rem;
   background-color: var(--bg-color);
 
