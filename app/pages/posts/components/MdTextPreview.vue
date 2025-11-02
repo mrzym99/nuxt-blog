@@ -72,7 +72,6 @@ onBeforeUnmount(() => {
   background: var(--code-color) !important;
 
   code {
-    opacity: 1;
     padding: 0 !important;
     padding-bottom: 1em !important;
     background: var(--code-color) !important;
@@ -96,11 +95,10 @@ onBeforeUnmount(() => {
 
 :deep(code) {
   @apply font-mono text-sm;
-  color: var(--white-color);
-  background-color: var(--primary-color);
+  color: var(--primary-color);
+  background-color: rgb(from var(--primary-color) r g b / 0.1);
   border-radius: 3px;
   padding: 2px 4px;
-  opacity: 0.8;
 }
 
 :deep(p) {
