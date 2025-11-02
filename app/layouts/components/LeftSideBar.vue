@@ -3,9 +3,9 @@
     <aside class="sidebar hide-scrollbar w-48">
       <!-- Profile Card -->
       <div class="blog-card">
-        <span class="title">Welcome to my blog!</span>
+        <span>Welcome to my blog!</span>
         <ClientOnly>
-          <p v-if="user" class="body">
+          <p v-if="user" class="body mt-1">
             {{ user?.nickName }}
           </p>
         </ClientOnly>
@@ -30,7 +30,7 @@ import MessageSideBarItem from '~/pages/messages/components/MessageSideBarItem.v
 
 const route = useRoute();
 
-const { user } = useUserStore();
+const { user } = storeToRefs(useUserStore())
 
 const isHome = computed(() => {
   return route.path === '/'
