@@ -12,7 +12,6 @@ export default class Timer {
     if (!this.r) {
       this.s = performance.now();
       this.r = true;
-      console.log(this.t);
     }
   }
   /**

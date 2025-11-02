@@ -67,8 +67,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 :deep(pre) {
   @apply relative rounded-md overflow-x-auto;
-  padding: 1em;
-  padding-top: 1.6em;
+  padding: 1.6em 1em 0 1em;
   background: var(--code-color) !important;
 
   code {
