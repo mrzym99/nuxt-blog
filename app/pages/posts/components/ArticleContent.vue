@@ -48,7 +48,7 @@ const {
   startDetection,
   stopDetection
 } = useIdleDetection(timeClock.start.bind(timeClock), () => {
-  timeClock.pause.bind(timeClock)(SILENT * 1000)
+  timeClock.pause.bind(timeClock)()
 }, SILENT)
 
 const props = defineProps<ArticleProps>();
@@ -80,11 +80,13 @@ function addimageView() {
       const parent = img.parentElement
       if (parent) {
         if (parent.tagName === 'a') {
+          parent.className = 'pswp-image-link'
           parent.setAttribute('data-pswp-width', image.width + '')
           parent.setAttribute('data-pswp-height', image.height + '')
         } else {
           const anchor = document.createElement('a');
           anchor.href = image.src;
+          anchor.className = 'pswp-image-link'
           anchor.setAttribute('target', '_blank');
           anchor.setAttribute('data-pswp-width', image.width + '');
           anchor.setAttribute('data-pswp-height', image.height + '');
@@ -100,7 +102,7 @@ function addimageView() {
 
   lightbox = new PhotoSwipeLightbox({
     gallery: '#blogGallery',
-    children: 'a',
+    children: 'a.pswp-image-link',
     pswpModule: () => import('photoswipe'),
   });
   lightbox.init();

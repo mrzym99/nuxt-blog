@@ -27,6 +27,7 @@ function addimageView() {
     image.onload = () => {
       const parent = img.parentElement
       if (parent) {
+        parent.className = 'pswp-image-link'
         parent.setAttribute('data-pswp-width', image.width + '');
         parent.setAttribute('data-pswp-height', image.height + '');
       }
@@ -38,7 +39,7 @@ function addimageView() {
 
   lightbox = new PhotoSwipeLightbox({
     gallery: '#ArticleCover',
-    children: 'a',
+    children: 'a.pswp-image-link',
     pswpModule: () => import('photoswipe'),
   });
   lightbox.init();

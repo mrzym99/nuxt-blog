@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useMdRender } from '~/hooks/useMdRender';
+import 'highlight.js/styles/atom-one-dark.css'
 
 const { $toast } = useNuxtApp()
 
@@ -65,25 +66,28 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 :deep(pre) {
-  @apply relative rounded-md my-4 overflow-x-auto;
+  @apply relative rounded-md overflow-x-auto;
+  padding: 1em;
+  padding-top: 1.6em;
+  background: var(--code-color) !important;
 
-  &:hover {
-    .md-code-copy-button {
-      @apply block;
-    }
+  code {
+    opacity: 1;
+    padding: 0 !important;
+    padding-bottom: 1em !important;
+    background: var(--code-color) !important;
   }
 }
 
 :deep(.md-code-copy-button) {
-  display: none;
   position: absolute;
-  top: 0.5rem;
+  top: 0.3rem;
   right: 0.5rem;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
   font-size: 0.8rem;
   cursor: pointer;
-  color: var(--text-color);
+  color: var(--white-color);
 
   &:hover {
     color: var(--primary-color);
@@ -92,7 +96,11 @@ onBeforeUnmount(() => {
 
 :deep(code) {
   @apply font-mono text-sm;
-  background: var(--code-color) !important;
+  color: var(--white-color);
+  background-color: var(--primary-color);
+  border-radius: 3px;
+  padding: 2px 4px;
+  opacity: 0.8;
 }
 
 :deep(p) {

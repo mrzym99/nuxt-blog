@@ -38,7 +38,7 @@
   transition: all $duration ease-in-out;
 
   &:disabled {
-    background-color: var(--border-color);
+    background-color: var(--disabled-color);
     cursor: not-allowed;
   }
 

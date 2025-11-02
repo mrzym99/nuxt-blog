@@ -30,6 +30,7 @@ function addimageView() {
       if (parent) {
         const anchor = document.createElement('a');
         anchor.href = image.src;
+        anchor.className = 'pswp-image-link'
         anchor.setAttribute('target', '_blank');
         anchor.setAttribute('data-pswp-width', image.width + '');
         anchor.setAttribute('data-pswp-height', image.height + '');
@@ -46,7 +47,7 @@ function addimageView() {
 
   lightbox = new PhotoSwipeLightbox({
     gallery: '#' + galleryId.value,
-    children: 'a',
+    children: 'a.pswp-image-link',
     pswpModule: () => import('photoswipe'),
   });
   lightbox.init();

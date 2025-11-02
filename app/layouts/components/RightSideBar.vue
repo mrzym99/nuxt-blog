@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-60 lt-md:hidden flex-shrink-0">
+  <div class="relative w-60 flex-shrink-0">
     <aside class="sidebar hide-scrollbar w-60">
       <div v-if="showArticleCard">
         <ArticleBoard />

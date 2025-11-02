@@ -12,19 +12,15 @@ export default class Timer {
     if (!this.r) {
       this.s = performance.now();
       this.r = true;
+      console.log(this.t);
     }
   }
   /**
    * 暂停计时
-   * @param {number} redundant 冗余时间 ms
    */
-  pause(redundant: number = 0) {
+  pause() {
     if (this.r) {
       this.t += performance.now() - this.s;
-      // 减去冗余时间 ms
-      if (this.t >= redundant) {
-        this.t -= redundant;
-      }
       this.r = false;
     }
   }

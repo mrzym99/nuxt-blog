@@ -18,7 +18,7 @@ export function useMdRender() {
     };
 
     baseRenderer.code = function ({ text, lang }) {
-      const validLanguage = lang && hljs.getLanguage(lang) ? lang : 'xml';
+      const validLanguage = lang && hljs.getLanguage(lang) ? lang : 'html';
       try {
         const highlighted = hljs.highlight(text, { language: validLanguage }).value;
         return `<pre><button data-code="${encodeURIComponent(text)}" class="md-code-copy-button">copy</button><code class="hljs language-${validLanguage}">${highlighted}</code></pre>`;

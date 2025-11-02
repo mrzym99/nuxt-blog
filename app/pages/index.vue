@@ -10,6 +10,9 @@
                 {{ post.title }}
               </h3>
             </NuxtLink>
+            <div v-if="post.top" class="post-top">
+              <Icon name="ph:push-pin" size="1rem" />
+            </div>
             <span class="ml-1rem post-meta">{{ post.createdAt &&
               formatDate(post.createdAt) }}</span>
           </div>
