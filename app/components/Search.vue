@@ -175,7 +175,6 @@ watch(() => keyword.value, () => {
 
   &-content {
     color: var(--text-light-color);
-    font-size: 0.9rem;
     overflow-wrap: break-word;
     font-weight: 400;
     letter-spacing: 1px;

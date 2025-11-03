@@ -144,7 +144,7 @@ watch(
 }
 
 .read-duration {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 400;
   color: var(--text-light-color);
   border-color: var(--border-color);
@@ -177,7 +177,6 @@ watch(
 
   .article-meta {
     font-family: Lora, 'Times New Roman', serif;
-    font-size: 0.9rem;
     font-weight: 300;
     margin-bottom: 0.5rem;
     letter-spacing: 1px;

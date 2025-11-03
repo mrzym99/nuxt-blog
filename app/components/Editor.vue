@@ -409,7 +409,7 @@ defineExpose<{
   :deep(.ql-container) {
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-color);
     font-family:
       -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',

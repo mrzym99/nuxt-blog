@@ -196,7 +196,6 @@ onBeforeMount(() => {
   text-align: center;
   cursor: pointer;
   padding: 0.3rem 0.8rem;
-  font-size: 0.875rem;
   font-weight: 800;
   letter-spacing: 1px;
   border: 1px solid var(--text-color);

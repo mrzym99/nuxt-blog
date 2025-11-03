@@ -107,18 +107,17 @@ function handleSubmitEdit() {
   }
 
   .time {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     color: var(--text-light-color);
   }
 
   .username {
-    font-size: 0.8rem;
     font-weight: 500;
     color: var(--text-color);
   }
 
   .reply-to {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
 
     color: var(--text-light-color);
 

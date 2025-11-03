@@ -28,7 +28,8 @@
                 </div>
               </div>
               <NuxtLink class="text-sm px-1rem" :to="`/messages/detail/${message.id}`">
-                <RichTextRender :content="message.content" :id="message.id" :type="ContentTypeEnum.MESSAGE" />
+                <RichTextRender class="!text-1rem" :content="message.content" :id="message.id"
+                  :type="ContentTypeEnum.MESSAGE" />
               </NuxtLink>
               <div class="flex items-center text-[12px]">
                 <span>{{ formatDate(message.createdAt) }}</span>

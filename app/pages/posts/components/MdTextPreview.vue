@@ -65,10 +65,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
-.md-body {
-  font-size: 0.875rem;
-}
-
 :deep(pre) {
   @apply relative rounded-md overflow-x-auto;
   padding: 1.6em 1em 0 1em;
@@ -87,7 +83,7 @@ onBeforeUnmount(() => {
   right: 0.5rem;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   cursor: pointer;
   color: var(--white-color);
 

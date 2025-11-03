@@ -101,13 +101,13 @@ function handleSubmitEdit() {
   }
 
   .username {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-color);
   }
 
   .time {
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     color: var(--text-light-color);
   }
 

@@ -73,7 +73,6 @@
     -webkit-line-clamp: 3;
 
     @include responsive(lt-sm) {
-      font-size: 0.9rem;
       gap: 1rem;
     }
   }
@@ -88,7 +87,7 @@
     font-family: Lora, 'Times New Roman', serif;
     color: var(--text-color);
     letter-spacing: 1px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     font-weight: 300;
   }
 }

@@ -533,7 +533,7 @@ onMounted(async () => {
     cursor: pointer;
     transition: color $duration ease;
     font-size: 14px;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
     color: var(--primary-color);
 
     &:hover {

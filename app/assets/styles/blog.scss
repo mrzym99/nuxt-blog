@@ -65,7 +65,7 @@ h6 {
       color: var(--white-color);
     }
     border-radius: 9999px;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -88,7 +88,6 @@ h6 {
 
 .recommend-item {
   padding: 0 0 0.5rem 0;
-  font-size: 0.875rem;
   text-decoration: underline;
   width: 100%;
   overflow: hidden;
@@ -107,7 +106,6 @@ h6 {
 
 .home-message-item {
   overflow: hidden;
-  font-size: 0.8rem;
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 0.5rem;
@@ -125,7 +123,7 @@ h6 {
   .content {
     display: inline-block;
     overflow: hidden;
-    height: 1rem;
+    height: 1.2rem;
   }
 
   &:last-child {

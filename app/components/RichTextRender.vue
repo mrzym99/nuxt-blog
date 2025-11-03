@@ -70,9 +70,9 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .richtext-container {
-  font-size: 0.875rem;
   width: 100%;
   white-space: pre;
+  font-size: 0.875rem;
 }
 
 :deep(.ql-code-block-container) {

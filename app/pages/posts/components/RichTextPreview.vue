@@ -13,10 +13,6 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.markdown-body {
-  font-size: 0.875rem;
-}
-
 :deep(img) {
   max-height: $content-image-max-height !important;
   object-fit: cover;

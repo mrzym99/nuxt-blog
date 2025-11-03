@@ -200,7 +200,6 @@ onUnmounted(() => {
         display: block;
         padding: 0.25rem 0;
         text-decoration: none;
-        font-size: 0.875rem;
         color: var(--text-color);
 
         @include hover-effect() {
