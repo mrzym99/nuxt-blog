@@ -71,6 +71,7 @@ onBeforeUnmount(() => {
   background: var(--code-color) !important;
 
   code {
+    font-size: 0.875rem;
     padding: 0 !important;
     padding-bottom: 1em !important;
     background: var(--code-color) !important;
