@@ -1,6 +1,6 @@
 <template>
-  <div id="ArticleCover">
-    <a :href="cover" class="article-cover" id="ArticleCover" target="_blank">
+  <div class="article-cover" id="ArticleCover">
+    <a :href="cover" id="ArticleCover" target="_blank">
       <img :src="cover" />
     </a>
   </div>
@@ -61,9 +61,7 @@ onBeforeUnmount(() => {
   height: 12rem;
   overflow: hidden;
   border-radius: 0.375rem;
-  margin-bottom: 1rem;
-
-  // @include mask;
+  margin-bottom: 0.3rem;
 
   img {
     width: 100%;

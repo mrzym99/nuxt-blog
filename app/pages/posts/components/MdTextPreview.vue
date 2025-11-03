@@ -61,10 +61,14 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div v-html="renderContent"></div>
+  <div class="md-body" v-html="renderContent"></div>
 </template>
 
 <style lang="scss" scoped>
+.md-body {
+  font-size: 0.875rem;
+}
+
 :deep(pre) {
   @apply relative rounded-md overflow-x-auto;
   padding: 1.6em 1em 0 1em;
@@ -92,7 +96,7 @@ onBeforeUnmount(() => {
   }
 }
 
-:deep(code) {
+:deep(code:not(pre code)) {
   @apply font-mono text-sm;
   color: var(--primary-color);
   background-color: rgb(from var(--primary-color) r g b / 0.1);

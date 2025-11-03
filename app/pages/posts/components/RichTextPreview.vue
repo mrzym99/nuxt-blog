@@ -9,10 +9,14 @@ defineProps<{
 </script>
 
 <template>
-  <div v-html="content"></div>
+  <div class="markdown-body" v-html="content"></div>
 </template>
 
 <style lang="scss" scoped>
+.markdown-body {
+  font-size: 0.875rem;
+}
+
 :deep(img) {
   max-height: $content-image-max-height !important;
   object-fit: cover;

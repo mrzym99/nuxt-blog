@@ -4,8 +4,7 @@
       <span class="username">{{ comment.commenter?.profile.nickName }}</span>
       <span class="time">{{ diffNowWord(comment?.createdAt) }}</span>
     </div>
-    <RichTextRender class="text-sm" v-if="!isEdit" :content="comment.content" :id="comment.id"
-      :type="ContentTypeEnum.COMMENT" />
+    <RichTextRender v-if="!isEdit" :content="comment.content" :id="comment.id" :type="ContentTypeEnum.COMMENT" />
     <CommentInput v-else v-model="content" :auto-focus="true">
       <template #footer>
         <div class="form-actions w-full">
@@ -22,7 +21,7 @@
         编辑
         <span v-if="comment.updatedAt !== comment.createdAt" class="text-[12px] cancel">（{{
           diffNowWord(comment.updatedAt)
-        }}）</span>
+          }}）</span>
       </button>
       <button v-if="user?.id === comment.commenter?.id" class="action-button cancel"
         @click="handleRevokeComment(comment)">
