@@ -2,7 +2,7 @@
   <Card>
     <NotFound v-if="error"> 文章未找到或已删除 </NotFound>
     <template v-else>
-      <Loading :loading="pending">
+      <Loading :loading="pending" :delay="0">
         <div v-if="articleDetail">
           <div :id="ARTICLE_HEADER_ID" class="article-header">
             <div class="info-wrapper">

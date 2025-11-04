@@ -12,3 +12,4 @@ declare module 'marked-highlight' {
 }
 
 declare module 'quill2-emoji' {}
+declare module 'highlightjs-line-numbers.js' {}

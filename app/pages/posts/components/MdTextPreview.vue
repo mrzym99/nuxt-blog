@@ -50,7 +50,7 @@ watch(
   }
 );
 
-onMounted(async () => {
+onMounted(() => {
   document.body.addEventListener('click', handleCopy);
   document && document.documentElement.setAttribute('data-theme', colorMode.value);
 });
