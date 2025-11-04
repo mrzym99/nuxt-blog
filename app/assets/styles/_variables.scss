@@ -69,6 +69,24 @@ $breakpoint-xl: 1280px;
   }
 }
 
+@mixin hover-decoration {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    transition: all $duration ease-in-out;
+  }
+
+  &:hover::after {
+    background: var(--primary-color);
+    width: 100%;
+  }
+}
+
 @mixin text-gradient {
   background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
   -webkit-background-clip: text;

@@ -28,29 +28,6 @@
   }
 
   .post-title {
-    position: relative;
-
-    &::after {
-      content: '';
-      position: absolute;
-      height: 2px;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      transition: all $duration ease-in-out;
-    }
-
-    &:hover::after {
-      background: var(--primary-color);
-      width: 100%;
-    }
-
-    @include hover-effect {
-      color: var(--primary-color);
-    }
-  }
-
-  .post-title {
     transition: all $duration ease;
     font-size: 1.2rem;
     line-height: $line-height-normal;
@@ -58,6 +35,11 @@
     color: var(--text-color);
     font-weight: normal;
     margin: 0;
+
+    @include hover-decoration;
+    @include hover-effect {
+      color: var(--primary-color);
+    }
   }
 
   .post-description {

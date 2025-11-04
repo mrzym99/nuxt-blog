@@ -12,8 +12,4 @@ declare module 'marked-highlight' {
 }
 
 declare module 'quill2-emoji' {}
-
-// declare module '#app' {
-//   interface NuxtApp {
-//   }
-// }
+declare module 'highlightjs-line-numbers.js' {}

@@ -24,6 +24,7 @@
     "dayjs": "^1.11.18",
     "form-data": "^4.0.4",
     "highlight.js": "^11.11.1",
+    "highlightjs-line-numbers.js": "^2.9.1",
     "marked": "^16.2.0",
     "nuxt": "^4.0.3",
     "nuxt-svgo": "^4.2.6",

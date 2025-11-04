@@ -4,7 +4,7 @@
     <Loading :loading="pending" height="6rem">
       <p class="recommend-item" v-for="item in data">
         <NuxtLink :to="'/posts/' + item.id">
-          <span :title="item.title">{{ item.title }}</span>
+          <span class="recommend-item__title" :title="item.title">{{ item.title }}</span>
         </NuxtLink>
       </p>
     </Loading>

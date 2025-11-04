@@ -1,7 +1,6 @@
 import { marked, Renderer } from 'marked';
 import hljs from 'highlight.js';
 import { uuid } from '~/utils/tool';
-
 export function useMdRender() {
   let baseRenderer: Renderer | null = null;
 
@@ -42,6 +41,14 @@ export function useMdRender() {
 
   // 防止多次初始化
   !baseRenderer && init();
+
+  onMounted(async () => {
+    // @ts-ignore
+    window.hljs = hljs;
+    await import('highlightjs-line-numbers.js');
+    // @ts-ignore
+    hljs.initLineNumbersOnLoad();
+  });
 
   return {
     marked,

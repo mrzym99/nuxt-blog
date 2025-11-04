@@ -50,7 +50,7 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
   document.body.addEventListener('click', handleCopy);
   document && document.documentElement.setAttribute('data-theme', colorMode.value);
 });
@@ -71,10 +71,18 @@ onBeforeUnmount(() => {
   background: var(--code-color) !important;
 
   code {
+    line-height: 1.7;
     font-size: 0.875rem;
     padding: 0 !important;
     padding-bottom: 1em !important;
     background: var(--code-color) !important;
+  }
+
+  .hljs-ln-numbers {
+    font-weight: 300;
+    width: 2em;
+    text-align: right;
+    padding-right: 0.5em;
   }
 }
 
