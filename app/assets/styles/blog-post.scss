@@ -36,7 +36,7 @@
     font-weight: normal;
     margin: 0;
 
-    @include hover-decoration;
+    @include hover-decoration(2px);
     @include hover-effect {
       color: var(--primary-color);
     }

@@ -87,6 +87,7 @@ h6 {
 }
 
 .recommend-item {
+  display: block;
   &__title {
     display: inline-block;
     max-width: 100%;
@@ -99,10 +100,6 @@ h6 {
     &:hover {
       color: var(--primary-color);
     }
-  }
-
-  &:last-child {
-    margin-bottom: 0;
   }
 }
 

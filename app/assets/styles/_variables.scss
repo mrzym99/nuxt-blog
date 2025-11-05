@@ -69,12 +69,12 @@ $breakpoint-xl: 1280px;
   }
 }
 
-@mixin hover-decoration {
+@mixin hover-decoration($height: 1px) {
   position: relative;
   &::after {
     content: '';
     position: absolute;
-    height: 2px;
+    height: $height;
     left: 0;
     bottom: 0;
     width: 0;

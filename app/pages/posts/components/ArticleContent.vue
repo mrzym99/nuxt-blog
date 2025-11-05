@@ -36,7 +36,7 @@ import useIdleDetection from '~/utils/idle-detection';
 import Timer from '~/utils/timer'
 
 const timeClock = new Timer()
-const SILENT = 12 // 允许用户离开时间
+const SILENT = 3 // 允许用户离开时间
 
 type ArticleProps = {
   article: IArticle;
@@ -47,9 +47,7 @@ const articleStore = useArticleStore();
 const {
   startDetection,
   stopDetection
-} = useIdleDetection(timeClock.start.bind(timeClock), () => {
-  timeClock.pause.bind(timeClock)()
-}, SILENT)
+} = useIdleDetection(timeClock.start.bind(timeClock), timeClock.pause.bind(timeClock), SILENT)
 
 const props = defineProps<ArticleProps>();
 let lightbox: PhotoSwipeLightbox | null = null

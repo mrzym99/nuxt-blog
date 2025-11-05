@@ -3,11 +3,9 @@
     <div class="blog-card">
       <span class="title">热门文章</span>
       <Loading :loading="postPending" height="6rem">
-        <div class="recommend-item" v-for="item in data">
-          <NuxtLink :to="'/posts/' + item.id">
-            <span class="recommend-item__title" :title="item.title">{{ item.title }}</span>
-          </NuxtLink>
-        </div>
+        <NuxtLink class="recommend-item" v-for="item in data" :to="'/posts/' + item.id">
+          <span class="recommend-item__title" :title="item.title">{{ item.title }}</span>
+        </NuxtLink>
       </Loading>
     </div>
     <div class="blog-card">
