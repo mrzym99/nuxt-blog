@@ -20,3 +20,13 @@ body {
   height: 100vh;
   overflow: auto;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 1em;
+}

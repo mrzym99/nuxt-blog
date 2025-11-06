@@ -44,8 +44,11 @@ export function useMdRender() {
 
   onMounted(async () => {
     // @ts-ignore
-    window.hljs = hljs;
-    await import('highlightjs-line-numbers.js');
+    if (!window.hljs) {
+      // @ts-ignore
+      window.hljs = hljs;
+      await import('highlightjs-line-numbers.js');
+    }
     // @ts-ignore
     hljs.initLineNumbersOnLoad();
   });

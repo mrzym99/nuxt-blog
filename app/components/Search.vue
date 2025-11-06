@@ -6,7 +6,7 @@
         <input :value="keyword" ref="inputRef" class="search-input" type="text" placeholder="Search..."
           @input="handleInput" />
         <div class="search-result">
-          <Loading :loading="searchIng">
+          <Loading :loading="searchIng" :delay="300">
             <template #loading>SearchIng...</template>
             <template v-if="searchResult">
               <div v-if="!isEmpty">

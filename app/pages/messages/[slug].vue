@@ -8,7 +8,7 @@
       <div class="leave flex justify-end items-center mb-2rem">
         <button class="link text-1.2rem" @click="leaveMessage">留言 </button>
       </div>
-      <Loading :loading="pending">
+      <Loading :loading="pending" :delay="300">
         <div>
           <article v-for="message in data?.list" :key="message.id" class="message-item">
             <div class="flex flex-col gap-2">

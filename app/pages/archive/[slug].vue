@@ -21,7 +21,7 @@
           </NuxtLink>
         </div>
       </Card>
-      <Loading :loading="pending">
+      <Loading :loading="pending" :delay="300">
         <div>
           <div v-for="(yearPosts, year) in groupedPosts" :key="year">
             <h2 class="title font-bold">{{ year }}</h2>

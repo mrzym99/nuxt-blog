@@ -29,12 +29,13 @@ let timer: any = null
 watch(
   () => props.loading,
   (val) => {
-    if (timer) clearTimeout(timer)      // 清掉上一次的延迟
-    if (val) {
+    if (timer) clearTimeout(timer) // 清掉上一次的延迟
+    if (val && props.delay) {
       // 延迟 ≥ delay 才显示
-      timer = window.setTimeout(() => (showLoading.value = true), props.delay ?? 300)
+      timer = window.setTimeout(() => (showLoading.value = true), props.delay)
+    } else if (val) {
+      showLoading.value = true
     } else {
-      // 立即消失，不等待
       showLoading.value = false
     }
   },

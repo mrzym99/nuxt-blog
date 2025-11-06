@@ -2,7 +2,7 @@
   <Card>
     <NotFound v-if="error"> 文章未找到或已删除 </NotFound>
     <template v-else>
-      <Loading :loading="pending" :delay="0">
+      <Loading :loading="pending">
         <div v-if="articleDetail">
           <div :id="ARTICLE_HEADER_ID" class="article-header">
             <div class="info-wrapper">
@@ -22,7 +22,7 @@
             <div class="flex items-center justify-between read-duration mb-2">
               <span><span class="tip" v-if="hasUpdated"> Updated On {{ hasUpdated }} </span> <span class="type-tag">{{
                 ARTICLE_TYPE_NAME[articleDetail.type] }}</span></span>
-              <span>阅读时长:<span class="ml-2">{{ formatDuration(viewDuration || 0) }}</span></span>
+              <span>阅读时长:<span class="ml-2">{{ duration }}</span></span>
             </div>
             <div class="text-sm">
               <p v-if="articleDetail.originalUrl">
@@ -61,7 +61,7 @@ definePageMeta({
 });
 
 const { setCurrentArticle } = useArticleStore();
-const userStore = useUserStore();
+const { user } = storeToRefs(useUserStore());
 const route = useRoute();
 const viewDuration = ref<number>(0)
 
@@ -84,10 +84,14 @@ async function handleGetViewDuration() {
   const res = await getViewDuration({
     type: ViewEnum.ARTICLE,
     targetId: route.params.slug as unknown as number,
-    userId: userStore.user?.id
+    userId: user.value?.id
   })
   viewDuration.value = res.data as number
 }
+
+const duration = computed(() => {
+  return formatDuration(viewDuration.value);
+});
 
 watch(route, async () => {
   if (route.meta.refresh) {
@@ -122,6 +126,15 @@ watch(
     deep: true,
   }
 );
+
+watch(
+  () => user.value,
+  () => {
+    if (user.value?.id) {
+      handleGetViewDuration()
+    }
+  }
+)
 </script>
 
 <style lang="scss" scoped>
