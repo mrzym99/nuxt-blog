@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .richtext-container {
   width: 100%;
-  white-space: pre;
+  white-space: pre-wrap;
   font-size: 0.875rem;
 }
 
