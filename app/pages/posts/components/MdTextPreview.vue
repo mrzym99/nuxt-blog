@@ -67,28 +67,54 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 :deep(pre) {
   @apply relative rounded-md overflow-x-auto;
-  padding: 1.6em 1em 0 1em;
   background: var(--code-color) !important;
 
   code {
+    display: block;
+    padding: 2em 1em 0 0;
     line-height: 1.7;
     font-size: 0.875rem;
-    padding: 0 !important;
     padding-bottom: 1em !important;
     background: var(--code-color) !important;
   }
 
+  // 表格布局固定行号
+  .hljs-ln {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .hljs-ln-tr {
+    display: table-row;
+  }
+
   .hljs-ln-numbers {
+    display: table-cell;
     font-weight: 300;
     width: 2em;
+    min-width: 2em;
     text-align: right;
-    padding-right: 0.5em;
+    padding: 0 0.5em;
+    user-select: none;
+    -webkit-user-select: none;
+    background: var(--code-color);
+    position: sticky;
+    left: 0;
+    z-index: 1;
+  }
+
+  .hljs-ln-code {
+    display: table-cell;
+    padding-left: 0.5em;
+    overflow-x: auto;
+    white-space: pre;
   }
 }
 
 :deep(.md-code-copy-button) {
   position: absolute;
-  top: 0.3rem;
+  top: 0;
   right: 0.5rem;
   border-radius: 4px;
   padding: 0.25rem 0.5rem;
